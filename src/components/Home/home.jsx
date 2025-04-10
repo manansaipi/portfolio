@@ -2,7 +2,7 @@ import React from "react";
 
 const Home = () => {
   return (
-    <section className="section bg-amber-100 flex items-center justify-center ">
+    <section className="section bg-amber-500 flex items-center justify-center">
       <div className="flex items-center p-6 w-md  bg-white rounded-xl shadow-lg space-x-4">
         <img
           className="w-12 h-12"
@@ -12,7 +12,6 @@ const Home = () => {
         <div>
           <div className="text-xl font-medium"> Are you sure?</div>
           <p className="text-slate-500">
-            {" "}
             You are about to delete a post, tailwind is a mobile first
           </p>
         </div>
@@ -23,7 +22,6 @@ const Home = () => {
           </button>
         </div> */}
       </div>
-
       {/* <div className="home">
         <div className="flex">
           <div className=" bg-blue-500  text-white">Column 1</div>

@@ -6,3 +6,7 @@ html {
 .section {
   min-height: 100vh; /* 100% of the viewport height */
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
