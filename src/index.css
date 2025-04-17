@@ -1,12 +1,11 @@
-@font-face {
-  font-family: "intertight";
-  src: url("/assets/fonts/Inter_Tight/static/InterTight-Black.ttf");
-}
-
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-  --font-intertight: intertight, "sans-serif";
+  --font-intertight: Inter Tight;
+  --color-primary: rgba(var(--primary));
+  --color-background: rgba(var(--background));
 }
 
 html {
@@ -18,4 +17,14 @@ html {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+.dark {
+  --background: 16, 16, 16;
+  --primary: 255, 255, 255;
+}
+
+.light {
+  --background: 255, 255, 255;
+  --primary: 16, 16, 16;
 }

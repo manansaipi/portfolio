@@ -1,11 +1,12 @@
-// tailwind.config.js
 module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      fontFamily: {
-        intertight: ["intertight", "sans-serif"],
+      colors: {
+        background: "rgba(var(--background))",
+        primary: "rgba(var(--primary)",
       },
     },
   },
-  content: ["./src/**/*.{js,jsx,ts,tsx}"], // adjust based on your setup
+  plugins: [],
 };
