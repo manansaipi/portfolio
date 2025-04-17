@@ -8,6 +8,8 @@ export default function CustomCursor() {
     const moveCursor = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
       console.log(e.target.tagName);
+      console.log(e.target.className);
+      //   console.log(e.target.className.includes("navbar"));
     };
 
     const handleMouseOver = (e) => {
@@ -35,8 +37,8 @@ export default function CustomCursor() {
 
   return (
     <div
-      className={`bg-primary pointer-events-none fixed w-5 h-5 ${
-        hovering ? " scale-200 mix-blend-difference bg-primary" : ""
+      className={`bg-primary pointer-events-none fixed w-5 h-5 mix-blend-difference translate-z-100 ${
+        hovering ? " scale-200" : ""
       } rounded-full transition-transform duration-200`}
       style={{
         left: `${position.x}px`,
