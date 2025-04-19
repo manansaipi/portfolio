@@ -6,7 +6,7 @@ import CustomCursor from "./CustomCursor";
 
 const App = () => {
   return (
-    <>
+    < >
       <CustomCursor />
       <Navbar />
       <Home />
