@@ -1,13 +1,14 @@
 import React from "react";
 
 const About = () => {
-  return (
-    <section className="section bg-black">
-      <div className="About">
-        <h1>Hi, I'm Abdul Mannan Saipi</h1>
-      </div>
-    </section>
-  );
+	return (
+		<section
+			id="About"
+			className="section flex justify-center bg-background text-primary items-center"
+		>
+			ABOUT
+		</section>
+	);
 };
 
 export default About;

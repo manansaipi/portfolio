@@ -37,7 +37,7 @@ export default function CustomCursor() {
 
 	return (
 		<div
-			className={`bg-primary pointer-events-none fixed w-5 h-5 mix-blend-difference translate-z-100 ${
+			className={`bg-primary pointer-events-none fixed z-1 w-5 h-5 mix-blend-difference translate-z-100 ${
 				hovering ? " scale-220" : ""
 			} rounded-full transition-transform duration-200`}
 			style={{

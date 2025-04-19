@@ -2,9 +2,11 @@ import React from "react";
 
 const Home = () => {
 	return (
-		<section className="bg-blac flex  justify-center bg-black text-white">
-			Menu
-			{/* <button className="bg-yellow-100 hover:cursor-none">click</button> */}
+		<section
+			id="Home"
+			className="section bg-blac flex justify-center bg-background text-primary items-center"
+		>
+			HOME
 		</section>
 	);
 };

@@ -5,14 +5,14 @@ import Navbar from "./components/Navbar/Navbar";
 import CustomCursor from "./CustomCursor";
 
 const App = () => {
-  return (
-    < >
-      <CustomCursor />
-      <Navbar />
-      <Home />
-      <About />
-    </>
-  );
+	return (
+		<>
+			<CustomCursor />
+			<Navbar />
+			<Home />
+			<About />
+		</>
+	);
 };
 
 export default App;
