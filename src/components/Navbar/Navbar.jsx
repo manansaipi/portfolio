@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import TogleTheme from "./TogleThemeButton";
 
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
-import { useGSAP } from "@gsap/react";
 gsap.registerEase(CustomEase);
 
 const Navbar = () => {
@@ -14,8 +13,6 @@ const Navbar = () => {
 	const leftTextNavbarOpenRef = useRef();
 
 	const logo = useRef();
-
-	const tl = gsap.timeline();
 
 	const handleOpenNavbar = () => {
 		setIsOpen(!isOpen);
@@ -146,16 +143,14 @@ const Navbar = () => {
 					<div className="h-15"></div>
 					<div
 						ref={socialMediaRef}
-						className="flex gap-5 font-bold text-background text-xl  overflow-hidden"
+						className="flex gap-5 font-bold text-background text-2xl  overflow-hidden"
 					>
 						<a className="hover:text-color-text-hovering">
+							LinkedIn
+						</a>
+						<a className="hover:text-color-text-hovering">GitHub</a>
+						<a className="hover:text-color-text-hovering">
 							Instagram
-						</a>
-						<a className="hover:text-color-text-hovering">
-							Threads
-						</a>
-						<a className="hover:text-color-text-hovering">
-							X (Twitter)
 						</a>
 					</div>
 				</div>
