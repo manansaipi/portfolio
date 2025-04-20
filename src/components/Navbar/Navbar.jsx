@@ -142,9 +142,6 @@ const Navbar = () => {
 						<a className="hover:text-color-text-hovering -mb-2 ">
 							CONTACT
 						</a>
-						{/* <a className="hover:text-color-text-hovering -mb-2 ">
-							CONTACT
-						</a> */}
 					</div>
 					<div className="h-15"></div>
 					<div
@@ -175,8 +172,8 @@ const Navbar = () => {
 					Portofolio
 				</a>
 				{/* <a className="p-3">
-						<TogleTheme />
-					</a> */}
+					<TogleTheme />
+				</a> */}
 			</div>
 		</>
 	);
