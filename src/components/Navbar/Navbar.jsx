@@ -2,19 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import TogleTheme from "./TogleThemeButton";
 
 import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
 import { useGSAP } from "@gsap/react";
+gsap.registerEase(CustomEase);
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const navbarRef = useRef();
-	const aboutNavRef = useRef();
+	const navigationListRef = useRef();
+	const socialMediaRef = useRef();
+	const leftTextNavbarOpenRef = useRef();
+
 	const logo = useRef();
 
 	const tl = gsap.timeline();
 
 	const handleOpenNavbar = () => {
 		setIsOpen(!isOpen);
-
 
 		if (!isOpen) {
 			// open navbar
@@ -28,6 +32,32 @@ const Navbar = () => {
 					ease: "power4.out",
 				}
 			);
+
+			// animate navList
+			gsap.set(navigationListRef.current.children, { y: 100 });
+			gsap.to(navigationListRef.current.children, {
+				y: 0,
+				duration: 0.5,
+				stagger: 0.075,
+			});
+			// animate left text opened navbar
+			gsap.set(leftTextNavbarOpenRef.current.children, { y: 100 });
+			gsap.to(leftTextNavbarOpenRef.current.children, {
+				y: 0,
+				duration: 0.75,
+				stagger: 0.075,
+			});
+
+			// animate social media
+			gsap.set(socialMediaRef.current.children, { y: 50 });
+			gsap.to(socialMediaRef.current.children, {
+				y: 0,
+				duration: 0.5,
+				stagger: 0.075,
+				delay: 0.3,
+			});
+
+			// hiding logo
 			gsap.fromTo(
 				logo.current,
 				{
@@ -43,8 +73,11 @@ const Navbar = () => {
 			// close navbar
 			gsap.to(navbarRef.current, {
 				y: -500,
-				duration: 1,
-				ease: "power4.out",
+				duration: 1.2,
+				ease: CustomEase.create(
+					"custom",
+					"M0,0 C0.11,0.494 0.3,0.6 0.33,0.6 0.35,0.6 0.37,0.6 0.38,0.6 0.39,0.6 0.41,0.6 0.43,0.6 0.45,0.6 0.47,0.6 0.49,0.6 0.51,0.6 0.55,0.6 0.58,0.65 0.6 ,0.7 0.65,0.75 0.7,0.85 0.9,0.9 0.9,1 1,1 "
+				),
 				onComplete: () => {
 					// hide the navbar if the navbar completely closed
 					if (
@@ -55,13 +88,10 @@ const Navbar = () => {
 					}
 				},
 			});
-			gsap.to(
-				logo.current,
-				{
-					opacity: 1,
-					duration: 0.3,
-				}
-			);
+			gsap.to(logo.current, {
+				opacity: 1,
+				duration: 0.3,
+			});
 		}
 	};
 
@@ -78,7 +108,10 @@ const Navbar = () => {
 				className={`flex bg-primary w-full fixed  `}
 				style={{ display: "none" }}
 			>
-				<div className="p-5  w-1/2 hidden  md:flex md:flex-col">
+				<div
+					ref={leftTextNavbarOpenRef}
+					className="p-5 h-[5rem]  w-1/2 hidden  md:flex md:flex-col overflow-hidden "
+				>
 					<a className=" font-bold text-background text-xl">
 						Abdul Mannan Saip
 					</a>
@@ -86,30 +119,38 @@ const Navbar = () => {
 						Portofolio
 					</a>
 				</div>
-				<div className="flex flex-col  justify-center items-start bg-primary pl-5 pt-14 md:pt-5  ">
-					<div className="flex flex-col gap-0 font-bold text-6xl text-background   ">
+				<div className=" flex flex-col  justify-center items-start bg-primary pl-5 pt-14 mb-8  md:pt-5 md:pl-3  ">
+					<div
+						ref={navigationListRef}
+						className="flex flex-col gap-0 font-bold text-6xl text-background overflow-hidden mb-7 md:mb-8 "
+					>
 						<a
-							ref={aboutNavRef}
 							href="#Home"
-							className="hover:text-color-text-hovering "
+							className="hover:text-color-text-hovering -mb-2 "
 						>
 							HOME
 						</a>
 						<a
 							href="#About"
-							className="hover:text-color-text-hovering"
+							className="hover:text-color-text-hovering -mb-2 "
 						>
 							ABOUT
 						</a>
-						<a className="hover:text-color-text-hovering">
-							GALLERIES
+						<a className="hover:text-color-text-hovering -mb-2 ">
+							EXPERIENCE
 						</a>
-						<a className="hover:text-color-text-hovering">
-							WRITING
+						<a className="hover:text-color-text-hovering -mb-2 ">
+							CONTACT
 						</a>
+						{/* <a className="hover:text-color-text-hovering -mb-2 ">
+							CONTACT
+						</a> */}
 					</div>
 					<div className="h-15"></div>
-					<div className="flex gap-5 mb-10 font-bold text-background text-xl">
+					<div
+						ref={socialMediaRef}
+						className="flex gap-5 font-bold text-background text-xl  overflow-hidden"
+					>
 						<a className="hover:text-color-text-hovering">
 							Instagram
 						</a>
