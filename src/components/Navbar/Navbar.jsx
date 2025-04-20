@@ -6,18 +6,19 @@ import { useGSAP } from "@gsap/react";
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const navbarRef = useRef(null);
+	const navbarRef = useRef();
 	const aboutNavRef = useRef();
+	const logo = useRef();
 
 	const tl = gsap.timeline();
 
 	const handleOpenNavbar = () => {
 		setIsOpen(!isOpen);
-	};
 
-	useEffect(() => {
-		if (isOpen) {
-			navbarRef.current.style.display = "flex"; // make it visible
+
+		if (!isOpen) {
+			// open navbar
+			navbarRef.current.style.display = "flex";
 			gsap.fromTo(
 				navbarRef.current,
 				{ y: -500 },
@@ -25,22 +26,44 @@ const Navbar = () => {
 					y: 0,
 					duration: 1,
 					ease: "power4.out",
-					onComplete: () => {
-						navbarRef.current.style.zIndex = "2";
-					},
+				}
+			);
+			gsap.fromTo(
+				logo.current,
+				{
+					opacity: 1,
+				},
+				{
+					opacity: 0,
+					duration: 0.3,
+					ease: "power1.in",
 				}
 			);
 		} else {
+			// close navbar
 			gsap.to(navbarRef.current, {
 				y: -500,
 				duration: 1,
 				ease: "power4.out",
 				onComplete: () => {
-					navbarRef.current.style.display = "none";
+					// hide the navbar if the navbar completely closed
+					if (
+						navbarRef.current.style.display ==
+						"translate(0px, -500px)"
+					) {
+						navbarRef.current.style.display = "none";
+					}
 				},
 			});
+			gsap.to(
+				logo.current,
+				{
+					opacity: 1,
+					duration: 0.3,
+				}
+			);
 		}
-	}, [isOpen]);
+	};
 
 	return (
 		<>
@@ -101,6 +124,7 @@ const Navbar = () => {
 			</div>
 
 			<div
+				ref={logo}
 				className={`fixed top-3.5 left-5 text-primary bg-transparent mix-blend-difference `}
 			>
 				<a className=" font-luckiestguy tracking-widest italic text-2xl">
