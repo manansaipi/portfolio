@@ -1,36 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
 
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-  --font-intertight: Inter Tight;
-  --font-luckiestguy: Luckiest Guy;
-  --color-primary: rgba(var(--primary));
-  --color-background: rgba(var(--background));
-  --color-color-text-hovering: rgba(var(--color-text-hovering))
+    --font-intertight: Inter Tight;
+    --font-luckiestguy: Luckiest Guy;
+    --color-primary: rgba(var(--primary));
+    --color-background: rgba(var(--background));
+    --color-color-text-hovering: rgba(var(--color-text-hovering));
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 .section {
-  min-height: 100vh; /* 100% of the viewport height */
+    min-height: 100vh; /* 100% of the viewport height */
 }
 
 body::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .dark {
-  --background: 16, 16, 16;
-  --primary: 255, 255, 255;
-  --color-text-hovering: 127, 127, 127;
+    --background: 16, 16, 16;
+    --primary: 255, 255, 255;
+    --color-text-hovering: 127, 127, 127;
 }
 
 .light {
-  --background: 255, 255, 255;
-  --primary: 16, 16, 16;
-  --color-text-hovering: 127, 127, 127;
+    --background: 255, 255, 255;
+    --primary: 16, 16, 16;
+    --color-text-hovering: 127, 127, 127;
 }
