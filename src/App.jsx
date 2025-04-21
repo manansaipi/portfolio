@@ -6,15 +6,15 @@ import CustomCursor from "./CustomCursor";
 import Entrance from "./components/Entrance/Entrance";
 
 const App = () => {
-	return (
-		<>
-			<CustomCursor />
-			<Navbar />
-			<Entrance />
-			<Home />
-			<About />
-		</>
-	);
+    return (
+        <>
+            <CustomCursor />
+            <Navbar />
+            <Entrance />
+            <Home />
+            {/* <About /> */}
+        </>
+    );
 };
 
 export default App;
