@@ -3,7 +3,7 @@ import React from "react";
 const About = () => {
     return (
         <section id="About" className="">
-            <div class="bg-gray-100 dark:bg-gray-800">
+            <div class="bg-gray-200 dark:bg-gray-800">
                 <div class="min-h-screen flex items-center justify-center">
                     <div class="max-w-2xl w-full px-4">
                         <h1 class="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">
