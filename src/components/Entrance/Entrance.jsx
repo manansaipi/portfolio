@@ -112,5 +112,7 @@ const Entrance = () => {
         </div>
     );
 };
+// https://www.sublimio.com/ refference good entrance
+// https://www.reactbits.dev/
 
 export default Entrance;

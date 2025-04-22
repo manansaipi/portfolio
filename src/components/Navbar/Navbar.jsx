@@ -177,15 +177,15 @@ const Navbar = () => {
                 ref={logo}
                 className={`fixed top-3.5 left-5 text-primary bg-transparent mix-blend-difference `}
             >
-                <a className=" font-luckiestguy tracking-widest italic text-2xl">
+                <a className=" font-luckiestguy tracking-widest italic text-2xl ">
                     AMS°
                 </a>
                 <a className=" hover:text-zinc-400 p-3 text-xl font-bold">
                     Portofolio
                 </a>
                 {/* <a className="p-3">
-					<TogleTheme />
-				</a> */}
+                    <TogleTheme />
+                </a> */}
             </div>
         </>
     );
