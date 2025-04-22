@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import TogleTheme from "./TogleThemeButton";
 
 import gsap from "gsap";
@@ -92,11 +92,30 @@ const Navbar = () => {
         }
     };
 
+    // Click-outside handler
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                isOpen && // when user click and vabar is open
+                navbarRef.current &&
+                !navbarRef.current.contains(event.target) && // when user click and it not contain navbar
+                !event.target.closest(".open-navbar-button") &&
+                !logo.current.contains(event.target)
+            ) {
+                handleOpenNavbar();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
     return (
         <>
             <a
                 onClick={handleOpenNavbar}
-                className={`fixed top-3.5 right-3.5  hover:text-zinc-400  text-primary mix-blend-difference text-xl font-bold z-10 `}
+                className={`open-navbar-button fixed top-3.5 right-3.5  hover:text-zinc-400  text-primary mix-blend-difference text-xl font-bold z-10 `}
             >
                 {isOpen ? "Close" : "Menu"}
             </a>
