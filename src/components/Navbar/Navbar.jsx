@@ -160,13 +160,27 @@ const Navbar = () => {
                     <div className="h-15"></div>
                     <div
                         ref={socialMediaRef}
-                        className="flex gap-5 font-bold text-background text-xl  overflow-hidden"
+                        className="flex gap-5 font-bold text-background text-xl  overflow-hidden "
                     >
-                        <a className="hover:text-color-text-hovering">
+                        <a
+                            target="_blank"
+                            href="https://www.linkedin.com/in/abdulmannansaipi"
+                            className="hover:text-color-text-hovering cursor-none"
+                        >
                             LinkedIn
                         </a>
-                        <a className="hover:text-color-text-hovering">GitHub</a>
-                        <a className="hover:text-color-text-hovering">
+                        <a
+                            target="_blank"
+                            href="https://github.com/manansaipi"
+                            className="hover:text-color-text-hovering cursor-none"
+                        >
+                            GitHub
+                        </a>
+                        <a
+                            target="_blank"
+                            href="https://www.instagram.com/manansaipi"
+                            className="hover:text-color-text-hovering cursor-none"
+                        >
                             Instagram
                         </a>
                     </div>
@@ -175,7 +189,7 @@ const Navbar = () => {
 
             <div
                 ref={logo}
-                className={`fixed top-3.5 left-5 text-primary bg-transparent mix-blend-difference `}
+                className={`fixed top-3.5 left-5 text-primary bg-transparent mix-blend-difference  `}
             >
                 <a className=" font-luckiestguy tracking-widest italic text-2xl ">
                     AMS°
