@@ -9,6 +9,7 @@
     --font-luckiestguy: Luckiest Guy;
     --color-primary: rgba(var(--primary));
     --color-background: rgba(var(--background));
+    --color-light-dark: rgba(var(--light-dark));
     --color-color-text-hovering: rgba(var(--color-text-hovering));
 }
 
@@ -27,10 +28,12 @@ body::-webkit-scrollbar {
     --background: 16, 16, 16;
     --primary: 255, 255, 255;
     --color-text-hovering: 127, 127, 127;
+    --light-dark: 25,25,25;
 }
 
 .light {
     --background: 255, 255, 255;
     --primary: 16, 16, 16;
     --color-text-hovering: 127, 127, 127;
+    --light-dark: 230, 230, 230;
 }

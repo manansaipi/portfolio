@@ -1,22 +1,14 @@
 import React from "react";
 
 const Home = () => {
-    return (
-        <section id="About" className="">
-            <div class="bg-gray-100 dark:bg-gray-800">
-                <div class="min-h-screen flex items-center justify-center">
-                    <div class="max-w-2xl w-full px-4">
-                        <h1 class="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-                            Coming Soon!
-                        </h1>
-                        <p class="text-lg text-gray-600 dark:text-gray-300 text-center mb-12">
-                            This page is under construction. We'll be back soon!
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
+	return (
+		<section
+			id="Homes"
+			className="section bg-light-dark flex justify-center items-center text-6xl text-primary "
+		>
+			Ciao, I'm Ben.
+		</section>
+	);
 };
 
 export default Home;
