@@ -11,7 +11,7 @@ const Entrance = () => {
     const annan = useRef();
     const saipi = useRef();
     const aipi = useRef();
-    const portofolio = useRef();
+    const portfolio = useRef();
 
     const wrapper = useRef();
 
@@ -42,7 +42,7 @@ const Entrance = () => {
         gsap.set(abdul.current, { y: yOffset, x: xOffset });
         gsap.set(mannan.current, { y: -yOffset });
         gsap.set(saipi.current, { y: yOffset, x: -xOffset });
-        gsap.set(portofolio.current, { y: yOffset });
+        gsap.set(portfolio.current, { y: yOffset });
 
         firstTl
             .to(abdul.current, { y: 0, duration: 0.5, ease: "power3.out" })
@@ -69,11 +69,11 @@ const Entrance = () => {
                 gap: 0,
                 duration: 0.7,
             })
-            .to(portofolio.current, {
+            .to(portfolio.current, {
                 y: 0,
                 onStart: () => {
-                    portofolio.current.classList.remove("hidden");
-                    portofolio.current.classList.add("visible");
+                    portfolio.current.classList.remove("hidden");
+                    portfolio.current.classList.add("visible");
                 },
             });
 
@@ -89,7 +89,7 @@ const Entrance = () => {
 
     return (
         <div
-            id="Home"
+            id="Entrance"
             className="section bg-background text-primary flex items-center justify-center text-3xl font-normal md:text-5xl lg:text-7xl "
         >
             <div
@@ -105,8 +105,8 @@ const Entrance = () => {
                 <div className="font-luckiestguy flex italic" ref={saipi}>
                     S <div ref={aipi}>AIPI</div>°
                 </div>
-                <div ref={portofolio} className="font-bold hidden ">
-                    &nbsp; Portofolio
+                <div ref={portfolio} className="font-bold hidden ">
+                    &nbsp; Portfolio
                 </div>
             </div>
         </div>
