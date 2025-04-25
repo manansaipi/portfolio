@@ -18,11 +18,11 @@ const PreLoader = () => {
             },
         });
 
-        tl.to(bgPreloaderRef.current, {
-            opacity: 0,
-            duration: 1.5,
-            delay: 7,
-        });
+        // tl.to(bgPreloaderRef.current, {
+        //     opacity: 0,
+        //     duration: 1.5,
+        //     delay: 7,
+        // });
     }, []);
 
     return (

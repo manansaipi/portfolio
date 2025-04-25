@@ -174,7 +174,7 @@ const Home = () => {
     }, []);
     return (
         // ->60vh
-        <section className="h-[100vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
+        <section className="h-[60vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
             <div className="h-[25vh]"></div>
             <div
                 ref={greetginsRef}
