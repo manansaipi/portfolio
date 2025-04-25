@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
 
 const Home = () => {
+    const greetginsRef = useRef();
     const ciaoRef = useRef();
     const imRef = useRef();
     const benRef = useRef();
@@ -86,7 +87,7 @@ const Home = () => {
                 y: 0,
                 rotateZ: 0,
                 duration: 0.6,
-                delay: 1.3,
+                delay: 1,
             })
             .to(
                 whoRef.current,
@@ -100,7 +101,7 @@ const Home = () => {
             .to(techRef.current, {
                 y: yToOffset,
                 rotateZ: -10,
-                delay: 2.5,
+                delay: 2,
                 duration: 0.8,
             })
             .to(softwareRef.current, { y: 0, rotateZ: 0 }, "-=0.5")
@@ -118,6 +119,15 @@ const Home = () => {
                 {
                     y: 0,
                     rotateZ: 0,
+                    onStart: () => {
+                        if (greetginsRef.current) {
+                            // greetginsRef.current.classList.replace(
+                            //     "z-6",
+                            //     // "z-2"
+                            //     "z-2"
+                            // );
+                        }
+                    },
                 },
                 "-=0.6"
             );
@@ -163,15 +173,16 @@ const Home = () => {
         };
     }, []);
     return (
-        <section
-            id="Home"
-            className="h-svh bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl"
-        >
-            <div className="h-1/4"></div>
-            <div className="flex flex-col w-full z-21 ">
+        // ->60vh
+        <section className="h-[100vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
+            <div className="h-[25vh]"></div>
+            <div
+                ref={greetginsRef}
+                className="flex flex-col w-full z-6 will-change-auto "
+            >
                 {/* overflow-hidden */}
+                {/* TODO : FIX OVERFLOW WITH NAVBAR */}
                 <div className="flex gap-2 lg:gap-3  overflow-hidden ">
-                    {/* <div className="flex gap-2 lg:gap-3 bg-red-50 md:bg-yellow-100 lg:bg-blue-300 xl:bg-green-200   "> */}
                     <div className="w-15 md:w-18 lg:w-21 xl:w-29" ref={ciaoRef}>
                         {currentGreeting},
                     </div>

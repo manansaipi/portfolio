@@ -45,15 +45,11 @@ const Logo = () => {
         gsap.set(portfolio.current, { y: yOffset });
 
         firstTl
-            .to(abdul.current, {
-                y: 0,
-                duration: 0.5,
-                ease: "power3.out",
-            })
+            .to(abdul.current, { y: 0, duration: 0.5, ease: "power3.out" })
             .to(abdul.current, {
                 x: 0,
                 duration: 0.5,
-
+                delay: 0.5,
                 ease: "power3.out",
             });
 
@@ -62,7 +58,7 @@ const Logo = () => {
                 y: 0,
                 duration: 0.5,
                 ease: "power3.out",
-                delay: 0.15,
+                delay: 1.15,
             })
             .to([bdul.current, annan.current, aipi.current], {
                 opacity: 1,
@@ -85,7 +81,7 @@ const Logo = () => {
             .to(saipi.current, {
                 y: 0,
                 duration: 0.5,
-                // delay: 7.5,
+                delay: 0.5,
                 ease: "power3.out",
             })
             .to(saipi.current, { x: 0, duration: 0.5, ease: "power3.out" });

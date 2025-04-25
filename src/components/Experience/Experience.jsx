@@ -1,13 +1,12 @@
 import React from "react";
 import ComingSoon from "../ComingSoon/ComingSoon";
 
-const About = () => {
+const Experience = () => {
     return (
-        <section id="About" className="">
+        <section id="Experience" className="">
             <ComingSoon></ComingSoon>
-            {/* <div className="bg-black w-full h-[30vh]">hey</div> */}
         </section>
     );
 };
 
-export default About;
+export default Experience;

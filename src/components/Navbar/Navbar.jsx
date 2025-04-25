@@ -137,7 +137,7 @@ const Navbar = () => {
             {/* OPENED NAVBAR */}
             <div
                 ref={navbarRef}
-                className={`flex bg-primary w-full fixed  z-22 `}
+                className={`flex bg-primary w-full fixed  z-3`}
                 style={{ display: "none" }}
             >
                 <div
@@ -170,7 +170,13 @@ const Navbar = () => {
                         >
                             ABOUT
                         </a>
-                        <a className=" -mb-2 ">EXPERIENCE</a>
+                        <a
+                            onClick={handleOpenNavbar}
+                            href="#Experience"
+                            className="hover:text-color-text-hovering -mb-2 cursor-none"
+                        >
+                            EXPERIENCE
+                        </a>
                         <a className=" -mb-2 ">CONTACT</a>
                     </div>
                     <div className="h-15"></div>
@@ -203,12 +209,12 @@ const Navbar = () => {
                 </div>
             </div>
             {/* NAVBAR LARGE */}
-            <div className="bg-light-dark">
+            <div id="Home" className="bg-light-dark">
                 <div className=" flex text-primary h-44 items-center px-48 xl:px-80  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div
                         ref={logo}
-                        className={`fixed lg:static top-3.5 left-5  mix-blend-difference  `}
+                        className={`fixed lg:static top-3.5 left-5  mix-blend-difference z-4 `}
                     >
                         <Logo></Logo>
                     </div>
@@ -232,9 +238,7 @@ const Navbar = () => {
             </div>
             <a
                 onClick={handleOpenNavbar}
-                className={`open-navbar-button fixed top-3.5 right-3.5 ${
-                    isOpen ? "text-background" : "text-primary"
-                }  hover:text-color-text-hovering  text-xl font-bold z-10 lg:hidden   `}
+                className={`open-navbar-button fixed top-3.5 right-3.5 text-primary mix-blend-difference  hover:text-color-text-hovering  text-xl font-bold z-4 lg:hidden `}
             >
                 {isOpen ? "Close" : "Menu"}
             </a>

@@ -28,10 +28,8 @@ const PreLoader = () => {
     return (
         <div
             ref={bgPreloaderRef}
-            className="section fixed bg-black w-full z-20 scroll-d"
-        >
-            PreLoader
-        </div>
+            className="section fixed bg-black w-full z-5 scroll-d"
+        ></div>
     );
 };
 
