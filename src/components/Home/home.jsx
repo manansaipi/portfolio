@@ -164,7 +164,7 @@ const Home = () => {
                     duration: 1,
                 });
             }
-        }, 10000); // change every 10 seconds
+        }, 12000); // change every 12 seconds
 
         window.addEventListener("resize", handleResize);
 
@@ -219,10 +219,10 @@ const Home = () => {
                         <span>who</span>
                         <div className="">
                             <span className="absolute" ref={lovesRef}>
-                                loves building things.
+                                simplifies complexity.
                             </span>
                             <span className="absolute" ref={simpleRef}>
-                                simplifies complexity
+                                loves building things.
                             </span>
                         </div>
                     </div>
