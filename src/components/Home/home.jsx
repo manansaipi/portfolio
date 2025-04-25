@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import gsap from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
 
@@ -17,16 +17,16 @@ const Home = () => {
         "Ciao",
         "Hello",
         "Hola",
-        "Salut",
         "Hallo",
         "Hei",
-        "Merhaba",
         "Olá",
         "안녕",
-        "こんにちは",
         "你好",
         "Ciao",
     ];
+    const [currentGreeting, setCurrentGreeting] = useState(greetings[0]);
+    const greetingIndex = useRef(0);
+
     const randomGreeting = useMemo(() => {
         return greetings[Math.floor(Math.random() * greetings.length)];
     }, []);
@@ -36,7 +36,7 @@ const Home = () => {
 
         let yOffset = 0;
         let yToOffset = 0;
-        let rotateZvar = 20;
+        let rotateZvar = 25;
 
         const handleResize = () => {
             if (vw < 640) {
@@ -86,6 +86,7 @@ const Home = () => {
                 y: 0,
                 rotateZ: 0,
                 duration: 0.6,
+                delay: 1.3,
             })
             .to(
                 whoRef.current,
@@ -102,7 +103,7 @@ const Home = () => {
                 delay: 2.5,
                 duration: 0.8,
             })
-            .to(softwareRef.current, { y: 0, rotateZ: 0 }, "-=0.75")
+            .to(softwareRef.current, { y: 0, rotateZ: 0 }, "-=0.5")
             .to(
                 lovesRef.current,
                 {
@@ -118,8 +119,38 @@ const Home = () => {
                     y: 0,
                     rotateZ: 0,
                 },
-                "-=0.75"
+                "-=0.6"
             );
+
+        const interval = setInterval(() => {
+            const nextGreeting =
+                greetings[(greetingIndex.current + 1) % greetings.length];
+
+            if (ciaoRef.current) {
+                const tl = gsap.timeline();
+
+                // Step 1: Animate the current word up and out
+                tl.to(ciaoRef.current, {
+                    y: -50,
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        // After the word is hidden, update the greeting
+                        greetingIndex.current =
+                            (greetingIndex.current + 1) % greetings.length;
+                        setCurrentGreeting(nextGreeting);
+                        gsap.set(ciaoRef.current, { y: 100 }); // reset position below
+                    },
+                });
+
+                // Step 2: Animate the new word in from the bottom
+                tl.to(ciaoRef.current, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1,
+                });
+            }
+        }, 10000); // change every 10 seconds
 
         window.addEventListener("resize", handleResize);
 
@@ -127,20 +158,23 @@ const Home = () => {
         handleResize();
 
         return () => {
+            clearInterval(interval);
             window.removeEventListener("resize", handleResize);
         };
     }, []);
     return (
         <section
             id="Home"
-            className=" h-svh bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl"
+            className="h-svh bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl"
         >
             <div className="h-1/4"></div>
-            <div className="flex flex-col w-full ">
+            <div className="flex flex-col w-full z-21 ">
                 {/* overflow-hidden */}
                 <div className="flex gap-2 lg:gap-3  overflow-hidden ">
                     {/* <div className="flex gap-2 lg:gap-3 bg-red-50 md:bg-yellow-100 lg:bg-blue-300 xl:bg-green-200   "> */}
-                    <div ref={ciaoRef}>{randomGreeting}, </div>
+                    <div className="w-15 md:w-18 lg:w-21 xl:w-29" ref={ciaoRef}>
+                        {currentGreeting},
+                    </div>
                     <div ref={imRef}>I'm </div>
                     <div ref={benRef}>Ben.</div>
                 </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import PreLoader from "./components/PreLoader";
 import Home from "./components/Home/home";
 import About from "./components/About/About";
 import Navbar from "./components/Navbar/Navbar";
@@ -9,6 +10,7 @@ const App = () => {
     return (
         <>
             <CustomCursor />
+            <PreLoader />
             <Navbar />
             <Home />
             <About />

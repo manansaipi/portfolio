@@ -137,7 +137,7 @@ const Navbar = () => {
             {/* OPENED NAVBAR */}
             <div
                 ref={navbarRef}
-                className={`flex bg-primary w-full fixed   `}
+                className={`flex bg-primary w-full fixed  z-22 `}
                 style={{ display: "none" }}
             >
                 <div
@@ -203,29 +203,31 @@ const Navbar = () => {
                 </div>
             </div>
             {/* NAVBAR LARGE */}
-            <div className=" flex text-primary bg-light-dark h-44 items-center px-48 xl:px-80  ">
-                {/* if sm-md screen size, the position is flex */}
-                <div
-                    ref={logo}
-                    className={`fixed lg:static top-3.5 left-5  mix-blend-difference  `}
-                >
-                    <Logo></Logo>
-                </div>
-                <div className="hidden lg:flex gap-10 justify-end w-full text- ">
-                    <a
-                        href="#Home"
-                        className="hover:text-color-text-hovering cursor-none"
+            <div className="bg-light-dark">
+                <div className=" flex text-primary h-44 items-center px-48 xl:px-80  ">
+                    {/* if sm-md screen size, the position is flex */}
+                    <div
+                        ref={logo}
+                        className={`fixed lg:static top-3.5 left-5  mix-blend-difference  `}
                     >
-                        Home
-                    </a>
-                    <a
-                        href="#About"
-                        className="hover:text-color-text-hovering cursor-none"
-                    >
-                        About
-                    </a>
-                    <a className="">Experience</a>
-                    <a className="">Contact</a>
+                        <Logo></Logo>
+                    </div>
+                    <div className="hidden lg:flex gap-10 justify-end w-full text- ">
+                        <a
+                            href="#Home"
+                            className="hover:text-color-text-hovering cursor-none"
+                        >
+                            Home
+                        </a>
+                        <a
+                            href="#About"
+                            className="hover:text-color-text-hovering cursor-none"
+                        >
+                            About
+                        </a>
+                        <a className="">Experience</a>
+                        <a className="">Contact</a>
+                    </div>
                 </div>
             </div>
             <a
