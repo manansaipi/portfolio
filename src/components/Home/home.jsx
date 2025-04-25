@@ -119,18 +119,22 @@ const Home = () => {
                 {
                     y: 0,
                     rotateZ: 0,
-                    onStart: () => {
+                    onComplete: () => {
                         if (greetginsRef.current) {
-                            // greetginsRef.current.classList.replace(
-                            //     "z-6",
-                            //     // "z-2"
-                            //     "z-2"
-                            // );
+                            setTimeout(() => {
+                                if (greetginsRef.current) {
+                                    greetginsRef.current.classList.replace(
+                                        "z-6",
+                                        "z-2"
+                                    );
+                                }
+                            }, 2000); // wait 2000ms before changing z-index to avoid blinking
                         }
                     },
                 },
                 "-=0.6"
-            );
+            )
+            .to(greetginsRef.current, { z: 0 });
 
         const interval = setInterval(() => {
             const nextGreeting =
@@ -176,12 +180,12 @@ const Home = () => {
         // ->60vh
         <section className="h-[60vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
             <div className="h-[25vh]"></div>
+            {/* TODO : FIX OVERFLOW WITH NAVBAR */}
             <div
                 ref={greetginsRef}
                 className="flex flex-col w-full z-6 will-change-auto "
             >
                 {/* overflow-hidden */}
-                {/* TODO : FIX OVERFLOW WITH NAVBAR */}
                 <div className="flex gap-2 lg:gap-3  overflow-hidden ">
                     <div className="w-15 md:w-18 lg:w-21 xl:w-29" ref={ciaoRef}>
                         {currentGreeting},
