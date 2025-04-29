@@ -102,8 +102,9 @@ const Logo = () => {
                 S <div ref={aipi}>AIPI</div>°
             </div>
             <a
+                href="#Home"
                 ref={portfolio}
-                className="font-bold text-primary hover:text-color-text-hovering"
+                className="font-bold text-primary hover:text-color-text-hovering cursor-none"
             >
                 &nbsp;&nbsp;Portfolio
             </a>

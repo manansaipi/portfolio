@@ -144,12 +144,12 @@ const Navbar = () => {
                     ref={leftTextNavbarOpenRef}
                     className="p-5 h-[5rem]  w-1/2 hidden  md:flex md:flex-col overflow-hidden "
                 >
-                    <a className=" font-bold text-background text-xl">
+                    <div className="font-bold text-background text-xl">
                         Abdul Mannan Saip
-                    </a>
-                    <a className=" font-bold text-background text-xl ">
+                    </div>
+                    <div className=" font-bold text-background text-xl ">
                         Portfolio
-                    </a>
+                    </div>
                 </div>
                 <div className=" flex flex-col  justify-center items-start bg-primary pl-5 pt-14 mb-8  md:pt-5 md:pl-3  ">
                     <div
