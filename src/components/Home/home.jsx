@@ -178,8 +178,8 @@ const Home = () => {
     }, []);
     return (
         // ->60vh
-        <section className="h-[60vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
-            <div className="h-[25vh]"></div>
+        <section className="h-[60vh] bg-light-dark flex flex-col  items-start text-2xl text-primary pl-15 md:px-40 md:text-3xl lg:px-66 lg:text-4xl xl:px-110 xl:text-5xl">
+            <div className="h-[23vh]"></div>
             {/* TODO : FIX OVERFLOW WITH NAVBAR */}
             <div
                 ref={greetginsRef}
