@@ -104,7 +104,7 @@ const Logo = () => {
             <a
                 href="#Home"
                 ref={portfolio}
-                className="font-bold text-primary hover:text-color-text-hovering cursor-none"
+                className="font-bold hover:text-color-text-hovering cursor-none"
             >
                 &nbsp;&nbsp;Portfolio
             </a>

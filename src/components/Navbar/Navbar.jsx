@@ -11,6 +11,7 @@ const Navbar = () => {
     const navigationListRef = useRef();
     const socialMediaRef = useRef();
     const leftTextNavbarOpenRef = useRef();
+    const navbarLargeRef = useRef();
 
     const logo = useRef();
 
@@ -96,6 +97,13 @@ const Navbar = () => {
     useState(() => {});
     // Click-outside handler
     useEffect(() => {
+        
+        gsap.fromTo(
+            navbarLargeRef.current.children,
+            { opacity: 0 },
+            { opacity: 100,stagger: 0.075, delay:7.1  }
+        );
+
         const handleClickOutside = (event) => {
             if (
                 isOpen && // when user click and vabar is open
@@ -210,7 +218,7 @@ const Navbar = () => {
             </div>
             {/* NAVBAR LARGE */}
             <div id="Home" className="bg-light-dark">
-                <div className=" flex text-primary h-44 items-center px-48 xl:px-80  ">
+                <div className=" flex text-primary h-44 items-center px-40 xl:px-80  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div
                         ref={logo}
@@ -218,7 +226,9 @@ const Navbar = () => {
                     >
                         <Logo></Logo>
                     </div>
-                    <div className="hidden lg:flex gap-10 justify-end w-full text- ">
+                    <div
+                    ref={navbarLargeRef}
+                    className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  ">
                         <a
                             href="#Home"
                             className="hover:text-color-text-hovering cursor-none"

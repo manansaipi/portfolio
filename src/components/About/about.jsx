@@ -9,24 +9,37 @@ gsap.registerPlugin(ScrollTrigger);
 const About = () => {
 	const aboutRef = useRef();
 
-	let tl = gsap.timeline({
-		// yes, we can add it to an entire timeline!
-		scrollTrigger: {
-			// trigger: aboutRef.current,
-			// markers: true,
-			// pin: true, // pin the trigger element while active
-			// start: "top center",
-			// end: "top top", // end after scrolling 500px beyond the start
-		},
-	});
+	useEffect(() => {
+		// gsap.to(aboutRef.current, {
+		// 	x: -400,
+		// 	duration: 3,
+		// 	// yes, we can add it to an entire timeline!
+		// 	scrollTrigger: {
+		// 		pin: true,
+		// 		trigger: aboutRef.current,
+		// 		markers: true,
+		// 		scrub: 2,
+		// 		start: "center center",
+		// 		end: "center 20%", // end after scrolling 500px beyond the start
+		// 		// toggleActions: "restart pause resume reset", // onEnter onLeave onEnterBack onLeaveBakk
+		// 	},
+		// });
+	}, []);
+
 	return (
-		<section id="About" className="h-[30vh]">
+		<section
+			id="About"
+			className="flex items-center justify-center bg-light-dark md:py-10  h-auto md:px-5 lg:px-10 xl:px-10  "
+		>
 			{/* <ComingSoon></ComingSoon> */}
-			<div ref={aboutRef} className="bg-black w-full h-[30vh]">
-				hey
-			</div>
+
+			<div
+				ref={aboutRef}
+				className="bg-black w-full h-[50vw]  max-h-[80vh] max-w-[1400px]"
+			></div>
 		</section>
 	);
 };
 
 export default About;
+// moritz petersen
