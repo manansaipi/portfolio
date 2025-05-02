@@ -12,7 +12,6 @@ const Navbar = () => {
     const socialMediaRef = useRef();
     const leftTextNavbarOpenRef = useRef();
     const navbarLargeRef = useRef();
-
     const logo = useRef();
 
     const handleOpenNavbar = () => {
@@ -92,18 +91,9 @@ const Navbar = () => {
             });
         }
     };
-    const vw = window.innerWidth;
 
-    useState(() => {});
-    // Click-outside handler
     useEffect(() => {
-        
-        gsap.fromTo(
-            navbarLargeRef.current.children,
-            { opacity: 0 },
-            { opacity: 100,stagger: 0.075, delay:7.1  }
-        );
-
+        // Click-outside handler
         const handleClickOutside = (event) => {
             if (
                 isOpen && // when user click and vabar is open
@@ -140,6 +130,15 @@ const Navbar = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, [isOpen]);
+
+    useEffect(() => {
+        gsap.fromTo(
+            navbarLargeRef.current.children,
+            { opacity: 0 },
+            { opacity: 100, stagger: 0.075, delay: 7.1 }
+        );
+    }, []);
+
     return (
         <>
             {/* OPENED NAVBAR */}
@@ -227,8 +226,9 @@ const Navbar = () => {
                         <Logo></Logo>
                     </div>
                     <div
-                    ref={navbarLargeRef}
-                    className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  ">
+                        ref={navbarLargeRef}
+                        className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  "
+                    >
                         <a
                             href="#Home"
                             className="hover:text-color-text-hovering cursor-none"
