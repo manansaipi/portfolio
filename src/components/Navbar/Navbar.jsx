@@ -184,7 +184,10 @@ const Navbar = () => {
                         >
                             EXPERIENCE
                         </a>
-                        <a className=" -mb-2 ">CONTACT</a>
+                        <a
+                            onClick={handleOpenNavbar}
+                            href="#Experience"
+                            className="hover:text-color-text-hovering -mb-2 cursor-none">CONTACT</a>
                     </div>
                     <div className="h-15"></div>
                     <div
@@ -242,7 +245,9 @@ const Navbar = () => {
                             About
                         </a>
                         <a className="">Experience</a>
-                        <a className="">Contact</a>
+                        <a
+                            href="#Contact"
+                            className="hover:text-color-text-hovering cursor-none">Contact</a>
                     </div>
                 </div>
             </div>

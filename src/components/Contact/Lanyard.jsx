@@ -32,7 +32,7 @@ export default function Lanyard({
   transparent = true,
 }) {
   return (
-    <div className="relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center cursor-none">
+    <div className="relative z-0 w-full h-[80vh] flex justify-center items-center transform scale-100 origin-center cursor-none">
       <Canvas
         camera={{ position: position, fov: fov }}
         gl={{ alpha: transparent }}

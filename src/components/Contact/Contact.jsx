@@ -6,6 +6,7 @@ import Lanyard from "./Lanyard";
 const Contact = () => {
   return (
     <div
+      id="Contact"
       className="section bg-gray-50 bg-repeat bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
