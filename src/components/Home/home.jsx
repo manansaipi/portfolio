@@ -183,14 +183,14 @@ const Home = () => {
     return (
         // ->60vh
         <section className="h-[60vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl">
-            <div className="h-[25vh]"></div>
+            <div className="h-[23vh]"></div>
             {/* TODO : FIX OVERFLOW WITH NAVBAR */}
             <div
                 ref={greetginsRef}
                 className="flex flex-col w-full z-6 will-change-auto "
             >
                 {/* overflow-hidden */}
-                <div className="flex gap-2 lg:gap-3  overflow-hidden ">
+                <div className="flex gap-2 lg:gap-3 overflow-hidden ">
                     <div className="w-15 md:w-18 lg:w-21 xl:w-29" ref={ciaoRef}>
                         {currentGreeting},
                     </div>

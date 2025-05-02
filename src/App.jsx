@@ -8,18 +8,19 @@ import CustomCursor from "./CustomCursor";
 import Entrance from "./components/Entrance/Entrance";
 
 const App = () => {
-    return (
-        <>
-            <CustomCursor />
-            <PreLoader />
-            <Navbar />
-            <Home />
-            <About />
-            <Experience />
-            {/* <Entrance /> */}
-            {/* <About /> */}
-        </>
-    );
+	return (
+		<>
+			<CustomCursor />
+			<PreLoader />
+			<Navbar />
+			<Home />
+			<About />
+			<Experience />
+			{/* <Entrance /> */}
+			{/* <About /> */}
+		</>
+	);
 };
 
 export default App;
+// TODO : WEB PORTOFOLIO TERMINAL/CMD STYLEhttps://www.youtube.com/watch?v=L-7Rofs-zTM&ab_channel=MuhammadIqbalAlaydrus
