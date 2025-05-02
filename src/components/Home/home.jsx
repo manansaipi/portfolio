@@ -15,22 +15,23 @@ const Home = () => {
     const simpleRef = useRef();
 
     const greetings = [
-        "Ciao",
-        "Hello",
-        "Hola",
-        "Hallo",
-        "Hei",
-        "Olá",
-        "안녕",
-        "你好",
-        "Ciao",
+        "Ciao", // Italian
+        "Hello", // English
+        "Hola", // Spanish
+        "Hallo", // German
+        "Hei", // Norwegian/Finnish
+        "Olá", // Portuguese
+        "안녕", // Korean (Annyeong)
+        "你好", // Chinese
+        "Salut", // French
+        "नमस्ते", // Hindi (Namaste)
+        "Aloh", // Hawaiian
+        "Hej", // Swedish/Danish
+        "Szia", // Hungarian
+        "مرحبا", // Arabic (Marhaban)
+        "Ciao", // Italian
     ];
     const [currentGreeting, setCurrentGreeting] = useState(greetings[0]);
-    const greetingIndex = useRef(0);
-
-    const randomGreeting = useMemo(() => {
-        return greetings[Math.floor(Math.random() * greetings.length)];
-    }, []);
 
     useEffect(() => {
         const vw = window.innerWidth;
@@ -137,9 +138,6 @@ const Home = () => {
             .to(greetginsRef.current, { z: 0 });
 
         const interval = setInterval(() => {
-            const nextGreeting =
-                greetings[(greetingIndex.current + 1) % greetings.length];
-
             if (ciaoRef.current) {
                 const tl = gsap.timeline();
 
@@ -149,9 +147,15 @@ const Home = () => {
                     opacity: 0,
                     duration: 1,
                     onComplete: () => {
-                        // After the word is hidden, update the greeting
-                        greetingIndex.current =
-                            (greetingIndex.current + 1) % greetings.length;
+                        // Pick a random greeting (excluding the current one)
+                        let nextGreeting;
+                        do {
+                            nextGreeting =
+                                greetings[
+                                    Math.floor(Math.random() * greetings.length)
+                                ];
+                        } while (nextGreeting === currentGreeting); // Avoid same greeting
+
                         setCurrentGreeting(nextGreeting);
                         gsap.set(ciaoRef.current, { y: 100 }); // reset position below
                     },
@@ -164,7 +168,7 @@ const Home = () => {
                     duration: 1,
                 });
             }
-        }, 12000); // change every 12 seconds
+        }, 12000);
 
         window.addEventListener("resize", handleResize);
 
