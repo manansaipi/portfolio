@@ -171,7 +171,7 @@ const Home = () => {
     handleResize();
 
     return () => {
-      clearInterval(interval);
+      clearInterval(interval); 
       window.removeEventListener("resize", handleResize);
     };
   }, []);
