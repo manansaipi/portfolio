@@ -7,7 +7,7 @@ import Magnet from "./Magnet";
 
 const Footer = () => {
 	return (
-		<div className="p-12 pb-5 h-full w-full flex justify-between items-center ">
+		<div className="p-12 pb-5 h-full w-full flex justify-between items-center hovering">
 			<div>
 				<div className="mb-4 text-xl font-semibold text-background">Github</div>
 				<Magnet magnetStrength={3}>
@@ -46,11 +46,11 @@ const Footer = () => {
 							<MdMailOutline size={25} />
 						</a>
 					</Magnet>
-					<Magnet>
+					<Magnet className="hovering">
 						<a
 							href="https://www.linkedin.com/in/abdulmannansaipi"
 							target="_blank"
-							className="md:cursor-none"
+							className="md:cursor-none hovering"
 						>
 							<PiLinkedinLogoBold size={25} />
 						</a>
