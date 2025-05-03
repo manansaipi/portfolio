@@ -112,7 +112,7 @@ const MessageForm = () => {
 						required
 						name="name"
 						type="text"
-						className="border-b-2 outline-0 py-2 "
+						className="border-b-2 outline-0 py-2 cursor-none "
 						placeholder="Your Name "
 					/>
 					<span
@@ -124,7 +124,7 @@ const MessageForm = () => {
 						required
 						name="email"
 						type="email"
-						className="border-b-2 outline-0 py-2 "
+						className="border-b-2 outline-0 py-2 cursor-none "
 						placeholder="Your Email"
 					/>
 					<span
@@ -136,7 +136,7 @@ const MessageForm = () => {
 						required
 						name="subject"
 						type="text"
-						className="border-b-2 outline-0 py-2 "
+						className="border-b-2 outline-0 py-2 cursor-none "
 						placeholder="Subject"
 					/>
 					<span
@@ -147,7 +147,7 @@ const MessageForm = () => {
 						ref={messageRef}
 						required
 						name="message"
-						className="border-b-2 outline-0 pt-5 pb-25  resize-none"
+						className="border-b-2 outline-0 pt-5 pb-25 cursor-none resize-none"
 						placeholder="Your Message"
 					></textarea>
 					<span
@@ -158,7 +158,7 @@ const MessageForm = () => {
 				<button
 					type="submit"
 					disabled={isLoading}
-					className={`flex justify-center items-center bg-background px-8 py-2 mt-5 rounded-md md:cursor-none active:bg-color-text-hovering ${
+					className={`flex justify-center items-center bg-background px-8 py-2 cursor-none mt-5 rounded-md md:cursor-none active:bg-color-text-hovering ${
 						isLoading ? "opacity-60 cursor-not-allowed" : ""
 					}`}
 				>

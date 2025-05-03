@@ -35,8 +35,10 @@ const About = () => {
 
 			<div
 				ref={aboutRef}
-				className="bg-black w-full h-[50vw]  max-h-[80vh] max-w-[1400px]"
-			></div>
+				className="bg-black w-full h-[50vw]  max-h-[80vh] max-w-[1400px] text-white flex items-center justify-center text-6xl"
+			>
+				manansaipi
+			</div>
 		</section>
 	);
 };

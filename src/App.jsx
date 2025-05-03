@@ -3,9 +3,9 @@ import CustomCursor from "./CustomCursor";
 import PreLoader from "./components/PreLoader";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
-// import About from "./components/About/About";
 import Experience from "./components/Experience/Experience";
 import Contact from "./components/Contact/Contact";
+import About from "./components/About/about";
 // import Entrance from "./components/Entrance/Entrance";
 
 const App = () => {
