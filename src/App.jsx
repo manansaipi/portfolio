@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import Experience from "./components/Experience/Experience";
 import Contact from "./components/Contact/Contact";
-import About from "./components/About/about";
+import About from "./components/About/About";
 // import Entrance from "./components/Entrance/Entrance";
 
 const App = () => {
