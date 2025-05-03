@@ -5,7 +5,6 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import Experience from "./components/Experience/Experience";
 import Contact from "./components/Contact/Contact";
-import About from "./components/About/About";
 // import Entrance from "./components/Entrance/Entrance";
 
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
 			<PreLoader />
 			<Navbar />
 			<Home />
-			{/* <About /> */}
 			<Contact />
 			{/* <Experience /> */}
 			{/* <Entrance /> */}
