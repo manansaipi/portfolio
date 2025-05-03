@@ -186,7 +186,7 @@ const Navbar = () => {
                         </a>
                         <a
                             onClick={handleOpenNavbar}
-                            href="#Experience"
+                            href="#Contact"
                             className="hover:text-color-text-hovering -mb-2 cursor-none">CONTACT</a>
                     </div>
                     <div className="h-15"></div>
