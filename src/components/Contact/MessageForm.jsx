@@ -102,11 +102,11 @@ const MessageForm = () => {
 
 	return (
 		<div>
-			<div className="pb-24 pt-8">
-				<div className="text-5xl font-bold text-background">Contact</div>
+			<div className="pb-12 pt-8 md:pb-24 ">
+				<div className="text-4xl md:text-5xl font-bold text-background">Contact</div>
 			</div>
 			<form ref={form} onSubmit={sendEmail} noValidate>
-				<div className="flex flex-col gap-y-5 text-xl font-semibold ">
+				<div className="flex flex-col gap-y-3 md:gap-y-5 text-xl font-semibold ">
 					<input
 						ref={nameRef}
 						required
@@ -147,7 +147,7 @@ const MessageForm = () => {
 						ref={messageRef}
 						required
 						name="message"
-						className="border-b-2 outline-0 pt-5 pb-25 cursor-none resize-none"
+						className="border-b-2 outline-0 pt-5 pb-18 md:pb-25 cursor-none resize-none"
 						placeholder="Your Message"
 					></textarea>
 					<span

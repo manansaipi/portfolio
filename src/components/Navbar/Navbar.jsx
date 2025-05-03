@@ -218,7 +218,7 @@ const Navbar = () => {
 			</div>
 			{/* NAVBAR LARGE */}
 			<div id="Home" className="bg-light-dark">
-				<div className=" flex text-primary h-44 items-center px-40 xl:px-80  ">
+				<div className=" flex text-primary h-[20vh]  items-center px-40 xl:px-80  ">
 					{/* if sm-md screen size, the position is flex */}
 					<div
 						ref={logo}

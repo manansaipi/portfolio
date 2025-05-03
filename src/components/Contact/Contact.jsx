@@ -28,7 +28,7 @@ const Contact = () => {
 			className="section bg-gray-50 bg-repeat bg-center"
 			style={{ backgroundImage: `url(${bgImage})` }}
 		>
-			<div className="flex flex-col lg:flex-row">
+			<div className="flex flex-col lg:flex-row ">
 				<div
 					ref={lanyardRef}
 					className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
