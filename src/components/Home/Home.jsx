@@ -53,7 +53,6 @@ const Home = () => {
 				yOffset = 125;
 				yToOffset = -95 - 35;
 			}
-			console.log("kon");
 		};
 		handleResize(); // Call once initially
 

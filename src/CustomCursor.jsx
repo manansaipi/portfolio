@@ -59,7 +59,7 @@ export default function CustomCursor() {
 			className={`bg-primary pointer-events-none fixed  h-5 mix-blend-difference translate-z-100 ${
 				hovering ? " scale-240" : ""
 			} ${
-				hoveringCertif ? "w-10  " : "w-5"
+				hoveringCertif ? "scale-240 w-10  " : "w-5"
 			} rounded-full transition-transform duration-200 hidden md:block z-4 `}
 			style={{
 				left: `${position.x}px`,
