@@ -4,7 +4,7 @@ import Certificate from "./Certificate/Certificate";
 
 const Experience = () => {
 	return (
-		<section id="Experience" className="h-screen bg-black">
+		<section id="Experience" className="h-screen bg-light-dark">
 			<Certificate />
 		</section>
 	);
