@@ -1,49 +1,76 @@
 import { useEffect, useState } from "react";
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [hovering, setHovering] = useState(false);
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+	const [hovering, setHovering] = useState(false);
+	const [hoveringCertif, setHoveringCertif] = useState(false);
 
-  useEffect(() => {
-    const moveCursor = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      //   console.log(e.target.tagName);
-      // console.log(e.target.className);
-      //   console.log(e.target.className.includes("navbar"));
-    };
+	useEffect(() => {
+		const moveCursor = (e) => {
+			setPosition({ x: e.clientX, y: e.clientY });
+			//   console.log(e.target.tagName);
+			// console.log(e.target.className);
+			//   console.log(e.target.className.includes("navbar"));
+		};
 
-    const handleMouseOver = (e) => {
-      if (e.target.tagName === "A") {
-        setHovering(true);
-      }
-    };
+		const handleMouseOver = (e) => {
+			const target = e.target;
 
-    const handleMouseOut = (e) => {
-      if (e.target.tagName === "A") {
-        setHovering(false);
-      }
-    };
+			const tagName = target.tagName;
+			const dataName =
+				target.getAttribute("data-name") || target.getAttribute("name");
 
-    window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mouseover", handleMouseOver);
-    window.addEventListener("mouseout", handleMouseOut);
+			if (tagName === "A") {
+				setHovering(true);
+			}
+			if (dataName == "certificate") {
+				setHoveringCertif(true);
+			}
+		};
 
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("mouseover", handleMouseOver);
-      window.removeEventListener("mouseout", handleMouseOut);
-    };
-  }, []);
+		const handleMouseOut = (e) => {
+			const target = e.target;
 
-  return (
-    <div
-      className={`bg-primary pointer-events-none fixed  w-5 h-5 mix-blend-difference translate-z-100 ${
-        hovering ? " scale-240" : ""
-      } rounded-full transition-transform duration-200 hidden md:block z-4 `}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-      }}
-    />
-  );
+			const tagName = target.tagName;
+			const dataName =
+				target.getAttribute("data-name") || target.getAttribute("name");
+
+			if (tagName === "A") {
+				setHovering(false);
+			}
+			if (dataName == "certificate") {
+				setHoveringCertif(false);
+			}
+		};
+
+		window.addEventListener("mousemove", moveCursor);
+		window.addEventListener("mouseover", handleMouseOver);
+		window.addEventListener("mouseout", handleMouseOut);
+
+		return () => {
+			window.removeEventListener("mousemove", moveCursor);
+			window.removeEventListener("mouseover", handleMouseOver);
+			window.removeEventListener("mouseout", handleMouseOut);
+		};
+	}, []);
+
+	return (
+		<div
+			className={`bg-primary pointer-events-none fixed  h-5 mix-blend-difference translate-z-100 ${
+				hovering ? " scale-240" : ""
+			} ${
+				hoveringCertif ? "w-10  " : "w-5"
+			} rounded-full transition-transform duration-200 hidden md:block z-4 `}
+			style={{
+				left: `${position.x}px`,
+				top: `${position.y}px`,
+			}}
+		>
+			{hoveringCertif && (
+				<div className="w-full h-full text-[10px] font-semibold flex items-center justify-center">
+					VIEW
+				</div>
+			)}
+		</div>
+	);
 }

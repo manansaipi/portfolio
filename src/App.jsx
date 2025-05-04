@@ -32,7 +32,7 @@ const App = () => {
 				{animationDone && (
 					<>
 						{/* <About /> */}
-						{/* <Experience /> */}
+						<Experience />
 						<Contact />
 					</>
 				)}
