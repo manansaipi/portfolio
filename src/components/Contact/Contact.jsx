@@ -56,4 +56,3 @@ const Contact = () => {
 export default Contact;
 // https://aafrzl.my.id/ contact refference
 // TODO : VALIDASI EMAIL SENDER SPAMMING. CANNOT SEND TWO TIMES OR MORE
-// TODO : CHANGE BUTTON COLOR, SEND CONFIRMATION BUTTON TO GREEN

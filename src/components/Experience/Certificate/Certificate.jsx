@@ -129,8 +129,23 @@ const Certificate = () => {
           </div>
         )}
 
-        <div className="relative pt-10 px-10 md:pt-15 md:px-15 lg:px-20  lg:pt-15 h-[25vh] lg:h-[300px] lg:w-[60vw] overflow-hidden text-ellipsis  ">
-          <div ref={certDescContainerRef} className=" h-full">
+        <div className=" mb-10 px-5 md:mb-0 md:px-15 lg:px-20  lg:pt-15 h-[25vh] lg:h-[300px] lg:w-[60vw] overflow-hidden text-ellipsis  ">
+          <div ref={certDescContainerRef} className=" h-full ">
+            <span
+              className="text-lg md:text-xl text-primary"
+              ref={certcertListRef}
+            >
+              Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
+            </span>
+            <span className="text-lg md:text-xl text-primary">. </span>
+            <span
+              ref={certDescRef}
+              className="text-color-text-hovering text-md md:text-lg"
+            >
+              Bangkit 2023, part of the Kampus Merdeka program, is a
+              collaboration between the Ministry of Education, Culture,
+              Research, and Technology, Google, Tokopedia, Gojek, and Traveloka.
+            </span>
             {/* <span ref={certcertListRef} className="text-xl text-primary">
 							Certifications & Achievements:
 						</span>
@@ -141,23 +156,11 @@ const Certificate = () => {
 						>
 							Because learning is a muscle—and mine's been lifting
 						</span> */}
-            <span ref={certcertListRef} className="text-xl text-primary">
-              Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
-            </span>
-            <span className="text-xl text-primary">. </span>
-            <span
-              ref={certDescRef}
-              className="text-color-text-hovering text-lg"
-            >
-              Bangkit 2023, part of the Kampus Merdeka program, is a
-              collaboration between the Ministry of Education, Culture,
-              Research, and Technology, Google, Tokopedia, Gojek, and Traveloka.
-            </span>
           </div>
         </div>
 
         <div className="flex flex-col px-5 md:px-10">
-          <span className="text-5xl font-extrabold text-white ">
+          <span className="text-4xl md:text-5xl font-extrabold text-white ">
             MY CERTIFICATES
           </span>
           <div ref={certListRef} className="flex flex-col">
@@ -182,7 +185,7 @@ const Certificate = () => {
                 </span>
                 <span
                   data-name="certificate"
-                  className="text-3xl font-extrabold hover:text-primary"
+                  className="text-2xl md:text-3xl font-extrabold hover:text-primary"
                 >
                   {cert.name}
                 </span>
