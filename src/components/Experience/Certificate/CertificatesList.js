@@ -53,14 +53,14 @@ const certificates = [
 	{
 		name: "JavaScript Programming",
 		year: "2023",
-		desc: "the fundamentals of JavaScript programming, focusing on concepts like variables, loops, data structures (e.g., Arrays, Objects), functions, and object-oriented programming (OOP). The course also covers asynchronous programming, error handling, and working with Node.js",
+		desc: "I learned concepts like variables, loops, data structures (e.g., Arrays, Objects), functions, and object-oriented programming (OOP). The course also covers asynchronous programming, error handling, and working with Node.js",
 		image: basicJs,
 		link: "https://www.dicoding.com/certificates/6RPN6LE38P2M",
 	},
 	{
 		name: "Web Development",
 		year: "2023",
-		desc: " the basics of HTML and CSS. The course covers creating web page structure with HTML and enhancing web page appearance with CSS. It also includes learning advanced CSS techniques, responsive design with Flexbox, and building a simple website project.",
+		desc: "The course covers creating web page structure with HTML and enhancing web page appearance with CSS. It also includes learning advanced CSS techniques, responsive design with Flexbox, and building a simple website project.",
 		image: basicWeb,
 		link: "https://www.dicoding.com/certificates/1OP8587JQPQK",
 	},

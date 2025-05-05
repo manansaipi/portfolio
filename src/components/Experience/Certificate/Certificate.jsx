@@ -65,10 +65,12 @@ const Certificate = () => {
       if (windowWidth > 1024) {
         ScrollTrigger.create({
           trigger: certDescContainerRef.current,
-          start: "top center",
-          end: "+=550",
+          start: "10% center",
+          endTrigger: certListRef.current, // The element you want to end at
+          end: "bottom center",
           pin: true,
           pinSpacing: false,
+          //   markers: true,
         });
       }
 
@@ -99,7 +101,7 @@ const Certificate = () => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row text-primary  h-full">
+      <div className="flex flex-col lg:flex-row text-primary h-full">
         {hoveredIndex !== null && showCertificate && (
           <div
             className="fixed bg-gray-700 w-[400px] h-[350px] transition-transform duration-300 ease-out scale-100"
@@ -116,23 +118,13 @@ const Certificate = () => {
                 className="shadow-lg shadow-black"
               />
             </div>
-            {/* <div
-						className="absolute text-white bg-black opacity-70 px-2 py-1"
-						style={{
-							top: "50%", // Vertical center
-							left: "50%", // Horizontal center
-							transform: "translate(-50%, -50%)", // Correct centering
-						}}
-					>
-						VIEW
-					</div> */}
           </div>
         )}
-
-        <div className=" mb-10 px-5 md:mb-0 md:px-15 lg:px-20  lg:pt-15 h-[25vh] lg:h-[300px] lg:w-[60vw] overflow-hidden text-ellipsis  ">
-          <div ref={certDescContainerRef} className=" h-full ">
+        {/* px-5 md:px-15 lg:px-20 */}
+        <div className="mb-10 md:mb-0 px-5 md:px-15 lg:px-0 lg:pl-10 xl:px-20 lg:pt-15 h-[25vh] lg:h-[300px] lg:w-[60vw] overflow-hidden text-ellipsis">
+          <div ref={certDescContainerRef} className=" h-full w-full  ">
             <span
-              className="text-lg md:text-xl text-primary"
+              className="text-lg md:text-xl text-primary "
               ref={certcertListRef}
             >
               Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka
@@ -140,7 +132,7 @@ const Certificate = () => {
             <span className="text-lg md:text-xl text-primary">. </span>
             <span
               ref={certDescRef}
-              className="text-color-text-hovering text-md md:text-lg"
+              className="text-color-text-hovering text-md md:text-lg "
             >
               Bangkit 2023, part of the Kampus Merdeka program, is a
               collaboration between the Ministry of Education, Culture,
@@ -159,7 +151,7 @@ const Certificate = () => {
           </div>
         </div>
 
-        <div className="flex flex-col px-5 md:px-10">
+        <div className="flex flex-col px-5 md:px-10 ">
           <span className="text-4xl md:text-5xl font-extrabold text-white ">
             MY CERTIFICATES
           </span>
@@ -170,7 +162,7 @@ const Certificate = () => {
                 target="_blank"
                 data-name="certificate"
                 key={index}
-                className="flex gap-5 py-2 md:cursor-none"
+                className="flex gap-5 py-2 md:cursor-none "
                 onMouseEnter={() => {
                   setHoveredIndex(index);
                   setShowCertificate(true);
