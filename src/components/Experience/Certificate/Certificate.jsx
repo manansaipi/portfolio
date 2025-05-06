@@ -62,7 +62,17 @@ const Certificate = () => {
   // Pin only if window width > 1024px
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
-      if (windowWidth > 1024) {
+      if (windowWidth < 1024) {
+        ScrollTrigger.create({
+          trigger: certDescContainerRef.current,
+          start: "top 8%",
+          endTrigger: certListRef.current, // The element you want to end at
+          end: "bottom center",
+          pin: true,
+          pinSpacing: false,
+          //   markers: true,
+        });
+      } else if (windowWidth > 1024) {
         ScrollTrigger.create({
           trigger: certDescContainerRef.current,
           start: "10% center",
@@ -122,7 +132,7 @@ const Certificate = () => {
         )}
         {/* px-5 md:px-15 lg:px-20 */}
         <div className="mb-10 md:mb-0 px-5 md:px-15 lg:px-0 lg:pl-10 xl:px-20 lg:pt-15 h-[25vh] lg:h-[300px] lg:w-[60vw] overflow-hidden text-ellipsis">
-          <div ref={certDescContainerRef} className=" h-full w-full  ">
+          <div ref={certDescContainerRef} className="  bg-blur ">
             <span
               className="text-lg md:text-xl text-primary "
               ref={certcertListRef}
@@ -152,7 +162,7 @@ const Certificate = () => {
         </div>
 
         <div className="flex flex-col px-5 md:px-10 ">
-          <span className="text-4xl md:text-5xl font-extrabold text-white ">
+          <span className="text-3xl md:text-5xl font-extrabold text-white ">
             MY CERTIFICATES
           </span>
           <div ref={certListRef} className="flex flex-col">
@@ -172,12 +182,15 @@ const Certificate = () => {
                   setShowCertificate(false);
                 }}
               >
-                <span data-name="certificate" className="">
+                <span
+                  data-name="certificate"
+                  className="text-xs md:text-md lg:text-lg"
+                >
                   {cert.year}
                 </span>
                 <span
                   data-name="certificate"
-                  className="text-2xl md:text-3xl font-extrabold hover:text-primary"
+                  className="text-xl md:text-2xl lg:text-3xl font-extrabold hover:text-primary -mt-2"
                 >
                   {cert.name}
                 </span>
