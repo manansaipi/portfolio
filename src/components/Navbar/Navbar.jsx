@@ -1,18 +1,25 @@
 import React, { useRef, useState, useEffect } from "react";
 import TogleTheme from "./TogleThemeButton";
-import Logo from "./Logo";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomEase } from "gsap/CustomEase";
+
+import FloatingNavbar from "./FloatingNavbar";
+import OpenedNavbar from "./OpenedNavbar";
+import NavbarLarge from "./NavbarLarge";
+
 gsap.registerEase(CustomEase);
+gsap.registerPlugin(ScrollTrigger);
 
 const Navbar = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const floatingNavbarRef = useRef();
 	const navbarRef = useRef();
 	const navigationListRef = useRef();
 	const socialMediaRef = useRef();
 	const leftTextNavbarOpenRef = useRef();
 	const navbarLargeRef = useRef();
-	const logo = useRef();
+	const logoRef = useRef();
 
 	const handleOpenNavbar = () => {
 		setIsOpen(!isOpen);
@@ -54,16 +61,16 @@ const Navbar = () => {
 				delay: 0.3,
 			});
 
-			// hiding logo
+			// hiding logoRef
 			gsap.fromTo(
-				logo.current,
+				logoRef.current,
 				{
 					opacity: 1,
 				},
 				{
 					opacity: 0,
 					duration: 0.3,
-					ease: "power1.in",
+					ease: "power4.in",
 				}
 			);
 		} else {
@@ -82,7 +89,7 @@ const Navbar = () => {
 					}
 				},
 			});
-			gsap.to(logo.current, {
+			gsap.to(logoRef.current, {
 				opacity: 1,
 				duration: 0.3,
 			});
@@ -97,24 +104,48 @@ const Navbar = () => {
 				navbarRef.current &&
 				!navbarRef.current.contains(event.target) && // when user click and it not contain navbar
 				!event.target.closest(".open-navbar-button") &&
-				!logo.current.contains(event.target)
+				!logoRef.current.contains(event.target)
 			) {
 				handleOpenNavbar();
 			}
 		};
 
 		let resizeTimer;
+		let vw = window.innerWidth;
 
 		// close the navbar when user resizing the the screen to large size
 		const handleResize = () => {
 			clearTimeout(resizeTimer); // Clear the previous timeout
 			resizeTimer = setTimeout(() => {
-				const vw = window.innerWidth;
+				vw = window.innerWidth;
 				if (vw > 1024 && isOpen) {
 					handleOpenNavbar();
 				}
 			}, 300); // Wait 300ms after the last resize
 		};
+
+		// handle showing floating navbar when user scroll down
+		// if (vw > 1024) {
+		// 	gsap.fromTo(
+		// 		floatingNavbarRef.current,
+		// 		{y: -100},
+		// 		{
+		// 			y:0,
+	
+		// 			scrollTrigger: {
+		// 				start: "top+=200",
+		// 				end: "+=1",
+		// 				markers: true,
+		// 				toggleActions: "play none reverse none",
+		// 				onEnter: () => {
+		// 					console.log("hey");
+							
+		// 					floatingNavbarRef.current.classList.remove("lg:hidden")
+		// 				}
+		// 			}
+		// 		}
+		// 	);
+		// }
 
 		window.addEventListener("resize", handleResize);
 
@@ -129,6 +160,8 @@ const Navbar = () => {
 	}, [isOpen]);
 
 	useEffect(() => {
+		if (!navbarLargeRef.current || !floatingNavbarRef.current) return;
+
 		gsap.fromTo(
 			navbarLargeRef.current.children,
 			{ opacity: 0 },
@@ -136,128 +169,24 @@ const Navbar = () => {
 		);
 	}, []);
 
+
 	return (
 		<>
+			{/* FLOATING NAVBAR */}
+			<FloatingNavbar floatingNavbarRef={floatingNavbarRef} logoRef={logoRef} isOpen={isOpen} handleOpenNavbar={handleOpenNavbar}/>
+		
 			{/* OPENED NAVBAR */}
-			<div
-				ref={navbarRef}
-				className={`flex bg-primary w-full fixed  z-3`}
-				style={{ display: "none" }}
-			>
-				<div
-					ref={leftTextNavbarOpenRef}
-					className="p-5 h-[5rem]  w-1/2 hidden  md:flex md:flex-col overflow-hidden "
-				>
-					<div className="font-bold text-background text-xl">
-						Abdul Mannan Saip
-					</div>
-					<div className=" font-bold text-background text-xl ">Portfolio</div>
-				</div>
-				<div className=" flex flex-col  justify-center items-start bg-primary pl-5 pt-14 mb-8  md:pt-5 md:pl-3  ">
-					<div
-						ref={navigationListRef}
-						className="flex flex-col gap-0 font-bold text-6xl text-background overflow-hidden mb-7 md:mb-8 "
-					>
-						<a
-							onClick={handleOpenNavbar}
-							href="#Home"
-							className="hover:text-color-text-hovering -mb-2 cursor-none"
-						>
-							HOME
-						</a>
-						<a
-							onClick={handleOpenNavbar}
-							href="#About"
-							className="hover:text-color-text-hovering -mb-2 cursor-none"
-						>
-							ABOUT
-						</a>
-						<a
-							onClick={handleOpenNavbar}
-							href="#Experience"
-							className="hover:text-color-text-hovering -mb-2 cursor-none"
-						>
-							EXPERIENCE
-						</a>
-						<a
-							onClick={handleOpenNavbar}
-							href="#Contact"
-							className="hover:text-color-text-hovering -mb-2 cursor-none"
-						>
-							CONTACT
-						</a>
-					</div>
-					<div className="h-15"></div>
-					<div
-						ref={socialMediaRef}
-						className="flex gap-5 font-bold text-background text-xl  overflow-hidden "
-					>
-						<a
-							target="_blank"
-							href="https://www.linkedin.com/in/abdulmannansaipi"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							LinkedIn
-						</a>
-						<a
-							target="_blank"
-							href="https://github.com/manansaipi"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							GitHub
-						</a>
-						<a
-							target="_blank"
-							href="https://www.instagram.com/manansaipi"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							Instagram
-						</a>
-					</div>
-				</div>
-			</div>
+			<OpenedNavbar
+				navbarRef={navbarRef}
+				leftTextNavbarOpenRef={leftTextNavbarOpenRef}
+				navigationListRef={navigationListRef}
+				socialMediaRef={socialMediaRef}
+				handleOpenNavbar={handleOpenNavbar}
+			/>
+
 			{/* NAVBAR LARGE */}
-			<div id="Home" className="bg-light-dark">
-				<div className=" flex text-primary h-[20vh]  items-center px-40 xl:px-80  ">
-					{/* if sm-md screen size, the position is flex */}
-					<div
-						ref={logo}
-						className={`fixed lg:static top-3.5 left-5  mix-blend-difference z-4 `}
-					>
-						<Logo></Logo>
-					</div>
-					<div
-						ref={navbarLargeRef}
-						className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  "
-					>
-						<a
-							href="#Home"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							Home
-						</a>
-						<a
-							href="#About"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							About
-						</a>
-						<a className="">Experience</a>
-						<a
-							href="#Contact"
-							className="hover:text-color-text-hovering cursor-none"
-						>
-							Contact
-						</a>
-					</div>
-				</div>
-			</div>
-			<a
-				onClick={handleOpenNavbar}
-				className={`open-navbar-button fixed top-3.5 right-3.5 text-primary mix-blend-difference  hover:text-color-text-hovering  text-xl font-bold z-4 lg:hidden `}
-			>
-				{isOpen ? "Close" : "Menu"}
-			</a>
+			<NavbarLarge logoRef={logoRef} navbarLargeRef={navbarLargeRef} />
+
 		</>
 	);
 };
