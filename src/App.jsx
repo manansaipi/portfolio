@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 import CustomCursor from "./components/CustomCursor";
 import PreLoader from "./components/PreLoader";
+import TransitionPage from "./components/TransitionPage/TransitionPage";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
@@ -13,6 +14,8 @@ import Contact from "./components/Contact/Contact";
 
 const App = () => {
 	const [animationDone, setAnimationDone] = useState(false);
+	const location = useLocation();
+	const [showTransition, setShowTransition] = useState(false);
 
 	// Prevent browser from restoring scroll position
 	if ("scrollRestoration" in window.history) {
@@ -20,8 +23,14 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		window.scrollTo(0, 0); // Scroll to top on first load
-	}, []);
+		setShowTransition(true);
+		const timer = setTimeout(() => {
+			console.log("imhere");
+			setShowTransition(false);
+		}, 3000); // show for 1 second (adjust as needed)
+
+		return () => clearTimeout(timer);
+	}, [location.pathname]); // Trigger on every route change
 
 	return (
 		<>
@@ -29,12 +38,10 @@ const App = () => {
 				<CustomCursor />
 				<PreLoader setAnimationDone={setAnimationDone} />
 				<Navbar />
-				<Outlet />
-				{animationDone && (
-					<>
-						<Contact />
-					</>
-				)}
+				{showTransition ? <TransitionPage location={location} /> : <></>}
+				{/* All page content will be inside the outlet */}
+				<Outlet></Outlet>
+				<Contact />
 			</ReactLenis>
 		</>
 	);

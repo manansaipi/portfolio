@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import Logo from "./Logo";
 
 const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
@@ -19,19 +20,30 @@ const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
 						ref={navbarLargeRef}
 						className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  "
 					>
-						<a
-							href="#Home"
+						<Link
 							className="hover:text-primary text-primary  cursor-none"
+							to={{ pathname: "/" }}
 						>
 							Home
-						</a>
-						<a href="#About" className="hover:text-primary  cursor-none">
+						</Link>
+						<Link
+							className="hover:text-primary text-color-text-hovering  cursor-none"
+							to={{ pathname: "/about" }}
+						>
 							About
-						</a>
-						<a className="">Experience</a>
-						<a href="#Contact" className="hover:text-primary  cursor-none">
+						</Link>
+						<Link
+							className="hover:text-primary text-color-text-hovering  cursor-none"
+							to={{ pathname: "/experience" }}
+						>
+							Experience
+						</Link>
+						<Link
+							className="hover:text-primary text-color-text-hovering  cursor-none"
+							to={{ pathname: "/contact" }}
+						>
 							Contact
-						</a>
+						</Link>
 					</div>
 				</div>
 			</div>
