@@ -5,52 +5,62 @@ import MessageForm from "./MessageForm";
 import FooterContact from "./FooterContact";
 
 const Contact = () => {
-  const [visible, setVisible] = useState(false);
-  const lanyardRef = useRef();
+	const [visible, setVisible] = useState(false);
+	const lanyardRef = useRef();
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect(); // stop observing once loaded
-        }
-      },
-      { threshold: 1 }
-    );
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setVisible(true);
+					observer.disconnect(); // stop observing once loaded
+				}
+			},
+			{ threshold: 1 }
+		);
 
-    if (lanyardRef.current) observer.observe(lanyardRef.current);
-  }, []);
+		if (lanyardRef.current) observer.observe(lanyardRef.current);
+	}, []);
 
-  return (
-    <div
-      id="Contact"
-      className="section bg-gray-50 bg-repeat bg-center"
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <div className="flex flex-col lg:flex-row ">
-        <div
-          ref={lanyardRef}
-          className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
-        >
-          {visible ? (
-            <div className="h-full w-[45vh] lg:w-full">
-              <Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} />
-            </div>
-          ) : (
-            <div />
-          )}
-        </div>
-        <div className="h-[80vh] w-full p-12">
-          <MessageForm />
-        </div>
-      </div>
-      {/* <div className="h-[80vh] "></div> */}
-      <div className="h-[20vh] ">
-        <FooterContact />
-      </div>
-    </div>
-  );
+	return (
+		<div
+			id="Contact"
+			className="section "
+			style={{
+				clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
+			}}
+		>
+			backgroundImage: `url(${bgImage})`,
+			<div
+				className="fixed w-full h-[100vh] bottom-0 bg-gray-50 bg-repeat bg-center "
+				style={{
+					backgroundImage: `url(${bgImage})`,
+				}}
+			>
+				<div className="flex flex-col lg:flex-row ">
+					<div
+						ref={lanyardRef}
+						className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
+					>
+						{visible ? (
+							<div className="h-full w-[45vh] lg:w-full">
+								<Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} />
+							</div>
+						) : (
+							<div />
+						)}
+					</div>
+					<div className="h-[80vh] w-full p-12">
+						<MessageForm />
+					</div>
+				</div>
+				{/* <div className="h-[80vh] "></div> */}
+				<div className="h-[20vh] ">
+					<FooterContact />
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Contact;

@@ -48,7 +48,7 @@ const Certificate = () => {
   }, []);
 
   // Update window width on resize
-  useEffect(() => {
+  useEffect(() => { 
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
