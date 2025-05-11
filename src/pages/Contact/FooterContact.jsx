@@ -3,7 +3,7 @@ import { LuGithub } from "react-icons/lu";
 import { FaInstagram } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 import { PiLinkedinLogoBold } from "react-icons/pi";
-import Magnet from "./Magnet";
+import Magnet from "../../components/Magnet";
 
 const Footer = () => {
 	return (

@@ -11,7 +11,7 @@ import NavbarLarge from "./NavbarLarge";
 gsap.registerEase(CustomEase);
 gsap.registerPlugin(ScrollTrigger);
 
-const Navbar = () => {
+const Navbar = ({ preloaderRef, preloaderTextRef }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const floatingNavbarRef = useRef();
 	const navbarRef = useRef();
@@ -189,7 +189,12 @@ const Navbar = () => {
 			/>
 
 			{/* NAVBAR LARGE */}
-			<NavbarLarge logoRef={logoRef} navbarLargeRef={navbarLargeRef} />
+			<NavbarLarge
+				preloaderRef={preloaderRef}
+				logoRef={logoRef}
+				navbarLargeRef={navbarLargeRef}
+				preloaderTextRef={preloaderTextRef}
+			/>
 		</>
 	);
 };

@@ -29,8 +29,7 @@ const Contact = () => {
 			style={{
 				clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
 			}}
-		>
-			backgroundImage: `url(${bgImage})`,
+			>
 			<div
 				className="fixed w-full h-[100vh] bottom-0 bg-gray-50 bg-repeat bg-center "
 				style={{

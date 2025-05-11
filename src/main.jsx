@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About.jsx";
 import Experience from "./pages/Experience/Experience.jsx";
+import Contact from "./pages/Contact/Contact.jsx";
 import "./index.css";
 import App from "./App.jsx";
 
@@ -17,7 +18,7 @@ createRoot(document.getElementById("root")).render(
 					<Route index element={<Home />} />
 					<Route path="about" element={<About />} />
 					<Route path="experience" element={<Experience />} />
-					<Route path="contact" element={<About />} />
+					<Route path="contact" element={<Contact />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

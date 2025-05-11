@@ -6,8 +6,7 @@ const Home = () => {
 	return (
 		<>
 			<Main></Main>
-			<Content></Content>
-			{/* <TransitionPage></TransitionPage> */}
+			{/* <Content></Content> */}
 		</>
 	);
 };
