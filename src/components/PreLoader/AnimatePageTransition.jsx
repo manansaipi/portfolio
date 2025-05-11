@@ -6,19 +6,18 @@ export const AnimatePageTransition = ({
 	href,
 	navigate,
 }) => {
-	console.log(preloaderRef);
 	if (preloaderRef.current) {
 		const tl = gsap.timeline();
 
 		tl.to(preloaderRef.current, {
 			opacity: 1,
-			duration: 0.5,
+			duration: 0,
 			onComplete: () => {
 				navigate(href);
 			},
 		}).to(preloaderRef.current, {
 			opacity: 0,
-			duration: 0.5,
+			duration: 0,
 		});
 		// .fromTo(
 		// 	preloaderTextRef.current,

@@ -52,23 +52,28 @@ const About = () => {
 	// }, []);
 
 	return (
-		<section
-			id="About"
-			className="flex items-center justify-center bg-light-dark md:py-10  h-auto md:px-5 lg:px-10 xl:px-10  "
-		>
-			<ComingSoon></ComingSoon>
+		// <section
+		// 	id="About"
+		// 	className="flex items-center justify-center bg-light-dark md:py-10  h-auto md:px-5 lg:px-10 xl:px-10  "
+		// >
+		// 	{/* <ComingSoon></ComingSoon> */}
 
-			{/* <div
-				ref={aboutRef}
-				className="relative bg-black w-full h-[50vw]  max-h-[80vh] max-w-[1400px] text-white flex items-center justify-center text-6xl "
-			>
-				<img
-					ref={imgRef}
-					src={bobenImg}
-					className="w-full h-full object-cover absolute "
-					alt=""
-				/>
-			</div> */}
+		// 	<div
+		// 		ref={aboutRef}
+		// 		className="relative bg-black w-full h-[50vw]  max-h-[80vh] max-w-[1400px] text-white flex items-center justify-center text-6xl "
+		// 	>
+		// 		<img
+		// 			ref={imgRef}
+		// 			src={bobenImg}
+		// 			className="w-full h-full object-cover absolute "
+		// 			alt=""
+		// 		/>
+		// 	</div>
+		// </section>
+		<section className="h-[80vh] w-full bg-light-dark text-primary flex items-center justify-center">
+			<div className="h-full w-full  flex items-center justify-center">
+				ABOUT
+			</div>
 		</section>
 	);
 };

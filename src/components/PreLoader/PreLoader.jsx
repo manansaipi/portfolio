@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useLocation } from "react-router";
 
 const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
+	const location = useLocation();
 	useEffect(() => {
 		const tl = gsap.timeline({
 			onComplete: () => {
@@ -12,12 +14,15 @@ const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
 				}
 			},
 		});
+		console.log(location.pathname);
 
-		// tl.to(preloaderRef.current, {
-		// 	opacity: 0,
-		// 	duration: 1.5,
-		// 	delay: 7,
-		// });
+		if (location.pathname === "/") {
+			tl.to(preloaderRef.current, {
+				opacity: 0,
+				duration: 1.5,
+				delay: 7,
+			});
+		}
 	}, [setAnimationDone]);
 
 	return (

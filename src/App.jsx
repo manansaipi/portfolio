@@ -20,18 +20,16 @@ const App = () => {
 	const preloaderRef = useRef();
 	const preloaderTextRef = useRef();
 
-	// useEffect(() => {
-	// 	console.log(location.pathname);
-	// 	if (location.pathname != "/" || location.pathname != "/home") {
-	// 		setShowTransition(true);
-	// 	}
-	// 	const timer = setTimeout(() => {
-	// 		console.log("imhere");
-	// 		setShowTransition(false);
-	// 	}, 3000); // show for 1 second (adjust as needed)
+	useEffect(() => {
+		if (location.pathname != "/" || location.pathname != "/home") {
+			setShowTransition(true);
+		}
+		const timer = setTimeout(() => {
+			setShowTransition(false);
+		}, 3000); // show for 1 second (adjust as needed)
 
-	// 	return () => clearTimeout(timer);
-	// }, [location.pathname]); // Trigger on every route change
+		return () => clearTimeout(timer);
+	}, [location.pathname]); // Trigger on every route change
 
 	// AnimatePageIn();
 	return (
@@ -48,8 +46,8 @@ const App = () => {
 					preloaderRef={preloaderRef}
 					preloaderTextRef={preloaderTextRef}
 				/>
-				<Outlet />
-				<Footer preloaderRef={preloaderRef} />
+				<Outlet context={animationDone}/>
+				{animationDone ? <Footer preloaderRef={preloaderRef} /> : <></>}
 			</ReactLenis>
 		</>
 	);

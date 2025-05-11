@@ -23,42 +23,47 @@ const Contact = () => {
 	}, []);
 
 	return (
-		<div
-			id="Contact"
-			className="section "
-			style={{
-				clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
-			}}
-			>
-			<div
-				className="fixed w-full h-[100vh] bottom-0 bg-gray-50 bg-repeat bg-center "
-				style={{
-					backgroundImage: `url(${bgImage})`,
-				}}
-			>
-				<div className="flex flex-col lg:flex-row ">
-					<div
-						ref={lanyardRef}
-						className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
-					>
-						{visible ? (
-							<div className="h-full w-[45vh] lg:w-full">
-								<Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} />
-							</div>
-						) : (
-							<div />
-						)}
-					</div>
-					<div className="h-[80vh] w-full p-12">
-						<MessageForm />
-					</div>
-				</div>
-				{/* <div className="h-[80vh] "></div> */}
-				<div className="h-[20vh] ">
-					<FooterContact />
-				</div>
+		<section className="h-[80vh] w-full bg-light-dark text-primary flex items-center justify-center">
+			<div className="h-full w-full  flex items-center justify-center">
+				Contact
 			</div>
-		</div>
+		</section>
+		// <div
+		// 	id="Contact"
+		// 	className="section "
+		// 	style={{
+		// 		clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
+		// 	}}
+		// 	>
+		// 	<div
+		// 		className="fixed w-full h-[100vh] bottom-0 bg-gray-50 bg-repeat bg-center "
+		// 		style={{
+		// 			backgroundImage: `url(${bgImage})`,
+		// 		}}
+		// 	>
+		// 		<div className="flex flex-col lg:flex-row ">
+		// 			<div
+		// 				ref={lanyardRef}
+		// 				className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
+		// 			>
+		// 				{visible ? (
+		// 					<div className="h-full w-[45vh] lg:w-full">
+		// 						<Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} />
+		// 					</div>
+		// 				) : (
+		// 					<div />
+		// 				)}
+		// 			</div>
+		// 			<div className="h-[80vh] w-full p-12">
+		// 				<MessageForm />
+		// 			</div>
+		// 		</div>
+		// 		{/* <div className="h-[80vh] "></div> */}
+		// 		<div className="h-[20vh] ">
+		// 			<FooterContact />
+		// 		</div>
+		// 	</div>
+		// </div>
 	);
 };
 

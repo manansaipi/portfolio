@@ -186,6 +186,8 @@ const Navbar = ({ preloaderRef, preloaderTextRef }) => {
 				navigationListRef={navigationListRef}
 				socialMediaRef={socialMediaRef}
 				handleOpenNavbar={handleOpenNavbar}
+				preloaderRef={preloaderRef}
+				preloaderTextRef={preloaderTextRef}
 			/>
 
 			{/* NAVBAR LARGE */}

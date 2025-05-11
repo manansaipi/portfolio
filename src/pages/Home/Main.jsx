@@ -55,11 +55,6 @@ const Home = () => {
 			}
 		};
 		handleResize(); // Call once initially
-		// const hasPlayed = localStorage.getItem("homeAnimationPlayed");
-
-		// if (hasPlayed) return; // Prevent animation from running again
-
-		// localStorage.setItem("homeAnimationPlayed", "true"); // Set once
 
 		gsap.set(ciaoRef.current, { y: yOffset, rotateZ: rotateZvar });
 		gsap.set(imRef.current, { y: yOffset, rotateZ: rotateZvar });
@@ -176,6 +171,7 @@ const Home = () => {
 			window.removeEventListener("resize", handleResize);
 		};
 	}, []);
+
 	return (
 		// ->60/80vh
 		<section className="h-[80vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl transition-all">

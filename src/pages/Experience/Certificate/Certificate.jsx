@@ -30,7 +30,6 @@ const Certificate = () => {
       // set delay to have magnetic effect
       setTimeout(() => {
         let currentIndex = hoveredIndexRef.current;
-        // console.log(currentIndex)
         if (currentIndex !== null) {
           certcertListRef.current.textContent = certificates[currentIndex].name;
           certDescRef.current.textContent = certificates[currentIndex].desc;
