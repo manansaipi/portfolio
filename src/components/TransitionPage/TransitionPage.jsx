@@ -5,7 +5,7 @@ import gsap from "gsap";
 const TransitionPage = ({ location }) => {
 	// const routesMap = {
 	// 	"/home": "Home",
-	// 	"/experience": "Experience",
+	// 	"/work": "Experience",
 	// 	"/about": "About",
 	// };
 

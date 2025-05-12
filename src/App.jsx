@@ -7,10 +7,8 @@ import PreLoader from "./components/PreLoader/PreLoader";
 
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import Experience from "./pages/Experience/Experience";
-import Contact from "./pages/Contact/Contact";
 import Footer from "./components/Footer/Footer";
+
 // import Entrance from "./components/Entrance/Entrance";
 export const AppContext = React.createContext({});
 
@@ -21,16 +19,17 @@ const App = () => {
 	const preloaderRef = useRef();
 	const preloaderTextRef = useRef();
 
-	useEffect(() => {
-		if (location.pathname != "/" || location.pathname != "/home") {
-			setShowTransition(true);
-		}
-		const timer = setTimeout(() => {
-			setShowTransition(false);
-		}, 3000); // show for 1 second (adjust as needed)
+	// useEffect(() => {
+	// 	if (location.pathname != "/" || location.pathname != "/home") {
+	// 		setShowTransition(true);
+	// 	}
+	// 	const timer = setTimeout(() => {
+	// 		setShowTransition(false);
+	// 	}, 3000); // show for 1 second (adjust as needed)
 
-		return () => clearTimeout(timer);
-	}, [location.pathname]); // Trigger on every route change
+	// 	return () => clearTimeout(timer);
+	// }, [location.pathname]); // Trigger on every route change
+	const isHome = location.pathname === "/" || location.pathname === "/home";
 
 	// AnimatePageIn();
 	return (
@@ -48,7 +47,12 @@ const App = () => {
 						preloaderRef={preloaderRef}
 						preloaderTextRef={preloaderTextRef}
 					/>
-					<Outlet context={animationDone} />
+					<div className={isHome ? "" : "hidden"}>
+						<Home animationDone={animationDone} />
+					</div>
+					<div className={isHome ? "hidden" : ""}>
+						<Outlet />
+					</div>
 					{animationDone ? <Footer preloaderRef={preloaderRef} /> : <></>}
 				</ReactLenis>
 			</AppContext.Provider>

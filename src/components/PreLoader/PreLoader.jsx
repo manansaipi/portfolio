@@ -16,13 +16,13 @@ const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
 		});
 		console.log(location.pathname);
 
-		// if (location.pathname === "/") {
-		// 	tl.to(preloaderRef.current, {
-		// 		opacity: 0,
-		// 		duration: 1.5,
-		// 		delay: 7,
-		// 	});
-		// }
+		if (location.pathname === "/") {
+			tl.to(preloaderRef.current, {
+				opacity: 0,
+				duration: 1.5,
+				delay: 7,
+			});
+		}
 	}, [setAnimationDone]);
 
 	return (

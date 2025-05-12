@@ -60,13 +60,13 @@ const NavbarLarge = ({
 								></TransitionLink>
 							</Magnet>
 						</div>
-						<div className={getLinkClass("/experience")}>
+						<div className={getLinkClass("/work")}>
 							<Magnet>
 								<TransitionLink
 									preloaderRef={preloaderRef}
 									preloaderTextRef={preloaderTextRef}
-									href={"/experience"}
-									label={"Experience"}
+									href={"/work"}
+									label={"Work"}
 								></TransitionLink>
 							</Magnet>
 						</div>

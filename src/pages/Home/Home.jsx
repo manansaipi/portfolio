@@ -5,14 +5,13 @@ import Intro from "./Intro";
 import HomeAbout from "./HomeAbout";
 import HomeRecentWork from "./HomeRecentWork";
 
-const Home = () => {
-	const animationDone = useOutletContext();
+const Home = ({animationDone}) => {
 	return (
 		<>
-			{/* <Intro></Intro> */}
+			<Intro></Intro>
 			{animationDone ? (
 				<>
-					{/* <HomeAbout></HomeAbout> */}
+					<HomeAbout></HomeAbout>
 					<HomeRecentWork></HomeRecentWork>{" "}
 				</>
 			) : (

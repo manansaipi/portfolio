@@ -35,7 +35,7 @@ const Footer = ({ preloaderRef }) => {
 							</span>
 						</div>
 						<div className="border px-8 py-1 text-lg flex items-center justify-center rounded-xm cursor-pointer md:cursor-none hover:border-color-text-hovering self-start  md:self-end ">
-							<Magnet magnetStrength={4}>
+							<Magnet magnetStrength={4} padding={20}>
 								<TransitionLink
 									preloaderRef={preloaderRef}
 									href={"/Contact"}
@@ -50,7 +50,7 @@ const Footer = ({ preloaderRef }) => {
 							<div>&copy; 2025 Ben</div>
 						</div>
 						<div className="flex gap-5 md:gap-7 lg:gap-9">
-							<Magnet magnetStrength={3}>
+							<Magnet magnetStrength={3} padding={15}>
 								<a
 									href="https://www.linkedin.com/in/abdulmannansaipi"
 									target="_blank"
@@ -59,7 +59,7 @@ const Footer = ({ preloaderRef }) => {
 									<PiLinkedinLogoBold className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7  " />
 								</a>
 							</Magnet>
-							<Magnet magnetStrength={3}>
+							<Magnet magnetStrength={3} padding={20}>
 								<a
 									href="https://github.com/manansaipi"
 									target="_blank"
@@ -68,7 +68,7 @@ const Footer = ({ preloaderRef }) => {
 									<LuGithub className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
 								</a>
 							</Magnet>
-							<Magnet magnetStrength={3}>
+							<Magnet magnetStrength={3} padding={20}>
 								<a
 									href="https://www.instagram.com/manansaipi"
 									target="_blank"

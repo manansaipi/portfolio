@@ -61,15 +61,12 @@ const OpenedNavbar = ({
 							></TransitionLink>
 						</div>
 
-						<div
-							className={getLinkClass("/experience")}
-							onClick={handleOpenNavbar}
-						>
+						<div className={getLinkClass("/work")} onClick={handleOpenNavbar}>
 							<TransitionLink
 								preloaderRef={preloaderRef}
 								preloaderTextRef={preloaderTextRef}
-								href={"/experience"}
-								label={"EXPERIENCE"}
+								href={"/work"}
+								label={"WORK"}
 							></TransitionLink>
 						</div>
 
