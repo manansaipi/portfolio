@@ -12,6 +12,7 @@ import Experience from "./pages/Experience/Experience";
 import Contact from "./pages/Contact/Contact";
 import Footer from "./components/Footer/Footer";
 // import Entrance from "./components/Entrance/Entrance";
+export const AppContext = React.createContext({});
 
 const App = () => {
 	const [animationDone, setAnimationDone] = useState(false);
@@ -34,21 +35,23 @@ const App = () => {
 	// AnimatePageIn();
 	return (
 		<>
-			<ReactLenis root>
-				<CustomCursor />
-				<PreLoader
-					setAnimationDone={setAnimationDone}
-					preloaderRef={preloaderRef}
-					preloaderTextRef={preloaderTextRef}
-				/>
-				{/* <TransitionPage /> */}
-				<Navbar
-					preloaderRef={preloaderRef}
-					preloaderTextRef={preloaderTextRef}
-				/>
-				<Outlet context={animationDone}/>
-				{animationDone ? <Footer preloaderRef={preloaderRef} /> : <></>}
-			</ReactLenis>
+			<AppContext.Provider value={{ preloaderRef }}>
+				<ReactLenis root>
+					<CustomCursor />
+					<PreLoader
+						setAnimationDone={setAnimationDone}
+						preloaderRef={preloaderRef}
+						preloaderTextRef={preloaderTextRef}
+					/>
+					{/* <TransitionPage /> */}
+					<Navbar
+						preloaderRef={preloaderRef}
+						preloaderTextRef={preloaderTextRef}
+					/>
+					<Outlet context={animationDone} />
+					{animationDone ? <Footer preloaderRef={preloaderRef} /> : <></>}
+				</ReactLenis>
+			</AppContext.Provider>
 		</>
 	);
 };

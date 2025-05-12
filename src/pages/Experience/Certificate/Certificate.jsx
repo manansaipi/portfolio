@@ -169,7 +169,7 @@ const Certificate = () => {
               <a
                 href={cert.link}
                 target="_blank"
-                data-name="certificate"
+                data-name="view"
                 key={index}
                 className="flex gap-5 py-2 md:cursor-none "
                 onMouseEnter={() => {
@@ -182,13 +182,13 @@ const Certificate = () => {
                 }}
               >
                 <span
-                  data-name="certificate"
+                  data-name="view"
                   className="text-xs md:text-md lg:text-lg"
                 >
                   {cert.year}
                 </span>
                 <span
-                  data-name="certificate"
+                  data-name="view"
                   className="text-xl md:text-2xl lg:text-3xl font-extrabold hover:text-primary -mt-2"
                 >
                   {cert.name}

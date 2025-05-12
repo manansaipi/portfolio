@@ -23,7 +23,7 @@ export default function CustomCursor() {
 			if (tagName === "A") {
 				setHovering(true);
 			}
-			if (dataName == "certificate") {
+			if (dataName == "view") {
 				setHoveringCertif(true);
 			}
 		};
@@ -38,7 +38,7 @@ export default function CustomCursor() {
 			if (tagName === "A") {
 				setHovering(false);
 			}
-			if (dataName == "certificate") {
+			if (dataName == "view") {
 				setHoveringCertif(false);
 			}
 		};

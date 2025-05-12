@@ -1,15 +1,23 @@
 import React from "react";
-import Main from "./Main";
-import Content from "./Content";
-import TransitionPage from "../../components/TransitionPage/TransitionPage";
 import { useOutletContext } from "react-router";
+
+import Intro from "./Intro";
+import HomeAbout from "./HomeAbout";
+import HomeRecentWork from "./HomeRecentWork";
 
 const Home = () => {
 	const animationDone = useOutletContext();
 	return (
 		<>
-			<Main></Main>
-			{animationDone ? <Content></Content> : <></>}
+			{/* <Intro></Intro> */}
+			{animationDone ? (
+				<>
+					{/* <HomeAbout></HomeAbout> */}
+					<HomeRecentWork></HomeRecentWork>{" "}
+				</>
+			) : (
+				<></>
+			)}
 		</>
 	);
 };

@@ -16,7 +16,9 @@ const NavbarLarge = ({
 	// Helper to determine active class
 	const getLinkClass = (path) =>
 		`${
-			pathname === path ? "text-primary" : "text-color-text-hovering"
+			pathname.toLowerCase() === path.toLowerCase()
+				? "text-primary"
+				: "text-color-text-hovering"
 		} hover:text-primary cursor-none`;
 
 	return (
