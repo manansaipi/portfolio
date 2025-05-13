@@ -5,14 +5,14 @@ import Intro from "./Intro";
 import HomeAbout from "./HomeAbout";
 import HomeRecentWork from "./HomeRecentWork";
 
-const Home = ({animationDone}) => {
+const Home = ({ animationDone }) => {
 	return (
 		<>
 			<Intro></Intro>
 			{animationDone ? (
 				<>
 					<HomeAbout></HomeAbout>
-					<HomeRecentWork></HomeRecentWork>{" "}
+					<HomeRecentWork></HomeRecentWork>
 				</>
 			) : (
 				<></>

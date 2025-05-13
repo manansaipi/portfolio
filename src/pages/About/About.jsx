@@ -4,7 +4,7 @@ const About = () => {
 	return (
 		<UnderDevelopment
 			title="About Page"
-			message="About me? Good question. I’m still deciding how to tell the tale without sounding like a superhero origin story. "
+			message="About me? Good question. I’m still deciding how to tell my story without sounding like a superhero origin story. "
 		/>
 	);
 };

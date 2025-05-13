@@ -5,9 +5,14 @@ import dpr from "../../assets/img/profiles/dpr.jpg";
 import Magnet from "../../components/Magnet";
 import TransitionLink from "../../components/Navbar/TransitionLink";
 import { AppContext } from "../../App";
+import gsap from "gsap";
 
 const HomeRecentWork = () => {
 	const { preloaderRef } = React.useContext(AppContext);
+	const [position, setPosition] = useState({ x: 0, y: 0 });
+	const [hoveredIndex, setHoveredIndex] = useState(0);
+
+	const imageContainerRef = useRef();
 
 	const works = [
 		{
@@ -42,10 +47,6 @@ const HomeRecentWork = () => {
 		},
 	];
 
-	const [position, setPosition] = useState({ x: 0, y: 0 });
-	const [showPhoto, setShowPhoto] = useState(false); // new line
-	const [hoveredIndex, setHoveredIndex] = useState(0);
-
 	useEffect(() => {
 		const moveCursor = (e) => {
 			// set delay to have magnetic effect
@@ -53,13 +54,40 @@ const HomeRecentWork = () => {
 				setPosition({ x: e.clientX, y: e.clientY });
 			}, 150);
 		};
-
 		window.addEventListener("mousemove", moveCursor);
 
 		return () => {
 			window.removeEventListener("mousemove", moveCursor);
 		};
 	}, []);
+
+	useLayoutEffect(() => {
+		if (imageContainerRef.current) {
+			gsap.set(imageContainerRef.current, { scale: 0 });
+		}
+	}, []);
+
+	function handleHover(eventName, index) {
+		if (eventName == "enter") {
+			setHoveredIndex(index);
+			gsap.to(
+				imageContainerRef.current,
+
+				{
+					scale: 1,
+					duration: 0.4,
+				}
+			);
+		} else {
+			gsap.fromTo(
+				imageContainerRef.current,
+				{
+					scale: 1,
+				},
+				{ scale: 0, duration: 0.4 }
+			);
+		}
+	}
 
 	return (
 		<div className="  bg-light-dark px-5 md:px-10 lg:px-25 xl:px-30">
@@ -108,12 +136,14 @@ const HomeRecentWork = () => {
 								key={work.id}
 								data-name="view"
 								onMouseEnter={() => {
-									setShowPhoto(true);
-									setHoveredIndex(index);
+									handleHover("enter", index);
+									// setShowPhoto(true);
+									// setHoveredIndex(index);
 								}}
 								onMouseLeave={() => {
-									setShowPhoto(false);
-									setHoveredIndex();
+									handleHover("out");
+									// setShowPhoto(false);
+									// setHoveredIndex();
 								}}
 								className="hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-x-1"
 							>
@@ -147,24 +177,23 @@ const HomeRecentWork = () => {
 			</div>
 
 			{/* hovered image */}
-			{hoveredIndex !== undefined && showPhoto && (
-				<div
-					className={`fixed ${works[hoveredIndex].bgColor} w-[400px] h-[350px] `}
-					style={{
-						top: `${position.y - 160}px`,
-						left: `${position.x - 180}px`,
-						pointerEvents: "none",
-					}}
-				>
-					<div className="px-10 w-full h-full  flex items-center justify-center">
-						<img
-							src={works[hoveredIndex].img}
-							alt="certificate"
-							className="shadow-lg shadow-black"
-						/>
-					</div>
+			<div
+				ref={imageContainerRef}
+				className={` fixed ${works[hoveredIndex].bgColor} w-[400px] h-[350px] `}
+				style={{
+					top: `${position.y - 160}px`,
+					left: `${position.x - 180}px`,
+					pointerEvents: "none",
+				}}
+			>
+				<div className="px-10 w-full h-full  flex items-center justify-center">
+					<img
+						src={works[hoveredIndex].img}
+						alt="certificate"
+						className="shadow-lg shadow-black"
+					/>
 				</div>
-			)}
+			</div>
 		</div>
 	);
 };
