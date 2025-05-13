@@ -1,12 +1,11 @@
 import React from "react";
-
+import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
 const Experience = () => {
 	return (
-		<section className="h-[80vh] w-full bg-light-dark text-primary flex items-center justify-center">
-			<div className="h-full w-full  flex items-center justify-center">
-				Work
-			</div>
-		</section>
+		<UnderDevelopment
+			title="Work"
+			message="I’ve done some cool stuff... just not ready to show off yet."
+		/>
 	);
 };
 

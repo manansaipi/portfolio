@@ -3,6 +3,7 @@ import bgImage from "../../assets/img/bg/noise-transparent.png"; // adjust the p
 import Lanyard from "./Lanyard";
 import MessageForm from "./MessageForm";
 import FooterContact from "./FooterContact";
+import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
 
 const Contact = () => {
 	const [visible, setVisible] = useState(false);
@@ -23,11 +24,11 @@ const Contact = () => {
 	}, []);
 
 	return (
-		<section className="h-[80vh] w-full bg-light-dark text-primary flex items-center justify-center">
-			<div className="h-full w-full  flex items-center justify-center">
-				Contact
-			</div>
-		</section>
+		<UnderDevelopment
+			title="Contact Page"
+			message="Still teaching my contact form to not ghost people."
+		/>
+
 		// <div
 		// 	id="Contact"
 		// 	className="section "
