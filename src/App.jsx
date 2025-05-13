@@ -13,51 +13,55 @@ import Footer from "./components/Footer/Footer";
 export const AppContext = React.createContext({});
 
 const App = () => {
-	const [animationDone, setAnimationDone] = useState(false);
-	const location = useLocation();
-	const [showTransition, setShowTransition] = useState(false);
-	const preloaderRef = useRef();
-	const preloaderTextRef = useRef();
+    const [animationDone, setAnimationDone] = useState(false);
+    const location = useLocation();
+    const [showTransition, setShowTransition] = useState(false);
+    const preloaderRef = useRef();
+    const preloaderTextRef = useRef();
 
-	// useEffect(() => {
-	// 	if (location.pathname != "/" || location.pathname != "/home") {
-	// 		setShowTransition(true);
-	// 	}
-	// 	const timer = setTimeout(() => {
-	// 		setShowTransition(false);
-	// 	}, 3000); // show for 1 second (adjust as needed)
+    // useEffect(() => {
+    // 	if (location.pathname != "/" || location.pathname != "/home") {
+    // 		setShowTransition(true);
+    // 	}
+    // 	const timer = setTimeout(() => {
+    // 		setShowTransition(false);
+    // 	}, 3000); // show for 1 second (adjust as needed)
 
-	// 	return () => clearTimeout(timer);
-	// }, [location.pathname]); // Trigger on every route change
-	const isHome = location.pathname === "/" || location.pathname === "/home";
+    // 	return () => clearTimeout(timer);
+    // }, [location.pathname]); // Trigger on every route change
+    const isHome = location.pathname === "/" || location.pathname === "/home";
 
-	// AnimatePageIn();
-	return (
-		<>
-			<AppContext.Provider value={{ preloaderRef }}>
-				<ReactLenis root>
-					<CustomCursor />
-					<PreLoader
-						setAnimationDone={setAnimationDone}
-						preloaderRef={preloaderRef}
-						preloaderTextRef={preloaderTextRef}
-					/>
-					{/* <TransitionPage /> */}
-					<Navbar
-						preloaderRef={preloaderRef}
-						preloaderTextRef={preloaderTextRef}
-					/>
-					<div className={isHome ? "" : "hidden"}>
-						<Home animationDone={animationDone} />
-					</div>
-					<div className={isHome ? "hidden" : ""}>
-						<Outlet />
-					</div>
-					{animationDone ? <Footer preloaderRef={preloaderRef} /> : <></>}
-				</ReactLenis>
-			</AppContext.Provider>
-		</>
-	);
+    // AnimatePageIn();
+    return (
+        <>
+            <AppContext.Provider value={{ preloaderRef }}>
+                <ReactLenis root>
+                    <CustomCursor />
+                    <PreLoader
+                        setAnimationDone={setAnimationDone}
+                        preloaderRef={preloaderRef}
+                        preloaderTextRef={preloaderTextRef}
+                    />
+                    {/* <TransitionPage /> */}
+                    <Navbar
+                        preloaderRef={preloaderRef}
+                        preloaderTextRef={preloaderTextRef}
+                    />
+                    <div className={isHome ? "" : "hidden"}>
+                        <Home animationDone={animationDone} />
+                    </div>
+                    <div className={isHome ? "hidden" : ""}>
+                        <Outlet />
+                    </div>
+                    {animationDone ? (
+                        <Footer preloaderRef={preloaderRef} />
+                    ) : (
+                        <></>
+                    )}
+                </ReactLenis>
+            </AppContext.Provider>
+        </>
+    );
 };
 
 export default App;

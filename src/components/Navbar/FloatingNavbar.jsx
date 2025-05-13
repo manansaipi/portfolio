@@ -1,30 +1,23 @@
 import React from "react";
 import Logo from "./Logo";
 
-const FloatingNavbar = ({
-	floatingNavbarRef,
-	logoRef,
-	isOpen,
-	handleOpenNavbar,
-}) => {
-	return (
-		<div
-			ref={floatingNavbarRef}
-			className="fixed lg:hidden w-full z-4 mix-blend-difference text-primary"
-		>
-			<div className="flex flex-row items-center justify-between  p-3.5    ">
-				<div ref={logoRef}>
-					<Logo></Logo>
-				</div>
-				<a
-					onClick={handleOpenNavbar}
-					className={` open-navbar-button hover:text-color-text-hovering  text-xl font-bold`}
-				>
-					{isOpen ? "Close" : "Menu"}
-				</a>
-			</div>
-		</div>
-	);
+const FloatingNavbar = ({ logoRef, isOpen, handleOpenNavbar }) => {
+    return (
+        <>
+            <div
+                className="fixed top-3.5 left-3 z-4 text-primary mix-blend-difference"
+                ref={logoRef}
+            >
+                <Logo></Logo>
+            </div>
+            <a
+                onClick={handleOpenNavbar}
+                className={` open-navbar-button text-primary fixed top-3.5 right-3 hover:text-color-text-hovering  text-xl font-bold z-4 mix-blend-difference`}
+            >
+                {isOpen ? "Close" : "Menu"}
+            </a>
+        </>
+    );
 };
 
 export default FloatingNavbar;
