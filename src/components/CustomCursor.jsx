@@ -50,9 +50,9 @@ export default function CustomCursor() {
 		<div
 			className={`bg-primary fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4 hidden 
 				${hovering ? " scale-240" : ""}
-				${hoveringCertif ? "scale-240 w-10" : "w-5"}
+				${hoveringCertif ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : "md:block"}
-				transition-transform duration-200`}
+				transition-transform duration-500`}
 			style={{
 				left: `${position.x}px`,
 				top: `${position.y}px`,

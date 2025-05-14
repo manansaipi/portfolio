@@ -3,6 +3,7 @@ import TogleTheme from "./TogleThemeButton";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomEase } from "gsap/CustomEase";
+import { useLocation } from "react-router";
 
 import FloatingNavbar from "./FloatingNavbar";
 import OpenedNavbar from "./OpenedNavbar";
@@ -126,29 +127,6 @@ const Navbar = ({ preloaderRef, preloaderTextRef }) => {
             }, 300); // Wait 300ms after the last resize
         };
 
-        // handle showing floating navbar when user scroll down
-        // if (vw > 1024) {
-        // 	gsap.fromTo(
-        // 		floatingNavbarRef.current,
-        // 		{y: -100},
-        // 		{
-        // 			y:0,
-
-        // 			scrollTrigger: {
-        // 				start: "top+=200",
-        // 				end: "+=1",
-        // 				markers: true,
-        // 				toggleActions: "play none reverse none",
-        // 				onEnter: () => {
-        // 					console.log("hey");
-
-        // 					floatingNavbarRef.current.classList.remove("lg:hidden")
-        // 				}
-        // 			}
-        // 		}
-        // 	);
-        // }
-
         window.addEventListener("resize", handleResize);
 
         // Call once to check initial width
@@ -161,8 +139,10 @@ const Navbar = ({ preloaderRef, preloaderTextRef }) => {
         };
     }, [isOpen]);
 
+    const location = useLocation();
+
     useEffect(() => {
-        if (!navbarLargeRef.current) return;
+        if (location.pathname !== "/") return;
 
         gsap.fromTo(
             navbarLargeRef.current.children,

@@ -40,16 +40,6 @@ const NavbarLarge = ({
 						ref={navbarLargeRef}
 						className="hidden lg:flex gap-10 justify-end w-screen  overflow-hidden  "
 					>
-						{/* <div className={getLinkClass("/")}>
-							<Magnet>
-								<TransitionLink
-									preloaderRef={preloaderRef}
-									preloaderTextRef={preloaderTextRef}
-									href={"/"}
-									label={"Home"}
-								></TransitionLink>
-							</Magnet>
-						</div> */}
 						<div className={getLinkClass("/about")}>
 							<Magnet>
 								<TransitionLink
