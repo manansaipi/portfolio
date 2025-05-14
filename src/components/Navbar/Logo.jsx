@@ -89,7 +89,7 @@ const Logo = () => {
 
   return (
     <a
-      href="#Home"
+      href="/"
       ref={wrapper}
       className=" flex items-center  gap-3 overflow-hidden  text-4xl lg:text-5xl md:cursor-none  hover:text-color-text-hovering"
     >

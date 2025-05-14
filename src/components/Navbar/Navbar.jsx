@@ -11,6 +11,7 @@ import NavbarLarge from "./NavbarLarge";
 
 gsap.registerEase(CustomEase);
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(CustomEase);
 
 const Navbar = ({ preloaderRef, preloaderTextRef }) => {
     const [isOpen, setIsOpen] = useState(false);

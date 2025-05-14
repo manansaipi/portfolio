@@ -132,7 +132,7 @@ const HomeRecentWork = () => {
             </div>
             {/* large size */}
             <div className="hidden lg:block text-primary">
-                <div className=" mx-15 py-10 xl:mx-25 text-xs xl:text-sm text-color-text-hovering">
+                <div className=" mx-15 py-10 xl:mx-25 2xl:mx-35 text-xs xl:text-sm  text-color-text-hovering">
                     RECENT WORK
                 </div>
                 <div
@@ -152,16 +152,16 @@ const HomeRecentWork = () => {
                                 className="hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-x-1"
                             >
                                 <div className="border-t-1 border-color-text-hovering pointer duration-0 hover:translate-x-0"></div>
-                                <div className="flex flex-row justify-between items-center m-10 xlmy:15 xl:mx-25 pointer-events-none hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1">
+                                <div className="flex flex-row justify-between items-center m-10 xl:my:15 xl:mx-25 2xl:mx-35 pointer-events-none hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1">
                                     <div className="flex flex-col ">
-                                        <div className="text-5xl xl:text-6xl">
+                                        <div className="text-5xl xl:text-6xl 2xl:text-7xl">
                                             {work.company}
                                         </div>
-                                        <div className="text-lg xl:text-xl">
+                                        <div className="text-lg xl:text-xl 2xl:text-2xl">
                                             {work.role}
                                         </div>
                                     </div>
-                                    <div className="text-xs xl:text-sm">
+                                    <div className="text-xs xl:text-sm 2xl:text-md">
                                         {work.startDate} &nbsp;-&nbsp;{" "}
                                         {work.endDate}
                                     </div>
@@ -186,7 +186,7 @@ const HomeRecentWork = () => {
             {/* hovered image */}
             <div
                 ref={imageContainerRef}
-                className="w-[400px] h-[350px]  fixed overflow-hidden"
+                className="w-[400px] h-[350px] fixed overflow-hidden"
                 style={{
                     top: `${position.y - 160}px`,
                     left: `${position.x - 180}px`,
@@ -195,7 +195,9 @@ const HomeRecentWork = () => {
             >
                 <div ref={imageHolderRef} className="flex flex-col">
                     {works.map((work, index) => (
-                        <div className={` ${work.bgColor} w-[400px] h-[350px]`}>
+                        <div
+						key={work.id}
+						className={` ${work.bgColor} w-[400px] h-[350px]`}>
                             <div className="px-10 w-full h-full flex items-center justify-center">
                                 <img
                                     src={work.img}
@@ -207,26 +209,6 @@ const HomeRecentWork = () => {
                     ))}
                 </div>
             </div>
-            {/* <div
-                ref={imageContainerRef}
-                className={` fixed ${works[hoveredIndex].bgColor} w-[400px] h-[350px] `}
-                style={{
-                    // top: `${position.y - 160}px`,
-                    // left: `${position.x - 180}px`,
-                    top: `${222}px`,
-                    left: `${222}px`,
-                    pointerEvents: "none",
-                }}
-            >
-                <div className="px-10 w-full h-full  flex items-center justify-center">
-                    <img
-                        src={works[hoveredIndex].img}
-                        alt="certificate"
-                        className="shadow-lg shadow-black"
-                    />
-                </div>
-            </div> */}
-            ;
         </div>
     );
 };

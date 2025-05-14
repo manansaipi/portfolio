@@ -72,7 +72,9 @@ const Home = () => {
 		gsap.set(simpleRef.current, { y: yOffset, rotateZ: 3 });
 
 		const tl = gsap.timeline();
-
+		
+		greetginsRef.current.classList.add("z-6")
+		
 		tl.to(ciaoRef.current, { y: 0, duration: 0.35, rotateZ: 0, delay: 0.5 })
 			.to(imRef.current, {
 				y: 0,
@@ -136,16 +138,23 @@ const Home = () => {
 					},
 				},
 				"-=0.6"
-			)
-			.to(greetginsRef.current, {
-				z: 0,
-				onComplete: () => {
-					if (homeContainerRef.current && imgContainerRef.current) {
-						homeContainerRef.current.classList.remove("overflow-hidden");
-						imgContainerRef.current.classList.remove("hidden");
-					}
-				},
+			);
+
+		const anim = gsap.timeline({
+			onComplete: () => {
+				if (homeContainerRef.current && imgContainerRef.current) {
+					homeContainerRef.current.classList.remove("overflow-hidden");
+					imgContainerRef.current.classList.remove("hidden");
+				}
+			},
+		});
+
+		// this will ensure teh image being rendered if the starting path is not home
+		if (location.pathname === "/") {
+			anim.to(imgContainerRef.current, {
+				delay: 7,
 			});
+		}
 
 		const interval = setInterval(() => {
 			if (ciaoRef.current) {
@@ -196,7 +205,7 @@ const Home = () => {
 					{/* TODO : FIX OVERFLOW WITH NAVBAR */}
 					<div
 						ref={greetginsRef}
-						className="flex flex-col w-full z-6 will-change-auto "
+						className="flex flex-col w-full will-change-auto "
 					>
 						{/* overflow-hidden */}
 						<div className="flex gap-2 lg:gap-3 overflow-hidden ">
