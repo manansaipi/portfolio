@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
 import CustomCursor from "./components/CustomCursor";
 import PreLoader from "./components/PreLoader/PreLoader";
@@ -8,30 +8,26 @@ import PreLoader from "./components/PreLoader/PreLoader";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
+import { AnimatePageTransition } from "./components/PreLoader/AnimatePageTransition";
 
-// import Entrance from "./components/Entrance/Entrance";
 export const AppContext = React.createContext({});
 
 const App = () => {
     const [animationDone, setAnimationDone] = useState(false);
     const location = useLocation();
-    const [showTransition, setShowTransition] = useState(false);
     const preloaderRef = useRef();
-    const preloaderTextRef = useRef();
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    // 	if (location.pathname != "/" || location.pathname != "/home") {
-    // 		setShowTransition(true);
-    // 	}
-    // 	const timer = setTimeout(() => {
-    // 		setShowTransition(false);
-    // 	}, 3000); // show for 1 second (adjust as needed)
-
-    // 	return () => clearTimeout(timer);
-    // }, [location.pathname]); // Trigger on every route change
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
-    // AnimatePageIn();
+    function handleButtonNavigation(href) {
+        AnimatePageTransition({
+            preloaderRef,
+            href,
+            navigate,
+        });
+    }
+
     return (
         <>
             <AppContext.Provider value={{ preloaderRef }}>
@@ -40,21 +36,22 @@ const App = () => {
                     <PreLoader
                         setAnimationDone={setAnimationDone}
                         preloaderRef={preloaderRef}
-                        preloaderTextRef={preloaderTextRef}
                     />
-                    {/* <TransitionPage /> */}
-                    <Navbar
-                        preloaderRef={preloaderRef}
-                        preloaderTextRef={preloaderTextRef}
-                    />
+                    <Navbar />
                     <div className={isHome ? "" : "hidden"}>
-                        <Home animationDone={animationDone} />
+                        <Home
+                            animationDone={animationDone}
+                            handleButtonNavigation={handleButtonNavigation}
+                        />
                     </div>
                     <div className={isHome ? "hidden" : ""}>
                         <Outlet />
                     </div>
+
                     {animationDone ? (
-                        <Footer preloaderRef={preloaderRef} />
+                        <Footer
+                            handleButtonNavigation={handleButtonNavigation}
+                        />
                     ) : (
                         <></>
                     )}

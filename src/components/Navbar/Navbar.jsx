@@ -13,7 +13,7 @@ gsap.registerEase(CustomEase);
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(CustomEase);
 
-const Navbar = ({ preloaderRef, preloaderTextRef }) => {
+const Navbar = ({}) => {
     const [isOpen, setIsOpen] = useState(false);
     const navbarRef = useRef();
     const navigationListRef = useRef();
@@ -168,17 +168,10 @@ const Navbar = ({ preloaderRef, preloaderTextRef }) => {
                 navigationListRef={navigationListRef}
                 socialMediaRef={socialMediaRef}
                 handleOpenNavbar={handleOpenNavbar}
-                preloaderRef={preloaderRef}
-                preloaderTextRef={preloaderTextRef}
             />
 
             {/* NAVBAR LARGE */}
-            <NavbarLarge
-                preloaderRef={preloaderRef}
-                logoRef={logoRef}
-                navbarLargeRef={navbarLargeRef}
-                preloaderTextRef={preloaderTextRef}
-            />
+            <NavbarLarge logoRef={logoRef} navbarLargeRef={navbarLargeRef} />
         </>
     );
 };

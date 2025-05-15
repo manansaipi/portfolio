@@ -8,8 +8,6 @@ const OpenedNavbar = ({
     navigationListRef,
     socialMediaRef,
     handleOpenNavbar,
-    preloaderRef,
-    preloaderTextRef,
 }) => {
     const location = useLocation();
     const pathname = location.pathname;
@@ -50,8 +48,6 @@ const OpenedNavbar = ({
                             onClick={handleOpenNavbar}
                         >
                             <TransitionLink
-                                preloaderRef={preloaderRef}
-                                preloaderTextRef={preloaderTextRef}
                                 href={"/"}
                                 label={"HOME"}
                             ></TransitionLink>
@@ -62,8 +58,6 @@ const OpenedNavbar = ({
                             onClick={handleOpenNavbar}
                         >
                             <TransitionLink
-                                preloaderRef={preloaderRef}
-                                preloaderTextRef={preloaderTextRef}
                                 href={"/about"}
                                 label={"ABOUT"}
                             ></TransitionLink>
@@ -74,8 +68,6 @@ const OpenedNavbar = ({
                             onClick={handleOpenNavbar}
                         >
                             <TransitionLink
-                                preloaderRef={preloaderRef}
-                                preloaderTextRef={preloaderTextRef}
                                 href={"/work"}
                                 label={"WORK"}
                             ></TransitionLink>
@@ -86,8 +78,6 @@ const OpenedNavbar = ({
                             onClick={handleOpenNavbar}
                         >
                             <TransitionLink
-                                preloaderRef={preloaderRef}
-                                preloaderTextRef={preloaderTextRef}
                                 href={"/contact"}
                                 label={"CONTACT"}
                             ></TransitionLink>
