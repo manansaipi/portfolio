@@ -20,7 +20,7 @@ const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
             tl.to(preloaderRef.current, {
                 opacity: 0,
                 duration: 1.5,
-                delay: 7,
+                delay: 0,
             });
         } else {
             tl.to(preloaderRef.current, {

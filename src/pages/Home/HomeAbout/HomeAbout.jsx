@@ -5,8 +5,8 @@ const Content = ({ handleButtonNavigation }) => {
     return (
         <div className=" bg-light-dark text-primary  transition-all">
             <div className=" flex flex-col p-5 py-5 pb-10 md:p-15 lg:px-25 xl:pt-20 xl:px-50">
-                <div className="text-6xl lg:text-7xl xl:text-8xl tracking-widest text-color-text-hovering">
-                    what
+                <div className="text-5xl lg:text-6xl tracking-widest text-color-text-hovering">
+                    WHAT
                 </div>
                 <div className="text-7xl  lg:text-8xl xl:text-9xl font-bold tracking-widest">
                     I DO?
