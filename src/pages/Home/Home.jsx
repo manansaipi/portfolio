@@ -2,26 +2,22 @@ import React, { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router";
 import HomeRecentWork from "./HomeRecentWork/HomeRecentWork";
 import { AppContext } from "../../App";
-import Intro from "./Intro";
-import HomeAbout from "./HomeAbout";
+import Intro from "./Intro/Intro";
+import HomeAbout from "./HomeAbout/HomeAbout";
 
 const Home = ({ animationDone, handleButtonNavigation }) => {
-   
-
-    
-
     return (
         <>
-            {/* <Intro></Intro> */}
-            {animationDone ? (
+            <Intro></Intro>
+            {animationDone && (
                 <>
-                    <HomeAbout handleButtonNavigation={handleButtonNavigation}></HomeAbout>
+                    <HomeAbout
+                        handleButtonNavigation={handleButtonNavigation}
+                    ></HomeAbout>
                     <HomeRecentWork
                         handleButtonNavigation={handleButtonNavigation}
                     ></HomeRecentWork>
                 </>
-            ) : (
-                <></>
             )}
         </>
     );

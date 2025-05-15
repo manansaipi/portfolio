@@ -5,12 +5,10 @@
     "type": "module",
     "homepage": "https://manansaipi.site/",
     "scripts": {
-        "dev": "vite",
+        "dev": "bunx --bun vite",
         "build": "vite build",
         "lint": "eslint .",
-        "preview": "vite preview",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "preview": "vite preview"
     },
     "dependencies": {
         "@gsap/react": "^2.1.2",

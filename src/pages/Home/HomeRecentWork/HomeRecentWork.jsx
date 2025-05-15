@@ -3,30 +3,16 @@ import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import gsap from "gsap";
 
 import Works from "./Works";
+import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import ListRecentWorkMobile from "./ListRecentWorkMobile";
 import ListRecentWorkLarge from "./ListRecentWorkLarge";
-import PrimaryButton from "../../../components/Buttons/PrimaryButton";
+import HoveredImages from "./HoveredImages";
 
 const HomeRecentWork = ({ handleButtonNavigation }) => {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
     const [hoveredIndex, setHoveredIndex] = useState(0);
 
     const imageContainerRef = useRef();
     const imageHolderRef = useRef();
-
-    useEffect(() => {
-        const moveCursor = (e) => {
-            // set delay to have magnetic effect
-            setTimeout(() => {
-                setPosition({ x: e.clientX, y: e.clientY });
-            }, 150);
-        };
-        window.addEventListener("mousemove", moveCursor);
-
-        return () => {
-            window.removeEventListener("mousemove", moveCursor);
-        };
-    }, []);
 
     useLayoutEffect(() => {
         if (imageContainerRef.current) {
@@ -75,32 +61,11 @@ const HomeRecentWork = ({ handleButtonNavigation }) => {
             </div>
 
             {/* hovered image */}
-            <div
-                ref={imageContainerRef}
-                className="w-[400px] h-[350px] fixed overflow-hidden"
-                style={{
-                    top: `${position.y - 160}px`,
-                    left: `${position.x - 180}px`,
-                    pointerEvents: "none",
-                }}
-            >
-                <div ref={imageHolderRef} className="flex flex-col">
-                    {Works.map((work, index) => (
-                        <div
-                            key={work.id}
-                            className={` ${work.bgColor} w-[400px] h-[350px]`}
-                        >
-                            <div className="px-10 w-full h-full flex items-center justify-center">
-                                <img
-                                    src={work.img}
-                                    alt="certificate"
-                                    className="shadow-lg shadow-black"
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            <HoveredImages
+                works={Works}
+                imageHolderRef={imageHolderRef}
+                imageContainerRef={imageContainerRef}
+            />
         </div>
     );
 };
