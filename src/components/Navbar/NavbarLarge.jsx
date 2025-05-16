@@ -1,12 +1,12 @@
 import React from "react";
-import { Link, useLocation } from "react-router";
-import TransitionLink from "./TransitionLink";
-import Logo from "./Logo";
+import { useLocation } from "react-router";
 import Magnet from "../Magnet";
+import { AppContext } from "../../App";
 
 const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
     const location = useLocation();
     const pathname = location.pathname;
+    const { handleButtonNavigation } = React.useContext(AppContext);
 
     // Helper to determine active class
     const getLinkClass = (path) =>
@@ -23,10 +23,9 @@ const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
                         <div className="hover:text-primary cursor-none">
-                            <TransitionLink
-                                href={"/"}
-                                label={"Abdul Mannan Saipi"}
-                            ></TransitionLink>
+                            <a onClick={() => handleButtonNavigation("/")}>
+                                Abdul Mannan Saipi
+                            </a>
                         </div>
                     </div>
                     <div
@@ -35,26 +34,27 @@ const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
                     >
                         <div className={getLinkClass("/about")}>
                             <Magnet>
-                                <TransitionLink
-                                    href={"/about"}
-                                    label={"About"}
-                                ></TransitionLink>
+                                <a onClick={() => handleButtonNavigation("/")}>
+                                    About
+                                </a>
                             </Magnet>
                         </div>
                         <div className={getLinkClass("/work")}>
                             <Magnet>
-                                <TransitionLink
-                                    href={"/work"}
-                                    label={"Work"}
-                                ></TransitionLink>
+                                <a
+                                    onClick={() =>
+                                        handleButtonNavigation("/work")
+                                    }
+                                >
+                                    Work
+                                </a>
                             </Magnet>
                         </div>
                         <div className={getLinkClass("/contact")}>
                             <Magnet>
-                                <TransitionLink
-                                    href={"/contact"}
-                                    label={"Contact"}
-                                ></TransitionLink>
+                                <a onClick={() => handleButtonNavigation("/contact")}>
+                                    Contact
+                                </a>
                             </Magnet>
                         </div>
                     </div>

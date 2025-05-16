@@ -7,8 +7,10 @@ import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import ListRecentWorkMobile from "./ListRecentWorkMobile";
 import ListRecentWorkLarge from "./ListRecentWorkLarge";
 import HoveredImages from "./HoveredImages";
+import { AppContext } from "../../../App";
+const HomeRecentWork = ({}) => {
+    const { handleButtonNavigation } = React.useContext(AppContext);
 
-const HomeRecentWork = ({ handleButtonNavigation }) => {
     const [hoveredIndex, setHoveredIndex] = useState(0);
 
     const imageContainerRef = useRef();

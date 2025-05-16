@@ -16,7 +16,6 @@
 html {
     scroll-behavior: smooth;
     overflow-anchor: none;
-
 }
 .section {
     min-height: 100vh; /* 100% of the viewport height */

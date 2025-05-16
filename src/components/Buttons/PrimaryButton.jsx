@@ -1,5 +1,4 @@
 import React from "react";
-import TransitionLink from "../Navbar/TransitionLink";
 import Magnet from "../Magnet";
 
 const PrimaryButton = ({ handleOnClick, label }) => {

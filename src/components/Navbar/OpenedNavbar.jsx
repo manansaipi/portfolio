@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router";
-import TransitionLink from "./TransitionLink";
+import { AppContext } from "../../App";
 
 const OpenedNavbar = ({
     navbarRef,
@@ -11,6 +11,7 @@ const OpenedNavbar = ({
 }) => {
     const location = useLocation();
     const pathname = location.pathname;
+    const { handleButtonNavigation } = React.useContext(AppContext);
 
     // Add "text-primary" if the current route matches
     const getLinkClass = (path) =>
@@ -47,40 +48,40 @@ const OpenedNavbar = ({
                             className={getLinkClass("/")}
                             onClick={handleOpenNavbar}
                         >
-                            <TransitionLink
-                                href={"/"}
-                                label={"HOME"}
-                            ></TransitionLink>
+                            <a onClick={() => handleButtonNavigation("/")}>
+                                Home
+                            </a>
                         </div>
 
                         <div
                             className={getLinkClass("/about")}
                             onClick={handleOpenNavbar}
                         >
-                            <TransitionLink
-                                href={"/about"}
-                                label={"ABOUT"}
-                            ></TransitionLink>
+                            <a onClick={() => handleButtonNavigation("/about")}>
+                                About
+                            </a>
                         </div>
 
                         <div
                             className={getLinkClass("/work")}
                             onClick={handleOpenNavbar}
                         >
-                            <TransitionLink
-                                href={"/work"}
-                                label={"WORK"}
-                            ></TransitionLink>
+                            <a onClick={() => handleButtonNavigation("/work")}>
+                                Work
+                            </a>
                         </div>
 
                         <div
                             className={getLinkClass("/contact")}
                             onClick={handleOpenNavbar}
                         >
-                            <TransitionLink
-                                href={"/contact"}
-                                label={"CONTACT"}
-                            ></TransitionLink>
+                            <a
+                                onClick={() =>
+                                    handleButtonNavigation("/contact")
+                                }
+                            >
+                                Contact
+                            </a>
                         </div>
                     </div>
                     <div className="h-15"></div>

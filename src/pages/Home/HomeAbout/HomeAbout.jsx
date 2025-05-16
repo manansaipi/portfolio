@@ -1,7 +1,10 @@
 import React from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
+import { AppContext } from "../../../App";
 
-const Content = ({ handleButtonNavigation }) => {
+const Content = ({}) => {
+    const { handleButtonNavigation } = React.useContext(AppContext);
+
     return (
         <div className=" bg-light-dark text-primary  transition-all">
             <div className=" flex flex-col p-5 py-5 pb-10 md:p-15 lg:px-25 xl:pt-20 xl:px-50">

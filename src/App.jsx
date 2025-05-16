@@ -16,13 +16,17 @@ const App = () => {
     const [animationDone, setAnimationDone] = useState(false);
     const location = useLocation();
     const preloaderRef = useRef();
+    const navbarRef = useRef();
     const navigate = useNavigate();
+    const lenis = useLenis();
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
     function handleButtonNavigation(href) {
         AnimatePageTransition({
             preloaderRef,
+            navbarRef,
+            lenis,
             href,
             navigate,
         });
@@ -30,31 +34,26 @@ const App = () => {
 
     return (
         <>
-            <AppContext.Provider value={{ preloaderRef }}>
+            <AppContext.Provider
+                value={{ preloaderRef, navbarRef, handleButtonNavigation }}
+            >
                 <ReactLenis root>
                     <CustomCursor />
                     <PreLoader
                         setAnimationDone={setAnimationDone}
                         preloaderRef={preloaderRef}
                     />
-                    <Navbar />
+                    <div ref={navbarRef}>
+                        <Navbar />
+                    </div>
                     <div className={isHome ? "" : "hidden"}>
-                        <Home
-                            animationDone={animationDone}
-                            handleButtonNavigation={handleButtonNavigation}
-                        />
+                        <Home animationDone={animationDone} />
                     </div>
                     <div className={isHome ? "hidden" : ""}>
                         <Outlet />
                     </div>
 
-                    {animationDone ? (
-                        <Footer
-                            handleButtonNavigation={handleButtonNavigation}
-                        />
-                    ) : (
-                        <></>
-                    )}
+                    {animationDone && <Footer />}
                 </ReactLenis>
             </AppContext.Provider>
         </>
@@ -70,3 +69,5 @@ export default App;
 // https://alvalens-k2ihpke38-alvalens-projects.vercel.app/projects/archive
 // website idea : https://readymag.com/examples/portfolio ,
 //  https://michaelwatchmaker.com/about/
+// showcase more work section :  https://www.orchestraco.com/careers
+// can be blog page show case section : https://www.orchestraco.com/insights

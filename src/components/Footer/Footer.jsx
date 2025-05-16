@@ -3,13 +3,14 @@ import bgImage from "../../assets/img/bg/noise-transparent.png"; // adjust the p
 
 import { LuGithub } from "react-icons/lu";
 import { FaInstagram } from "react-icons/fa";
-import { MdMailOutline } from "react-icons/md";
 import { PiLinkedinLogoBold } from "react-icons/pi";
 import Magnet from "../Magnet";
-import TransitionLink from "../Navbar/TransitionLink";
 import PrimaryButton from "../Buttons/PrimaryButton";
+import { AppContext } from "../../App";
 
-const Footer = ({ handleButtonNavigation }) => {
+const Footer = ({}) => {
+    const { handleButtonNavigation } = React.useContext(AppContext);
+
     return (
         <div
             className="h-[50vh]"
@@ -30,10 +31,9 @@ const Footer = ({ handleButtonNavigation }) => {
                                 Got something in mind?{" "}
                             </span>
                             <span className="text-color-text-hovering border-b-2 border-transparent hover:text-color-text-hovering  hover:border-color-text-hovering transition-all duration-300 cursor-pointer md:cursor-none">
-                                <TransitionLink
-                                    href={"/Contact"}
-                                    label={"Let’s talk about it."}
-                                />
+                                <a onClick={() => handleButtonNavigation("/")}>
+                                    Let’s talk about it.
+                                </a>
                             </span>
                         </div>
                         <div className="md:self-end">
@@ -44,14 +44,6 @@ const Footer = ({ handleButtonNavigation }) => {
                                 }
                             />
                         </div>
-                        {/* <div className="border px-8 py-1 text-lg flex items-center justify-center rounded-xm cursor-pointer md:cursor-none hover:border-color-text-hovering self-start  md:self-end ">
-                            <Magnet magnetStrength={4} padding={20}>
-                                <TransitionLink
-                                    href={"/Contact"}
-                                    label={"GET IN TOUCH"}
-                                ></TransitionLink>
-                            </Magnet>
-                        </div> */}
                     </div>
                     <div className="flex  justify-between items-center  h-[10vh]">
                         <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10">

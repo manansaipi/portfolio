@@ -12,10 +12,8 @@ const Home = ({ animationDone, handleButtonNavigation }) => {
             {animationDone && (
                 <>
                     <HomeAbout
-                        handleButtonNavigation={handleButtonNavigation}
                     ></HomeAbout>
                     <HomeRecentWork
-                        handleButtonNavigation={handleButtonNavigation}
                     ></HomeRecentWork>
                 </>
             )}
