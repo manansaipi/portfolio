@@ -34,7 +34,11 @@ const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
                     >
                         <div className={getLinkClass("/about")}>
                             <Magnet>
-                                <a onClick={() => handleButtonNavigation("/")}>
+                                <a
+                                    onClick={() =>
+                                        handleButtonNavigation("/about")
+                                    }
+                                >
                                     About
                                 </a>
                             </Magnet>
@@ -52,7 +56,11 @@ const NavbarLarge = ({ logoRef, navbarLargeRef }) => {
                         </div>
                         <div className={getLinkClass("/contact")}>
                             <Magnet>
-                                <a onClick={() => handleButtonNavigation("/contact")}>
+                                <a
+                                    onClick={() =>
+                                        handleButtonNavigation("/contact")
+                                    }
+                                >
                                     Contact
                                 </a>
                             </Magnet>
