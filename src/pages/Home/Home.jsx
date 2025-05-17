@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router";
 import HomeRecentWork from "./HomeRecentWork/HomeRecentWork";
-import { AppContext } from "../../App";
-import HomeEntrance from "./Entrance/HomeEntrance";
+import HomeEntrance from "./HomeEntrance/HomeEntrance";
 import HomeAbout from "./HomeAbout/HomeAbout";
-
+import HomeProject from "./HomeProject/HomeProject";
 const Home = ({ entranceAnimationDone, handleButtonNavigation }) => {
 	return (
 		<>
-			<HomeEntrance entranceAnimationDone={entranceAnimationDone}></HomeEntrance>
+			{/* <HomeEntrance
+				entranceAnimationDone={entranceAnimationDone}
+			></HomeEntrance> */}
 			{entranceAnimationDone && (
 				<>
-					<HomeAbout></HomeAbout>
-					<HomeRecentWork></HomeRecentWork>
+					{/* <HomeAbout></HomeAbout> */}
+					{/* <HomeRecentWork></HomeRecentWork> */}
+					<HomeProject></HomeProject>
 				</>
 			)}
 		</>
