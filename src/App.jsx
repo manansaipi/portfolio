@@ -13,51 +13,54 @@ import { AnimatePageTransition } from "./components/PreLoader/AnimatePageTransit
 export const AppContext = React.createContext({});
 
 const App = () => {
-    const [animationDone, setAnimationDone] = useState(false);
-    const location = useLocation();
-    const preloaderRef = useRef();
-    const navbarRef = useRef();
-    const navigate = useNavigate();
-    const lenis = useLenis();
+	const [animationDone, setAnimationDone] = useState(false);
+	const location = useLocation();
+	const preloaderRef = useRef();
+	const navbarRef = useRef();
+	const navigate = useNavigate();
+	const lenis = useLenis();
 
-    const isHome = location.pathname === "/" || location.pathname === "/home";
+	const isHome = location.pathname === "/" || location.pathname === "/home";
 
-    function handleButtonNavigation(href) {
-        AnimatePageTransition({
-            preloaderRef,
-            navbarRef,
-            lenis,
-            href,
-            navigate,
-        });
-    }
+	function handleButtonNavigation(href) {
+		console.log();
+		if (location.pathname != href) {
+			AnimatePageTransition({
+				preloaderRef,
+				navbarRef,
+				lenis,
+				href,
+				navigate,
+			});
+		}
+	}
 
-    return (
-        <>
-            <AppContext.Provider
-                value={{ preloaderRef, navbarRef, handleButtonNavigation }}
-            >
-                <ReactLenis root>
-                    <CustomCursor />
-                    <PreLoader
-                        setAnimationDone={setAnimationDone}
-                        preloaderRef={preloaderRef}
-                    />
-                    <div ref={navbarRef}>
-                        <Navbar />
-                    </div>
-                    <div className={isHome ? "" : "hidden"}>
-                        <Home animationDone={animationDone} />
-                    </div>
-                    <div className={isHome ? "hidden" : ""}>
-                        <Outlet />
-                    </div>
+	return (
+		<>
+			<AppContext.Provider
+				value={{ preloaderRef, navbarRef, handleButtonNavigation }}
+			>
+				<ReactLenis root>
+					<CustomCursor />
+					<PreLoader
+						setAnimationDone={setAnimationDone}
+						preloaderRef={preloaderRef}
+					/>
+					<div ref={navbarRef}>
+						<Navbar />
+					</div>
+					<div className={isHome ? "" : "hidden"}>
+						<Home animationDone={animationDone} />
+					</div>
+					<div className={isHome ? "hidden" : ""}>
+						<Outlet />
+					</div>
 
-                    {animationDone && <Footer />}
-                </ReactLenis>
-            </AppContext.Provider>
-        </>
-    );
+					{animationDone && <Footer />}
+				</ReactLenis>
+			</AppContext.Provider>
+		</>
+	);
 };
 
 export default App;
