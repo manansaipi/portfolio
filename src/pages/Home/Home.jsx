@@ -5,11 +5,11 @@ import { AppContext } from "../../App";
 import HomeEntrance from "./Entrance/HomeEntrance";
 import HomeAbout from "./HomeAbout/HomeAbout";
 
-const Home = ({ animationDone, handleButtonNavigation }) => {
+const Home = ({ entranceAnimationDone, handleButtonNavigation }) => {
 	return (
 		<>
-			<HomeEntrance></HomeEntrance>
-			{animationDone && (
+			<HomeEntrance entranceAnimationDone={entranceAnimationDone}></HomeEntrance>
+			{entranceAnimationDone && (
 				<>
 					<HomeAbout></HomeAbout>
 					<HomeRecentWork></HomeRecentWork>

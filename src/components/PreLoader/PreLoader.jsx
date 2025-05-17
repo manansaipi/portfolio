@@ -2,12 +2,16 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useLocation } from "react-router";
 
-const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
+const PreLoader = ({
+	setEntranceAnimationDone,
+	preloaderRef,
+	preloaderTextRef,
+}) => {
 	const location = useLocation();
 	useEffect(() => {
 		const tl = gsap.timeline({
 			onComplete: () => {
-				setAnimationDone(true); // Show the rest of the components
+				setEntranceAnimationDone(true); // Show the rest of the components
 
 				// if (preloaderRef.current) {
 				// 	preloaderRef.current.remove();
@@ -33,7 +37,7 @@ const PreLoader = ({ setAnimationDone, preloaderRef, preloaderTextRef }) => {
 				}
 			);
 		}
-	}, [setAnimationDone]);
+	}, []);
 
 	return (
 		<div

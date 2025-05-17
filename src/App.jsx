@@ -13,7 +13,7 @@ import { AnimatePageTransition } from "./components/PreLoader/AnimatePageTransit
 export const AppContext = React.createContext({});
 
 const App = () => {
-	const [animationDone, setAnimationDone] = useState(false);
+	const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
 	const location = useLocation();
 	const preloaderRef = useRef();
 	const navbarRef = useRef();
@@ -43,20 +43,20 @@ const App = () => {
 				<ReactLenis root>
 					<CustomCursor />
 					<PreLoader
-						setAnimationDone={setAnimationDone}
+						setEntranceAnimationDone={setEntranceAnimationDone}
 						preloaderRef={preloaderRef}
 					/>
 					<div ref={navbarRef}>
 						<Navbar />
 					</div>
 					<div className={isHome ? "" : "hidden"}>
-						<Home animationDone={animationDone} />
+						<Home entranceAnimationDone={entranceAnimationDone} />
 					</div>
 					<div className={isHome ? "hidden" : ""}>
 						<Outlet />
 					</div>
 
-					{animationDone && <Footer />}
+					{entranceAnimationDone && <Footer />}
 				</ReactLenis>
 			</AppContext.Provider>
 		</>

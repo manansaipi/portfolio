@@ -24,24 +24,29 @@ export const AnimatePageTransition = ({
 	}
 };
 export const AnimateHeader = ({ location, headerContainerRef }) => {
-	gsap.set(headerContainerRef.current, { opacity: 0, y: 100, rotateZ: 2 });
+	// gsap.set(headerContainerRef.current, { opacity: 0, y: 100, rotateZ: 2 });
 
-	gsap.to(headerContainerRef.current, {
-		opacity: 1,
-		y: 0,
-		duration: 1,
-		rotateZ: 0,
-		onStart: () => {
-			if (headerContainerRef.current) {
-				headerContainerRef.current.classList.add("z-7");
-			}
-		},
-		onComplete: () => {
-			if (headerContainerRef.current) {
-				setTimeout(() => {
-					headerContainerRef.current.classList.remove("z-7");
-				}, 2000);
-			}
-		},
-	});
+	gsap.fromTo(
+		headerContainerRef.current.children,
+		{ opacity: 0, y: 100, rotateZ: 0 },
+		{
+			opacity: 1,
+			y: 0,
+			duration: 1,
+			rotateZ: 0,
+			stagger: 0.25,
+			onStart: () => {
+				if (headerContainerRef.current) {
+					headerContainerRef.current.classList.add("z-7");
+				}
+			},
+			onComplete: () => {
+				if (headerContainerRef.current) {
+					setTimeout(() => {
+						headerContainerRef.current.classList.remove("z-7");
+					}, 2000);
+				}
+			},
+		}
+	);
 };

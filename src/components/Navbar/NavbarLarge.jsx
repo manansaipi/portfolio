@@ -18,7 +18,7 @@ const NavbarLarge = () => {
 				: "text-color-text-hovering"
 		} hover:text-primary cursor-none`;
 	useEffect(() => {
-		// if (location.pathname !== "/") return;
+		if (location.pathname !== "/") return;
 
 		gsap.fromTo(
 			navbarLargeRef.current.children,

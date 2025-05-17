@@ -23,7 +23,7 @@ export const EntranceAnimation = ({
   } = refs;
 
   const vw = window.innerWidth;
-
+console.log("imanimatinggggg")
   let yOffset = 0;
   let yToOffset = 0;
   let rotateZvar = 25;
@@ -55,6 +55,7 @@ export const EntranceAnimation = ({
   gsap.set(simpleRef.current, { y: yOffset, rotateZ: 3 });
 
   const tl = gsap.timeline();
+console.log("imanimatinggggg")
 
   tl.to(ciaoRef.current, { y: 0, duration: 0.35, rotateZ: 0, delay: 0.5,
       onStart: () => {
@@ -112,15 +113,13 @@ export const EntranceAnimation = ({
       }
     }, "-=0.6");
 
-  if (location.pathname === "/") {
     gsap.to(imgContainerRef.current, {
-      delay: 7,
+      delay: location.pathname === "/"? 7 : 0, // if the first path is not home, then immediatly remove the entrance img placeholder
       onComplete: () => {
         homeContainerRef.current?.classList.remove("overflow-hidden");
         imgContainerRef.current?.classList.remove("hidden");
       }
     });
-  }
 
   const interval = setInterval(() => {
     const tl = gsap.timeline();

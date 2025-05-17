@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import gsap from "gsap";
 import greetings from "./greetings";
 import ImageIntro from "./ImageEntrance";
@@ -6,7 +6,7 @@ import { useLocation } from "react-router";
 import { EntranceAnimation } from "./EntranceAnimation";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
 
-const Home = () => {
+const Home = ({ entranceAnimationDone }) => {
 	const homeContainerRef = useRef();
 	const headerContainerRef = useRef();
 	const ciaoRef = useRef();
@@ -24,7 +24,7 @@ const Home = () => {
 
 	const [currentGreeting, setCurrentGreeting] = useState(greetings[0]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const cleanup = EntranceAnimation({
 			refs: {
 				homeContainerRef,
@@ -52,6 +52,7 @@ const Home = () => {
 	const location = useLocation();
 
 	useEffect(() => {
+		if (!entranceAnimationDone) return;
 		AnimateHeader({ location, headerContainerRef });
 	}, [location.pathname]);
 

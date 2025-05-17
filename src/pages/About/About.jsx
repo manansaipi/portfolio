@@ -10,19 +10,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
 	const headerContainerRef = useRef();
+
 	useLayoutEffect(() => {
-		gsap.set(headerContainerRef.current, { opacity: 0, y: 100, rotateZ: 2 });
-	});
-	useEffect(() => {
 		AnimateHeader({ location, headerContainerRef });
 	}, []);
 
 	return (
-		<div className="h-[300vh] bg-light-dark text-primary p-5 pt-10 ">
+		<div className="h-[150vh] bg-light-dark text-primary p-5 pt-10 ">
 			<div className="px-5 md:px-20 lg:px-35 xl:px-50 z-10 mb-20">
 				<div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl pb-5 overflow-hidden ">
 					<div ref={headerContainerRef} className="relative z-7 ">
-						Build digital things that work beautifully and feel easy.
+						<div>Build digital things that work beautifully and feel easy.</div>
 					</div>
 				</div>
 
