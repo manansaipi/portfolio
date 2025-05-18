@@ -23,7 +23,6 @@ export const EntranceAnimation = ({
   } = refs;
 
   const vw = window.innerWidth;
-console.log("imanimatinggggg")
   let yOffset = 0;
   let yToOffset = 0;
   let rotateZvar = 25;
@@ -55,7 +54,6 @@ console.log("imanimatinggggg")
   gsap.set(simpleRef.current, { y: yOffset, rotateZ: 3 });
 
   const tl = gsap.timeline();
-console.log("imanimatinggggg")
 
   tl.to(ciaoRef.current, { y: 0, duration: 0.35, rotateZ: 0, delay: 0.5,
       onStart: () => {

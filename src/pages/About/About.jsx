@@ -3,7 +3,7 @@ import Certificate from "./AboutCertificate/AboutCertificate";
 const About = () => {
 	return (
 		<div className=" bg-light-dark text-primary  ">
-			{/* <AboutEntrance/> */}
+			<AboutEntrance />
 			<Certificate />
 		</div>
 	);

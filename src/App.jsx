@@ -23,7 +23,6 @@ const App = () => {
 	const isHome = location.pathname === "/" || location.pathname === "/home";
 
 	function handleButtonNavigation(href) {
-		console.log();
 		if (location.pathname != href) {
 			AnimatePageTransition({
 				preloaderRef,

@@ -3,7 +3,7 @@ import certificates from "./CertificatesList";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import gsap from "gsap";
 
-const CertificateMobileComponent = () => {
+const CertificateMobileComponent = ({ certificates }) => {
 	const [visibleCount, setVisibleCount] = useState(2);
 	const cardsContainer = useRef();
 	const prevVisibleCount = useRef(2);
@@ -58,7 +58,7 @@ const CertificateMobileComponent = () => {
 						data-name="view"
 						className="flex flex-col  gap-5 text-white h-full md:cursor-none "
 					>
-						<div className={`h-[50vh] bg-gray-600 pointer-events-none `}>
+						<div className={`h-[50vh] bg-gray-500 pointer-events-none `}>
 							<div className="px-5 w-full h-full flex items-center justify-center">
 								<img
 									className="max-h-[45vh] shadow-lg shadow-black "
