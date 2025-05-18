@@ -6,6 +6,11 @@ import basicWeb from "../../../assets/img/certificates/dicoding4.png";
 import gcsb from "../../../assets/img/certificates/gcsb.png";
 import bitsByte from "../../../assets/img/certificates/coursera1.png";
 import sysAdmin from "../../../assets/img/certificates/coursera2.png";
+import cleancode from "../../../assets/img/certificates/cleancode.jpg";
+import dsa from "../../../assets/img/certificates/dsa.jpg";
+import react from "../../../assets/img/certificates/react.jpg";
+import sql from "../../../assets/img/certificates/sql.jpg";
+import java from "../../../assets/img/certificates/java.jpg";
 
 const certificates = [
     {
@@ -23,19 +28,48 @@ const certificates = [
         link: "https://www.coursera.org/account/accomplishments/certificate/W7HL5ZKJY2JY",
     },
     {
-        name: "Become a Google Cloud Engineer",
-        year: "2023",
-        desc: "I learned the basics of cloud computing with Google Cloud, including how to build, manage, and monitor cloud apps through hands-on practice and a final project.",
-        image: cloudEng,
-        link: "https://www.dicoding.com/certificates/1RXY6O233ZVM",
-    },
-    {
         name: "System Administration and IT Infrastructure Services",
         year: "2023",
         desc: "I learned how to set up system services, manage security, and ensure the smooth operation of IT environments,",
         image: sysAdmin,
         link: "https://www.coursera.org/account/accomplishments/certificate/SASKPNKXVL54",
     },
+    {
+        name: "Clean Code",
+        year: "2025",
+        desc: "This course taught me the principles of writing clean, readable, and maintainable code including refactoring, naming conventions, and SOLID principles.",
+        image: cleancode,
+        link: "#",
+    },
+    {
+        name: "Data Structures & Algorithms",
+        year: "2025",
+        desc: "I learned how to solve coding problems using data structures like linked lists, trees, and graphs, and algorithms such as sorting, recursion, and dynamic programming.",
+        image: dsa,
+        link: "#",
+    },
+    {
+        name: "React Developer Course",
+        year: "2025",
+        desc: "I learned the fundamentals of React, including creating components, managing state and props, using JSX, and applying effects and context.",
+        image: react,
+        link: "#",
+    },
+    {
+        name: "SQL & Database Management",
+        year: "2025",
+        desc: "I learned how to design and manage relational databases using Microsoft SQL Server. I practiced writing SQL queries (CRUD), creating tables, views, stored procedures, and managing users, backups, and security.",
+        image: sql,
+        link: "#",
+    },
+    {
+        name: "Java Programming",
+        year: "2025",
+        desc: "I learned the basics of Java programming, including variables, loops, methods, conditionals, and object-oriented programming (OOP).",
+        image: java,
+        link: "#",
+    },
+
     {
         name: "Build Back-End Applications with Google Cloud",
         year: "2023",
@@ -44,11 +78,11 @@ const certificates = [
         link: "https://www.dicoding.com/certificates/ERZR0QE5NXYV",
     },
     {
-        name: "Google Cloud Skill Boost",
+        name: "Become a Google Cloud Engineer",
         year: "2023",
-        desc: "I’ve earned several Google Cloud Skills Boost badges . Some of the badges include Kubernetes, Cloud Run, and hybrid cloud applications. I also completed courses on Google Cloud fundamentals, Terraform, networking, security, and machine learning APIs.",
-        image: gcsb,
-        link: "https://www.cloudskillsboost.google/public_profiles/5d03fd6c-a138-4e59-b072-85c1174c5051",
+        desc: "I learned the basics of cloud computing with Google Cloud, including how to build, manage, and monitor cloud apps through hands-on practice and a final project.",
+        image: cloudEng,
+        link: "https://www.dicoding.com/certificates/1RXY6O233ZVM",
     },
     {
         name: "JavaScript Programming",
@@ -63,6 +97,13 @@ const certificates = [
         desc: "The course covers creating web page structure with HTML and enhancing web page appearance with CSS. It also includes learning advanced CSS techniques, responsive design with Flexbox, and building a simple website project.",
         image: basicWeb,
         link: "https://www.dicoding.com/certificates/1OP8587JQPQK",
+    },
+    {
+        name: "Google Cloud Skill Boost",
+        year: "2023",
+        desc: "I’ve earned several Google Cloud Skills Boost badges . Some of the badges include Kubernetes, Cloud Run, and hybrid cloud applications. I also completed courses on Google Cloud fundamentals, Terraform, networking, security, and machine learning APIs.",
+        image: gcsb,
+        link: "https://www.cloudskillsboost.google/public_profiles/5d03fd6c-a138-4e59-b072-85c1174c5051",
     },
 ];
 export default certificates;

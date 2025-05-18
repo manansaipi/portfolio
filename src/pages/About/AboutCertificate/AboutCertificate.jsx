@@ -3,7 +3,7 @@ import CertificateMobileComponent from "./CertificateMobileComponent";
 const Certificate = () => {
 	return (
 		<>
-			{/* <CertificateLargeComponent /> */}
+			<CertificateLargeComponent />
 			<CertificateMobileComponent />
 		</>
 	);

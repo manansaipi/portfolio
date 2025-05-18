@@ -109,7 +109,7 @@ const CertificateLargeComponent = () => {
 	}, [windowWidth]); // Dependency on windowWidth
 
 	return (
-		<div className="hidden lg:flex flex-col lg:flex-row text-primary h-full">
+		<div className="hidden lg:flex flex-col lg:flex-row text-primary h-full pb-200">
 			{hoveredIndex !== null && showCertificate && (
 				<div
 					className="fixed bg-gray-700 w-[400px] h-[350px] transition-transform duration-300 ease-out scale-100"
