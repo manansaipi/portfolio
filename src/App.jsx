@@ -73,4 +73,6 @@ export default App;
 // website idea : https://readymag.com/examples/portfolio ,
 //  https://michaelwatchmaker.com/about/
 // showcase more work section :  https://www.orchestraco.com/careers
-// can be blog page show case section : https://www.orchestraco.com/insights
+// can be blog page show case section : https://www.orchestraco.com/insights or https://www.sublimio.com/upstairz/
+// blog : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
+// blog main page : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/

@@ -5,14 +5,14 @@ import HomeProject from "./HomeProject/HomeProject";
 const Home = ({ entranceAnimationDone, handleButtonNavigation }) => {
 	return (
 		<>
-			{/* <HomeEntrance
+			<HomeEntrance
 				entranceAnimationDone={entranceAnimationDone}
-			></HomeEntrance> */}
+			></HomeEntrance>
 			{entranceAnimationDone && (
 				<>
-					{/* <HomeAbout></HomeAbout> */}
-					{/* <HomeRecentWork></HomeRecentWork> */}
-					<HomeProject></HomeProject>
+					<HomeAbout></HomeAbout>
+					<HomeRecentWork></HomeRecentWork>
+					{/* <HomeProject></HomeProject> */}
 				</>
 			)}
 		</>
