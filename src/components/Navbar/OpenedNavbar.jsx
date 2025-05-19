@@ -44,21 +44,14 @@ const OpenedNavbar = ({
                         ref={navigationListRef}
                         className="flex flex-col gap-0 font-bold text-6xl text-background overflow-hidden mb-7 md:mb-8 "
                     >
-                        <div
-                            className={getLinkClass("/")}
-                            onClick={handleOpenNavbar}
-                        >
-                            <a onClick={() => handleButtonNavigation("/")}>
-                                Home
-                            </a>
-                        </div>
+                   
 
                         <div
                             className={getLinkClass("/about")}
                             onClick={handleOpenNavbar}
                         >
                             <a onClick={() => handleButtonNavigation("/about")}>
-                                About
+                                ABOUT
                             </a>
                         </div>
 
@@ -67,7 +60,15 @@ const OpenedNavbar = ({
                             onClick={handleOpenNavbar}
                         >
                             <a onClick={() => handleButtonNavigation("/work")}>
-                                Work
+                                WORK
+                            </a>
+                        </div>
+                        <div
+                            className={getLinkClass("/blog")}
+                            onClick={handleOpenNavbar}
+                        >
+                            <a onClick={() => handleButtonNavigation("/blog")}>
+                                BLOG
                             </a>
                         </div>
 
@@ -80,7 +81,7 @@ const OpenedNavbar = ({
                                     handleButtonNavigation("/contact")
                                 }
                             >
-                                Contact
+                                CONTACT
                             </a>
                         </div>
                     </div>

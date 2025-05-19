@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
-
+import { AppContext } from "../../App";
 gsap.registerPlugin(TextPlugin);
 
 const Logo = () => {
+  const { handleButtonNavigation } = React.useContext(AppContext);
   const abdul = useRef();
   const bdul = useRef();
   const mannan = useRef();
@@ -89,7 +90,7 @@ const Logo = () => {
 
   return (
     <a
-      href="/"
+      onClick={() => handleButtonNavigation("/")}
       ref={wrapper}
       className=" flex items-center  gap-3 overflow-hidden  text-4xl lg:text-5xl md:cursor-none  hover:text-color-text-hovering"
     >

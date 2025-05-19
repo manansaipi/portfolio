@@ -13,6 +13,11 @@ const Works = [
         bgColor: "bg-neutral-800",
         url: "",
     },
+    // \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
+    // •
+    // Utilized SQL Server Management Studio (SSMS) to analyze production data and validate backend feature requests for performance and accuracy.
+    // •
+    // Collaborated with QA and manufacturing teams to maintain and scale backend services across production lines.
     {
         id: 2,
         company: "PT. \u00A0Mattel Indonesia",

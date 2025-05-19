@@ -8,6 +8,7 @@ import App from "./App.jsx";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About.jsx";
 import Experience from "./pages/Experience/Experience.jsx";
+import Blog from "./pages/Blog/Blog.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
 
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")).render(
 					{/* <Route index element={<Home />} /> */}
 					<Route path="about" element={<About />} />
 					<Route path="work" element={<Experience />} />
+					<Route path="blog" element={<Blog />} />
 					<Route path="contact" element={<Contact />} />
 					<Route path="*" element={<NotFound />} /> {/* Catch-all route */}
 				</Route>

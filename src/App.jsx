@@ -75,3 +75,4 @@ export default App;
 // can be blog page show case section : https://www.orchestraco.com/insights or https://www.sublimio.com/upstairz/
 // blog : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
 // blog main page : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
+// blog can be like this https://citizenofnowhe.re/blog/gfx100rf-first-impressions
