@@ -48,19 +48,19 @@ const HomeRecentWork = ({}) => {
     }
 
     return (
-        <div className="  bg-light-dark px-5 md:px-10 lg:px-25 xl:px-30 pb-50">
+        <div className="  bg-light-dark px-5 md:px-10 lg:px-25 xl:px-30 ">
             {/* mobile-medium size */}
             <ListRecentWorkMobile works={Works} />
 
             {/* large size */}
             <ListRecentWorkLarge works={Works} handleHover={handleHover} />
 
-            {/* <div className="flex justify-center text-primary py-20">
+            <div className="flex justify-center text-primary py-15">
                 <PrimaryButton
                     handleOnClick={() => handleButtonNavigation("/work")}
                     label={"WORK"}
                 />
-            </div> */}
+            </div>
 
             {/* hovered image */}
             <HoveredImages
