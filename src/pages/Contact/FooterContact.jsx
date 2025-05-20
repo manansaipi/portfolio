@@ -14,7 +14,7 @@ const Footer = () => {
 					<a
 						href="https://github.com/manansaipi"
 						target="_blank"
-						className="md:cursor-none"
+						className="cursor-none"
 					>
 						<LuGithub
 							className="text-background hover:text-color-text-hovering "
@@ -32,7 +32,7 @@ const Footer = () => {
 						<a
 							href="https://www.instagram.com/manansaipi"
 							target="_blank"
-							className="md:cursor-none"
+							className="cursor-none"
 						>
 							<FaInstagram size={25} />
 						</a>
@@ -41,7 +41,7 @@ const Footer = () => {
 						<a
 							href="mailto:abdulmannan.saipi@gmail.com"
 							target="_blank"
-							className="md:cursor-none"
+							className="cursor-none"
 						>
 							<MdMailOutline size={25} />
 						</a>
@@ -50,7 +50,7 @@ const Footer = () => {
 						<a
 							href="https://www.linkedin.com/in/abdulmannansaipi"
 							target="_blank"
-							className="md:cursor-none hovering"
+							className="cursor-none hovering"
 						>
 							<PiLinkedinLogoBold size={25} />
 						</a>

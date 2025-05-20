@@ -91,7 +91,7 @@ const CertificateLargeComponent = ({
 							target="_blank"
 							data-name="view"
 							key={index}
-							className="flex gap-5 py-2 md:cursor-none group"
+							className="flex gap-5 py-2 cursor-none group"
 							onMouseEnter={() => {
 								handleHover("enter", index);
 							}}

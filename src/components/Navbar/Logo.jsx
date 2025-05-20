@@ -92,7 +92,7 @@ const Logo = () => {
     <a
       onClick={() => handleButtonNavigation("/")}
       ref={wrapper}
-      className=" flex items-center  gap-3 overflow-hidden  text-4xl lg:text-5xl md:cursor-none  hover:text-color-text-hovering"
+      className=" flex items-center  gap-3 overflow-hidden  text-4xl lg:text-5xl cursor-none  hover:text-color-text-hovering"
     >
       <div className="font-luckiestguy flex pointer-events-none" ref={abdul}>
         A <div ref={bdul}>BDUL</div>

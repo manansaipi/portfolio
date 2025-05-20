@@ -178,7 +178,7 @@ const MessageForm = () => {
 				<button
 					type="submit"
 					disabled={isLoading}
-					className={`flex justify-center items-center bg-background px-8 py-2 cursor-none mt-5 rounded-md md:cursor-none active:bg-color-text-hovering transition-all duration-700 ${
+					className={`flex justify-center items-center bg-background px-8 py-2 cursor-none mt-5 rounded-md active:bg-color-text-hovering transition-all duration-700 ${
 						isLoading ? "opacity-60 cursor-not-allowed" : ""
 					} ${isSuccess ? "bg-green-500" : ""} `}
 				>

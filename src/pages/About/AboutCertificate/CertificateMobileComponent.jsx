@@ -56,7 +56,7 @@ const CertificateMobileComponent = ({ certificates }) => {
 						href={cert.link}
 						target="_blank"
 						data-name="view"
-						className="flex flex-col  gap-5 text-white h-full md:cursor-none "
+						className="flex flex-col  gap-5 text-white h-full cursor-none "
 					>
 						<div className={`h-[50vh] bg-gray-500 pointer-events-none `}>
 							<div className="px-5 w-full h-full flex items-center justify-center">
@@ -70,7 +70,7 @@ const CertificateMobileComponent = ({ certificates }) => {
 						<div className="pointer-events-none">
 							<div className="text-3xl">{cert.name} </div>
 							<div className=" border-b-1 my-5"></div>
-							<div className="flex justify-between gap-15">
+							<div className="flex justify-between gap-10">
 								<div className="text-justify">{cert.desc}</div>
 								<div>{cert.year}</div>
 							</div>

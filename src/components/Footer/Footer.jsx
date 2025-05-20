@@ -30,7 +30,7 @@ const Footer = ({}) => {
                             <span className="text-background">
                                 Got something in mind?{" "}
                             </span>
-                            <span className="text-color-text-hovering border-b-2 border-transparent hover:text-color-text-hovering  hover:border-color-text-hovering transition-all duration-300 cursor-pointer md:cursor-none">
+                            <span className="text-color-text-hovering border-b-2 border-transparent hover:text-color-text-hovering  hover:border-color-text-hovering transition-all duration-300 cursor-none">
                                 <a
                                     onClick={() =>
                                         handleButtonNavigation("/contact")
@@ -59,7 +59,7 @@ const Footer = ({}) => {
                                 <a
                                     href="https://www.linkedin.com/in/abdulmannansaipi"
                                     target="_blank"
-                                    className="md:cursor-none hovering"
+                                    className="cursor-none hovering"
                                 >
                                     <PiLinkedinLogoBold className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7  " />
                                 </a>
@@ -68,7 +68,7 @@ const Footer = ({}) => {
                                 <a
                                     href="https://github.com/manansaipi"
                                     target="_blank"
-                                    className="md:cursor-none"
+                                    className="cursor-none"
                                 >
                                     <LuGithub className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
                                 </a>
@@ -77,7 +77,7 @@ const Footer = ({}) => {
                                 <a
                                     href="https://www.instagram.com/manansaipi"
                                     target="_blank"
-                                    className="md:cursor-none"
+                                    className="cursor-none"
                                 >
                                     <FaInstagram className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
                                 </a>

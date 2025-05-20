@@ -54,7 +54,7 @@ const NavbarLarge = () => {
 						</div>
 						<div className={getLinkClass("/blog")}>
 							<Magnet>
-								<a onClick={() => handleButtonNavigation("/blog")}>Blog</a>
+								<a onClick={() => handleButtonNavigation("/blog")}>Writing</a>
 							</Magnet>
 						</div>
 						<div className={getLinkClass("/contact")}>

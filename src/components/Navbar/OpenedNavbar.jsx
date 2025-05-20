@@ -19,7 +19,7 @@ const OpenedNavbar = ({
 			pathname.toLowerCase() === path.toLowerCase()
 				? "text-color-text-hovering"
 				: "text-background"
-		} hover:text-color-text-hovering -mb-2 cursor-pointer md:cursor-none`;
+		} hover:text-color-text-hovering -mb-2 cursor-none`;
 
 	return (
 		<div>
@@ -55,7 +55,7 @@ const OpenedNavbar = ({
 							<a onClick={() => handleButtonNavigation("/work")}>WORK</a>
 						</div>
 						<div className={getLinkClass("/blog")} onClick={handleOpenNavbar}>
-							<a onClick={() => handleButtonNavigation("/blog")}>BLOG</a>
+							<a onClick={() => handleButtonNavigation("/blog")}>WRITING</a>
 						</div>
 
 						<div
@@ -73,21 +73,21 @@ const OpenedNavbar = ({
 						<a
 							target="_blank"
 							href="https://www.linkedin.com/in/abdulmannansaipi"
-							className="hover:text-color-text-hovering cursor-pointer md:cursor-none"
+							className="hover:text-color-text-hovering cursor-none"
 						>
 							LinkedIn
 						</a>
 						<a
 							target="_blank"
 							href="https://github.com/manansaipi"
-							className="hover:text-color-text-hovering cursor-pointer md:cursor-none"
+							className="hover:text-color-text-hovering cursor-none"
 						>
 							GitHub
 						</a>
 						<a
 							target="_blank"
 							href="https://www.instagram.com/manansaipi"
-							className="hover:text-color-text-hovering cursor-pointer md:cursor-none"
+							className="hover:text-color-text-hovering cursor-none"
 						>
 							Instagram
 						</a>

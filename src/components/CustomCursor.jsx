@@ -4,10 +4,26 @@ export default function CustomCursor() {
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const [hovering, setHovering] = useState(false);
 	const [hoveringCertif, setHoveringCertif] = useState(false);
-	const [isInViewport, setIsInViewport] = useState(true); // <- new state
+	const [isInViewport, setIsInViewport] = useState(true); 
+	const [isTouchDevice, setIsTouchDevice] = useState(false);
+	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const hasMovedRef = useRef(false);
 
+	// Update window width state when resizing
 	useEffect(() => {
+		const handleResize = () => {
+			setWindowWidth(window.innerWidth);
+		};
+
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	useEffect(() => {
+		// Detect touch devices
+		setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+
 		const moveCursor = (e) => {
 			if (!hasMovedRef.current) hasMovedRef.current = true;
 			setPosition({ x: e.clientX, y: e.clientY });
@@ -45,16 +61,18 @@ export default function CustomCursor() {
 		window.addEventListener("mousemove", moveCursor);
 		window.addEventListener("mouseover", handleMouseOver);
 		window.addEventListener("mouseout", handleMouseOut);
-
+		// TODO : HANDLE RESIZE TO HIDE/UNHIDE CURSOR, SEPRATE HANDLE RESIZE FUNCTION 
 		return () => {
 			window.removeEventListener("mousemove", moveCursor);
 			window.removeEventListener("mouseover", handleMouseOver);
 			window.removeEventListener("mouseout", handleMouseOut);
 		};
-	}, []);
+	}, [windowWidth]);
 
 	// if the cursor not move(mobile then hide)
-	const shouldHide = !hasMovedRef.current || !isInViewport;
+	// const shouldHide = !hasMovedRef.current || !isInViewport;
+	const shouldHide = isTouchDevice || !hasMovedRef.current || !isInViewport;
+
 	// console.log(shouldHide);
 	return (
 		<div

@@ -54,13 +54,13 @@ const HomeRecentWork = ({}) => {
 
             {/* large size */}
             <ListRecentWorkLarge works={Works} handleHover={handleHover} />
-
+{/* 
             <div className="flex justify-center text-primary py-15">
                 <PrimaryButton
                     handleOnClick={() => handleButtonNavigation("/work")}
                     label={"WORK"}
                 />
-            </div>
+            </div> */}
 
             {/* hovered image */}
             <HoveredImages
