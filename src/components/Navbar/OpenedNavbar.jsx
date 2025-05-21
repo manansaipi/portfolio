@@ -14,7 +14,7 @@ const OpenedNavbar = ({
 	const { handleButtonNavigation } = React.useContext(AppContext);
 
 	// Add "text-primary" if the current route matches
-	const getLinkClass = (path) =>
+	const getLinkClass = (path) =>	
 		`${
 			pathname.toLowerCase() === path.toLowerCase()
 				? "text-color-text-hovering"

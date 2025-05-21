@@ -56,12 +56,12 @@ const CertificateMobileComponent = ({ certificates }) => {
 						href={cert.link}
 						target="_blank"
 						data-name="view"
-						className="flex flex-col  gap-5 text-white h-full cursor-none "
+						className="flex flex-col  gap-5 text-white h-full cursor-none group"
 					>
 						<div className={`h-[50vh] bg-gray-500 pointer-events-none `}>
 							<div className="px-5 w-full h-full flex items-center justify-center">
 								<img
-									className="max-h-[45vh] shadow-lg shadow-black "
+									className="max-h-[45vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102"
 									src={cert.image}
 									alt=""
 								/>

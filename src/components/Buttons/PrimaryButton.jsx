@@ -5,7 +5,7 @@ const PrimaryButton = ({ handleOnClick, label }) => {
     return (
         <a
             onClick={handleOnClick}
-        className=" border px-8 py-1 text-lg md:text-xl lg:text-2xl flex items-center justify-center rounded-xm cursor-none hover:border-color-text-hovering "
+            className=" border px-8 py-1 text-lg md:text-xl lg:text-2xl flex items-center justify-center rounded-xm cursor-none hover:border-color-text-hovering "
         >
             <Magnet wrapperClassName="pointer-events-none" magnetStrength={4}>
                 {label}

@@ -23,7 +23,7 @@ export const AnimatePageTransition = ({
 		});
 	}
 };
-export const AnimateHeader = ({ location, headerContainerRef }) => {
+export const AnimateHeader = ({ headerContainerRef }) => {
 	// gsap.set(headerContainerRef.current, { opacity: 0, y: 100, rotateZ: 2 });
 
 	gsap.fromTo(

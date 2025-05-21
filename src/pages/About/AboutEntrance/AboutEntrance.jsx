@@ -9,13 +9,13 @@ const AboutEntrance = () => {
 	const headerContainerRef = useRef();
 
 	useLayoutEffect(() => {
-		AnimateHeader({ location, headerContainerRef });
+		AnimateHeader({ headerContainerRef });
 	}, []);
 
 	return (
 		<div>
 			<div className="p-5 pt-10 px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10 mb-20">
-				<div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl pb-5 overflow-hidden ">
+				<div className="custom-heading pb-5 overflow-hidden ">
 					<div ref={headerContainerRef} className="relative z-7 ">
 						<div>Build digital things that work beautifully and feel easy.</div>
 					</div>

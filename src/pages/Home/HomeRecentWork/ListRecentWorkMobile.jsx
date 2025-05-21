@@ -12,7 +12,7 @@ const ListRecentWorkMobile = ({ works }) => {
                         onClick={() => handleButtonNavigation("/work")}
                         data-name="view"
                         className={`flex flex-col
-							                ${index === 2 ? "md:col-span-2" : ""} // 👈 add this line
+							                ${index === 2 ? "md:col-span-2" : ""} 
 							gap-5 text-white h-full w-full group`}
                     >
                         <div

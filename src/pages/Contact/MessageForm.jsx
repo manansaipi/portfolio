@@ -121,7 +121,7 @@ const MessageForm = () => {
 	return (
 		<div>
 			<div className="pb-12 pt-8 md:pb-24 ">
-				<div className="text-4xl md:text-5xl font-bold text-background">
+				<div className="text-4xl md:text-5xl font-bold ">
 					Contact
 				</div>
 			</div>

@@ -16,7 +16,7 @@ const certificates = [
     {
         name: "Bangkit Academy led by Google, Tokopedia, Gojek, & Traveloka",
         year: "2023",
-        desc: "Bangkit Academy is a bootcamp led by major tech companies in Indonesia and is part of the Kampus Merdeka program. It is a collaboration between the Ministry of Education, Culture, Research, and Technology, and companies such as Google, Tokopedia, Gojek, and Traveloka.",
+        desc: "Bangkit Academy is a bootcamp led by major tech companies in Indonesia and is part of the Kampus Merdeka program. IfOR",
         image: bangkit,
         link: "https://drive.google.com/file/d/13mgCEnwhO1DTpc7c_z0Fs8cNt-BHrBR4/view?usp=sharing",
     },

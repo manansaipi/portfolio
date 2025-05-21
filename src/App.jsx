@@ -76,3 +76,10 @@ export default App;
 // blog : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
 // blog main page : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
 // blog can be like this https://citizenofnowhe.re/blog/gfx100rf-first-impressions
+
+
+ // \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
+// •
+// Utilized SQL Server Management Studio (SSMS) to analyze production data and validate backend feature requests for performance and accuracy.
+// •
+// Collaborated with QA and manufacturing teams to maintain and scale backend services across production lines.

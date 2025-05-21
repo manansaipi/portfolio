@@ -7,7 +7,7 @@ const UnderDevelopment = ({ title = "This page", message }) => {
 	const headerContainerRef = useRef();
 
 	useLayoutEffect(() => {
-		AnimateHeader({ location, headerContainerRef });
+		AnimateHeader({  headerContainerRef });
 	}, []);
 
 	return (

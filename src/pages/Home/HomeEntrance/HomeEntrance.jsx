@@ -49,11 +49,9 @@ const Home = ({ entranceAnimationDone }) => {
 		return cleanup;
 	}, []);
 
-	const location = useLocation();
-
 	useEffect(() => {
 		if (!entranceAnimationDone) return;
-		AnimateHeader({ location, headerContainerRef });
+		AnimateHeader({ headerContainerRef });
 	}, [location.pathname]);
 
 	return (
