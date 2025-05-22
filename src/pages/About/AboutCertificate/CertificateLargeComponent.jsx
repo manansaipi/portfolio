@@ -59,6 +59,56 @@ const CertificateLargeComponent = ({
 		return () => ctx.revert();
 	}, []);
 
+	useEffect(() => {
+		let mouseX = 0;
+		let mouseY = 0;
+		let lastElement = null;
+	
+		// Track mouse position
+		const handleMouseMove = (e) => {
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+		};
+	
+		// On scroll, detect the element under cursor
+		const handleScroll = () => {
+			const currentElement = document.elementFromPoint(mouseX, mouseY);
+			if (!currentElement) return;
+	
+			// Check if the hovered element is one of the certificate items
+			const isCertItem = currentElement.closest("[data-name='view']");
+	
+			// Prevent repeated triggers for the same element
+			if (isCertItem && isCertItem !== lastElement) {
+				lastElement = isCertItem;
+	
+				// Find index based on text content
+				const index = certificates.findIndex((cert) =>
+					isCertItem.textContent.includes(cert.name)
+				);
+	
+				if (index !== -1) {
+					handleHover("enter", index);
+				}
+			}
+	
+			// If no cert is under the cursor, consider it a hover out
+			if (!isCertItem && lastElement) {
+				lastElement = null;
+				handleHover("out");
+			}
+		};
+	
+		window.addEventListener("mousemove", handleMouseMove);
+		window.addEventListener("scroll", handleScroll);
+	
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, [certificates, handleHover]);
+	
+
 	return (
 		<div className="hidden lg:flex lg:flex-row text-primary h-full pb-50 mx-10 xl:mx-20 2xl:mx-30 ">
 			<div className="w-[50vw] xl:w-[100vh] mt-10 overflow-hidden ">
