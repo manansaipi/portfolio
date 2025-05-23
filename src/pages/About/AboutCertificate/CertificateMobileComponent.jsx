@@ -62,7 +62,7 @@ const CertificateMobileComponent = ({ certificates }) => {
 							<div className="px-5 w-full h-full flex items-center justify-center">
 								<img
 									className="max-h-[45vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102"
-									src={cert.image}
+									src={cert.img}
 									alt=""
 								/>
 							</div>

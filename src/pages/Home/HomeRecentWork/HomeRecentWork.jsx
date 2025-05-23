@@ -6,7 +6,7 @@ import Works from "./Works";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import ListRecentWorkMobile from "./ListRecentWorkMobile";
 import ListRecentWorkLarge from "./ListRecentWorkLarge";
-import HoveredImages from "./HoveredImages";
+import HoveredImages from "../../../components/HoveredImages/HoveredImages";
 import { AppContext } from "../../../App";
 const HomeRecentWork = ({}) => {
     const { handleButtonNavigation } = React.useContext(AppContext);
@@ -64,7 +64,7 @@ const HomeRecentWork = ({}) => {
 
             {/* hovered image */}
             <HoveredImages
-                works={Works}
+                datas={Works}
                 imageHolderRef={imageHolderRef}
                 imageContainerRef={imageContainerRef}
             />

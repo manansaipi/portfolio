@@ -1,74 +1,37 @@
-import { useRef, useState, useEffect } from "react";
-import bgImage from "../../assets/img/bg/noise-transparent.png"; // adjust the path as needed
-import Lanyard from "./Lanyard";
-import MessageForm from "./MessageForm";
-import FooterContact from "./FooterContact";
-import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
-import CustomCursor from "../../components/CustomCursor";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
+import ContactForm from "./ContactForm/ContactForm";
+import Magnet from "../../components/Magnet";
+import { LuGithub } from "react-icons/lu";
+import { FaInstagram } from "react-icons/fa";
+import { PiLinkedinLogoBold } from "react-icons/pi";
+import { AnimateHeader } from "../../components/PreLoader/AnimatePageTransition";
+import FooterSocials from "../../components/Footer/FooterSocials";
+
 const Contact = () => {
-    const [visible, setVisible] = useState(false);
-    const lanyardRef = useRef();
+    const headerContainerRef = useRef();
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
-                    observer.disconnect(); // stop observing once loaded
-                }
-            },
-            { threshold: 1 }
-        );
-
-        if (lanyardRef.current) observer.observe(lanyardRef.current);
+    useLayoutEffect(() => {
+        AnimateHeader({ headerContainerRef });
     }, []);
 
     return (
-        <UnderDevelopment
-        	title="Contact Page"
-        	message="Still teaching my contact form to not ghost people."
-        />
+        <div className="bg-light-dark text-primary ">
+            <div className=" p-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10">
+                <div className="custom-heading pb-5 overflow-hidden ">
+                    <div ref={headerContainerRef} className="relative z-7 ">
+                        <div>
+                            Feel free to reach out through the form or my
+                            socials below.
+                        </div>
+                    </div>
+                </div>
 
-        // <div
-        //     id="Contact"
-        //     className="h-[80vh] cursor-none text-primary"
-        //     style={{
-        //         clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
-        //     }}
-        // >
-        //     <div
-        //         className="fixed w-full h-[80vh] bottom-0 bg-light-dark bg-repeat bg-center "
-        //         // style={{
-        //         //     backgroundImage: `url(${bgImage})`,
-        //         // }}
-        //     >
-        //         <div className="flex flex-col lg:flex-row ">
-        //             <div
-        //                 ref={lanyardRef}
-        //                 className="h-[80vh] lg:w-full hidden md:flex md:items-center justify-center   "
-        //             >
-        //                 {visible ? (
-        //                     <div className="h-full w-[45vh] lg:w-full">
-        //                         <Lanyard
-        //                             position={[0, 0, 15]}
-        //                             gravity={[0, -40, 0]}
-        //                         />
-        //                     </div>
-        //                 ) : (
-        //                     <div />
-        //                 )}
-        //             </div>
-        //             <div className="h-[80vh] w-full p-12">
-        //                 <MessageForm />
-        //             </div>
-        //         </div>
-        //         {/* <div className="h-[80vh] "></div> */}
-        //         <div className="h-[20vh] ">
-        //             <FooterContact />
-        //         </div>
-        //     </div>
-        //     <CustomCursor />
-        // </div>
+                <ContactForm />
+            </div>
+            <div className="px-12 md:px-20 lg:px-30">
+                <FooterSocials />
+            </div>
+        </div>
     );
 };
 

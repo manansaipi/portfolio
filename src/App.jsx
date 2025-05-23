@@ -77,6 +77,9 @@ export default App;
 // blog main page : https://www.sublimio.com/leaving-a-mark-our-vision-on-logo-design/
 // blog can be like this https://citizenofnowhe.re/blog/gfx100rf-first-impressions
 //https://davidpacheco.co/
+// can be blog or project section https://www.dtampe.com/work
+// work/project transition https://fbridoux.com/projets/quatre-tours/
+// PROJECT VIEW CAN BE LIKE : https://fbridoux.com/projets/quatre-tours/
 
  // \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
 // •

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const HoveredImages = ({ imageContainerRef, imageHolderRef, works }) => {
+const HoveredImages = ({ imageContainerRef, imageHolderRef, datas }) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const HoveredImages = ({ imageContainerRef, imageHolderRef, works }) => {
     return (
         <div
             ref={imageContainerRef}
-            className="w-[400px] h-[350px] fixed overflow-hidden"
+            className="hidden lg:block w-[400px] h-[350px] fixed overflow-hidden"
             style={{
                 top: `${position.y - 160}px`,
                 left: `${position.x - 180}px`,
@@ -28,14 +28,14 @@ const HoveredImages = ({ imageContainerRef, imageHolderRef, works }) => {
             }}
         >
             <div ref={imageHolderRef} className="flex flex-col">
-                {works.map((work) => (
+                {datas.map((data, index) => (
                     <div
-                        key={work.id}
-                        className={` ${work.bgColor} w-[400px] h-[350px]`}
+                        key={index}
+                        className={` ${data.bgColor} w-[400px] h-[350px]`}
                     >
                         <div className="px-10 w-full h-full flex items-center justify-center">
                             <img
-                                src={work.img}
+                                src={data.img}
                                 alt="certificate"
                                 className="shadow-lg shadow-black"
                             />

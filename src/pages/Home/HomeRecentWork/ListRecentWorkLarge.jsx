@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { AppContext } from "../../../App";
 const ListRecentWorkLarge = ({ works, handleHover }) => {
-	const { handleButtonNavigation } = React.useContext(AppContext);
+const { handleButtonNavigation } = React.useContext(AppContext);
 
 	return (
 		<div className="hidden lg:block text-primary">

@@ -27,7 +27,7 @@ export default function CustomCursor() {
 		const moveCursor = (e) => {
 			if (!hasMovedRef.current) hasMovedRef.current = true;
 			setPosition({ x: e.clientX, y: e.clientY });
-
+				
 			const isOutside =
 				e.clientY <= 0 ||
 				e.clientX <= 0 ||
@@ -41,6 +41,7 @@ export default function CustomCursor() {
 		const handleMouseOver = (e) => {
 			const target = e.target;
 			const tagName = target.tagName;
+			// console.log(tagName)
 			const dataName =
 				target.getAttribute("data-name") || target.getAttribute("name");
 

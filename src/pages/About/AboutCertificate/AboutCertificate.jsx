@@ -3,7 +3,7 @@ import CertificateLargeComponent from "./CertificateLargeComponent";
 import CertificateMobileComponent from "./CertificateMobileComponent";
 import certificates from "./CertificatesList";
 import gsap from "gsap";
-import HoveredCertificate from "./HoveredCertificate";
+import HoveredImages from "../../../components/HoveredImages/HoveredImages";
 const Certificate = () => {
 	const certTitle = useRef();
 	const certDesc = useRef();
@@ -52,10 +52,10 @@ const Certificate = () => {
 				certTitle={certTitle}
 				certDesc={certDesc}
 			/>
-			<HoveredCertificate
+			<HoveredImages
 				imageHolderRef={imageHolderRef}
 				imageContainerRef={imageContainerRef}
-				certificates={certificates}
+				datas={certificates}
 			/>
 		</>
 	);

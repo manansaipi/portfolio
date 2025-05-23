@@ -1,19 +1,19 @@
 import React from "react";
 import bgImage from "../../assets/img/bg/noise-transparent.png"; // adjust the path as needed
 
-import { LuGithub } from "react-icons/lu";
-import { FaInstagram } from "react-icons/fa";
-import { PiLinkedinLogoBold } from "react-icons/pi";
-import Magnet from "../Magnet";
 import PrimaryButton from "../Buttons/PrimaryButton";
 import { AppContext } from "../../App";
+import { useLocation } from "react-router";
+import FooterSocials from "./FooterSocials";
 
 const Footer = ({}) => {
     const { handleButtonNavigation } = React.useContext(AppContext);
+    const location = useLocation();
+    const isContact = location.pathname == "/contact";
 
     return (
         <div
-            className="h-[50vh]"
+            className={`h-[50vh] ${isContact && "hidden"} `}
             style={{
                 clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
             }}
@@ -49,41 +49,7 @@ const Footer = ({}) => {
                             />
                         </div>
                     </div>
-                    <div className="flex  justify-between items-center  h-[10vh]">
-                        <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10">
-                            <div>Made in Jakarta, Indonesia</div>
-                            <div>&copy; 2025 Ben</div>
-                        </div>
-                        <div className="flex gap-5 md:gap-7 lg:gap-9">
-                            <Magnet magnetStrength={3} padding={15}>
-                                <a
-                                    href="https://www.linkedin.com/in/abdulmannansaipi"
-                                    target="_blank"
-                                    className="cursor-none hovering"
-                                >
-                                    <PiLinkedinLogoBold className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7  " />
-                                </a>
-                            </Magnet>
-                            <Magnet magnetStrength={3} padding={20}>
-                                <a
-                                    href="https://github.com/manansaipi"
-                                    target="_blank"
-                                    className="cursor-none"
-                                >
-                                    <LuGithub className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
-                                </a>
-                            </Magnet>
-                            <Magnet magnetStrength={3} padding={20}>
-                                <a
-                                    href="https://www.instagram.com/manansaipi"
-                                    target="_blank"
-                                    className="cursor-none"
-                                >
-                                    <FaInstagram className="text-background hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
-                                </a>
-                            </Magnet>
-                        </div>
-                    </div>
+                    <FooterSocials />
                 </div>
             </div>
         </div>
