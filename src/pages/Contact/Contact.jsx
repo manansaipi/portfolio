@@ -57,7 +57,7 @@ const Contact = () => {
 		</div>
 	);
 };
-
+// COPYABLE BUTTON LIKE IN GITTEA
 export default Contact;
 // contact refference https://dribbble.com/shots/7717624-District2-V2-Contact-Page
 // TODO : VALIDASI EMAIL SENDER SPAMMING. CANNOT SEND TWO TIMES OR MORE
