@@ -80,8 +80,8 @@ const ContactForm = () => {
 
     return (
         <div>
-             <form ref={form} onSubmit={sendEmail} noValidate>
-                <div className="flex flex-col gap-y-5 md:gap-y-5 text-xl font-semibold ">
+            <form ref={form} onSubmit={sendEmail} noValidate>
+                <div className="flex flex-col gap-y-5 md:gap-y-5 textmd md:text-xl font-semibold ">
                     <ContactInputComponent
                         inputRef={nameRef}
                         errorRef={nameErrorRef}
@@ -115,10 +115,14 @@ const ContactForm = () => {
                     disabled={isLoading}
                     className={`flex justify-center items-center border px-8 py-1 text-lg md:text-xl rounded-xm cursor-none hover:border-color-text-hovering  mt-5 rounded-md active:bg-color-text-hovering transition-all duration-700 ${
                         isLoading ? "opacity-60 cursor-not-allowed" : ""
-                    } ${isSuccess ? "border-green-500 text-green-500" : "text-primary"} `}
+                    } ${
+                        isSuccess
+                            ? "border-green-500 text-green-500"
+                            : "text-primary"
+                    } `}
                 >
-                    <Magnet magnetStrength={3}>
-                        <div className="flex flex-row gap-2 items-center justify-center ">
+                    <Magnet magnetStrength={3} padding={5}>
+                        <a className="flex flex-row gap-2 items-center justify-center ">
                             {isLoading ? (
                                 <div className="text-primary animate-pulse">
                                     Sending...
@@ -135,12 +139,15 @@ const ContactForm = () => {
                             ) : (
                                 <>
                                     <MdMailOutline
+                                        className="pointer-events-none"
                                         size={27}
                                     />
-                                    <div >Send</div>
+                                    <div className="pointer-events-none">
+                                        Send
+                                    </div>
                                 </>
                             )}
-                        </div>
+                        </a>
                     </Magnet>
                 </button>
             </form>

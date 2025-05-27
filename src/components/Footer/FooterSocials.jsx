@@ -18,7 +18,7 @@ const FooterSocials = () => {
                         target="_blank"
                         className="cursor-none hovering"
                     >
-                        <PiLinkedinLogoBold className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7  " />
+                        <PiLinkedinLogoBold className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none " />
                     </a>
                 </Magnet>
                 <Magnet magnetStrength={3} padding={20}>
@@ -27,7 +27,7 @@ const FooterSocials = () => {
                         target="_blank"
                         className="cursor-none"
                     >
-                        <LuGithub className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
+                        <LuGithub className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none" />
                     </a>
                 </Magnet>
                 <Magnet magnetStrength={3} padding={20}>
@@ -36,7 +36,7 @@ const FooterSocials = () => {
                         target="_blank"
                         className="cursor-none"
                     >
-                        <FaInstagram className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 " />
+                        <FaInstagram className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none" />
                     </a>
                 </Magnet>
             </div>

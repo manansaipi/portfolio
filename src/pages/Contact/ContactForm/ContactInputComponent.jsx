@@ -31,7 +31,7 @@ const ContactInputComponent = ({
 			)}
 			<span
 				ref={errorRef}
-				className="text-sm text-red-400 opacity-0 transition-opacity duration-300 font-light"
+				className="text-sm  text-red-400 opacity-0 transition-opacity duration-300 font-light"
 			>
 				error
 			</span>

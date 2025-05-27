@@ -81,7 +81,7 @@ export default function CustomCursor() {
 				${hovering ? " scale-240" : ""}
 				${hoveringCertif ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : ""}
-				transition-transform duration-500`}
+				transition-transform duration-450`}
 			style={{
 				left: `${position.x}px`,
 				top: `${position.y}px`,
