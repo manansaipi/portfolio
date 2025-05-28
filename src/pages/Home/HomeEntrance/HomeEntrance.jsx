@@ -58,7 +58,7 @@ const Home = ({ entranceAnimationDone }) => {
 		// ->60/80vh
 		<div>
 			<div ref={homeContainerRef} className="h-[80vh] overflow-hidden">
-				<section className="h-[80vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl transition-all ">
+				<section className="h-[80vh] bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl ">
 					<div className="h-[23vh]"></div>
 					<div className="overflow-hidden w-full">
 						<div

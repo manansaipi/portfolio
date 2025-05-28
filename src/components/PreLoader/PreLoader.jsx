@@ -23,7 +23,7 @@ const PreLoader = ({
             tl.to(preloaderRef.current, {
                 opacity: 0,
                 duration: 1.5,
-                delay: 7, //-> 7
+                delay: 0, //-> 7
             });
         } else {
             tl.fromTo(
@@ -42,7 +42,7 @@ const PreLoader = ({
         <div
             id="preloaderId"
             ref={preloaderRef}
-            className="section fixed bg-black w-full z-6 scroll-d even pointer-events-none text-primary flex justify-center items-center overflow-hidden"
+            className="section fixed bg-background w-full z-6 scroll-d even pointer-events-none text-primary flex justify-center items-center overflow-hidden"
         >
             <div className="text-4xl overflow-hidden">
                 <div ref={preloaderTextRef}>{/* Experience */}</div>

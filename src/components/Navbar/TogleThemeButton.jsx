@@ -17,7 +17,7 @@ const TogleTheme = () => {
         }
     };
     return (
-        <div onClick={toggleTheme} className="fixed bottom-3 right-3">
+        <div onClick={toggleTheme} className="fixed top-3 right-3">
             <div
                 className={`${
                     !enabled

@@ -53,12 +53,14 @@ const Contact = () => {
                     </div>
 
                     <div className="w-full">
-                        <div className="text-2xl xl:text-4xl mb-10">Say hello</div>
+                        <div className="text-2xl xl:text-4xl mb-10">
+                            Say hello
+                        </div>
                         <ContactForm />
                     </div>
                 </div>
             </div>
-            <div className="px-5 md:px-20 lg:px-30 mt-20">
+            <div className="px-5 md:px-20 lg:px-30 mt-20 text-primary">
                 <FooterSocials />
             </div>
         </div>

@@ -19,14 +19,14 @@ const Footer = ({}) => {
             }}
         >
             <div
-                className="fixed  w-full h-[50vh]  bottom-0 bg-gray-50 bg-repeat bg-center "
+                className="fixed  w-full h-[50vh]  bottom-0 bg-primary bg-repeat bg-center "
                 style={{
                     backgroundImage: `url(${bgImage})`,
                 }}
             >
                 <div className="flex flex-col h-full px-12 md:px-20 lg:px-30">
-                    <div className="pt-10 h-[40vh] flex flex-col gap-5  justify-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold md:text-end ">
-                        <div>
+                    <div className="pt-10 h-[40vh] flex flex-col gap-5  justify-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl  md:text-end ">
+                        <div className="font-semibold">
                             <span className="text-background">
                                 Got something in mind?{" "}
                             </span>
@@ -43,13 +43,16 @@ const Footer = ({}) => {
                         <div className="self-start md:self-end">
                             <PrimaryButton
                                 label={"GET IN TOUCH"}
+                                colorStyle="text-background"
                                 handleOnClick={() =>
                                     handleButtonNavigation("/contact")
                                 }
                             />
                         </div>
                     </div>
-                    <FooterSocials />
+                    <div className="text-background">
+                        <FooterSocials />
+                    </div>
                 </div>
             </div>
         </div>

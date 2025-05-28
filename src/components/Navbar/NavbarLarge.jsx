@@ -3,6 +3,7 @@ import { useLocation } from "react-router";
 import Magnet from "../Magnet";
 import { AppContext } from "../../App";
 import gsap from "gsap";
+import TogleTheme from "./TogleThemeButton";
 const NavbarLarge = () => {
     const { handleButtonNavigation } = React.useContext(AppContext);
     const location = useLocation();
@@ -49,7 +50,7 @@ const NavbarLarge = () => {
     }, []);
     return (
         <div>
-            <div id="Home" className="bg-light-dark">
+            <div id="Home" className="bg-light-dark transition-co">
                 <div className=" flex text-color-text-hovering h-[20vh]  items-center px-40 xl:px-60  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
@@ -62,10 +63,12 @@ const NavbarLarge = () => {
                             </a>
                         </div>
                     </div>
+                    <TogleTheme/>
                     <div
                         ref={navbarLargeRef}
                         className="hidden lg:flex  gap-10 justify-end w-screen  overflow-hidden  "
                     >
+
                         <div className={getLinkClass("/about")}>
                             <Magnet>
                                 <a

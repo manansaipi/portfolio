@@ -13,53 +13,53 @@ import { AnimatePageTransition } from "./components/PreLoader/AnimatePageTransit
 export const AppContext = React.createContext({});
 
 const App = () => {
-	const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
-	const location = useLocation();
-	const preloaderRef = useRef();
-	const navbarRef = useRef();
-	const navigate = useNavigate();
-	const lenis = useLenis();
+    const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
+    const location = useLocation();
+    const preloaderRef = useRef();
+    const navbarRef = useRef();
+    const navigate = useNavigate();
+    const lenis = useLenis();
 
-	const isHome = location.pathname === "/" || location.pathname === "/home";
+    const isHome = location.pathname === "/" || location.pathname === "/home";
 
-	function handleButtonNavigation(href) {
-		if (location.pathname != href) {
-			AnimatePageTransition({
-				preloaderRef,
-				navbarRef,
-				lenis,
-				href,
-				navigate,
-			});
-		}
-	}
+    function handleButtonNavigation(href) {
+        if (location.pathname != href) {
+            AnimatePageTransition({
+                preloaderRef,
+                navbarRef,
+                lenis,
+                href,
+                navigate,
+            });
+        }
+    }
 
-	return (
-		<>
-			<AppContext.Provider
-				value={{ preloaderRef, navbarRef, handleButtonNavigation }}
-			>
-				<ReactLenis root>
-					<CustomCursor />
-					<PreLoader
-						setEntranceAnimationDone={setEntranceAnimationDone}
-						preloaderRef={preloaderRef}
-					/>
-					<div ref={navbarRef}>
-						<Navbar />
-					</div>
-					<div className={isHome ? "" : "hidden"}>
-						<Home entranceAnimationDone={entranceAnimationDone} />
-					</div>
-					<div className={isHome ? "hidden" : ""}>
-						<Outlet />
-					</div>
+    return (
+        <>
+            <AppContext.Provider
+                value={{ preloaderRef, navbarRef, handleButtonNavigation }}
+            >
+                <ReactLenis root>
+                    <CustomCursor />
+                    <PreLoader
+                        setEntranceAnimationDone={setEntranceAnimationDone}
+                        preloaderRef={preloaderRef}
+                    />
+                    <div ref={navbarRef}>
+                        <Navbar />
+                    </div>
+                    <div className={isHome ? "" : "hidden"}>
+                        <Home entranceAnimationDone={entranceAnimationDone} />
+                    </div>
+                    <div className={isHome ? "hidden" : ""}>
+                        <Outlet />
+                    </div>
 
-					{entranceAnimationDone && <Footer />}
-				</ReactLenis>
-			</AppContext.Provider>
-		</>
-	);
+                    {entranceAnimationDone && <Footer />}
+                </ReactLenis>
+            </AppContext.Provider>
+        </>
+    );
 };
 
 export default App;
@@ -81,7 +81,7 @@ export default App;
 // work/project transition https://fbridoux.com/projets/quatre-tours/
 // PROJECT VIEW CAN BE LIKE : https://fbridoux.com/projets/quatre-tours/
 
- // \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
+// \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
 // •
 // Utilized SQL Server Management Studio (SSMS) to analyze production data and validate backend feature requests for performance and accuracy.
 // •

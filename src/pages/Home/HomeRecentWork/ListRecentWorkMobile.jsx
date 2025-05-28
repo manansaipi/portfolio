@@ -26,10 +26,10 @@ const ListRecentWorkMobile = ({ works }) => {
                                 />
                             </div>
                         </div>
-                        <div className="pointer-events-none">
+                        <div className="pointer-events-none text-primary">
                             <div className="text-3xl">{work.company} </div>
                             <div className=" border-b-1 my-5"></div>
-                            <div className="flex justify-between">
+                            <div className="flex justify-between ">
                                 <div>{work.role}</div>
                                 <div>
                                     {work.startDate} &nbsp;-&nbsp;{" "}

@@ -8,20 +8,26 @@
     --font-intertight: Inter Tight;
     --font-luckiestguy: Luckiest Guy;
     --color-primary: rgba(var(--primary));
+    --color-cursor: rgba(var(--cursor));
     --color-background: rgba(var(--background));
     --color-light-dark: rgba(var(--light-dark));
     --color-color-text-hovering: rgba(var(--color-text-hovering));
 }
 
-
 .custom-heading {
-    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl ;
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
 }
 
 html {
     scroll-behavior: smooth;
     overflow-anchor: none;
 }
+
+* {
+    transition-property: background-color, color, border-color, fill, stroke;
+    transition-duration: 1000ms;
+    transition-timing-function: ease;
+  }
 .section {
     min-height: 100vh; /* 100% of the viewport height */
 }
@@ -33,6 +39,7 @@ body::-webkit-scrollbar {
 .dark {
     --background: 16, 16, 16;
     --primary: 255, 255, 255;
+    --cursor: 255, 255, 255;
     --color-text-hovering: 127, 127, 127;
     --light-dark: 25, 25, 25;
 }
@@ -40,6 +47,7 @@ body::-webkit-scrollbar {
 .light {
     --background: 255, 255, 255;
     --primary: 16, 16, 16;
+    --cursor: 255, 255, 255;
     --color-text-hovering: 127, 127, 127;
     --light-dark: 230, 230, 230;
 }

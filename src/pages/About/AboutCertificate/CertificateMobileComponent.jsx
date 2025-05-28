@@ -67,11 +67,11 @@ const CertificateMobileComponent = ({ certificates }) => {
 								/>
 							</div>
 						</div>
-						<div className="pointer-events-none">
+						<div className="pointer-events-none text-primary">
 							<div className="text-3xl">{cert.name} </div>
 							<div className=" border-b-1 my-5"></div>
 							<div className="flex justify-between gap-10">
-								<div className="text-justify">{cert.desc}</div>
+								<div className="text-justify ">{cert.desc}</div>
 								<div>{cert.year}</div>
 							</div>
 						</div>

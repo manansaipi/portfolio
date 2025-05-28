@@ -77,7 +77,7 @@ export default function CustomCursor() {
 	// console.log(shouldHide);
 	return (
 		<div
-			className={`bg-primary fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4  
+			className={`bg-cursor fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4  
 				${hovering ? " scale-240" : ""}
 				${hoveringCertif ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : ""}

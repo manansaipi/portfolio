@@ -125,7 +125,7 @@ const CertificateLargeComponent = ({
 			</div>
 
 			<div className="flex flex-col px-10">
-				<span className="text-4xl xl:text-5xl font-extrabold text-white ">
+				<span className="text-4xl xl:text-5xl font-extrabold text-primary ">
 					MY CERTIFICATES
 				</span>
 				<div

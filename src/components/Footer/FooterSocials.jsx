@@ -7,7 +7,7 @@ import Magnet from "../Magnet";
 const FooterSocials = () => {
     return (
         <div className="flex justify-between items-center h-[10vh]">
-            <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10">
+            <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10 ">
                 <div>Made in Jakarta, Indonesia</div>
                 <div>&copy; 2025 Ben</div>
             </div>
@@ -16,27 +16,28 @@ const FooterSocials = () => {
                     <a
                         href="https://www.linkedin.com/in/abdulmannansaipi"
                         target="_blank"
-                        className="cursor-none hovering"
+                        className="cursor-none hover:text-color-text-hovering"
                     >
-                        <PiLinkedinLogoBold className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none " />
+                        <PiLinkedinLogoBold className="  size-5 md:size-6 lg:size-7 pointer-events-none " />
                     </a>
                 </Magnet>
-                <Magnet magnetStrength={3} padding={20}>
+                <Magnet magnetStrength={3} padding={15}>
                     <a
                         href="https://github.com/manansaipi"
                         target="_blank"
-                        className="cursor-none"
+                        className="cursor-none hover:text-color-text-hovering"
                     >
-                        <LuGithub className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none" />
+                        <LuGithub className="  size-5 md:size-6 lg:size-7 pointer-events-none" />
                     </a>
                 </Magnet>
-                <Magnet magnetStrength={3} padding={20}>
+                <Magnet magnetStrength={3} padding={15}>
                     <a
                         href="https://www.instagram.com/manansaipi"
                         target="_blank"
-                        className="cursor-none"
+                        className="cursor-none hover:text-color-text-hovering"
+                        
                     >
-                        <FaInstagram className=" hover:text-color-text-hovering size-5 md:size-6 lg:size-7 pointer-events-none" />
+                        <FaInstagram className="  size-5 md:size-6 lg:size-7 pointer-events-none" />
                     </a>
                 </Magnet>
             </div>
