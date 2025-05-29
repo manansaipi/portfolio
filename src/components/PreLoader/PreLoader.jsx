@@ -23,7 +23,7 @@ const location = useLocation();
             tl.to(preloaderRef.current, {
                 opacity: 0,
                 duration: 1.5,
-                delay: 0, //-> 7
+                delay: 7, //-> 7
             });
         } else {
             tl.fromTo(
