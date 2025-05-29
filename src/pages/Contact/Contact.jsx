@@ -26,7 +26,7 @@ const Contact = () => {
     }, []);
 
     return (
-        <div className="bg-light-dark text-primary">
+        <div className="pt-[20vh] bg-light-dark text-primary">
             <div className=" p-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10">
                 <div className="custom-heading pb-5 overflow-hidden xl:mb-20">
                     <div ref={headerContainerRef} className="relative z-7 ">

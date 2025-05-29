@@ -7,7 +7,7 @@ const PreLoader = ({
     preloaderRef,
     preloaderTextRef,
 }) => {
-    const location = useLocation();
+const location = useLocation();
     useEffect(() => {
         const tl = gsap.timeline({
             onComplete: () => {

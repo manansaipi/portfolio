@@ -23,11 +23,11 @@ html {
     overflow-anchor: none;
 }
 
-* {
+/* * {
     transition-property: background-color, color, border-color, fill, stroke;
     transition-duration: 1000ms;
     transition-timing-function: ease;
-  }
+  } */
 .section {
     min-height: 100vh; /* 100% of the viewport height */
 }

@@ -15,10 +15,10 @@ const NavbarLarge = () => {
     // Helper to determine active class
     const getLinkClass = (path) =>
         `${
-            pathname.toLowerCase() === path.toLowerCase()
+            pathname.toLowerCase().startsWith(path.toLowerCase())
                 ? "text-primary font-semibold"
                 : "text-color-text-hovering"
-        } hover:text-primary cursor-none transition-color duration-500`;
+        } hover:text-primary cursor-none transition-color duration-500 mix-blend-difference`;
     useEffect(() => {
         const tl = gsap.timeline({
             onComplete: () => {
@@ -50,8 +50,8 @@ const NavbarLarge = () => {
     }, []);
     return (
         <div>
-            <div id="Home" className="bg-light-dark transition-co">
-                <div className=" flex text-color-text-hovering h-[20vh]  items-center px-40 xl:px-60  ">
+            <div id="Home" className="bg-light-dark ">
+                <div className=" flex absolute text-color-text-hovering h-[20vh] w-[100vw]  items-center px-40 xl:px-60  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
                         <div
@@ -63,7 +63,7 @@ const NavbarLarge = () => {
                             </a>
                         </div>
                     </div>
-                    <TogleTheme/>
+                    {/* <TogleTheme/> */}
                     <div
                         ref={navbarLargeRef}
                         className="hidden lg:flex  gap-10 justify-end w-screen  overflow-hidden  "

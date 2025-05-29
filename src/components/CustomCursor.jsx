@@ -3,8 +3,8 @@ import { useEffect, useState, useRef } from "react";
 export default function CustomCursor() {
 	const [position, setPosition] = useState({ x: 0, y: 0 });
 	const [hovering, setHovering] = useState(false);
-	const [hoveringCertif, setHoveringCertif] = useState(false);
-	const [isInViewport, setIsInViewport] = useState(true); 
+	const [hoveringImage, setHoveringImage] = useState(false);
+	const [isInViewport, setIsInViewport] = useState(true);
 	const [isTouchDevice, setIsTouchDevice] = useState(false);
 	const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 	const hasMovedRef = useRef(false);
@@ -21,13 +21,12 @@ export default function CustomCursor() {
 
 	useEffect(() => {
 		// Detect touch devices
-		setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
+		setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
 		const moveCursor = (e) => {
 			if (!hasMovedRef.current) hasMovedRef.current = true;
 			setPosition({ x: e.clientX, y: e.clientY });
-				
+
 			const isOutside =
 				e.clientY <= 0 ||
 				e.clientX <= 0 ||
@@ -46,7 +45,7 @@ export default function CustomCursor() {
 				target.getAttribute("data-name") || target.getAttribute("name");
 
 			if (tagName === "A") setHovering(true);
-			if (dataName === "view") setHoveringCertif(true);
+			if (dataName === "view") setHoveringImage(true);
 		};
 
 		const handleMouseOut = (e) => {
@@ -55,14 +54,14 @@ export default function CustomCursor() {
 			const dataName =
 				target.getAttribute("data-name") || target.getAttribute("name");
 
-			if (tagName === "A") setHovering(false);
-			if (dataName === "view") setHoveringCertif(false);
+			if (tagName !== "A") setHovering(false);
+			if (dataName !== "view" || dataName === null || dataName === "view") setHoveringImage(false);
 		};
 
 		window.addEventListener("mousemove", moveCursor);
 		window.addEventListener("mouseover", handleMouseOver);
 		window.addEventListener("mouseout", handleMouseOut);
-		// TODO : HANDLE RESIZE TO HIDE/UNHIDE CURSOR, SEPRATE HANDLE RESIZE FUNCTION 
+		// TODO : HANDLE RESIZE TO HIDE/UNHIDE CURSOR, SEPRATE HANDLE RESIZE FUNCTION
 		return () => {
 			window.removeEventListener("mousemove", moveCursor);
 			window.removeEventListener("mouseover", handleMouseOver);
@@ -79,7 +78,7 @@ export default function CustomCursor() {
 		<div
 			className={`bg-cursor fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4  
 				${hovering ? " scale-240" : ""}
-				${hoveringCertif ? "scale-200 w-10" : "w-5"}
+				${hoveringImage ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : ""}
 				transition-transform duration-450`}
 			style={{
@@ -87,7 +86,7 @@ export default function CustomCursor() {
 				top: `${position.y}px`,
 			}}
 		>
-			{hoveringCertif && (
+			{hoveringImage && (
 				<div className="w-full h-full text-[10px] font-semibold flex items-center justify-center">
 					VIEW
 				</div>

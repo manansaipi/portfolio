@@ -1,6 +1,6 @@
 import galadinerlgsm from "../../../assets/img/profiles/galadinerlgsm.JPEG";
 import mattel from "../../../assets/img/profiles/mattel.jpg";
-import dpr from "../../../assets/img/profiles/dpr.jpg";
+import dpr from "../../../assets/img/profiles/dpr.JPEG";
 
 const Works = [
     {

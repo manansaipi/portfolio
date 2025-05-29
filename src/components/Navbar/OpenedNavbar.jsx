@@ -16,7 +16,7 @@ const OpenedNavbar = ({
 	// Add "text-primary" if the current route matches
 	const getLinkClass = (path) =>	
 		`${
-			pathname.toLowerCase() === path.toLowerCase()
+            pathname.toLowerCase().startsWith(path.toLowerCase())
 				? "text-color-text-hovering"
 				: "text-background"
 		} hover:text-color-text-hovering -mb-2 cursor-none`;

@@ -7,7 +7,11 @@ export const AnimatePageTransition = ({
 	href,
 	navigate,
 }) => {
+	document.body.style.overflow = "hidden";
+	document.body.setAttribute("data-lenis-prevent", "true");
+
 	lenis.scrollTo(navbarRef.current, { duration: 1 });
+
 	if (preloaderRef.current) {
 		const tl = gsap.timeline();
 		tl.to(preloaderRef.current, {
@@ -20,11 +24,13 @@ export const AnimatePageTransition = ({
 			opacity: 0,
 			duration: 1,
 			delay: 1.5, // -> 1.5
+			onComplete: () => (document.body.style.overflow = ""),
 		});
 	}
 };
+// TODO : ANIMATE HEADER IN PAGE TRANSITION USING GLOBAL STATE 
 export const AnimateHeader = ({ headerContainerRef }) => {
-	// gsap.set(headerContainerRef.current, { opacity: 0, y: 100, rotateZ: 2 });
+	if (!headerContainerRef?.current) return; // add safety check
 
 	gsap.fromTo(
 		headerContainerRef.current.children,
