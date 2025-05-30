@@ -11,7 +11,7 @@ const UnderDevelopment = ({ title = "This page", message }) => {
 	}, []);
 
 	return (
-		<section className=" h-[80vh] w-full bg-light-dark text-primary flex flex-col gap-6 items-center justify-center px-6 overflow-hidden">
+		<section className=" h-[100vh] w-full bg-light-dark text-primary flex flex-col gap-6 items-center justify-center px-6 overflow-hidden">
 			<FaTools size={60} className="text-accent animate-pulse" />
 			<div
 				ref={headerContainerRef}

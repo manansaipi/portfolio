@@ -17,6 +17,10 @@
 .custom-heading {
     @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
 }
+.custom-subheading {
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl;
+}
+
 
 html {
     scroll-behavior: smooth;

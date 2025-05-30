@@ -54,7 +54,7 @@ export default function CustomCursor() {
 			const dataName =
 				target.getAttribute("data-name") || target.getAttribute("name");
 
-			if (tagName !== "A") setHovering(false);
+			if (tagName !== "A" || tagName === "A" || tagName === null) setHovering(false);
 			if (dataName !== "view" || dataName === null || dataName === "view") setHoveringImage(false);
 		};
 
