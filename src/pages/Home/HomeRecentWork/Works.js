@@ -7,14 +7,14 @@ const Works = [
         id: 1,
         company: "LG Sinar Mas",
         role: "Software Engineer",
-        desc: "Since December 2024, I've been working as a Software Engineer at LG Sinar Mas Technology Solutions, where I develop and maintain backend logic using Java and BizActor to support core MES operations across factories in multiple countries.",
+        desc: "Since December 2024, I've been working as a Software Engineer at LG Sinar Mas Technology Solutions, where I contribute to the development of smart factory systems for EV (Electric Vehicle) battery manufacturing across multiple countries.",
         startDate: "Dec 2024",
         endDate: "Present",
         img: galadinerlgsm,
         bgColor: "bg-neutral-800",
         url: "",
     },
-    // \Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
+    // Developed and maintained backend logic modules using Java and BizActor to support core MES operations across factories in multiple countries.
     // •
     // Utilized SQL Server Management Studio (SSMS) to analyze production data and validate backend feature requests for performance and accuracy.
     // •
