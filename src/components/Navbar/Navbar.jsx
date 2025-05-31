@@ -12,7 +12,7 @@ gsap.registerEase(CustomEase);
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(CustomEase);
 
-const Navbar = ({}) => {
+const Navbar = ({entranceAnimationDone}) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const navbarRef = useRef();
 	const navigationListRef = useRef();
@@ -142,6 +142,7 @@ const Navbar = ({}) => {
 				logoRef={logoRef}
 				isOpen={isOpen}
 				handleOpenNavbar={handleOpenNavbar}
+				entranceAnimationDone={entranceAnimationDone}
 			/>
 
 			{/* OPENED NAVBAR */}

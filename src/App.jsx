@@ -46,7 +46,7 @@ const App = () => {
                         preloaderRef={preloaderRef}
                     />
                     <div ref={navbarRef}>
-                        <Navbar />
+                        <Navbar entranceAnimationDone={entranceAnimationDone} />
                     </div>
                     <div className={isHome ? "" : "hidden"}>
                         <Home entranceAnimationDone={entranceAnimationDone} />
