@@ -63,7 +63,7 @@ const Home = ({ entranceAnimationDone }) => {
 					<div className="overflow-hidden w-full">
 						<div
 							ref={headerContainerRef}
-							className="flex relative z-7 flex-col w-full mt-[20vh]"
+							className={`flex ${entranceAnimationDone? "relative" : "fixed"} z-7 flex-col w-full mt-[20vh] `}
 						>
 							{/* overflow-hidden */}
 							<div className="flex gap-2 lg:gap-3 overflow-hidden ">

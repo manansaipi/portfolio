@@ -46,16 +46,18 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
             if (clone) {
                 clone.classList.add("z-7");
             }
-            gsap.to(preloaderRef.current, {
-                opacity: 1,
-                duration: 0.8,
-                onComplete: () => {
-                    lenis.start();
-                    lenis.scrollTo(navbarRef.current, {
-                        duration: 0,
-                    });
-                },
-            });
+            if(preloaderRef) {
+                gsap.to(preloaderRef.current, {
+                    opacity: 1,
+                    duration: 0.8,
+                    onComplete: () => {
+                        lenis.start();
+                        lenis.scrollTo(navbarRef.current, {
+                            duration: 0,
+                        });
+                    },
+                });
+            }
         },
         onComplete: () => {
             navigate(path);

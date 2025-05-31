@@ -1,10 +1,14 @@
-import { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import CertificateLargeComponent from "./CertificateLargeComponent";
 import CertificateMobileComponent from "./CertificateMobileComponent";
 import certificates from "./CertificatesList";
 import gsap from "gsap";
 import HoveredImages from "../../../components/HoveredImages/HoveredImages";
+import PrimaryButton from "../../../components/Buttons/PrimaryButton";
+import { AppContext } from "../../../App";
+
 const Certificate = () => {
+	const { handleButtonNavigation } = React.useContext(AppContext);
 	const certTitle = useRef();
 	const certDesc = useRef();
 
@@ -57,6 +61,10 @@ const Certificate = () => {
 				imageContainerRef={imageContainerRef}
 				datas={certificates}
 			/>
+
+			<div className="flex justify-center py-20">
+				<PrimaryButton label={"MY WORK"} handleOnClick={() => handleButtonNavigation("/work")}/>
+			</div>
 		</>
 	);
 };

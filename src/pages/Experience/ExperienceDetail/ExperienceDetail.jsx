@@ -35,9 +35,6 @@ const ExperienceDetail = () => {
     useLayoutEffect(() => {
         if (currentWork && imageRef.current) {
             imageRef.current.classList.remove("z-7");
-            lenis.scrollTo(navbarRef.current, {
-                duration: 1,
-            });
         }
     }, [currentWork, location.pathname]);
 
@@ -99,7 +96,7 @@ const ExperienceDetail = () => {
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-col items-center py-[10vh] mx-5">
+                <div className="flex flex-col items-center py-[10vh] mx-10 md:mx-25 lg:mx-40 xl:mx-55">
                     <div className="text-color-text-hovering text-xs md:text-sm lg:text-md  font-semibold">
                         NEXT WORK
                     </div>
@@ -120,7 +117,7 @@ const ExperienceDetail = () => {
                                 )
                             }
                             src={nextWork.img}
-                            className="max-h-[70vh] w-full group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
+                            className="max-h-[70vh]  w-full group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
                             alt={`Next work for ${nextWork.company}`}
                         />
                     </div>
