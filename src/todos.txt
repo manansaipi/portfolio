@@ -1,0 +1,20 @@
+TODO :
+- make entranceanimationdone become global state ✅
+- make scroll trigger utils to animate target ref ✅
+- fix Warning GSAP target not found in about page
+
+- aniamte ref on all page 
+- animate image zoom effect on scroll like in citizen web 
+- make hovered images bigger on big screen size 
+
+- update work detail page include another detail, like desc images, etc ✅
+- update home/about/work page to include skills and projects that you'he done
+
+- make writing page
+- make writing detail 
+- make writing input page
+- make writing like, comment feature
+
+Backend
+- store the data into database 
+- then make api to dynamicly call the data

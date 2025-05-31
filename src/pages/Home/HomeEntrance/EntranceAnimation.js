@@ -59,6 +59,9 @@ export const EntranceAnimation = ({
       onStart: () => {
         if (headerContainerRef.current) {
             headerContainerRef.current.classList.add("z-7");
+
+            homeContainerRef.current?.classList.remove("overflow-hidden");
+            imgContainerRef.current?.classList.remove("hidden");
         }
       }
    })
@@ -110,14 +113,6 @@ export const EntranceAnimation = ({
         }
       }
     }, "-=0.6");
-
-    gsap.to(imgContainerRef.current, {
-      delay: location.pathname === "/"? 7 : 0, // if the first path is not home, then immediatly remove the entrance img placeholder
-      onComplete: () => {
-        homeContainerRef.current?.classList.remove("overflow-hidden");
-        imgContainerRef.current?.classList.remove("hidden");
-      }
-    });
 
   const interval = setInterval(() => {
     const tl = gsap.timeline();

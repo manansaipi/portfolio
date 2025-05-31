@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
-import gsap from "gsap";
 import greetings from "./greetings";
 import ImageIntro from "./ImageEntrance";
-import { useLocation } from "react-router";
 import { EntranceAnimation } from "./EntranceAnimation";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
+import { AppContext } from "../../../App";
 
-const Home = ({ entranceAnimationDone }) => {
+const Home = ({  }) => {
+	const { entranceAnimationDone } = React.useContext(AppContext);
+
 	const homeContainerRef = useRef();
 	const headerContainerRef = useRef();
 	const ciaoRef = useRef();

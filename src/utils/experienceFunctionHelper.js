@@ -39,13 +39,11 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
         left: 0,
         width: "100vw",
         height: "70vh",
-        duration: 1.2,
+        duration: 1.5,
         ease: "power3.out",
         onStart: () => {
             imageElement.classList.add("opacity-0");
-            if (clone) {
-                clone.classList.add("z-7");
-            }
+            clone.classList.add("z-7");
             if(preloaderRef) {
                 gsap.to(preloaderRef.current, {
                     opacity: 1,

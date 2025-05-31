@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const HoveredImages = ({ imageContainerRef, imageHolderRef, datas }) => {
+const HoveredImages = ({ imageContainerRef, imageHolderRef, datas, imageRefs }) => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -35,9 +35,10 @@ const HoveredImages = ({ imageContainerRef, imageHolderRef, datas }) => {
                     >
                         <div className="px-10 w-full h-full flex items-center justify-center">
                             <img
+                                ref={(el) => (imageRefs.current[index] = el)}
                                 src={data.img}
                                 alt="certificate"
-                                className="shadow-lg shadow-black"
+                                className="shadow-lg shadow-black object-cover"
                             />
                         </div>
                     </div>

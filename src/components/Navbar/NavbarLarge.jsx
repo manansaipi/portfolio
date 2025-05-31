@@ -54,11 +54,8 @@ const NavbarLarge = () => {
                 <div className=" flex absolute text-color-text-hovering h-[20vh] w-[100vw]  items-center px-40 xl:px-60  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
-                        <div
-                            ref={nameRef}
-                            className="hover:text-primary cursor-none"
-                        >
-                            <a onClick={() => handleButtonNavigation("/")}>
+                        <div ref={nameRef} >
+                            <a className="hover:text-primary cursor-none" onClick={() => handleButtonNavigation("/")}>
                                 Abdul Mannan Saipi
                             </a>
                         </div>

@@ -15,6 +15,8 @@ const HomeRecentWork = ({}) => {
 
     const imageContainerRef = useRef();
     const imageHolderRef = useRef();
+    const imageRefs = useRef([]);
+    
 
     useLayoutEffect(() => {
         if (imageContainerRef.current) {
@@ -53,7 +55,7 @@ const HomeRecentWork = ({}) => {
             <ListRecentWorkMobile works={Works} />
 
             {/* large size */}
-            <ListRecentWorkLarge works={Works} handleHover={handleHover} />
+            <ListRecentWorkLarge works={Works} handleHover={handleHover} imageRefs={imageRefs} />
             {/* 
             <div className="flex justify-center text-primary py-15">
                 <PrimaryButton
@@ -67,6 +69,7 @@ const HomeRecentWork = ({}) => {
                 datas={Works}
                 imageHolderRef={imageHolderRef}
                 imageContainerRef={imageContainerRef}
+                imageRefs={imageRefs}
             />
         </div>
     );

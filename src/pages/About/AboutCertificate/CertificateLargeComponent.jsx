@@ -8,7 +8,7 @@ const CertificateLargeComponent = ({
 	certificates,
 	certTitle,
 	certDesc,
-	handleHover,
+	handleHover,	
 }) => {
 	const certDescContainerRef = useRef();
 	const certListRef = useRef();

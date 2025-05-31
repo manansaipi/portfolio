@@ -37,7 +37,7 @@ const App = () => {
     return (
         <>
             <AppContext.Provider
-                value={{ preloaderRef, navbarRef, handleButtonNavigation }}
+                value={{ preloaderRef, navbarRef, handleButtonNavigation, entranceAnimationDone  }}
             >
                 <ReactLenis root>
                     <CustomCursor />
@@ -46,10 +46,10 @@ const App = () => {
                         preloaderRef={preloaderRef}
                     />
                     <div ref={navbarRef}>
-                        <Navbar entranceAnimationDone={entranceAnimationDone} />
+                        <Navbar />
                     </div>
                     <div className={isHome ? "" : "hidden"}>
-                        <Home entranceAnimationDone={entranceAnimationDone} />
+                        <Home />
                     </div>
                     <div className={isHome ? "hidden" : ""}>
                         <Outlet />

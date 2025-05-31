@@ -16,10 +16,6 @@ const PreLoader = ({
             onComplete: () => {
                 setEntranceAnimationDone(true); // Show the rest of the components
                 document.body.style.overflow = "";
-
-                // if (preloaderRef.current) {
-                // 	preloaderRef.current.remove();
-                // }
             },
         });
 

@@ -7,12 +7,16 @@ import { CustomEase } from "gsap/CustomEase";
 import FloatingNavbar from "./FloatingNavbar";
 import OpenedNavbar from "./OpenedNavbar";
 import NavbarLarge from "./NavbarLarge";
+import { AppContext } from "../../App";
 
 gsap.registerEase(CustomEase);
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(CustomEase);
 
-const Navbar = ({entranceAnimationDone}) => {
+const Navbar = ({}) => {
+	const { entranceAnimationDone } = React.useContext(AppContext);
+
+	
 	const [isOpen, setIsOpen] = useState(false);
 	const navbarRef = useRef();
 	const navigationListRef = useRef();
