@@ -1,13 +1,9 @@
 import React from "react";
 import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
+import AllBlog from "./AllBlog/AllBlog";
 
 const Blog = () => {
-	return (
-		<UnderDevelopment
-			title="Blog Page"
-			message={"Hey there! I'm still working on this space :)"}
-		/>
-	);
+	return <AllBlog />;
 };
 
 export default Blog;

@@ -28,7 +28,7 @@ export const AnimatePageTransition = ({
 		});
 	}
 };
-// TODO : ANIMATE HEADER IN PAGE TRANSITION USING GLOBAL STATE 
+// TODO : ANIMATE HEADER IN PAGE TRANSITION USING GLOBAL STATE
 export const AnimateHeader = ({ headerContainerRef }) => {
 	if (!headerContainerRef?.current) return; // add safety check
 
@@ -47,11 +47,11 @@ export const AnimateHeader = ({ headerContainerRef }) => {
 				}
 			},
 			onComplete: () => {
-				if (headerContainerRef.current) {
-					setTimeout(() => {
+				setTimeout(() => {
+					if (headerContainerRef.current) {
 						headerContainerRef.current.classList.remove("z-7");
-					}, 2000);
-				}
+					}
+				}, 2000);
 			},
 		}
 	);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../App";
 import {
 	handleWorkNavigation,
@@ -14,8 +14,10 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 	const { preloaderRef } = React.useContext(AppContext);
 	const lenis = useLenis();
 	const navigate = useNavigate();
-
 	const [position, setPosition] = useState({ x: 0, y: 0 });
+
+	let index = 0;
+	const workListContainer = useRef([]);
 
 	useEffect(() => {
 		const moveCursor = (e) => {
@@ -32,16 +34,14 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 	useEffect(() => {
 		const checkHoverOnScroll = () => {
 			const { x, y } = position;
-			console.log("🚀 ~ checkHoverOnScroll ~ position:", position);
 
 			let hovering = "out";
-			let index = 0
 
-			// Check for elements with data-name="view"
+			// Check for elements with data-work="view"
 			document.querySelectorAll("[data-work='view']").forEach((el) => {
 				const rect = el.getBoundingClientRect();
 				// console.log("🚀 ~ document.querySelectorAll ~ rect:", rect)
-				if (x !== 0 || y !== 0) {
+				if (x !== 0 && y !== 0) {
 					if (
 						x >= rect.left &&
 						x <= rect.right &&
@@ -49,17 +49,15 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 						y <= rect.bottom
 					) {
 						hovering = "enter";
-						index = parseInt(el.dataset.index, 10); // 👈 Get the index here
-						
+						index = parseInt(el.dataset.index, 10);
 					}
 				}
 			});
-			
-			handleHover(hovering, index); // 👈 Pass it
+
+			handleHover(hovering, index);
 		};
 
 		window.addEventListener("scroll", checkHoverOnScroll);
-
 		return () => {
 			window.removeEventListener("scroll", checkHoverOnScroll);
 		};
@@ -99,7 +97,10 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 							className="hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-x-1"
 						>
 							<div className="border-t-1 border-color-text-hovering duration-0 hover:translate-x-0"></div>
-							<div className="flex flex-row justify-between items-center m-10 xl:my:15 xl:mx-25 2xl:mx-35 hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1">
+							<div
+								ref={(element) => (workListContainer.current[index] = element)}
+								className="flex flex-row justify-between items-center m-10 xl:my:15 xl:mx-25 2xl:mx-35 hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1"
+							>
 								<div className="flex flex-col pointer-events-none ">
 									<div className="text-5xl xl:text-6xl 2xl:text-7xl">
 										{work.company}

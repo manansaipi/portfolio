@@ -1,23 +1,14 @@
-TODO :
-- make entranceanimationdone become global state ✅
-- make scroll trigger utils to animate target ref ✅
-- fix Warning GSAP target not found in about page ✅
-- prevent scrolling before removing clone images in detailexperience page ✅
-- fix ncaught TypeError: Cannot read properties of null (reading 'classList') on navbar large
-- hover on scroll in home recent work large ✅
-- aniamte text on hover on scroll in home recent work large 
-- hover effect animation on scroll in all page
-- make resize to get screensize and cursormove function reusable
+TODO 🚀 
 
-- aniamte ref on all page 
-- animate image zoom effect on scroll like in citizen web 
-- make hovered images bigger on big screen size 
 
-- update about page to include graduation image ✅
-- update work detail page include another detail, like desc images, etc ✅
 - update home/about/work page to include skills and projects that you'he done
 
 - make writing page
+- hover effect animation on scroll in all page, entranceanimateion
+- make resize to get screensize and cursormove function reusable
+- aniamte div item on all page 
+- animate image zoom effect on scroll like in citizen web 
+- make hovered images bigger on big screen size 
 - make writing detail 
 - make writing input page
 - make writing like, comment feature
@@ -25,3 +16,31 @@ TODO :
 Backend
 - store the data into database 
 - then make api to dynamicly call the data
+
+PENDING 🕧 
+- aniamte text on hover on scroll in home recent work large (so many detail need to consider. dynamic color change on hover dark/light mode)
+
+
+
+
+DONE ✅ 
+- make entranceanimationdone become global state ✅
+- make scroll trigger utils to animate target ref ✅
+- fix Warning GSAP target not found in about page ✅
+- prevent scrolling before removing clone images in detailexperience page ✅
+- hover on scroll in home recent work large ✅
+- update about page to include graduation image ✅
+- update work detail page include another detail, like desc images, etc ✅
+- fix ncaught TypeError: Cannot read properties of null (reading 'classList') on navbar large✅
+
+
+
+
+
+
+
+
+
+
+
+
