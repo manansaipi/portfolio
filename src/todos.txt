@@ -1,14 +1,14 @@
 TODO 🚀 
-
-
-- update home/about/work page to include skills and projects that you'he done
-
-- make writing page
 - hover effect animation on scroll in all page, entranceanimateion
 - make resize to get screensize and cursormove function reusable
 - aniamte div item on all page 
 - animate image zoom effect on scroll like in citizen web 
 - make hovered images bigger on big screen size 
+
+- update home/about/work page to include skills and projects that you'he done
+
+- make writing page mobile-xl ✅
+- make writing page if in large size only 1 item is big otehr is normal size 
 - make writing detail 
 - make writing input page
 - make writing like, comment feature
