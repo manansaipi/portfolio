@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import graduateImg from "../../../assets/img/profiles/graduate.jpg";
+import graduate1 from "../../../assets/img/profiles/graduate1.JPG";
+import graduate2 from "../../../assets/img/profiles/graduate2.JPG";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -14,7 +15,7 @@ const AboutEntrance = () => {
 
 	return (
 		<div>
-			<div className="p-5 pt-10 px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10 mb-20">
+			<div className="p-5 pt-10 px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10">
 				<div className="custom-heading pb-5 overflow-hidden ">
 					<div ref={headerContainerRef} className="relative z-7 ">
 						<div>Build digital things that work beautifully and feel easy.</div>
@@ -47,10 +48,18 @@ const AboutEntrance = () => {
 
 					<div className="relative w-full h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden">
 						<img
-							src={graduateImg}
+							src={graduate1}
 							className="absolute top-0 left-0 w-full h-full object-cover object-[45%]"
 						/>
 					</div>
+				</div>
+			</div>
+			<div className="flex justify-center">
+				<div className="w-[100vw] self overflow-hidden my-10 ">
+					<img
+						src={graduate2}
+						className="max-h-[85vh] w-full rounded-xl object-cover object-center"
+					/>
 				</div>
 			</div>
 		</div>

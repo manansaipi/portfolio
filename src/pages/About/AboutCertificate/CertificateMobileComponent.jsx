@@ -28,17 +28,19 @@ const CertificateMobileComponent = ({ certificates }) => {
 			prevVisibleCount.current
 		);
 
-		gsap.fromTo(
-			newItems,
-			{ opacity: 0, y: 30 },
-			{
-				opacity: 1,
-				y: 0,
-				duration: 0.6,
-				stagger: 0.15,
-				ease: "power2.out",
-			}
-		);
+		if (newItems.length > 0) {
+			gsap.fromTo(
+				newItems,
+				{ opacity: 0, y: 30 },
+				{
+					opacity: 1,
+					y: 0,
+					duration: 0.6,
+					stagger: 0.15,
+					ease: "power2.out",
+				}
+			);
+		}
 
 		// Update previous count
 		prevVisibleCount.current = visibleCount;

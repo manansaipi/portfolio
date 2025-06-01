@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import gsap from "gsap";
 import { useLocation } from "react-router";
-import { useLenis } from "lenis/react";
 
 const PreLoader = ({
     setEntranceAnimationDone,
@@ -23,7 +22,7 @@ const PreLoader = ({
             tl.to(preloaderRef.current, {
                 opacity: 0,
                 duration: 1.5,
-                delay: 7, //-> 7
+                delay: 0, //-> 7
             });
         } else {
             tl.fromTo(

@@ -21,6 +21,7 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
     // Clone the image
     const clone = imageElement.cloneNode(true);
     document.body.appendChild(clone);
+    lenis.stop();
 
     // Set initial fixed position based on current position
     Object.assign(clone.style, {

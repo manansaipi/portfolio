@@ -131,7 +131,7 @@ const ExperienceDetail = () => {
 				</div>
 
 				{/* NEXT WORK */}
-				<div className="flex flex-col items-center py-[30vh] mx-10 md:mx-30 lg:mx-50 xl:mx-65">
+				<div className="flex flex-col items-center  py-[15vh] md:py-[30vh] mx-10 md:mx-30 lg:mx-50 xl:mx-65">
 					<div className="text-color-text-hovering text-xs md:text-sm lg:text-md  font-semibold">
 						NEXT WORK
 					</div>

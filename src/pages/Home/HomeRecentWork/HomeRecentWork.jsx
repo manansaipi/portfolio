@@ -39,11 +39,8 @@ const HomeRecentWork = ({}) => {
                 ease: "expoScale(0.5,7, none)",
             });
         } else {
-            gsap.fromTo(
+            gsap.to(
                 imageContainerRef.current,
-                {
-                    scale: 1,
-                },
                 { scale: 0, duration: 0.5, ease: "expoScale(0.5,7, none)" }
             );
         }

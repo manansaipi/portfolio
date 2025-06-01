@@ -1,12 +1,19 @@
 TODO :
 - make entranceanimationdone become global state ✅
 - make scroll trigger utils to animate target ref ✅
-- fix Warning GSAP target not found in about page
+- fix Warning GSAP target not found in about page ✅
+- prevent scrolling before removing clone images in detailexperience page ✅
+- fix ncaught TypeError: Cannot read properties of null (reading 'classList') on navbar large
+- hover on scroll in home recent work large ✅
+- aniamte text on hover on scroll in home recent work large 
+- hover effect animation on scroll in all page
+- make resize to get screensize and cursormove function reusable
 
 - aniamte ref on all page 
 - animate image zoom effect on scroll like in citizen web 
 - make hovered images bigger on big screen size 
 
+- update about page to include graduation image ✅
 - update work detail page include another detail, like desc images, etc ✅
 - update home/about/work page to include skills and projects that you'he done
 

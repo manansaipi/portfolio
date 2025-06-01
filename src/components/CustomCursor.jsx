@@ -40,7 +40,7 @@ export default function CustomCursor() {
 		const handleMouseOver = (e) => {
 			const target = e.target;
 			const tagName = target.tagName;
-			// console.log(tagName)
+
 			const dataName =
 				target.getAttribute("data-name") || target.getAttribute("name");
 
@@ -61,13 +61,59 @@ export default function CustomCursor() {
 		window.addEventListener("mousemove", moveCursor);
 		window.addEventListener("mouseover", handleMouseOver);
 		window.addEventListener("mouseout", handleMouseOut);
-		// TODO : HANDLE RESIZE TO HIDE/UNHIDE CURSOR, SEPRATE HANDLE RESIZE FUNCTION
+
 		return () => {
 			window.removeEventListener("mousemove", moveCursor);
 			window.removeEventListener("mouseover", handleMouseOver);
 			window.removeEventListener("mouseout", handleMouseOut);
 		};
 	}, [windowWidth]);
+
+	useEffect(() => {
+	const checkHoverOnScroll = () => {
+		const { x, y } = position;
+
+		let hoveringLink = false;
+		let hoveringImg = false;
+
+		// Check for <a> tags
+		document.querySelectorAll("a").forEach((el) => {
+			const rect = el.getBoundingClientRect();
+			if (
+				x >= rect.left &&
+				x <= rect.right &&
+				y >= rect.top &&
+				y <= rect.bottom
+			) {
+				hoveringLink = true;
+			}
+		});
+
+		// Check for elements with data-name="view"
+		document.querySelectorAll("[data-name='view']").forEach((el) => {
+			const rect = el.getBoundingClientRect();
+			// console.log("🚀 ~ document.querySelectorAll ~ rect:", rect)
+			if (
+				x >= rect.left &&
+				x <= rect.right &&
+				y >= rect.top &&
+				y <= rect.bottom
+			) {
+				hoveringImg = true;
+			}
+		});
+
+		setHovering(hoveringLink);
+		setHoveringImage(hoveringImg);
+	};
+
+	window.addEventListener("scroll", checkHoverOnScroll);
+
+	return () => {
+		window.removeEventListener("scroll", checkHoverOnScroll);
+	};
+}, [position]);
+
 
 	// if the cursor not move(mobile then hide)
 	// const shouldHide = !hasMovedRef.current || !isInViewport;
