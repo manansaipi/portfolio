@@ -32,6 +32,7 @@ DONE ✅
 - update about page to include graduation image ✅
 - update work detail page include another detail, like desc images, etc ✅
 - fix ncaught TypeError: Cannot read properties of null (reading 'classList') on navbar large✅
+- IMPLEMENT BOX HEIGH IN ABOUT PAGE TO PREVENT TEXT OVERFLOW ✅
 
 
 

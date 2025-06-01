@@ -54,11 +54,11 @@ const AboutEntrance = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex justify-center">
-				<div className="w-[100vw] self overflow-hidden my-10 ">
+			<div className="flex justify-center min-h-[85vh]">
+				<div className="w-[100vw] my-10 ">
 					<img
 						src={graduate2}
-						className="max-h-[85vh] w-full rounded-xl object-cover object-center"
+						className=" max-h-[85vh] w-full rounded-xl object-cover object-center"
 					/>
 				</div>
 			</div>
