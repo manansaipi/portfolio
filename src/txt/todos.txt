@@ -20,9 +20,6 @@ Backend
 PENDING 🕧 
 - aniamte text on hover on scroll in home recent work large (so many detail need to consider. dynamic color change on hover dark/light mode)
 
-
-
-
 DONE ✅ 
 - make entranceanimationdone become global state ✅
 - make scroll trigger utils to animate target ref ✅
