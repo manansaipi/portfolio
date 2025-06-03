@@ -21,3 +21,4 @@
  Utilized SQL Server Management Studio (SSMS) to analyze production data and validate backend feature requests for performance and accuracy.
  •
  Collaborated with QA and manufacturing teams to maintain and scale backend services across production lines.
+    
