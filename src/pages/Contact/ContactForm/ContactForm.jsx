@@ -100,6 +100,8 @@ const ContactForm = () => {
                         errorRef={subjectErrorRef}
                         name="subject"
                         placeholder="Subject"
+                        defaultValue={"Hay Ben"}
+                        className={"hidden"}
                     />
                     <ContactInputComponent
                         inputRef={messageRef}

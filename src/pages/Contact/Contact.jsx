@@ -41,7 +41,7 @@ const Contact = () => {
                         <div>
                             <a
                                 className="text-color-text-hovering mb-10 relative w-full group "
-                                onClick={handleCopyEmail}
+                                    onClick={handleCopyEmail}
                             >
                                 AbdulMannan.Saipi@gmail.com
                                 <span className="absolute left-full ml-2 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-full">

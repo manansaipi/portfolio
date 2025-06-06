@@ -6,6 +6,8 @@ const ContactInputComponent = ({
 	name,
 	type = "text",
 	placeholder,
+	defaultValue,
+	className,
 	isTextArea = false,
 }) => {
 	return (
@@ -24,14 +26,14 @@ const ContactInputComponent = ({
 					required
 					name={name}
 					type={type}
-                    
-					className="border-b-1 outline-0 py-2 cursor-none placeholder:text-color-text-hovering"
+                    value={defaultValue}
+					className={`${className} border-b-1 outline-0 py-2 cursor-none placeholder:text-color-text-hovering`}
 					placeholder={placeholder}
 				/>
 			)}
 			<span
 				ref={errorRef}
-				className="text-sm text-red-400 opacity-0 transition-opacity duration-300 font-light"
+				className={`${className} text-sm text-red-400 opacity-0 transition-opacity duration-300 font-light`}
 			>
 				 error
 			</span>
