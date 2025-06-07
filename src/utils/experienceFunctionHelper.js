@@ -34,6 +34,9 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
         pointerEvents: "none", // prevent accidental interaction
     });
 
+    // set the image element's opacity to 0 to hide it while animation
+    gsap.set(imageElement, {opacity: 0})
+
     // Animate to top center
     gsap.to(clone, {
         top: 0,
@@ -43,7 +46,7 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
         duration: 1.5,
         ease: "power3.out",
         onStart: () => {
-            imageElement.classList.add("opacity-0");
+            // imageElement.classList.add("opacity-0");
             clone.classList.add("z-7");
             if(preloaderRef) {
                 gsap.to(preloaderRef.current, {
@@ -60,7 +63,9 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
         },
         onComplete: () => {
             navigate(path);
-            imageElement.classList.add("opacity-100");
+
+            // set the image element's opacity back to 100
+            gsap.set(imageElement, {opacity: 100})
 
             gsap.to(preloaderRef.current, {
                 opacity: 0,

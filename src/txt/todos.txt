@@ -8,7 +8,7 @@ TODO 🚀
 - update home/about/work page to include skills and projects that you'he done
 
 - make writing page mobile-xl ✅
-- make writing page if in large size only 1 item is big otehr is normal size 
+- make writing page if in large size only 1 item is big and otehr is normal size✅ 
 - make writing detail 
 - make writing input page
 - make writing like, comment feature
