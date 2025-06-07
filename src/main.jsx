@@ -13,19 +13,23 @@ import ExperienceDetail from "./pages/Experience/ExperienceDetail/ExperienceDeta
 import Blog from "./pages/Blog/Blog.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import NotFound from "./pages/NotFound/NotFound.jsx";
+import AllBlog from "./pages/Blog/AllBlog/AllBlog.jsx";
+import BlogDetail from "./pages/Blog/BlogDetail/BlogDetail.jsx";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<App />}>
-					{/* <Route index element={<Home />} /> */}
 					<Route path="about" element={<About />} />
-					<Route path="work" element={<Experience />} >
+					<Route path="work" element={<Experience />}>
 						<Route index element={<ExperienceEntrance />} />
 						<Route path=":workId" element={<ExperienceDetail />} />
 					</Route>
-					<Route path="blog" element={<Blog />} />
+					<Route path="blog" element={<Blog />}>
+						<Route index element={<AllBlog />} />
+						<Route path=":blogId" element={<BlogDetail />} />
+					</Route>
 					<Route path="contact" element={<Contact />} />
 					<Route path="*" element={<NotFound />} /> {/* Catch-all route */}
 				</Route>

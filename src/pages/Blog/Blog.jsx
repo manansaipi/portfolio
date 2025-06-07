@@ -1,9 +1,7 @@
-import React from "react";
-import UnderDevelopment from "../UnderDevelopment/UnderDevelopment";
-import AllBlog from "./AllBlog/AllBlog";
+import { Outlet } from "react-router";
 
 const Blog = () => {
-	return <AllBlog />;
+	return <Outlet />;
 };
 
 export default Blog;

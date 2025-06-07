@@ -2,16 +2,26 @@ import React, { useLayoutEffect, useRef } from "react";
 import blogs from "./Blogs";
 import authorImg from "../../../assets/img/author/Matteo.jpg";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
+import {
+	slugify,
+	handleWorkNavigation,
+} from "../../../utils/experienceFunctionHelper";
+import { useNavigate } from "react-router";
+import { useLenis } from "lenis/react";
+import { AppContext } from "../../../App";
 
 const AllBlog = () => {
+	const { navbarRef, preloaderRef } = React.useContext(AppContext);
+	const lenis = useLenis();
+	const navigate = useNavigate();
+
 	const headerContainerRef = useRef([]);
+	const imageRefs = useRef([]);
 
 	useLayoutEffect(() => {
-		if (headerContainerRef.current.length > 0) {
-			headerContainerRef.current.forEach((el) => {
-				if (el) {
-					AnimateHeader({ headerContainerRef: { current: el } });
-				}
+		if (headerContainerRef.current[0]) {
+			AnimateHeader({
+				headerContainerRef: { current: headerContainerRef.current[0] },
 			});
 		}
 	}, []);
@@ -33,7 +43,7 @@ const AllBlog = () => {
 						>
 							<div
 								ref={(element) => (headerContainerRef.current[index] = element)}
-								className={`flex flex-col relative z-7 ${
+								className={`flex flex-col relative ${
 									index == 0 ? "lg:flex-row lg:gap-10" : " "
 								} mb-5`}
 							>
@@ -69,13 +79,24 @@ const AllBlog = () => {
 						{/* blog img */}
 						<a
 							data-name="view"
-							className={` group overflow-hidden max-h-[50vh] bg-red-300 ${
+							onClick={() =>
+								handleWorkNavigation(
+									`/blog/${slugify(blog.title)}`,
+									imageRefs.current[index],
+									navbarRef,
+									preloaderRef,
+									lenis,
+									navigate
+								)
+							}
+							className={` group overflow-hidden max-h-[50vh] ${
 								index == 0
 									? "lg:max-h-[80vh]  lg:mx-15 xl:mx-25 2xl:mx-40 "
 									: ""
 							}`}
 						>
 							<img
+								ref={(el) => (imageRefs.current[index] = el)}
 								src={blog.image}
 								alt="blog_image"
 								className={`-mt-5 w-full ${

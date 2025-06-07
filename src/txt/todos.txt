@@ -9,9 +9,15 @@ TODO 🚀
 
 - make writing page mobile-xl ✅
 - make writing page if in large size only 1 item is big and otehr is normal size✅ 
-- make writing detail 
-- make writing input page
+- make writing detail ✅
+- make comment input section ✅
+- make comment input section respnsive in larger screen size
+- make response section ✅
+- make response section respnsive in larger screen size
+- reply input for user's response
 - make writing like, comment feature
+
+- make writing input page
 
 Backend
 - store the data into database 
