@@ -65,7 +65,7 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
             navigate(path);
 
             // set the image element's opacity back to 100
-            gsap.set(imageElement, {opacity: 100})
+            gsap.set(imageElement, {opacity: 1})
 
             gsap.to(preloaderRef.current, {
                 opacity: 0,

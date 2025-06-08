@@ -4,14 +4,25 @@ import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import { AppContext } from "../../../App";
 import { AnimateRef } from "../../../utils/animationUtils";
 import gsap from "gsap";
-
-
+import { useNavigate } from "react-router";
+import { useLenis } from "lenis/react";
+import {
+	slugify,
+	handleWorkNavigation,
+} from "../../../utils/experienceFunctionHelper";
 
 const HomeBlog = () => {
-	const { handleButtonNavigation } = React.useContext(AppContext);
-	const { entranceAnimationDone } = React.useContext(AppContext);
+	const {
+		handleButtonNavigation,
+		entranceAnimationDone,
+		navbarRef,
+		preloaderRef,
+	} = React.useContext(AppContext);
 
+	const lenis = useLenis();
+	const navigate = useNavigate();
 	const titleRef = useRef();
+	const imageRefs = useRef([]);
 
 	useLayoutEffect(() => {
 		let ctx = gsap.context(() => {
@@ -32,23 +43,34 @@ const HomeBlog = () => {
 					</div>
 				</div>
 				<div className="flex flex-col md:flex-row gap-5 ">
-					{blogs.map((blog, index) => (
+					{blogs.slice(0, 2).map((blog, index) => (
 						<a
 							key={index}
-							onClick={() => handleButtonNavigation("/blog")}
+							onClick={() =>
+								handleWorkNavigation(
+									`/blog/${slugify(blog.title)}`,
+									imageRefs.current[index],
+									navbarRef,
+									preloaderRef,
+									lenis,
+									navigate
+								)
+							}
 							data-name="view"
 							className="group w-full"
 						>
 							<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[30vh] max-h-[50vh] ">
 								<img
-									className="group-hover:scale-105 transition-all duration-500 ease-initial w-full "
+									ref={(el) => (imageRefs.current[index] = el)}
+									className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out w-full max-h-[70vh] "
 									src={blog.image}
-									alt=""
+									alt="img"
 								/>
 							</div>
 							<div data-name="view" className="text-2xl font-bold">
 								{blog.title}
 							</div>
+							
 							<div
 								data-name="view"
 								className="text-color-text-hovering  text-sm font-bold"
