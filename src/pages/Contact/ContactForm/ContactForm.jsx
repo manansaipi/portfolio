@@ -7,6 +7,7 @@ import Lottie from "lottie-react";
 import checkAnimation from "../../../assets/animations/icons8-check.json"; // your downloaded file
 import { validateContactForm } from "./ValidatContactForm";
 import ContactInputComponent from "./ContactInputComponent";
+
 const ContactForm = () => {
     let form = useRef();
 

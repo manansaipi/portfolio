@@ -19,6 +19,10 @@ import { MdOutlineModeComment } from "react-icons/md";
 import { TfiComment } from "react-icons/tfi";
 import InputComment from "../../../components/Input/InputComment";
 import comments from "./Comments";
+import { FaHeart } from "react-icons/fa";
+import checkAnimation from "../../../assets/animations/heartAnimation.json";
+import Lottie from "lottie-react";
+
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -145,7 +149,7 @@ const BlogDetail = () => {
 
 			{/* response section */}
 			<div className="mt-20 mb-15 border-b-[1px] border-color-text-hovering "></div>
-			<div className=" mx-5">
+			<div className="px-5 md:px-20 lg:px-40 2xl:px-60">
 				<div>
 					<h2 className="text-xl font-semibold my-5">Responses (1)</h2>
 				</div>
@@ -201,6 +205,11 @@ const BlogDetail = () => {
 							<div className="flex items-center gap-2">
 								<div className="">
 									<CiHeart size={25} />
+									{/* <Lottie
+                                        animationData={checkAnimation}
+                                    />
+									<FaHeart size={25} color="red"/> */}
+
 								</div>
 								<span className="text-sm">{comment.totalLikes}</span>
 							</div>
