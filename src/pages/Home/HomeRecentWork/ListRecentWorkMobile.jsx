@@ -42,7 +42,7 @@ const ListRecentWorkMobile = ({ works }) => {
 							<div className="px-5 w-full h-full flex items-center justify-center ">
 								<img
 									ref={(el) => (imageRefs.current[index] = el)}
-									className="max-h-[70vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102 object-cover"
+									className="h-[40vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102 object-cover"
 									src={work.img}
 									alt=""
 								/>

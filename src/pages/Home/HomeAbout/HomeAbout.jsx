@@ -1,15 +1,17 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import { AppContext } from "../../../App";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimateRef } from "../../../utils/animationUtils";
+import { getAllWorks } from "../../../services/workService";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Content = ({}) => {
 	const { handleButtonNavigation } = React.useContext(AppContext);
 	const { entranceAnimationDone } = React.useContext(AppContext);
+	const [dataWork, setData] = useState([]);
 
 	const whatRef = useRef();
 	const descriptionRef = useRef();
@@ -21,6 +23,29 @@ const Content = ({}) => {
 		});
 		return () => ctx.revert();
 	}, [entranceAnimationDone]);
+
+	// fetch api example
+	useEffect(() => {
+        const fetchData = async () => {
+			try {
+				const res = await getAllWorks();
+				setData(res);
+				
+			} catch (error) {
+				console.error("Error fetching works:", error);
+			}
+		};
+
+		fetchData();
+
+    },[]);
+
+	useEffect(() => {
+		if (dataWork.length > 0) {
+			console.log("Fetched Works:", dataWork);
+		}
+	}, [dataWork]);
+
 
 	return (
 		<div className=" bg-light-dark text-primary  transition-all">
