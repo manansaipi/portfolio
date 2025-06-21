@@ -18,6 +18,7 @@ TODO 🚀
 - make writing like, comment feature
 
 - make writing input page
+- add tosaster after comment-implement like count add
 
 Backend
 - store the data into database 

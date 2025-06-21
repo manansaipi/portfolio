@@ -11,7 +11,8 @@ const InputComment = ({
 	handleClickComment,
 	inputCommentRef,
 	inputCommentContainer,
-	commentActions,
+	commentActionsRef,
+	handleOnClick,
 }) => {
 	return (
 		<div
@@ -23,12 +24,22 @@ const InputComment = ({
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}
 				onMouseDown={() => handleClickComment("open")}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" && !e.shiftKey) {
+						e.preventDefault(); // Prevent default form submission or newline
+						if (comment.length > 0) {
+							handleOnClick(); // Call your submit function
+						}
+					}
+				}}
 				className={`w-full resize-none scroll- py-2 cursor-none placeholder:text-color-text-hovering ${
 					isBold ? "placeholder:font-semibold" : ""
-				} ${isItalic ? "placeholder:italic" : ""} text-sm border border-[#282828] rounded-sm outline-none focus:heigh-50 transition-all`}
+				} ${
+					isItalic ? "placeholder:italic" : ""
+				} text-sm border border-[#282828] rounded-sm outline-none focus:heigh-50 transition-all`}
 				placeholder="What are your thoughts?"
 			/>
-			<div ref={commentActions} className="flex justify-between opacity-0">
+			<div ref={commentActionsRef} className="flex justify-between opacity-0">
 				<div className="flex gap-4 items-center">
 					<div
 						onClick={() => setIsBold(!isBold)}
@@ -48,14 +59,12 @@ const InputComment = ({
 					</div>
 				</div>
 				<div className="flex gap-5 items-center text-sm">
-					<div
-						className="text-sm"
-						onClick={() => handleClickComment("close")}
-					>
+					<div className="text-sm" onClick={() => handleClickComment("close")}>
 						Cancel
 					</div>
 					<button
 						disabled={comment.length === 0}
+						onClick={handleOnClick}
 						className={`border px-3 p-1 disabled: rounded-2xl ${
 							comment.length === 0
 								? "border-[#36393b] text-[#36393b] pointer-events-none"

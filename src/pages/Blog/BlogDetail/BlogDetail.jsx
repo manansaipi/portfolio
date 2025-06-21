@@ -22,7 +22,8 @@ import comments from "./Comments";
 import { FaHeart } from "react-icons/fa";
 import checkAnimation from "../../../assets/animations/heartAnimation.json";
 import Lottie from "lottie-react";
-
+import { getCommentByPostId, addComment } from "../../../services/PostService";
+import dayjs from "dayjs";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -36,15 +37,41 @@ const BlogDetail = () => {
 	const imageRef = useRef();
 	const inputCommentRef = useRef();
 	const inputCommentContainer = useRef();
-	const commentActions = useRef();
+	const commentActionsRef = useRef();
 
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [currentBlog, setCurrentBlog] = useState(null);
+	const [userName, setUserName] = useState("Anonymous");
 	const [comment, setComment] = useState("");
+
+	const [dataComments, setDataComments] = useState([]);
+	const fetchData = async (postId) => {
+		try {
+			const res = await getCommentByPostId(postId);
+			setDataComments(res);
+		} catch (error) {
+			console.error("Error fetching works:", error);
+		}
+	};
+	
+	async function handleSubmitRespond ()  {
+		try {
+			const newComment = await addComment(currentBlog.id, comment, userName);
+			console.log("🚀 ~ handleSubmitRespond ~ newComment:", newComment)
+			
+			await fetchData(currentBlog.id);
+
+			setComment("");
+		} catch (error) {
+			console.error("Error fetching works:", error);
+		}
+	}
 
 	useEffect(() => {
 		const foundBlog = blogs.find((blog) => slugify(blog.title) === blogId);
+
+		fetchData(foundBlog.id);
 
 		setCurrentBlog(foundBlog);
 	}, [blogId]);
@@ -56,15 +83,16 @@ const BlogDetail = () => {
 	}, [currentBlog]);
 
 	function handleClickComment(toggle) {
-		console.log("🚀 ~ handleClickComment ~ toggle:", toggle);
 		if (toggle == "open") {
 			gsap.to(inputCommentContainer.current, { height: "15vh" });
-			gsap.to(commentActions.current, { opacity: 1 });
+			gsap.to(commentActionsRef.current, { opacity: 1 });
 		} else {
-			gsap.to(commentActions.current, { opacity: 0 });
+			gsap.to(commentActionsRef.current, { opacity: 0 });
 			gsap.to(inputCommentContainer.current, { height: "5vh" });
 		}
 	}
+
+	
 
 	function handleCommentOnChange(e) {
 		const value = e.target.value;
@@ -151,7 +179,7 @@ const BlogDetail = () => {
 			<div className="mt-20 mb-15 border-b-[1px] border-color-text-hovering "></div>
 			<div className="px-5 md:px-20 lg:px-40 2xl:px-60">
 				<div>
-					<h2 className="text-xl font-semibold my-5">Responses (1)</h2>
+					<h2 className="text-xl font-semibold my-5">Responses ({dataComments.length})</h2>
 				</div>
 				{/* Input comment */}
 				<div>
@@ -161,7 +189,7 @@ const BlogDetail = () => {
 							alt="author"
 							className="h-8 w-8 rounded-full"
 						/>
-						<span className="text-md text-primary ">Anonymous</span>
+						<span className="text-md text-primary ">{userName}</span>
 						<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 							<MdEdit size={15} /> <div className="text-sm">Edit</div>
 						</div>
@@ -176,14 +204,15 @@ const BlogDetail = () => {
 						handleClickComment={handleClickComment}
 						inputCommentRef={inputCommentRef}
 						inputCommentContainer={inputCommentContainer}
-						commentActions={commentActions}
+						commentActionsRef={commentActionsRef}
+						handleOnClick={handleSubmitRespond}
 					/>
 				</div>
 
 				<div className="my-10 border-b-[1px] border-color-text-hovering "></div>
 
 				{/* All Comments */}
-				{comments.map((comment, index) => (
+				{dataComments.map((comment, index) => (
 					<div key={index} className="mb-10">
 						<div className="flex items-center gap-3 group">
 							<img
@@ -194,13 +223,11 @@ const BlogDetail = () => {
 							<div className="flex flex-col">
 								<span className="text-md text-primary ">{comment.name}</span>
 								<span className="text-xs text-color-text-hovering">
-									{comment.date}
+									{dayjs(comment.createdAt).format("DD MMM YYYY")}
 								</span>
 							</div>
 						</div>
-						<div className="mt-3">
-							{comment.comment}
-						</div>
+						<div className="mt-3">{comment.comment}</div>
 						<div className="flex mt-2 gap-5 text-color-text-hovering items-center">
 							<div className="flex items-center gap-2">
 								<div className="">
@@ -209,7 +236,6 @@ const BlogDetail = () => {
                                         animationData={checkAnimation}
                                     />
 									<FaHeart size={25} color="red"/> */}
-
 								</div>
 								<span className="text-sm">{comment.totalLikes}</span>
 							</div>
@@ -218,7 +244,10 @@ const BlogDetail = () => {
 								<div className="text-color-text-hovering ">
 									<MdOutlineModeComment size={18} />
 								</div>
-								<div className="text-sm">{comment.totalComment} {comment.totalComment > 1 ? "Replies" : "Reply"}</div>
+								<div className="text-sm">
+									{comment.totalComment}{" "}
+									{comment.totalComment > 1 ? "Replies" : "Reply"}
+								</div>
 							</div>
 
 							<div className=" text-sm underline text-primary">Reply</div>
