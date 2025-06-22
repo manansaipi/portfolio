@@ -10,18 +10,10 @@ import { useLenis } from "lenis/react";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import gsap from "gsap";
-import { GrBold } from "react-icons/gr";
-import { GrItalic } from "react-icons/gr";
 import { MdEdit } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
-import { FaRegComment } from "react-icons/fa";
-import { MdOutlineModeComment } from "react-icons/md";
-import { TfiComment } from "react-icons/tfi";
 import InputComment from "../../../components/Input/InputComment";
-import comments from "./Comments";
 import { FaHeart } from "react-icons/fa";
-import checkAnimation from "../../../assets/animations/heartAnimation.json";
-import Lottie from "lottie-react";
 import {
 	getCommentByPostId,
 	addComment,
@@ -44,8 +36,6 @@ const BlogDetail = () => {
 	const inputCommentContainer = useRef();
 	const commentActionsRef = useRef();
 
-	const [isBold, setIsBold] = useState(false);
-	const [isItalic, setIsItalic] = useState(false);
 	const [currentBlog, setCurrentBlog] = useState(null);
 	const [isEditingName, setIsEditingName] = useState(false);
 	const [userName, setUserName] = useState(() => {
@@ -122,7 +112,6 @@ const BlogDetail = () => {
 				commentInout,
 				userName
 			);
-			console.log("🚀 ~ handleSubmitRespond ~ newComment:", newComment);
 
 			await fetchData(currentBlog.id);
 		} catch (error) {
@@ -150,7 +139,7 @@ const BlogDetail = () => {
 			gsap.to(commentActionsRef.current, { opacity: 1 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0 });
-			gsap.to(inputCommentContainer.current, { height: "5vh" });
+			gsap.to(inputCommentContainer.current, { height: "6vh" });
 		}
 	}
 
@@ -284,10 +273,6 @@ const BlogDetail = () => {
 					<InputComment
 						comment={comment}
 						setComment={setComment}
-						isBold={isBold}
-						setIsBold={setIsBold}
-						isItalic={isItalic}
-						setIsItalic={setIsItalic}
 						handleClickComment={handleClickComment}
 						inputCommentRef={inputCommentRef}
 						inputCommentContainer={inputCommentContainer}
@@ -317,7 +302,10 @@ const BlogDetail = () => {
 								</span>
 							</div>
 						</div>
-						<div className="mt-3">{comment.comment}</div>
+						<div
+							className="mt-3"
+							dangerouslySetInnerHTML={{ __html: comment.comment }}
+						></div>
 						<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
 							<div
 								className="flex items-center gap-2"

@@ -3,7 +3,6 @@ import api from "./api";
 export const getCommentByPostId = async (postId) => {
     try {
         const response = await api.get(`/posts/${postId}/comments`)
-        console.log("🚀 ~ getCommentByPostId ~ response.data:", response.data)
         return response.data
     } catch (error) {
         console.error("Failed to fetch data", error);
