@@ -1,9 +1,9 @@
 import React, { useReducer, useRef } from "react";
 import { AppContext } from "../../../App";
 import {
-	handleWorkNavigation,
+	handleImageNavigation,
 	slugify,
-} from "../../../utils/experienceFunctionHelper";
+} from "../../../utils/NavhiagtionImageAnimation";
 import { useLinkClickHandler, useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
 
@@ -24,7 +24,7 @@ const ListRecentWorkMobile = ({ works }) => {
 					<a
 						key={work.id}
 						onClick={() =>
-							handleWorkNavigation(
+							handleImageNavigation(
 								`/work/${slugify(work.company)}`,
 								imageRefs.current[index],
 								navbarRef,

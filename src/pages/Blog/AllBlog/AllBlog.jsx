@@ -4,8 +4,8 @@ import authorImg from "../../../assets/img/author/Matteo.jpg";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
 import {
 	slugify,
-	handleWorkNavigation,
-} from "../../../utils/experienceFunctionHelper";
+	handleImageNavigation,
+} from "../../../utils/NavhiagtionImageAnimation.js";
 import { useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
 import { AppContext } from "../../../App";
@@ -80,7 +80,7 @@ const AllBlog = () => {
 						<a
 							data-name="view"
 							onClick={() =>
-								handleWorkNavigation(
+								handleImageNavigation(
 									`/blog/${slugify(blog.title)}`,
 									imageRefs.current[index],
 									navbarRef,

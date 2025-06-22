@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../App";
 import {
-	handleWorkNavigation,
+	handleImageNavigation,
 	slugify,
-} from "../../../utils/experienceFunctionHelper";
+} from "../../../utils/NavhiagtionImageAnimation";
 import { useLinkClickHandler, useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
 
@@ -85,7 +85,7 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 								handleHover("enter", index);
 							}}
 							onClick={() =>
-								handleWorkNavigation(
+								handleImageNavigation(
 									`/work/${slugify(work.company)}`,
 									imageRefs.current[index],
 									navbarRef,

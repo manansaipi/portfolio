@@ -28,7 +28,7 @@ const InputComment = ({
 					if (e.key === "Enter" && !e.shiftKey) {
 						e.preventDefault(); // Prevent default form submission or newline
 						if (comment.length > 0) {
-							handleOnClick(); // Call your submit function
+							handleOnClick(); 
 						}
 					}
 				}}

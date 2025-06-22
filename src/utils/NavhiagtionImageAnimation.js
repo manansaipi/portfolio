@@ -12,7 +12,7 @@ const slugify = (text) => {
         .replace(/--+/g, "-"); // Replace multiple - with single -
 };
 
-function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis, navigate) {
+function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, lenis, navigate) {
     document.body.style.overflow = "hidden"; // standard no-scroll implementation
     document.body.setAttribute("data-lenis-prevent", "true");
 
@@ -80,4 +80,4 @@ function handleWorkNavigation(path, imageElement, navbarRef, preloaderRef, lenis
     });
 }
 
-export { slugify, handleWorkNavigation };
+export { slugify, handleImageNavigation };

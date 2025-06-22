@@ -6,8 +6,8 @@ import { AppContext } from "../../../App.jsx";
 import { useLenis } from "lenis/react";
 import {
 	slugify,
-	handleWorkNavigation,
-} from "../../../utils/experienceFunctionHelper.js";
+	handleImageNavigation,
+} from "../../../utils/NavhiagtionImageAnimation.js";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition.jsx";
 
 const ExperienceDetail = () => {
@@ -142,7 +142,7 @@ const ExperienceDetail = () => {
 						<img
 							data-name="view"
 							onClick={(e) =>
-								handleWorkNavigation(
+								handleImageNavigation(
 									`/work/${slugify(nextWork.company)}`,
 									e.currentTarget,
 									navbarRef,

@@ -9,8 +9,8 @@ import gsap from "gsap";
 import { useLenis } from "lenis/react";
 import {
 	slugify,
-	handleWorkNavigation,
-} from "../../../utils/experienceFunctionHelper";
+	handleImageNavigation,
+} from "../../../utils/NavhiagtionImageAnimation";
 
 const ExperienceEntrance = () => {
 	const { navbarRef } = React.useContext(AppContext);
@@ -45,7 +45,7 @@ const ExperienceEntrance = () => {
 						<div
 							data-name="view"
 							onClick={() =>
-								handleWorkNavigation(
+								handleImageNavigation(
 									`/work/${slugify(work.company)}`,
 									imageRefs.current[index],
 									navbarRef,
@@ -71,7 +71,7 @@ const ExperienceEntrance = () => {
 							<PrimaryButton
 								label={"VIEW MORE"}
 								handleOnClick={() =>
-									handleWorkNavigation(
+									handleImageNavigation(
 										`/work/${slugify(work.company)}`,
 										imageRefs.current[index],
 										navbarRef,

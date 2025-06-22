@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router";
 import blogs from "../AllBlog/Blogs";
 import {
 	slugify,
-	handleWorkNavigation,
-} from "../../../utils/experienceFunctionHelper";
+	handleImageNavigation,
+} from "../../../utils/NavhiagtionImageAnimation";
 import { AppContext } from "../../../App";
 import { useLenis } from "lenis/react";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
@@ -22,8 +22,13 @@ import comments from "./Comments";
 import { FaHeart } from "react-icons/fa";
 import checkAnimation from "../../../assets/animations/heartAnimation.json";
 import Lottie from "lottie-react";
-import { getCommentByPostId, addComment } from "../../../services/PostService";
+import {
+	getCommentByPostId,
+	addComment,
+	likeComment,
+} from "../../../services/PostService";
 import dayjs from "dayjs";
+import { MdVerified } from "react-icons/md";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -42,8 +47,61 @@ const BlogDetail = () => {
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [currentBlog, setCurrentBlog] = useState(null);
-	const [userName, setUserName] = useState("Anonymous");
+	const [isEditingName, setIsEditingName] = useState(false);
+	const [userName, setUserName] = useState(() => {
+		const storedName = localStorage.getItem("commentUserName");
+		return storedName ? storedName : "Anonymous";
+	});
 	const [comment, setComment] = useState("");
+	const [likedComments, setLikedComments] = useState(() => {
+		const storedLikes = localStorage.getItem("likedComments");
+		return storedLikes ? JSON.parse(storedLikes) : {};
+	});
+
+	useEffect(() => {
+		localStorage.setItem("likedComments", JSON.stringify(likedComments));
+	}, [likedComments]);
+
+	const toggleLike = async (commentId) => {
+		// Determine the new like state before updating
+		const isCurrentlyLiked = likedComments[commentId];
+		const newLikedState = !isCurrentlyLiked;
+
+		// Update UI immediately
+		setLikedComments((prev) => ({
+			...prev,
+			[commentId]: newLikedState,
+		}));
+
+		// Save to localStorage (optional)
+		const updatedStorage = {
+			...likedComments,
+			[commentId]: newLikedState,
+		};
+		localStorage.setItem("likedComments", JSON.stringify(updatedStorage));
+
+		// Hit API with correct like state
+		try {
+			await likeComment(commentId, newLikedState);
+		} catch (error) {
+			console.error("Failed to like comment:", error);
+			// Optional: rollback UI if needed
+			setLikedComments((prev) => ({
+				...prev,
+				[commentId]: isCurrentlyLiked,
+			}));
+		}
+	};
+
+	const handleNameEditToggle = () => {
+		setIsEditingName((prev) => !prev);
+		if (userName.trim().length === 0) {
+			setUserName("Anonymous");
+			localStorage.setItem("commentUserName", "Anonymous");
+		} else {
+			localStorage.setItem("commentUserName", userName);
+		}
+	};
 
 	const [dataComments, setDataComments] = useState([]);
 	const fetchData = async (postId) => {
@@ -54,15 +112,19 @@ const BlogDetail = () => {
 			console.error("Error fetching works:", error);
 		}
 	};
-	
-	async function handleSubmitRespond ()  {
-		try {
-			const newComment = await addComment(currentBlog.id, comment, userName);
-			console.log("🚀 ~ handleSubmitRespond ~ newComment:", newComment)
-			
-			await fetchData(currentBlog.id);
 
+	async function handleSubmitRespond() {
+		try {
+			const commentInout = comment;
 			setComment("");
+			const newComment = await addComment(
+				currentBlog.id,
+				commentInout,
+				userName
+			);
+			console.log("🚀 ~ handleSubmitRespond ~ newComment:", newComment);
+
+			await fetchData(currentBlog.id);
 		} catch (error) {
 			console.error("Error fetching works:", error);
 		}
@@ -91,8 +153,6 @@ const BlogDetail = () => {
 			gsap.to(inputCommentContainer.current, { height: "5vh" });
 		}
 	}
-
-	
 
 	function handleCommentOnChange(e) {
 		const value = e.target.value;
@@ -159,6 +219,9 @@ const BlogDetail = () => {
 						<span className="uppercase tracking-wide">
 							By {currentBlog.author}
 						</span>
+						<div>
+							<MdVerified size={20} />
+						</div>
 					</div>
 					<div className="tracking-wider">{currentBlog.date}</div>
 				</div>
@@ -179,20 +242,44 @@ const BlogDetail = () => {
 			<div className="mt-20 mb-15 border-b-[1px] border-color-text-hovering "></div>
 			<div className="px-5 md:px-20 lg:px-40 2xl:px-60">
 				<div>
-					<h2 className="text-xl font-semibold my-5">Responses ({dataComments.length})</h2>
+					<h2 className="text-xl font-semibold my-5">
+						Responses ({dataComments.length})
+					</h2>
 				</div>
 				{/* Input comment */}
 				<div>
-					<div className="flex items-center gap-3 group">
+					<div
+						onClick={handleNameEditToggle}
+						className="flex items-center gap-3 group"
+					>
 						<img
 							src={currentBlog.authorImg || "/default-author.jpg"}
 							alt="author"
-							className="h-8 w-8 rounded-full"
+							className="h-8 w-8 rounded-full "
 						/>
-						<span className="text-md text-primary ">{userName}</span>
-						<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-							<MdEdit size={15} /> <div className="text-sm">Edit</div>
-						</div>
+						{isEditingName ? (
+							<input
+								type="text"
+								value={userName}
+								onChange={(e) => setUserName(e.target.value)}
+								onBlur={handleNameEditToggle}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" && !e.shiftKey) {
+										e.preventDefault(); // Prevent default form submission or newline
+										handleNameEditToggle();
+									}
+								}}
+								autoFocus
+								className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none"
+							/>
+						) : (
+							<>
+								<span className="text-md text-primary ">{userName}</span>
+								<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+									<MdEdit size={15} /> <div className="text-sm">Edit</div>
+								</div>
+							</>
+						)}
 					</div>
 					<InputComment
 						comment={comment}
@@ -221,26 +308,32 @@ const BlogDetail = () => {
 								className="h-8 w-8 rounded-full"
 							/>
 							<div className="flex flex-col">
-								<span className="text-md text-primary ">{comment.name}</span>
+								<div className="flex flex-row items-center gap-2">
+									<span className="text-md text-primary ">{comment.name}</span>
+									{comment.isVerified == true && <MdVerified size={15} />}
+								</div>
 								<span className="text-xs text-color-text-hovering">
 									{dayjs(comment.createdAt).format("DD MMM YYYY")}
 								</span>
 							</div>
 						</div>
 						<div className="mt-3">{comment.comment}</div>
-						<div className="flex mt-2 gap-5 text-color-text-hovering items-center">
-							<div className="flex items-center gap-2">
-								<div className="">
-									<CiHeart size={25} />
-									{/* <Lottie
-                                        animationData={checkAnimation}
-                                    />
-									<FaHeart size={25} color="red"/> */}
-								</div>
-								<span className="text-sm">{comment.totalLikes}</span>
+						<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
+							<div
+								className="flex items-center gap-2"
+								onClick={() => toggleLike(comment.id)}
+							>
+								{likedComments[comment.id] ? (
+									<FaHeart size={18} color="red" className="w-7" />
+								) : (
+									<CiHeart size={25} className="w-7" />
+								)}
+								<span className="text-sm">
+									{comment.totalLikes + (likedComments[comment.id] ? 1 : 0)}
+								</span>
 							</div>
 
-							<div className="flex items-center gap-2">
+							{/* <div className="flex items-center gap-2">
 								<div className="text-color-text-hovering ">
 									<MdOutlineModeComment size={18} />
 								</div>
@@ -249,8 +342,7 @@ const BlogDetail = () => {
 									{comment.totalComment > 1 ? "Replies" : "Reply"}
 								</div>
 							</div>
-
-							<div className=" text-sm underline text-primary">Reply</div>
+							<div className=" text-sm underline text-primary">Reply</div> */}
 						</div>
 						<div className="mt-5 border-b-[1px] border-color-text-hovering "></div>
 					</div>

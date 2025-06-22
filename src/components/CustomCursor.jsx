@@ -45,6 +45,7 @@ export default function CustomCursor() {
 				target.getAttribute("data-name") || target.getAttribute("name");
 
 			if (tagName === "A") setHovering(true);
+			if (dataName === "clickable") setHovering(true);
 			if (dataName === "view") setHoveringImage(true);
 		};
 
@@ -55,6 +56,7 @@ export default function CustomCursor() {
 				target.getAttribute("data-name") || target.getAttribute("name");
 
 			if (tagName !== "A" || tagName === "A" || tagName === null) setHovering(false);
+			if (dataName !== "clickable" || dataName === null || dataName === "clickable") setHovering(false);
 			if (dataName !== "view" || dataName === null || dataName === "view") setHoveringImage(false);
 		};
 
@@ -123,7 +125,7 @@ export default function CustomCursor() {
 	return (
 		<div
 			className={`bg-cursor fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4  
-				${hovering ? " scale-240" : ""}
+				${hovering ? " scale-230" : ""}
 				${hoveringImage ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : ""}
 				transition-transform duration-450`}

@@ -8,8 +8,8 @@ import { useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
 import {
 	slugify,
-	handleWorkNavigation,
-} from "../../../utils/experienceFunctionHelper";
+	handleImageNavigation,
+} from "../../../utils/NavhiagtionImageAnimation";
 
 const HomeBlog = () => {
 	const {
@@ -47,7 +47,7 @@ const HomeBlog = () => {
 						<a
 							key={index}
 							onClick={() =>
-								handleWorkNavigation(
+								handleImageNavigation(
 									`/blog/${slugify(blog.title)}`,
 									imageRefs.current[index],
 									navbarRef,
@@ -70,7 +70,7 @@ const HomeBlog = () => {
 							<div data-name="view" className="text-2xl font-bold">
 								{blog.title}
 							</div>
-							
+
 							<div
 								data-name="view"
 								className="text-color-text-hovering  text-sm font-bold"
