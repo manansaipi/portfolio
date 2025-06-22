@@ -134,18 +134,15 @@ const BlogDetail = () => {
 	}, [currentBlog]);
 
 	function handleClickComment(toggle) {
+		console.log(comment.length);
+		
 		if (toggle == "open") {
-			gsap.to(inputCommentContainer.current, { height: "15vh" });
+			gsap.to(inputCommentContainer.current, { height: "18vh" });
 			gsap.to(commentActionsRef.current, { opacity: 1 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0 });
 			gsap.to(inputCommentContainer.current, { height: "6vh" });
 		}
-	}
-
-	function handleCommentOnChange(e) {
-		const value = e.target.value;
-		setComment(value);
 	}
 
 	// useLayoutEffect(() => {
@@ -277,7 +274,7 @@ const BlogDetail = () => {
 						inputCommentRef={inputCommentRef}
 						inputCommentContainer={inputCommentContainer}
 						commentActionsRef={commentActionsRef}
-						handleOnClick={handleSubmitRespond}
+						handleSubmit={handleSubmitRespond}
 					/>
 				</div>
 

@@ -8,7 +8,7 @@ const InputComment = ({
 	inputCommentRef,
 	inputCommentContainer,
 	commentActionsRef,
-	handleOnClick,
+	handleSubmit,
 }) => {
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
@@ -30,9 +30,8 @@ const InputComment = ({
 		};
 	}, []);
 
-	function handleSubmit() {
+	function resetInput() {
 		if (comment.length > 0) {
-			handleOnClick();
 			setComment("<br>"); // Reset state
 			inputCommentRef.current.innerHTML = ""; // Reset visual
 			setIsBold(false);
@@ -73,6 +72,7 @@ const InputComment = ({
 						if (e.key === "Enter" && !e.shiftKey) {
 							e.preventDefault(); // Prevent default form submission or newline
 							handleSubmit();
+							resetInput();
 						}
 					}}
 					className={`w-full resize-none scroll- py-2 cursor-none placeholder:text-color-text-hovering ${
@@ -83,25 +83,23 @@ const InputComment = ({
 					suppressContentEditableWarning={true}
 				/>
 
-				{comment.length === 0 ||
-					(comment === "<br>" && (
-						<span
-							className={`absolute top-2 left-0 text-color-text-hovering pointer-events-none select-none 
+				{(comment.length === 0 || comment === "<br>") && (
+					<span
+						className={`absolute top-2 left-0 text-color-text-hovering pointer-events-none select-none 
 							${isItalic ? "italic" : ""} 
 							${isBold ? "font-semibold" : ""} 
 							${isUnderLine ? "underline" : ""}
-						`}
-						>
-							What are your thoughts?
-						</span>
-					))}
+							`}
+					>
+						What are your thoughts?
+					</span>
+				)}
 			</div>
 			<div ref={commentActionsRef} className="flex justify-between opacity-0">
 				<div className="flex gap-4 items-center">
 					<div
 						onClick={() => {
 							inputCommentRef.current.focus();
-
 							document.execCommand("bold");
 							setIsBold(!isBold);
 						}}
@@ -116,7 +114,6 @@ const InputComment = ({
 					<div
 						onClick={() => {
 							inputCommentRef.current.focus();
-
 							document.execCommand("italic");
 							setIsItalic(!isItalic);
 						}}
@@ -131,7 +128,6 @@ const InputComment = ({
 					<div
 						onClick={() => {
 							inputCommentRef.current.focus();
-
 							document.execCommand("underline");
 							setIsUnderLine(!isUnderLine);
 						}}
@@ -145,13 +141,20 @@ const InputComment = ({
 					</div>
 				</div>
 				<div className="flex gap-5 items-center text-sm">
-					<div className="text-sm" onClick={() => handleClickComment("close")}>
+					<div
+						className="text-sm"
+						onClick={() => {
+							handleClickComment("close");
+							resetInput();
+						}}
+					>
 						Cancel
 					</div>
 					<button
 						disabled={comment.length === 0}
 						onClick={() => {
 							handleSubmit();
+							resetInput();
 						}}
 						className={`border px-3 p-1 disabled: rounded-2xl ${
 							comment.length === 0
