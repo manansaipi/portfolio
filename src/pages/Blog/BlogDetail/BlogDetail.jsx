@@ -295,7 +295,7 @@ const BlogDetail = () => {
 									{comment.isVerified == true && <MdVerified size={15} />}
 								</div>
 								<span className="text-xs text-color-text-hovering">
-									{dayjs(comment.createdAt).format("DD MMM YYYY")}
+									{dayjs(comment.createdAt).format("ddd, DD MMM YYYY HH:mm")}
 								</span>
 							</div>
 						</div>
