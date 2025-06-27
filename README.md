@@ -32,8 +32,8 @@ To get a local copy up and running, follow these simple steps.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-portfolio.git
-   cd your-portfolio
+   git clone https://github.com/manansaipi/portfolio.git
+   cd portfolio
    ```
 2. Install NPM packages:
    ```bash
@@ -89,5 +89,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-Your Name - [AbdulMannan.Saipi@gmail.com](mailto:AbdulMannan.Saipi@gmail.com)
+Abdul Mannan Saipi - [AbdulMannan.Saipi@gmail.com](mailto:AbdulMannan.Saipi@gmail.com)
+
 Project Link: [https://github.com/manansaipi/portfolio](https://github.com/manansaipi/portfolio)
