@@ -1,0 +1,143 @@
+
+
+SLIDE 1
+Good [morning/afternoon], everyone.
+My name is Abdul Mannan Saipi, and together with Bhara Alfhaniawan and I Made Raditya Bayu Pangestu, 
+
+Today, we’d like to introduce you to our proposal:
+“Smart Retail Without Cashier” – an AI-based retail innovation designed to eliminate queues and simplify the checkout process. 
+Our goal is to drive greater efficiency in Indonesia’s digital economy by transforming the retail experience with technology.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 2
+Let me start with a familiar scene we’ve all experienced—long checkout lines.
+
+Whether it’s after work or during the weekend rush, standing in a queue just to pay for groceries is something none of us enjoy.
+And while it might seem like just a small inconvenience, this everyday experience actually reflects a deeper problem in the retail sector.
+
+This brings us to the problem we’re tackling.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE3
+On average, checkout takes 6 to 10 minutes per customer.
+Now imagine that multiplied by hundreds of customers every day—
+That’s not just lost time for shoppers; it’s also a major operational cost for businesses.
+
+Retailers rely on manual scanning and human cashiers, which leads to:
+
+Long queues and customer frustration
+
+Higher staffing costs
+
+And missed sales due to abandoned purchases
+
+In short, traditional checkout is slow, expensive, and not scalable.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 4
+To fully understand the opportunity, we need to break down the true cost of today’s checkout process.
+
+Yes, it’s convenient in theory—but in practice, it’s full of inefficiencies.
+
+First, there’s lost time and frustration.
+Customers waiting in long lines often become impatient. Many walk away without buying anything, especially during peak hours. That’s lost revenue.
+
+Next, there’s the high operational overhead.
+Retailers spend a significant amount on cashier staffing—costs that directly eat into profits.
+
+And finally, missed opportunities.
+Manual processes are difficult to scale, and they slow down the adoption of digital tools, making it harder for retailers to evolve in the digital economy.
+
+The bottom line: traditional checkout isn’t just slow—it’s holding the industry back.
+But what if we could eliminate the queue entirely?
+That’s exactly what our innovation aims to do.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 5
+Here’s our answer:
+A cashierless smart retail system powered by AI and computer vision.
+
+With our system, customers simply enter the store, pick up the items they want, and walk out.
+No scanning. No standing in line. No waiting.
+
+Behind the scenes, computer vision technology identifies the products taken and links them to the customer’s account. Payment is processed automatically.
+
+It’s a checkout experience that feels like magic—but it’s powered by solid, real-time AI tracking.
+
+This is retail, reimagined: seamless, efficient, and built for today’s digital-native customers.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 6
+Beyond solving a retail pain point, our solution delivers strategic business impact.
+
+It aligns with Bank Indonesia and OJK’s vision for a cashless society and supports the adoption of QRIS and digital transformation.
+
+For businesses, it means:
+
+Reduced overhead costs, thanks to automation
+
+Improved customer experience, leading to stronger brand loyalty
+
+And deeper analytics, empowering smarter decision-making
+
+Ultimately, this isn’t just a tech innovation—it’s a step forward for Indonesia’s digital economy.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 7
+Behind this seamless customer experience is a robust and scalable technology stack.
+
+At the core of our system is advanced AI/ML:
+
+We use YOLOv8 for real-time object detection
+
+And DeepSORT for multi-object tracking—this ensures that every item picked is accurately identified and linked to the correct user
+
+Next, we enhance accuracy with sensor fusion—combining weight sensors and computer vision to confirm purchases precisely, reducing false detections.
+
+For the user interface, we’ve built an intuitive kiosk using React and Tailwind, providing a smooth fallback experience for cases when manual confirmation is needed.
+
+Our AI models are built using Python, TensorFlow, and PyTorch, with OpenCV for image processing.
+
+This tech stack doesn’t just work—it’s built to scale and perform reliably in high-traffic retail environments.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 8
+Let’s visualize the transformation.
+
+Traditional retail relies on manual item scanning, resulting in:
+
+Long queues
+
+Cashier dependency
+
+And high operational overhead
+
+It’s inefficient, error-prone, and limits scalability.
+
+Now compare that to our smart retail system:
+
+Automated, real-time tracking replaces scanning
+
+Staff-less checkout reduces labor costs and human error
+
+And lower overhead enables businesses to scale operations while improving the customer journey
+
+It’s a complete shift—from reactive to intelligent, from manual to seamless.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+SLIDE 9
+Thank you for your time and attention.
+
+We believe that Smart Retail Without Cashier is more than just a hackathon idea—it’s a strategic innovation that aligns with national goals and 
+brings real value to both businesses and consumers.
+
+We’re excited about the potential of this solution, and we’re eager to hear your feedback and questions.
+
+Terima kasih.
