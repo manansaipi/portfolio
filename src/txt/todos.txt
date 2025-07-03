@@ -1,4 +1,7 @@
 TODO 🚀 
+- update images of profile and user's commnet and post's images
+- fix transition to detail post can be scroll
+
 - hover effect animation on scroll in all page, entranceanimateion
 - make resize to get screensize and cursormove function reusable
 - aniamte div item on all page 
