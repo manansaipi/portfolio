@@ -41,7 +41,7 @@ DONE ✅
 - fix ncaught TypeError: Cannot read properties of null (reading 'classList') on navbar large✅
 - IMPLEMENT BOX HEIGH IN ABOUT PAGE TO PREVENT TEXT OVERFLOW ✅
 
-
+Skills: .NET Framework · Java · React.js · Statistical Process Control (SPC) · SQL · Spring Boot
 
 
 
