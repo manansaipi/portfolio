@@ -21,7 +21,7 @@ function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, leni
     // Clone the image
     const clone = imageElement.cloneNode(true);
     document.body.appendChild(clone);
-    lenis.stop();
+    if(lenis) lenis.stop(); // Stop Lenis scrolling during animation
 
     // Set initial fixed position based on current position
     Object.assign(clone.style, {
@@ -71,10 +71,14 @@ function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, leni
                 opacity: 0,
                 duration: 1,
                 delay: 0.5,
+                onStart: () => {
+                    document.body.style.position = "fixed"; // standard no-scroll implementation
+                }
             });
             setTimeout(() => {
                 clone.remove();
                 document.body.style.overflow = ""; // standard no-scroll implementation
+                document.body.style.position = ""; // standard no-scroll implementation
             }, 1500);
         },
     });

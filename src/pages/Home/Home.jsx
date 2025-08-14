@@ -12,14 +12,13 @@ const Home = () => {
 	return (
 		<>
 			<HomeEntrance></HomeEntrance>
-			{entranceAnimationDone && (
-				<>
-					<HomeAbout></HomeAbout>
-					<HomeRecentWork></HomeRecentWork>
-					{/* <HomeProject></HomeProject> */}
-					<HomeBlog />
-				</>
-			)}
+			
+			<div style={{ display: entranceAnimationDone ? 'block' : 'none' }}>
+				<HomeAbout />
+				<HomeRecentWork />
+				<HomeBlog />
+			</div>
+
 		</>
 	);
 };
