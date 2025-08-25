@@ -19,7 +19,7 @@ const Footer = ({}) => {
             }}
         >
             <div
-                className="fixed  w-full h-[50vh]  bottom-0 bg-primary bg-repeat bg-center "
+                className=" lg:fixed  w-full h-[50vh]  bottom-0 bg-primary bg-repeat bg-center "
                 style={{
                     backgroundImage: `url(${bgImage})`,
                 }}
