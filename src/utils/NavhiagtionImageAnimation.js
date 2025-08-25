@@ -21,7 +21,7 @@ function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, leni
     // Clone the image
     const clone = imageElement.cloneNode(true);
     document.body.appendChild(clone);
-    if(lenis) lenis.stop(); // Stop Lenis scrolling during animation
+    // if(lenis) lenis.stop(); // Stop Lenis scrolling during animation
 
     // Set initial fixed position based on current position
     Object.assign(clone.style, {

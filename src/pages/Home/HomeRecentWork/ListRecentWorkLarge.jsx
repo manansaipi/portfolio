@@ -99,7 +99,7 @@ const ListRecentWorkLarge = ({ works, handleHover, imageRefs }) => {
 							<div className="border-t-1 border-color-text-hovering duration-0 hover:translate-x-0"></div>
 							<div
 								ref={(element) => (workListContainer.current[index] = element)}
-								className="flex flex-row justify-between items-center m-10 xl:my:15 xl:mx-25 2xl:mx-35 hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1"
+								className="pointer-events-none flex flex-row justify-between items-center m-10 xl:my:15 xl:mx-25 2xl:mx-35 hover:text-color-text-hovering transition-all duration-300 ease-out hover:-translate-y-1"
 							>
 								<div className="flex flex-col pointer-events-none ">
 									<div className="text-5xl xl:text-6xl 2xl:text-7xl">

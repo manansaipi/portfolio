@@ -1,12 +1,13 @@
 TODO 🚀 
 - update images of profile and user's commnet and post's images
-- fix transition to detail post can be scroll
+- fix transition to detail post can be scroll✅
+- use mobile version when in mobile phone in the footer
 
-- hover effect animation on scroll in all page, entranceanimateion
+- hover effect animation on scroll in all page, entranceanimateion✅
 - make resize to get screensize and cursormove function reusable
 - aniamte div item on all page 
-- animate image zoom effect on scroll like in citizen web 
-- make hovered images bigger on big screen size 
+- animate image zoom effect on scroll like in citizen web ✅
+- make hovered images bigger in big screen size (dynamic image size) 
 
 - update home/about/work page to include skills and projects that you'he done
 
