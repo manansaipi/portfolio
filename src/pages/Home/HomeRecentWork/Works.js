@@ -18,10 +18,10 @@ const Works = [
         endDate: "Present",
         img: galadinerlgsm,
         points: [
-            "Contributed to the development of smart factory systems for EV battery manufacturing, enhancing production efficiency and data integration across international sites.",
+            "Contributed to the development of smart factory systems for EV battery manufacturing across multiple countries such as South Korea, the United States, China, Poland, and Indonesia.",
             "Designed and maintained backend logic to support core MES (Manufacturing Execution System) operations, ensuring seamless and accurate production workflows.",
-            "Utilized SQL Server Management Studio (SSMS) to analyze manufacturing data, validate feature implementations, and ensure optimal system performance and data reliability.",
-            "Collaborated with QA and manufacturing teams to scale, monitor, and maintain backend services across multiple production lines."
+            "Analyze production data and validate backend features to ensure performance, reliability, and data accuracy.",
+            "Developed job portal and job posting applications for LG Sinarmas Technology Solutions to streamline recruitment processes."
         ],
         iamges: [lg1, lg2],
         bgColor: "bg-neutral-800",
