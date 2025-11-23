@@ -1,6 +1,5 @@
 import React, { useRef, useLayoutEffect } from "react";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
-import works from "../../Home/HomeRecentWork/Works";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import { AppContext } from "../../../App";
 import { useMatch, Link, useNavigate } from "react-router";
@@ -41,7 +40,10 @@ const ExperienceEntrance = () => {
 			)}
 			<div>
 				{works.map((work, index) => (
-					<div key={index} className="mb-[15vh] lg:mb-[20vh]  flex flex-col">
+					<div
+						key={index}
+						className="mb-[15vh] lg:mb-[20vh]  flex flex-col"
+					>
 						<div
 							data-name="view"
 							onClick={() =>

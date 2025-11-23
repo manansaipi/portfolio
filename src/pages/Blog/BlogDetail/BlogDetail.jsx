@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import blogs from "../AllBlog/Blogs";
+import blogs from "../../../consts/Blogs";
 import {
 	slugify,
 	handleImageNavigation,
@@ -135,7 +135,7 @@ const BlogDetail = () => {
 
 	function handleClickComment(toggle) {
 		console.log(comment.length);
-		
+
 		if (toggle == "open") {
 			gsap.to(inputCommentContainer.current, { height: "18vh" });
 			gsap.to(commentActionsRef.current, { opacity: 1 });
@@ -213,7 +213,10 @@ const BlogDetail = () => {
 				</div>
 
 				{/* Content */}
-				<div ref={contentRef} className="text-lg leading-relaxed text-primary">
+				<div
+					ref={contentRef}
+					className="text-lg leading-relaxed text-primary"
+				>
 					<p>
 						{/* You can make this dynamic like `currentBlog.content` or render paragraphs */}
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
@@ -282,7 +285,10 @@ const BlogDetail = () => {
 
 				{/* All Comments */}
 				{dataComments.map((comment, index) => (
-					<div key={index} className="mb-10">
+					<div
+						key={index}
+						className="mb-10"
+					>
 						<div className="flex items-center gap-3 group">
 							<img
 								src={currentBlog.authorImg || "/default-author.jpg"}
@@ -309,9 +315,16 @@ const BlogDetail = () => {
 								onClick={() => toggleLike(comment.id)}
 							>
 								{likedComments[comment.id] ? (
-									<FaHeart size={18} color="red" className="w-7" />
+									<FaHeart
+										size={18}
+										color="red"
+										className="w-7"
+									/>
 								) : (
-									<CiHeart size={25} className="w-7" />
+									<CiHeart
+										size={25}
+										className="w-7"
+									/>
 								)}
 								<span className="text-sm">
 									{comment.totalLikes + (likedComments[comment.id] ? 1 : 0)}

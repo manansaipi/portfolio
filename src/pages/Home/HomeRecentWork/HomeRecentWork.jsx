@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 
 import gsap from "gsap";
 
-import Works from "./Works";
+import Works from "../../../consts/Works";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import ListRecentWorkMobile from "./ListRecentWorkMobile";
 import ListRecentWorkLarge from "./ListRecentWorkLarge";

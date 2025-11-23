@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import certificates from "./CertificatesList";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import gsap from "gsap";
 

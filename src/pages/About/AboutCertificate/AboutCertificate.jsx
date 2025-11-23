@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from "react";
 import CertificateLargeComponent from "./CertificateLargeComponent";
 import CertificateMobileComponent from "./CertificateMobileComponent";
-import certificates from "./CertificatesList";
+import certificates from "../../../consts/CertificatesList";
 import gsap from "gsap";
 import HoveredImages from "../../../components/HoveredImages/HoveredImages";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
@@ -27,9 +27,8 @@ const Certificate = () => {
 		// 	AnimateRef(certTitle);
 		// 	AnimateRef(certDesc);
 		// });
-		
-		// return () => ctx.revert();
 
+		// return () => ctx.revert();
 	}, [entranceAnimationDone]);
 
 	function handleHover(eventName, index) {

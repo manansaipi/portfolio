@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import blogs from "./Blogs";
+import blogs from "../../../consts/Blogs.js";
 import authorImg from "../../../assets/img/author/Matteo.jpg";
 import { AnimateHeader } from "../../../components/PreLoader/AnimatePageTransition";
 import {
@@ -112,7 +112,11 @@ const AllBlog = () => {
 							}   items-center justify-between text-color-text-hovering text-[10px] mt-5`}
 						>
 							<div className=" flex items-center  gap-5">
-								<img src={authorImg} alt="author_img" className="max-h-[5vh]" />
+								<img
+									src={authorImg}
+									alt="author_img"
+									className="max-h-[5vh]"
+								/>
 								<div className="tracking-[2px] uppercase">BY {blog.author}</div>
 							</div>
 							<div className="tracking-[2px]">{blog.date}</div>

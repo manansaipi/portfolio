@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from "react";
-import blogs from "../../Blog/AllBlog/Blogs";
+import blogs from "../../../consts/Blogs";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton";
 import { AppContext } from "../../../App";
 import { AnimateRef } from "../../../utils/animationUtils";
@@ -34,7 +34,10 @@ const HomeBlog = () => {
 	return (
 		<div className="bg-light-dark  text-primary pb-20 mb:pb-30 lg:pb-50">
 			<div className=" pt-20 lg:pt-30 px-5 pb-10 md:pb-20 ">
-				<div ref={titleRef} className="flex flex-row  w-full overflow-hidden">
+				<div
+					ref={titleRef}
+					className="flex flex-row  w-full overflow-hidden"
+				>
 					<div className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl  font-bold">
 						WRITING
 					</div>
@@ -67,7 +70,10 @@ const HomeBlog = () => {
 									alt="img"
 								/>
 							</div>
-							<div data-name="view" className="text-2xl font-bold">
+							<div
+								data-name="view"
+								className="text-2xl font-bold"
+							>
 								{blog.title}
 							</div>
 

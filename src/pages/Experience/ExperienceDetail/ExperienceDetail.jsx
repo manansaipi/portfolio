@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router";
-import Works from "../../Home/HomeRecentWork/Works.js";
+import Works from "../../../consts/Works.js";
 import PrimaryButton from "../../../components/Buttons/PrimaryButton.jsx";
 import { AppContext } from "../../../App.jsx";
 import { useLenis } from "lenis/react";
@@ -69,10 +69,19 @@ const ExperienceDetail = () => {
 	}
 
 	return (
-		<div data-name="" className="min-h-screen bg-light-dark text-primary ">
-			<div data-name="" className=" flex flex-col">
+		<div
+			data-name=""
+			className="min-h-screen bg-light-dark text-primary "
+		>
+			<div
+				data-name=""
+				className=" flex flex-col"
+			>
 				{/* Image Header */}
-				<div data-name="" className="overflow-hidden w-full  ">
+				<div
+					data-name=""
+					className="overflow-hidden w-full  "
+				>
 					<img
 						ref={imageRef}
 						src={currentWork.img}
@@ -103,7 +112,10 @@ const ExperienceDetail = () => {
 					{/* DETAIL */}
 					<div className="flex flex-col gap-10 mt-10">
 						{currentWork.points?.map((point, index) => (
-							<div key={index} className="flex flex-col gap-6 items-center">
+							<div
+								key={index}
+								className="flex flex-col gap-6 items-center"
+							>
 								{/* Corresponding Image */}
 								{currentWork.iamges?.[index] && (
 									<div className={` ${index % 2 === 1 ? "order-2" : ""}`}>

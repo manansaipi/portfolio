@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import App from "./App.jsx";
 import Home from "./pages/Home/Home";
-import About from "./pages/About/About.jsx";
+import About from "./pages/About/about.jsx";
 import Experience from "./pages/Experience/Experience.jsx";
 import ExperienceEntrance from "./pages/Experience/ExperienceEntrance/ExperienceEntrance.jsx";
 import ExperienceDetail from "./pages/Experience/ExperienceDetail/ExperienceDetail.jsx";
