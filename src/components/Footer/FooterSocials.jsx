@@ -9,7 +9,7 @@ const FooterSocials = () => {
         <div className="flex justify-between items-center h-[10vh]">
             <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10 ">
                 <div>Made in Jakarta, Indonesia</div>
-                <div>&copy; 2025 Ben</div>
+                <div>&copy; 2026 Ben</div>
             </div>
             <div className="flex gap-5 md:gap-7 lg:gap-9">
                 <Magnet magnetStrength={3} padding={15}>

@@ -16,10 +16,11 @@ const Footer = ({}) => {
             className={`h-[50vh] ${isContact && "hidden"} `}
             style={{
                 clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)",
+                backgroundImage: `url(${bgImage})`,
             }}
         >
             <div
-                className=" lg:fixed  w-full h-[50vh]  bottom-0 bg-primary bg-repeat bg-center "
+                className=" fixed  w-full h-[50vh]  bottom-0 bg-primary bg-repeat bg-center "
                 style={{
                     backgroundImage: `url(${bgImage})`,
                 }}

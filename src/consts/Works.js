@@ -1,4 +1,5 @@
 import galadinerlgsm from "../assets/img/profiles/galadinerlgsm.JPEG";
+import samsung from "../assets/img/profiles/SAMSUNG.jpg";
 import lg1 from "../assets/img/profiles/lg1.jpeg";
 import lg2 from "../assets/img/profiles/lg2.jpeg";
 import mattel from "../assets/img/profiles/mattel.jpg";
@@ -10,12 +11,30 @@ import dpr2 from "../assets/img/profiles/dpr2.jpeg";
 
 const Works = [
 	{
+		id: 0,
+		company: "Samsung R&D Indonesia",
+		role: "Software Engineer",
+		desc: "Since Dec 2025, I've been working at Samsung R&D Indonesia",
+		startDate: "Dec 2025",
+		endDate: "Present",
+		img: samsung,
+		points: [
+			// "Describe your main responsibility here",
+			// "Add another strong impact point",
+			// "Highlight technologies you use (React, Java, etc.)",
+			// "Mention achievements or contributions",
+		],
+		// iamges: [samsung1, samsung2],
+		bgColor: "bg-gray-100",
+		url: "",
+	},
+	{
 		id: 1,
 		company: "LG Sinar Mas",
 		role: "Software Engineer",
-		desc: "Since December 2024, I've been working as a Software Engineer at LG Sinar Mas Technology Solutions, where I contribute to the development of smart factory systems for EV (Electric Vehicle) battery manufacturing across multiple countries.",
+		desc: "From December 2024 to Dec 2025, I've been working as a Software Engineer at LG Sinar Mas Technology Solutions, where I contribute to the development of smart factory systems for EV (Electric Vehicle) battery manufacturing across multiple countries.",
 		startDate: "Dec 2024",
-		endDate: "Present",
+		endDate: "Dec 2025",
 		img: galadinerlgsm,
 		points: [
 			"Contributed to the development of smart factory systems for EV battery manufacturing across multiple countries such as South Korea, the United States, China, Poland, and Indonesia.",

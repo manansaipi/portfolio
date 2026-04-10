@@ -10,6 +10,7 @@ import {
 	slugify,
 	handleImageNavigation,
 } from "../../../utils/NavhiagtionImageAnimation";
+import Works from "../../../consts/Works";
 
 const ExperienceEntrance = () => {
 	const { navbarRef } = React.useContext(AppContext);
@@ -39,7 +40,7 @@ const ExperienceEntrance = () => {
 				</div>
 			)}
 			<div>
-				{works.map((work, index) => (
+				{Works.map((work, index) => (
 					<div
 						key={index}
 						className="mb-[15vh] lg:mb-[20vh]  flex flex-col"
