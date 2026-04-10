@@ -6,8 +6,4 @@ export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	base: "/",
 	assetsInclude: ["**/*.glb", "**/*.jpeg", "**/*.jpg", "**/*.JPEG", "**/*.JPG"],
-	server: {
-		host: true,
-		port: 5173,
-	},
 });
