@@ -15,7 +15,7 @@ gsap.registerPlugin(CustomEase);
 
 const Navbar = ({}) => {
 	const { entranceAnimationDone } = React.useContext(AppContext);
-
+	const { headerContainerRef } = React.useContext(AppContext);
 	
 	const [isOpen, setIsOpen] = useState(false);
 	const navbarRef = useRef();
@@ -29,6 +29,9 @@ const Navbar = ({}) => {
 
 		if (!isOpen) {
 			// open navbar
+			if (headerContainerRef.current) {
+				headerContainerRef.current.classList.remove("z-7");
+			}
 			navbarRef.current.style.display = "flex";
 			gsap.fromTo(
 				navbarRef.current,

@@ -7,9 +7,9 @@ import { AppContext } from "../../../App";
 
 const Home = ({  }) => {
 	const { entranceAnimationDone } = React.useContext(AppContext);
+	const { headerContainerRef } = React.useContext(AppContext);
 
 	const homeContainerRef = useRef();
-	const headerContainerRef = useRef();
 	const ciaoRef = useRef();
 	const imRef = useRef();
 	const benRef = useRef();

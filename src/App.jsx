@@ -14,11 +14,14 @@ export const AppContext = React.createContext({});
 
 const App = () => {
     const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
+    const [theme, setTheme] = useState("dark");
+
     const location = useLocation();
     const preloaderRef = useRef();
     const navbarRef = useRef();
     const navigate = useNavigate();
     const lenis = useLenis();
+    const headerContainerRef = useRef(); 
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
@@ -34,10 +37,39 @@ const App = () => {
         }
     }
 
+    const toggleTheme = () => {
+        // setEnabled(!enabled);
+        // IMPORTANT TODO : HANDLE THE DEFAULT THEME SWITCH BUTTON , ID THE DEFAULT WAS LIGHT, THE BUTTON SHOULD ON THE RIGHT SIDE
+        //TODO : ADD DEFAULT THEME BASED ON USER THEME SETTING
+        //TODO : STORE USER PREFERENCED SETTING INTO LOCAL STORAGE
+
+        // if (enabled) {
+        //     document.documentElement.classList.add("dark");
+        //     document.documentElement.classList.remove("light");
+        // } else {
+        //     document.documentElement.classList.add("light");
+        //     document.documentElement.classList.remove("dark");
+        // }
+
+        const newTheme = theme === "light" ? "dark" : "light";
+        setTheme(newTheme);
+
+        document.documentElement.classList.remove("light", "dark");
+        document.documentElement.classList.add(newTheme);
+    };
+
     return (
         <>
             <AppContext.Provider
-                value={{ preloaderRef, navbarRef, handleButtonNavigation, entranceAnimationDone  }}
+                value={{
+                    preloaderRef,
+                    navbarRef,
+                    handleButtonNavigation,
+                    entranceAnimationDone,
+                    headerContainerRef,
+                    toggleTheme,
+                    theme,
+                }}
             >
                 <ReactLenis root>
                     <CustomCursor />

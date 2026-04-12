@@ -1,23 +1,10 @@
 import React, { useState } from "react";
 
 const TogleTheme = () => {
-    const [enabled, setEnabled] = useState(false);
-    const toggleTheme = () => {
-        setEnabled(!enabled);
-        // IMPORTANT TODO : HANDLE THE DEFAULT THEME SWITCH BUTTON , ID THE DEFAULT WAS LIGHT, THE BUTTON SHOULD ON THE RIGHT SIDE
-        //TODO : ADD DEFAULT THEME BASED ON USER THEME SETTING
-        //TODO : STORE USER PREFERENCED SETTING INTO LOCAL STORAGE
-
-        if (enabled) {
-            document.documentElement.classList.add("dark");
-            document.documentElement.classList.remove("light");
-        } else {
-            document.documentElement.classList.add("light");
-            document.documentElement.classList.remove("dark");
-        }
-    };
+    const { toggleTheme } = React.useContext(AppContext);
+    
     return (
-        <div onClick={toggleTheme} className="fixed top-3 right-3">
+        <div onClick={toggleTheme} className="fixed bottom-3 left-3">
             <div
                 className={`${
                     !enabled

@@ -3,9 +3,12 @@ import { useLocation } from "react-router";
 import Magnet from "../Magnet";
 import { AppContext } from "../../App";
 import gsap from "gsap";
-import TogleTheme from "./TogleThemeButton";
+import { MdOutlineLightMode  } from "react-icons/md";
+import { MdOutlineDarkMode } from "react-icons/md";
+
 const NavbarLarge = () => {
-    const { handleButtonNavigation } = React.useContext(AppContext);
+    const { handleButtonNavigation, toggleTheme, theme } = React.useContext(AppContext);
+    
     const location = useLocation();
     const pathname = location.pathname;
 
@@ -51,7 +54,7 @@ const NavbarLarge = () => {
     return (
         <div>
             <div id="Home" className="bg-light-dark ">
-                <div className=" flex absolute text-color-text-hovering h-[20vh] w-[100vw]  items-center px-40 xl:px-60  ">
+                <div className=" flex absolute text-color-text-hovering h-[20vh] w-screen items-center px-40 xl:px-60  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
                         <div ref={nameRef} >
@@ -63,7 +66,7 @@ const NavbarLarge = () => {
                     {/* <TogleTheme/> */}
                     <div
                         ref={navbarLargeRef}
-                        className="hidden lg:flex  gap-10 justify-end w-screen  overflow-hidden  "
+                        className="hidden lg:flex  gap-10 justify-end items-center w-screen  overflow-hidden"
                     >
 
                         <div className={getLinkClass("/about")}>
@@ -108,6 +111,15 @@ const NavbarLarge = () => {
                                 >
                                     Contact
                                 </a>
+                            </Magnet>
+                        </div>
+                        <div className={getLinkClass("/theme")} onClick={toggleTheme}>
+                            <Magnet>
+                                {theme === "light" ? (
+                                    <MdOutlineLightMode  data-name="clickable" />
+                                ) : (
+                                    <MdOutlineDarkMode data-name="clickable" />
+                                )}
                             </Magnet>
                         </div>
                     </div>
