@@ -1,21 +1,21 @@
-import authorImg from "../../../assets/img/author/Matteo.jpg";
+import authorImg from "@assets/img/author/Matteo.jpg";
 
 const comments = [
     {
-        name: "John Doe",
-        date: "Apr 5, 2025",
-        comment: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex eos ipsam laudantium minus debitis neque iste autem alias eius distinctio.",
-        totalLikes: 83,
-        totalComment : 1,
-        profileImg: authorImg,
+        id: "c1",
+        username: "John Doe",
+        created_at: "2025-04-05T00:00:00",
+        content: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex eos ipsam laudantium minus debitis neque iste autem alias eius distinctio.",
+        likes: 83,
+        profile_img: authorImg,
     },
     {
-        name: "Win Dev",
-        date: "July 25, 2029",
-        comment: "Lorem ipsum dolor. Ex eos ipsam laudantium minus debitis neque iste autem alias eius distinctio.",
-        totalLikes: 99,
-        totalComment : 2,
-        profileImg: authorImg,
+        id: "c2",
+        username: "Win Dev",
+        created_at: "2029-07-25T00:00:00",
+        content: "Lorem ipsum dolor. Ex eos ipsam laudantium minus debitis neque iste autem alias eius distinctio.",
+        likes: 99,
+        profile_img: authorImg,
     },
     
 ];

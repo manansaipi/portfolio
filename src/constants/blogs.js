@@ -2,29 +2,29 @@ import authorImg from "@assets/img/author/Matteo.jpg";
 
 const blogs = [
 	{
-		id: 1,
+		id: "b1",
 		title: "GFX100RF: The midlife crisis camera",
-		date: "Apr 5, 2025",
+		published_at: "2025-04-05T00:00:00",
 		author: "Abdul Mannan Saipi",
-		authorImg: authorImg,
+		author_img: authorImg,
 		image:
 			"https://framerusercontent.com/images/Z6qmtAxjwbIurGFL0Iboo0hQnJw.jpg?scale-down-to=512",
 	},
 	{
-		id: 2,
+		id: "b2",
 		title: "Predicting the Fixed Lens GFX",
-		date: "May 13, 2024",
+		published_at: "2024-05-13T00:00:00",
 		author: "Abdul Mannan Saipi",
-		authorImg: authorImg,
+		author_img: authorImg,
 		image:
 			"https://framerusercontent.com/images/ivYYFXUUWUo6JjgupgzZtcLoQw.jpg",
 	},
 	{
-		id: 3,
+		id: "b3",
 		title: "GFX100RF: The midlife crisis camera",
-		date: "Apr 5, 2025",
+		published_at: "2025-04-05T00:00:00",
 		author: "Abdul Mannan Saipi",
-		authorImg: authorImg,
+		author_img: authorImg,
 		image:
 			"https://framerusercontent.com/images/Z6qmtAxjwbIurGFL0Iboo0hQnJw.jpg?scale-down-to=512",
 	},

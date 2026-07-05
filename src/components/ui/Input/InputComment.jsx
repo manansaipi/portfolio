@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { GrBold, GrItalic, GrUnderline } from "react-icons/gr";
+import gsap from "gsap";
 
 const InputComment = ({
 	comment,
 	setComment,
-	handleClickComment,
-	inputCommentRef,
-	inputCommentContainer,
-	commentActionsRef,
 	handleSubmit,
+	onCancel
 }) => {
+	const inputCommentRef = useRef();
+	const inputCommentContainer = useRef();
+	const commentActionsRef = useRef();
+
+	function handleClickComment(toggle) {
+		if (toggle === "open") {
+			gsap.to(inputCommentContainer.current, { height: "18vh", duration: 0.3 });
+			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
+		} else {
+			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { height: "6vh", duration: 0.3 });
+			if (onCancel) onCancel();
+		}
+	}
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderLine, setIsUnderLine] = useState(false);
@@ -43,7 +55,7 @@ const InputComment = ({
 	return (
 		<div
 			ref={inputCommentContainer}
-			className="w-full h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-[#282828]"
+			className="w-full h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
 		>
 			<div className=" relative w-full">
 				<div
@@ -79,7 +91,7 @@ const InputComment = ({
 						isBold ? "placeholder:font-semibold" : ""
 					} ${
 						isItalic ? "placeholder:italic" : ""
-					} text-sm border border-[#282828] rounded-sm outline-none focus:heigh-50 transition-all`}
+					} text-sm border border-light-dark rounded-sm outline-none focus:heigh-50 transition-all`}
 					suppressContentEditableWarning={true}
 				/>
 

@@ -1,5 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
-import blogs from "@constants/blogs.js";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import authorImg from "@assets/img/author/Matteo.jpg";
 import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
 import {
@@ -9,6 +8,8 @@ import {
 import { useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
 import { AppContext } from "@/App";
+import { getAllWritings } from "@services/postService";
+import dayjs from "dayjs";
 
 const AllBlog = () => {
 	const { navbarRef, preloaderRef } = React.useContext(AppContext);
@@ -17,14 +18,30 @@ const AllBlog = () => {
 
 	const headerContainerRef = useRef([]);
 	const imageRefs = useRef([]);
+	const [blogs, setBlogs] = useState([]);
+
+	const resolveImg = (imgStr, defaultImg) => {
+		if (!imgStr) return defaultImg;
+		if (imgStr.startsWith("/static")) return `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${imgStr}`;
+		if (imgStr.startsWith("@assets")) return defaultImg;
+		return imgStr;
+	};
+
+	useEffect(() => {
+		const fetchBlogs = async () => {
+			const data = await getAllWritings();
+			setBlogs(data);
+		};
+		fetchBlogs();
+	}, []);
 
 	useLayoutEffect(() => {
-		if (headerContainerRef.current[0]) {
+		if (blogs.length > 0 && headerContainerRef.current[0]) {
 			AnimateHeader({
 				headerContainerRef: { current: headerContainerRef.current[0] },
 			});
 		}
-	}, []);
+	}, [blogs]);
 
 	return (
 		<div className="bg-background min-h-[100vh] text-primary ">
@@ -63,15 +80,15 @@ const AllBlog = () => {
 							>
 								<div className=" flex items-center gap-5 ">
 									<img
-										src={authorImg}
+										src={resolveImg(blog.author_img, authorImg)}
 										alt="author_img"
-										className="max-h-[5vh] "
+										className="max-h-[5vh] rounded-full object-cover"
 									/>
 									<div className="tracking-[2px] uppercase">
 										BY {blog.author}
 									</div>
 								</div>
-								<div className="tracking-[2px]">{blog.date}</div>
+								<div className="tracking-[2px]">{dayjs(blog.published_at).format("MMM D, YYYY")}</div>
 								{/* <div className="tracking-[2px]">5 MIN AGO</div> */}
 							</div>
 						</div>
@@ -113,13 +130,13 @@ const AllBlog = () => {
 						>
 							<div className=" flex items-center  gap-5">
 								<img
-									src={authorImg}
+									src={resolveImg(blog.author_img, authorImg)}
 									alt="author_img"
-									className="max-h-[5vh]"
+									className="max-h-[5vh] rounded-full object-cover"
 								/>
 								<div className="tracking-[2px] uppercase">BY {blog.author}</div>
 							</div>
-							<div className="tracking-[2px]">{blog.date}</div>
+							<div className="tracking-[2px]">{dayjs(blog.published_at).format("MMM D, YYYY")}</div>
 							{/* <div className="tracking-[2px]">5 MIN AGO</div> */}
 						</div>
 					</div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import blogs from "@constants/blogs.js";
 import {
 	slugify,
 	handleImageNavigation,
@@ -9,18 +8,19 @@ import { AppContext } from "@/App.jsx";
 import { useLenis } from "lenis/react";
 import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition.jsx";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton.jsx";
-import gsap from "gsap";
 import { MdEdit } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
 import InputComment from "@components/ui/Input/InputComment.jsx";
 import { FaHeart } from "react-icons/fa";
 import {
+    getAllWritings,
 	getCommentByPostId,
 	addComment,
 	likeComment,
 } from "@services/postService.js";
 import dayjs from "dayjs";
 import { MdVerified } from "react-icons/md";
+import authorImgDefault from "@assets/img/author/Matteo.jpg";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -32,9 +32,6 @@ const BlogDetail = () => {
 	const headerRef = useRef();
 	const contentRef = useRef();
 	const imageRef = useRef();
-	const inputCommentRef = useRef();
-	const inputCommentContainer = useRef();
-	const commentActionsRef = useRef();
 
 	const [currentBlog, setCurrentBlog] = useState(null);
 	const [isEditingName, setIsEditingName] = useState(false);
@@ -43,6 +40,9 @@ const BlogDetail = () => {
 		return storedName ? storedName : "Anonymous";
 	});
 	const [comment, setComment] = useState("");
+	const [replyComment, setReplyComment] = useState("");
+	const [replyingTo, setReplyingTo] = useState(null);
+	
 	const [likedComments, setLikedComments] = useState(() => {
 		const storedLikes = localStorage.getItem("likedComments");
 		return storedLikes ? JSON.parse(storedLikes) : {};
@@ -99,32 +99,47 @@ const BlogDetail = () => {
 			const res = await getCommentByPostId(postId);
 			setDataComments(res);
 		} catch (error) {
-			console.error("Error fetching works:", error);
+			console.error("Error fetching comments:", error);
 		}
 	};
 
 	async function handleSubmitRespond() {
 		try {
-			const commentInout = comment;
+			const commentInput = comment;
 			setComment("");
-			const newComment = await addComment(
+			await addComment(
 				currentBlog.id,
-				commentInout,
+				commentInput,
 				userName
 			);
-
 			await fetchData(currentBlog.id);
 		} catch (error) {
-			console.error("Error fetching works:", error);
+			console.error("Error submitting response:", error);
+		}
+	}
+
+	async function handleReplySubmit(parentId) {
+		try {
+			const commentInput = replyComment;
+			setReplyComment("");
+			setReplyingTo(null);
+			await addComment(currentBlog.id, commentInput, userName, parentId);
+			await fetchData(currentBlog.id);
+		} catch (error) {
+			console.error("Error submitting response:", error);
 		}
 	}
 
 	useEffect(() => {
-		const foundBlog = blogs.find((blog) => slugify(blog.title) === blogId);
-
-		fetchData(foundBlog.id);
-
-		setCurrentBlog(foundBlog);
+        const fetchCurrentBlog = async () => {
+            const fetchedBlogs = await getAllWritings();
+		    const foundBlog = fetchedBlogs.find((blog) => slugify(blog.title) === blogId);
+            if (foundBlog) {
+		        fetchData(foundBlog.id);
+		        setCurrentBlog(foundBlog);
+            }
+        };
+        fetchCurrentBlog();
 	}, [blogId]);
 
 	useLayoutEffect(() => {
@@ -132,24 +147,6 @@ const BlogDetail = () => {
 			imageRef.current.classList.remove("z-7");
 		}
 	}, [currentBlog]);
-
-	function handleClickComment(toggle) {
-		console.log(comment.length);
-
-		if (toggle == "open") {
-			gsap.to(inputCommentContainer.current, { height: "18vh" });
-			gsap.to(commentActionsRef.current, { opacity: 1 });
-		} else {
-			gsap.to(commentActionsRef.current, { opacity: 0 });
-			gsap.to(inputCommentContainer.current, { height: "6vh" });
-		}
-	}
-
-	// useLayoutEffect(() => {
-	// 	if (headerRef.current) {
-	// 		AnimateHeader({ headerContainerRef: headerRef });
-	// 	}
-	// }, [currentBlog]);
 
 	if (!currentBlog) {
 		return (
@@ -167,6 +164,98 @@ const BlogDetail = () => {
 			</div>
 		);
 	}
+
+	const resolveImg = (imgStr, defaultImg) => {
+		if (!imgStr) return defaultImg;
+		if (imgStr.startsWith("/static")) return `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${imgStr}`;
+		if (imgStr.startsWith("@assets")) return defaultImg;
+		return imgStr;
+	};
+
+	const renderComment = (commentObj, isReply = false) => (
+		<div key={commentObj.id} className={`mb-10 ${isReply ? 'ml-10 border-l border-[#333] pl-5' : ''}`}>
+			<div className="flex items-center gap-3 group">
+				<img
+					src={resolveImg(commentObj.profile_img, authorImgDefault)}
+					alt="author"
+					className="h-8 w-8 rounded-full object-cover"
+				/>
+				<div className="flex flex-col">
+					<div className="flex flex-row items-center gap-2">
+						<span className="text-md text-primary ">{commentObj.username}</span>
+						{commentObj.isVerified && <MdVerified size={15} />}
+					</div>
+					<span className="text-xs text-color-text-hovering">
+						{dayjs(commentObj.created_at).format("ddd, DD MMM YYYY HH:mm")}
+					</span>
+				</div>
+			</div>
+			<div className="mt-3" dangerouslySetInnerHTML={{ __html: commentObj.content }}></div>
+			<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
+				<div
+					className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition-colors"
+					onClick={() => toggleLike(commentObj.id)}
+				>
+					{likedComments[commentObj.id] ? (
+						<FaHeart size={18} color="red" className="w-7" />
+					) : (
+						<CiHeart size={25} className="w-7" />
+					)}
+					<span className="text-sm">
+						{commentObj.likes + (likedComments[commentObj.id] ? 1 : 0)}
+					</span>
+				</div>
+				<div
+					className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+					onClick={() => {
+						if (replyingTo === commentObj.id) {
+							setReplyingTo(null);
+							setReplyComment("");
+						} else {
+							setReplyingTo(commentObj.id);
+							setReplyComment("");
+						}
+					}}
+				>
+					<span className="text-sm underline">Reply</span>
+				</div>
+			</div>
+			
+			{/* Reply Input Box */}
+			{replyingTo === commentObj.id && (
+				<div className="mt-5">
+					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-pointer">
+						<img src={resolveImg(currentBlog.author_img, authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
+						{isEditingName ? (
+							<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} onBlur={handleNameEditToggle} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleNameEditToggle(); } }} autoFocus className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none" />
+						) : (
+							<>
+								<span className="text-md text-primary ">{userName}</span>
+								<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+									<MdEdit size={15} /> <div className="text-sm">Edit</div>
+								</div>
+							</>
+						)}
+					</div>
+					<InputComment
+						comment={replyComment}
+						setComment={setReplyComment}
+						handleSubmit={() => handleReplySubmit(commentObj.id)}
+						onCancel={() => { setReplyingTo(null); setReplyComment(""); }}
+					/>
+				</div>
+			)}
+
+			<div className="mt-5 border-b-[1px] border-color-text-hovering "></div>
+
+			{/* Nested Replies */}
+			{commentObj.replies && commentObj.replies.length > 0 && (
+				<div className="mt-5">
+					{commentObj.replies.map(reply => renderComment(reply, true))}
+				</div>
+			)}
+		</div>
+	);
 
 	return (
 		<div className="min-h-screen bg-background text-primary pb-50">
@@ -198,9 +287,9 @@ const BlogDetail = () => {
 				<div className="flex items-center justify-between text-sm text-color-text-hovering">
 					<div className="flex items-center gap-3">
 						<img
-							src={currentBlog.authorImg || "/default-author.jpg"}
+							src={resolveImg(currentBlog.author_img, authorImgDefault)}
 							alt="author"
-							className="h-8 w-8 rounded-full"
+							className="h-8 w-8 rounded-full object-cover"
 						/>
 						<span className="uppercase tracking-wide">
 							By {currentBlog.author}
@@ -209,7 +298,7 @@ const BlogDetail = () => {
 							<MdVerified size={20} />
 						</div>
 					</div>
-					<div className="tracking-wider">{currentBlog.date}</div>
+					<div className="tracking-wider">{dayjs(currentBlog.published_at).format("MMM D, YYYY")}</div>
 				</div>
 
 				{/* Content */}
@@ -218,7 +307,6 @@ const BlogDetail = () => {
 					className="text-lg leading-relaxed text-primary"
 				>
 					<p>
-						{/* You can make this dynamic like `currentBlog.content` or render paragraphs */}
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
 						lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod
 						malesuada. Nullam ac erat ante. Integer varius nisi in tellus
@@ -239,12 +327,12 @@ const BlogDetail = () => {
 				<div>
 					<div
 						onClick={handleNameEditToggle}
-						className="flex items-center gap-3 group"
+						className="flex items-center gap-3 group cursor-pointer"
 					>
 						<img
-							src={currentBlog.authorImg || "/default-author.jpg"}
+							src={resolveImg(currentBlog.author_img, authorImgDefault)}
 							alt="author"
-							className="h-8 w-8 rounded-full "
+							className="h-8 w-8 rounded-full object-cover"
 						/>
 						{isEditingName ? (
 							<input
@@ -254,7 +342,7 @@ const BlogDetail = () => {
 								onBlur={handleNameEditToggle}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" && !e.shiftKey) {
-										e.preventDefault(); // Prevent default form submission or newline
+										e.preventDefault(); 
 										handleNameEditToggle();
 									}
 								}}
@@ -273,10 +361,6 @@ const BlogDetail = () => {
 					<InputComment
 						comment={comment}
 						setComment={setComment}
-						handleClickComment={handleClickComment}
-						inputCommentRef={inputCommentRef}
-						inputCommentContainer={inputCommentContainer}
-						commentActionsRef={commentActionsRef}
 						handleSubmit={handleSubmitRespond}
 					/>
 				</div>
@@ -284,67 +368,7 @@ const BlogDetail = () => {
 				<div className="my-10 border-b-[1px] border-color-text-hovering "></div>
 
 				{/* All Comments */}
-				{dataComments.map((comment, index) => (
-					<div
-						key={index}
-						className="mb-10"
-					>
-						<div className="flex items-center gap-3 group">
-							<img
-								src={currentBlog.authorImg || "/default-author.jpg"}
-								alt="author"
-								className="h-8 w-8 rounded-full"
-							/>
-							<div className="flex flex-col">
-								<div className="flex flex-row items-center gap-2">
-									<span className="text-md text-primary ">{comment.name}</span>
-									{comment.isVerified == true && <MdVerified size={15} />}
-								</div>
-								<span className="text-xs text-color-text-hovering">
-									{dayjs(comment.createdAt).format("ddd, DD MMM YYYY HH:mm")}
-								</span>
-							</div>
-						</div>
-						<div
-							className="mt-3"
-							dangerouslySetInnerHTML={{ __html: comment.comment }}
-						></div>
-						<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
-							<div
-								className="flex items-center gap-2"
-								onClick={() => toggleLike(comment.id)}
-							>
-								{likedComments[comment.id] ? (
-									<FaHeart
-										size={18}
-										color="red"
-										className="w-7"
-									/>
-								) : (
-									<CiHeart
-										size={25}
-										className="w-7"
-									/>
-								)}
-								<span className="text-sm">
-									{comment.totalLikes + (likedComments[comment.id] ? 1 : 0)}
-								</span>
-							</div>
-
-							{/* <div className="flex items-center gap-2">
-								<div className="text-color-text-hovering ">
-									<MdOutlineModeComment size={18} />
-								</div>
-								<div className="text-sm">
-									{comment.totalComment}{" "}
-									{comment.totalComment > 1 ? "Replies" : "Reply"}
-								</div>
-							</div>
-							<div className=" text-sm underline text-primary">Reply</div> */}
-						</div>
-						<div className="mt-5 border-b-[1px] border-color-text-hovering "></div>
-					</div>
-				))}
+				{dataComments.map((comment) => renderComment(comment))}
 			</div>
 		</div>
 	);
