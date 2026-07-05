@@ -21,6 +21,13 @@
     @apply text-xl md:text-2xl lg:text-3xl xl:text-4xl;
 }
 
+.blog-content-html img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 2rem 0;
+    display: block;
+}
 
 html {
     scroll-behavior: smooth;

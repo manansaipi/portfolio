@@ -113,6 +113,7 @@ const BlogDetail = () => {
 						__html: currentBlog.content
 							.replace(/&nbsp;/g, ' ')
 							.replace(/<p><\/p>/g, '<p><br></p>')
+							.replace(/\\"/g, '"')
 							.replace(/\\n/g, '<br />')
 							.replace(/\n/g, '<br />') 
 					}} />
