@@ -42,7 +42,8 @@ export const useAllBlog = () => {
 			navbarRef,
 			preloaderRef,
 			lenis,
-			navigate
+			navigate,
+			{ blog }
 		);
 	};
 

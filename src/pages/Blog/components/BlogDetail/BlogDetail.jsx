@@ -58,7 +58,7 @@ const BlogDetail = () => {
 	return (
 		<div className="min-h-screen bg-background text-primary pb-50">
 			{/* Image Header */}
-			<div className="w-full overflow-hidden h-[70vh]">
+			<div className="relative w-full overflow-hidden h-[70vh]">
 				{allImages.length > 1 ? (
 					<ImageCarousel
 						ref={imageRef}

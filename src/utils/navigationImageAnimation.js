@@ -12,7 +12,7 @@ const slugify = (text) => {
         .replace(/--+/g, "-"); // Replace multiple - with single -
 };
 
-function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, lenis, navigate) {
+function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, lenis, navigate, state = {}) {
     document.body.style.overflow = "hidden"; // standard no-scroll implementation
     document.body.setAttribute("data-lenis-prevent", "true");
 
@@ -62,7 +62,7 @@ function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, leni
             }
         },
         onComplete: () => {
-            navigate(path);
+            navigate(path, { state });
 
             // set the image element's opacity back to 100
             gsap.set(imageElement, {opacity: 1})

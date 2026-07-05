@@ -48,7 +48,8 @@ export const useHomeBlog = () => {
 			navbarRef,
 			preloaderRef,
 			lenis,
-			navigate
+			navigate,
+			{ blog }
 		);
 	};
 

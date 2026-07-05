@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, useLocation } from "react-router";
 import { AppContext } from "@/App.jsx";
 import { useToast } from "@components/ui/Toast/ToastProvider";
 import {
@@ -14,9 +14,10 @@ export const useBlogDetail = () => {
 	const { blogId } = useParams();
 	const { handleButtonNavigation, isAdmin } = useContext(AppContext);
 	const navigate = useNavigate();
+	const location = useLocation();
 	const toast = useToast();
 
-	const [currentBlog, setCurrentBlog] = useState(null);
+	const [currentBlog, setCurrentBlog] = useState(location.state?.blog || null);
 	const [dataComments, setDataComments] = useState([]);
 	const [comment, setComment] = useState("");
 	const [replyComment, setReplyComment] = useState("");
@@ -24,7 +25,7 @@ export const useBlogDetail = () => {
 	const [editingComment, setEditingComment] = useState(null);
 	const [editContent, setEditContent] = useState("");
 	const [isEditingName, setIsEditingName] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(!location.state?.blog);
 	const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 	const [submittingReplyId, setSubmittingReplyId] = useState(null);
 
@@ -65,11 +66,22 @@ export const useBlogDetail = () => {
 
 	useEffect(() => {
 		const fetchCurrentBlog = async () => {
-			setIsLoading(true);
+			const passedBlog = location.state?.blog;
+			
+			if (passedBlog) {
+				// If blog is passed via router state, fetch comments immediately
+				fetchData(passedBlog.id);
+			} else {
+				setIsLoading(true);
+			}
+			
 			const fetchedBlogs = await getAllWritings();
 			const foundBlog = fetchedBlogs.find((blog) => slugify(blog.title) === blogId);
+			
 			if (foundBlog) {
-				await fetchData(foundBlog.id);
+				if (!passedBlog) {
+					await fetchData(foundBlog.id);
+				}
 				setCurrentBlog(foundBlog);
 			}
 			setIsLoading(false);
