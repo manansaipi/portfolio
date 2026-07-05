@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import CustomCursor from "../../components/CustomCursor";
+import CustomCursor from "@components/ui/CustomCursor/CustomCursor";
 const NotFound = () => {
 	const containerRef = useRef(null);
 

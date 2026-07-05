@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaTools } from "react-icons/fa";
-import { AnimateHeader } from "../../components/PreLoader/AnimatePageTransition";
+import { AnimateHeader } from "@components/PreLoader/AnimatePageTransition";
 const UnderDevelopment = ({ title = "This page", message }) => {
 	const headerContainerRef = useRef();
 

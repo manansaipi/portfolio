@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect, useLayoutEffect } from "react";
-import ContactForm from "./ContactForm/ContactForm";
-import Magnet from "../../components/Magnet";
+import ContactForm from "@pages/Contact/components/ContactForm/ContactForm";
+import Magnet from "@components/ui/Magnet/Magnet";
 import { LuGithub } from "react-icons/lu";
 import { FaInstagram } from "react-icons/fa";
 import { PiLinkedinLogoBold } from "react-icons/pi";
-import { AnimateHeader } from "../../components/PreLoader/AnimatePageTransition";
-import FooterSocials from "../../components/Footer/FooterSocials";
+import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
+import FooterSocials from "@components/layout/Footer/FooterSocials";
 import { IoCopyOutline } from "react-icons/io5";
 
 const Contact = () => {

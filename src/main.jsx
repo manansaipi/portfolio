@@ -3,18 +3,18 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Analytics } from "@vercel/analytics/react";
 
-import "./index.css";
-import App from "./App.jsx";
-import Home from "./pages/Home/Home";
-import About from "./pages/About/About.jsx";
-import Experience from "./pages/Experience/Experience.jsx";
-import ExperienceEntrance from "./pages/Experience/ExperienceEntrance/ExperienceEntrance.jsx";
-import ExperienceDetail from "./pages/Experience/ExperienceDetail/ExperienceDetail.jsx";
-import Blog from "./pages/Blog/Blog.jsx";
-import Contact from "./pages/Contact/Contact.jsx";
-import NotFound from "./pages/NotFound/NotFound.jsx";
-import AllBlog from "./pages/Blog/AllBlog/AllBlog.jsx";
-import BlogDetail from "./pages/Blog/BlogDetail/BlogDetail.jsx";
+import "@/index.css";
+import App from "@/App.jsx";
+import Home from "@pages/Home/Home";
+import About from "@pages/About/About.jsx";
+import Experience from "@pages/Experience/Experience.jsx";
+import ExperienceEntrance from "@pages/Experience/components/ExperienceEntrance/ExperienceEntrance.jsx";
+import ExperienceDetail from "@pages/Experience/components/ExperienceDetail/ExperienceDetail.jsx";
+import Blog from "@pages/Blog/Blog.jsx";
+import Contact from "@pages/Contact/Contact.jsx";
+import NotFound from "@pages/NotFound/NotFound.jsx";
+import AllBlog from "@pages/Blog/components/AllBlog/AllBlog.jsx";
+import BlogDetail from "@pages/Blog/components/BlogDetail/BlogDetail.jsx";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>

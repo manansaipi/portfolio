@@ -2,13 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 
-import CustomCursor from "./components/CustomCursor";
-import PreLoader from "./components/PreLoader/PreLoader";
+import CustomCursor from "@components/ui/CustomCursor/CustomCursor";
+import PreLoader from "@components/layout/PreLoader/PreLoader";
 
-import Navbar from "./components/Navbar/Navbar";
-import Home from "./pages/Home/Home";
-import Footer from "./components/Footer/Footer";
-import { AnimatePageTransition } from "./components/PreLoader/AnimatePageTransition";
+import Navbar from "@components/layout/Navbar/Navbar";
+import Home from "@pages/Home/Home";
+import Footer from "@components/layout/Footer/Footer";
+import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
 
 export const AppContext = React.createContext({});
 
