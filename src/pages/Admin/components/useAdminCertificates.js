@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { getCertificates, deleteCertificate, createCertificate, uploadFile } from "@services/adminService";
+import { getCertificates, deleteCertificate, createCertificate, updateCertificate, uploadFile } from "@services/adminService";
 import { useToast } from "@components/ui/Toast/ToastProvider";
 
 export const useAdminCertificates = () => {
     const toast = useToast();
     const [items, setItems] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [editing, setEditing] = useState(null);
 
     const [formData, setFormData] = useState({ name: "", description: "", year: "", img: "", bg_color: "", link: "", order: "" });
 
@@ -23,7 +24,22 @@ export const useAdminCertificates = () => {
     };
 
     const handleAddNew = () => {
+        setEditing(null);
         setFormData({ name: "", description: "", year: "", img: "", bg_color: "", link: "", order: "" });
+        setIsFormOpen(true);
+    };
+
+    const handleEdit = (cert) => {
+        setEditing(cert.id);
+        setFormData({
+            name: cert.name,
+            description: cert.description,
+            year: cert.year,
+            img: cert.img || "",
+            bg_color: cert.bg_color || "",
+            link: cert.link || "",
+            order: cert.order !== null ? cert.order : ""
+        });
         setIsFormOpen(true);
     };
 
@@ -38,13 +54,19 @@ export const useAdminCertificates = () => {
         const payload = { ...formData };
         if (payload.order === "") payload.order = null;
         else payload.order = parseInt(payload.order, 10);
+        
         try {
-            await createCertificate(payload);
+            if (editing) {
+                await updateCertificate(editing, payload);
+                toast.success("Certificate updated successfully");
+            } else {
+                await createCertificate(payload);
+                toast.success("Certificate created successfully");
+            }
             setIsFormOpen(false);
             fetchItems();
-            toast.success("Certificate created successfully");
         } catch (err) {
-            toast.error("Failed to create certificate");
+            toast.error(editing ? "Failed to update certificate" : "Failed to create certificate");
         }
     };
 
@@ -56,6 +78,7 @@ export const useAdminCertificates = () => {
         setFormData,
         handleDelete,
         handleAddNew,
+        handleEdit,
         handleImageUpload,
         handleSubmit
     };

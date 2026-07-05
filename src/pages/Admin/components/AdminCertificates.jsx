@@ -12,6 +12,7 @@ const AdminCertificates = () => {
         setFormData,
         handleDelete,
         handleAddNew,
+        handleEdit,
         handleImageUpload,
         handleSubmit
     } = useAdminCertificates();
@@ -52,11 +53,12 @@ const AdminCertificates = () => {
                         <div className="flex gap-4 items-center">
                             {w.img && <img src={resolveImg(w.img)} className="h-10 w-16 object-cover" />}
                             <div>
-                                <div className="font-bold">{w.name}</div>
+                                <div className="font-bold">{w.name} {w.order !== null && `(Order: ${w.order})`}</div>
                                 <div className="text-sm opacity-50">{w.description} - {w.year}</div>
                             </div>
                         </div>
                         <div className="flex gap-4 cursor-none">
+                            <div onClick={() => handleEdit(w)} className="hover:text-blue-400">Edit</div>
                             <div onClick={() => handleDelete(w.id)} className="hover:text-red-400">Delete</div>
                         </div>
                     </div>

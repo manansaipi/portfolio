@@ -43,6 +43,11 @@ export const createCertificate = async (data) => {
     clearCache("/api/certificates");
     return res.data;
 };
+export const updateCertificate = async (id, data) => {
+    const res = await api.put(`/api/certificates/${id}`, data);
+    clearCache("/api/certificates");
+    return res.data;
+};
 export const deleteCertificate = async (id) => {
     const res = await api.delete(`/api/certificates/${id}`);
     clearCache("/api/certificates");
