@@ -32,9 +32,11 @@ const InputComment = ({
 		const handleSelectionChange = () => {
 			const selection = window.getSelection();
 			if (selection && selection.rangeCount > 0) {
-				setIsBold(document.queryCommandState("bold"));
-				setIsItalic(document.queryCommandState("italic"));
-				setIsUnderLine(document.queryCommandState("underline"));
+				if (inputCommentRef.current && inputCommentRef.current.contains(selection.anchorNode)) {
+					setIsBold(document.queryCommandState("bold"));
+					setIsItalic(document.queryCommandState("italic"));
+					setIsUnderLine(document.queryCommandState("underline"));
+				}
 			}
 		};
 
@@ -137,10 +139,10 @@ const InputComment = ({
 			<div ref={commentActionsRef} className="flex justify-between opacity-0">
 				<div className="flex gap-4 items-center">
 					<div
-						onClick={() => {
-							inputCommentRef.current.focus();
+						onMouseDown={(e) => {
+							e.preventDefault(); // Prevent losing focus
 							document.execCommand("bold");
-							setIsBold(!isBold);
+							setIsBold(document.queryCommandState("bold"));
 						}}
 						className={`border rounded-sm p-1 transition-all duration-300  ${
 							isBold
@@ -151,10 +153,10 @@ const InputComment = ({
 						<GrBold size={22} />
 					</div>
 					<div
-						onClick={() => {
-							inputCommentRef.current.focus();
+						onMouseDown={(e) => {
+							e.preventDefault(); // Prevent losing focus
 							document.execCommand("italic");
-							setIsItalic(!isItalic);
+							setIsItalic(document.queryCommandState("italic"));
 						}}
 						className={`border rounded-sm p-1 transition-all duration-300 ${
 							isItalic
@@ -168,7 +170,7 @@ const InputComment = ({
 						onClick={() => {
 							inputCommentRef.current.focus();
 							document.execCommand("underline");
-							setIsUnderLine(!isUnderLine);
+							setIsUnderLine(document.queryCommandState("underline"));
 						}}
 						className={`border rounded-sm p-1 transition-all duration-300 ${
 							isUnderLine
