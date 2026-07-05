@@ -1,73 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { getExperiences, deleteExperience, createExperience, updateExperience, uploadFile } from "@services/adminService";
+import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
-import { useToast } from "@components/ui/Toast/ToastProvider";
+import { resolveImg } from "@utils/imageUtils";
+import { useAdminExperiences } from "./useAdminExperiences";
 
 const AdminExperiences = () => {
-    const toast = useToast();
-    const [items, setItems] = useState([]);
-    const [editing, setEditing] = useState(null); 
-    const [isFormOpen, setIsFormOpen] = useState(false);
-
-    const [formData, setFormData] = useState({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "" });
-
-    const fetchItems = async () => {
-        try { setItems(await getExperiences()); } catch (e) { console.error(e); }
-    };
-
-    useEffect(() => { fetchItems(); }, []);
-
-    const handleDelete = async (id) => {
-        if (!window.confirm("Delete this experience?")) return;
-        await deleteExperience(id);
-        fetchItems();
-        toast.success("Experience deleted successfully");
-    };
-
-    const handleEdit = (w) => {
-        setEditing(w);
-        setFormData({ 
-            company: w.company, 
-            position: w.position, 
-            description: w.description, 
-            start_date: w.start_date, 
-            end_date: w.end_date, 
-            img: w.img,
-            points: (w.points || "")
-        });
-        setIsFormOpen(true);
-    };
-
-    const handleAddNew = () => {
-        setEditing(null);
-        setFormData({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "" });
-        setIsFormOpen(true);
-    };
-
-    const handleImageUpload = async (e) => {
-        if (!e.target.files[0]) return;
-        const res = await uploadFile(e.target.files[0]);
-        setFormData(prev => ({ ...prev, img: res.url }));
-        toast.success("Image uploaded!");
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const payload = { ...formData };
-        try {
-            if (editing) {
-                await updateExperience(editing.id, payload);
-                toast.success("Experience updated successfully");
-            } else {
-                await createExperience(payload);
-                toast.success("Experience created successfully");
-            }
-            setIsFormOpen(false);
-            fetchItems();
-        } catch (err) {
-            toast.error("Failed to save experience");
-        }
-    };
+    const {
+        items,
+        isFormOpen,
+        setIsFormOpen,
+        formData,
+        setFormData,
+        handleDelete,
+        handleEdit,
+        handleAddNew,
+        handleImageUpload,
+        handleSubmit
+    } = useAdminExperiences();
 
     return (
         <div>
@@ -88,7 +36,7 @@ const AdminExperiences = () => {
                         <label>Image URL or Upload:</label>
                         <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.img} onChange={e => setFormData({...formData, img: e.target.value})} />
                         <input type="file" onChange={handleImageUpload} />
-                        {formData.img && <img src={formData.img.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${formData.img}` : formData.img} alt="preview" className="h-20 w-32 object-cover" />}
+                        {formData.img && <img src={resolveImg(formData.img)} alt="preview" className="h-20 w-32 object-cover" />}
                     </div>
                     <textarea className="bg-transparent border p-2 outline-none h-20" placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
                     <textarea className="bg-transparent border p-2 outline-none h-32" placeholder="Points (JSON string array, e.g., [&quot;Point 1&quot;])" value={formData.points} onChange={e => setFormData({...formData, points: e.target.value})} />

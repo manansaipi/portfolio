@@ -1,50 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { getCertificates, deleteCertificate, createCertificate, uploadFile } from "@services/adminService";
+import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
-import { useToast } from "@components/ui/Toast/ToastProvider";
+import { resolveImg } from "@utils/imageUtils";
+import { useAdminCertificates } from "./useAdminCertificates";
 
 const AdminCertificates = () => {
-    const toast = useToast();
-    const [items, setItems] = useState([]);
-    const [isFormOpen, setIsFormOpen] = useState(false);
-
-    const [formData, setFormData] = useState({ name: "", description: "", year: "", img: "", bg_color: "", link: "" });
-
-    const fetchItems = async () => {
-        try { setItems(await getCertificates()); } catch (e) { console.error(e); }
-    };
-
-    useEffect(() => { fetchItems(); }, []);
-
-    const handleDelete = async (id) => {
-        if (!window.confirm("Delete this certificate?")) return;
-        await deleteCertificate(id);
-        fetchItems();
-        toast.success("Certificate deleted successfully");
-    };
-
-    const handleAddNew = () => {
-        setFormData({ name: "", description: "", year: "", img: "", bg_color: "", link: "" });
-        setIsFormOpen(true);
-    };
-
-    const handleImageUpload = async (e) => {
-        if (!e.target.files[0]) return;
-        const res = await uploadFile(e.target.files[0]);
-        setFormData(prev => ({ ...prev, img: res.url }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await createCertificate(formData);
-            setIsFormOpen(false);
-            fetchItems();
-            toast.success("Certificate created successfully");
-        } catch (err) {
-            toast.error("Failed to create certificate");
-        }
-    };
+    const {
+        items,
+        isFormOpen,
+        setIsFormOpen,
+        formData,
+        setFormData,
+        handleDelete,
+        handleAddNew,
+        handleImageUpload,
+        handleSubmit
+    } = useAdminCertificates();
 
     return (
         <div>
@@ -65,7 +35,7 @@ const AdminCertificates = () => {
                         <label>Image URL or Upload:</label>
                         <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.img} onChange={e => setFormData({...formData, img: e.target.value})} />
                         <input type="file" onChange={handleImageUpload} />
-                        {formData.img && <img src={formData.img.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${formData.img}` : formData.img} alt="preview" className="h-20 w-32 object-cover" />}
+                        {formData.img && <img src={resolveImg(formData.img)} alt="preview" className="h-20 w-32 object-cover" />}
                     </div>
                     
                     <div className="flex gap-4">
@@ -79,7 +49,7 @@ const AdminCertificates = () => {
                 {items.map(w => (
                     <div key={w.id} className="flex justify-between items-center border border-light-dark p-4 rounded hover:bg-light-dark transition-colors">
                         <div className="flex gap-4 items-center">
-                            {w.img && <img src={w.img.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${w.img}` : w.img} className="h-10 w-16 object-cover" />}
+                            {w.img && <img src={resolveImg(w.img)} className="h-10 w-16 object-cover" />}
                             <div>
                                 <div className="font-bold">{w.name}</div>
                                 <div className="text-sm opacity-50">{w.description} - {w.year}</div>

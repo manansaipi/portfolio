@@ -1,196 +1,19 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router";
-import {
-	slugify,
-	handleImageNavigation,
-} from "@utils/navigationImageAnimation.js";
-import { AppContext } from "@/App.jsx";
-import { useLenis } from "lenis/react";
-import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition.jsx";
+import React, { useRef, useLayoutEffect } from "react";
+import { useBlogDetail } from "./useBlogDetail";
+import CommentSection from "./components/CommentSection";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton.jsx";
-import { MdEdit } from "react-icons/md";
-import { CiHeart } from "react-icons/ci";
-import InputComment from "@components/ui/Input/InputComment.jsx";
-import { FaHeart } from "react-icons/fa";
-import {
-    getAllWritings,
-	getCommentByPostId,
-	addComment,
-	likeComment,
-} from "@services/postService.js";
-import dayjs from "dayjs";
 import { MdVerified } from "react-icons/md";
 import authorImgDefault from "@assets/img/author/no_profile.jpeg";
-import abdulImg from "@assets/img/author/abdulmannansaipi.png";
-import { useToast } from "@components/ui/Toast/ToastProvider";
+import { resolveImg } from "@utils/imageUtils.js";
+import dayjs from "dayjs";
 
 const BlogDetail = () => {
-	const { blogId } = useParams();
-	const { navbarRef, preloaderRef, handleButtonNavigation, isAdmin } =
-		React.useContext(AppContext);
-	const lenis = useLenis();
-	const navigate = useNavigate();
+	const handlers = useBlogDetail();
+	const { currentBlog, dataComments, handleButtonNavigation } = handlers;
 
 	const headerRef = useRef();
 	const contentRef = useRef();
 	const imageRef = useRef();
-
-	const toast = useToast();
-
-	const [currentBlog, setCurrentBlog] = useState(null);
-	const [isEditingName, setIsEditingName] = useState(false);
-	const [userName, setUserName] = useState(() => {
-		if (localStorage.getItem("isAdmin") === "true") {
-			return "Abdul Mannan Saipi";
-		}
-		const storedName = localStorage.getItem("commentUserName");
-		return storedName ? storedName : "Anonymous";
-	});
-	const [comment, setComment] = useState("");
-	const [replyComment, setReplyComment] = useState("");
-	const [replyingTo, setReplyingTo] = useState(null);
-	const [editingComment, setEditingComment] = useState(null);
-	const [editContent, setEditContent] = useState("");
-	
-	const [likedComments, setLikedComments] = useState(() => {
-		const storedLikes = localStorage.getItem("likedComments");
-		return storedLikes ? JSON.parse(storedLikes) : {};
-	});
-
-	useEffect(() => {
-		localStorage.setItem("likedComments", JSON.stringify(likedComments));
-	}, [likedComments]);
-
-	useEffect(() => {
-		if (isAdmin) {
-			setUserName("Abdul Mannan Saipi");
-		} else {
-			const storedName = localStorage.getItem("commentUserName");
-			setUserName(storedName ? storedName : "Anonymous");
-		}
-	}, [isAdmin]);
-
-	const handleDeleteComment = async (commentId) => {
-		if (!window.confirm("Are you sure you want to delete this comment?")) return;
-		try {
-			const { deleteComment } = await import("@services/adminService");
-			await deleteComment(commentId);
-			if (currentBlog) fetchData(currentBlog.id);
-			toast.success("Comment deleted successfully");
-		} catch (error) {
-			console.error("Error deleting comment:", error);
-			toast.error("Failed to delete comment");
-		}
-	};
-
-	const handleEditComment = (commentObj) => {
-		setEditingComment(commentObj.id);
-		setEditContent(commentObj.content);
-	};
-
-	const handleSaveEdit = async (commentId) => {
-		try {
-			const { updateComment } = await import("@services/adminService");
-			await updateComment(commentId, { content: editContent });
-			setEditingComment(null);
-			setEditContent("");
-			if (currentBlog) fetchData(currentBlog.id);
-			toast.success("Comment updated successfully");
-		} catch (error) {
-			console.error("Error updating comment:", error);
-			toast.error("Failed to update comment");
-		}
-	};
-
-	const toggleLike = async (commentId) => {
-		// Determine the new like state before updating
-		const isCurrentlyLiked = likedComments[commentId];
-		const newLikedState = !isCurrentlyLiked;
-
-		// Update UI immediately
-		setLikedComments((prev) => ({
-			...prev,
-			[commentId]: newLikedState,
-		}));
-
-		// Save to localStorage (optional)
-		const updatedStorage = {
-			...likedComments,
-			[commentId]: newLikedState,
-		};
-		localStorage.setItem("likedComments", JSON.stringify(updatedStorage));
-
-		// Hit API with correct like state
-		try {
-			await likeComment(commentId, newLikedState);
-		} catch (error) {
-			console.error("Failed to like comment:", error);
-			// Optional: rollback UI if needed
-			setLikedComments((prev) => ({
-				...prev,
-				[commentId]: isCurrentlyLiked,
-			}));
-		}
-	};
-
-	const handleNameEditToggle = () => {
-		setIsEditingName((prev) => !prev);
-		if (userName.trim().length === 0) {
-			setUserName("Anonymous");
-			localStorage.setItem("commentUserName", "Anonymous");
-		} else {
-			localStorage.setItem("commentUserName", userName);
-		}
-	};
-
-	const [dataComments, setDataComments] = useState([]);
-	const fetchData = async (postId) => {
-		try {
-			const res = await getCommentByPostId(postId);
-			setDataComments(res);
-		} catch (error) {
-			console.error("Error fetching comments:", error);
-		}
-	};
-
-	async function handleSubmitRespond() {
-		try {
-			const commentInput = comment;
-			setComment("");
-			await addComment(
-				currentBlog.id,
-				commentInput,
-				userName
-			);
-			await fetchData(currentBlog.id);
-		} catch (error) {
-			console.error("Error submitting response:", error);
-		}
-	}
-
-	async function handleReplySubmit(parentId) {
-		try {
-			const commentInput = replyComment;
-			setReplyComment("");
-			setReplyingTo(null);
-			await addComment(currentBlog.id, commentInput, userName, parentId);
-			await fetchData(currentBlog.id);
-		} catch (error) {
-			console.error("Error submitting response:", error);
-		}
-	}
-
-	useEffect(() => {
-        const fetchCurrentBlog = async () => {
-            const fetchedBlogs = await getAllWritings();
-		    const foundBlog = fetchedBlogs.find((blog) => slugify(blog.title) === blogId);
-            if (foundBlog) {
-		        fetchData(foundBlog.id);
-		        setCurrentBlog(foundBlog);
-            }
-        };
-        fetchCurrentBlog();
-	}, [blogId]);
 
 	useLayoutEffect(() => {
 		if (currentBlog && imageRef.current) {
@@ -214,129 +37,6 @@ const BlogDetail = () => {
 			</div>
 		);
 	}
-
-	const resolveImg = (imgStr, defaultImg) => {
-		if (!imgStr) return defaultImg;
-		if (imgStr.startsWith("/static")) return `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${imgStr}`;
-		if (imgStr.startsWith("@assets")) return defaultImg;
-		return imgStr;
-	};
-
-	const renderComment = (commentObj, isReply = false) => (
-		<div key={commentObj.id} className={`mb-10 ${isReply ? 'ml-10 border-l border-[#333] pl-5' : ''}`}>
-			<div className="flex items-center gap-3 group">
-				<img
-					src={commentObj.is_author ? abdulImg : resolveImg(commentObj.profile_img, authorImgDefault)}
-					alt="author"
-					className="h-8 w-8 rounded-full object-cover"
-				/>
-				<div className="flex flex-col">
-					<div className="flex flex-row items-center gap-2">
-						<span className="text-md text-primary ">{commentObj.username}</span>
-						{commentObj.is_author && <MdVerified size={15} />}
-					</div>
-					<span className="text-xs text-color-text-hovering">
-						{dayjs(commentObj.created_at).format("ddd, DD MMM YYYY HH:mm")}
-					</span>
-				</div>
-			</div>
-			<div className="mt-3">
-				{editingComment === commentObj.id ? (
-					<div className="flex flex-col gap-2">
-						<textarea
-							value={editContent}
-							onChange={(e) => setEditContent(e.target.value)}
-							className="bg-transparent border border-color-text-hovering rounded p-2 text-primary outline-none resize-none h-20 cursor-none"
-							autoFocus
-						/>
-						<div className="flex gap-2">
-							<span className="text-xs px-3 py-1 bg-white text-black rounded font-semibold cursor-none" onClick={() => handleSaveEdit(commentObj.id)}>Save</span>
-							<span className="text-xs px-3 py-1 border border-color-text-hovering rounded cursor-none" onClick={() => setEditingComment(null)}>Cancel</span>
-						</div>
-					</div>
-				) : (
-					<div dangerouslySetInnerHTML={{ __html: commentObj.content }}></div>
-				)}
-			</div>
-			<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
-				<div
-					className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors"
-					onClick={() => toggleLike(commentObj.id)}
-				>
-					{likedComments[commentObj.id] ? (
-						<FaHeart size={18} color="red" className="w-7" />
-					) : (
-						<CiHeart size={25} className="w-7" />
-					)}
-					<span className="text-sm">
-						{commentObj.likes + (likedComments[commentObj.id] ? 1 : 0)}
-					</span>
-				</div>
-				<div
-					className="flex items-center gap-2 cursor-none hover:text-primary transition-colors"
-					onClick={() => {
-						if (replyingTo === commentObj.id) {
-							setReplyingTo(null);
-						} else {
-							setReplyingTo(commentObj.id);
-						}
-					}}
-				>
-					<span className="text-sm font-semibold">Reply</span>
-				</div>
-				{isAdmin && (
-					<>
-						<div
-							className="flex items-center gap-2 cursor-none hover:text-blue-400 transition-colors"
-							onClick={() => handleEditComment(commentObj)}
-						>
-							<span className="text-sm font-semibold">Edit</span>
-						</div>
-						<div
-							className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors"
-							onClick={() => handleDeleteComment(commentObj.id)}
-						>
-							<span className="text-sm font-semibold">Delete</span>
-						</div>
-					</>
-				)}
-			</div>
-			
-			{/* Reply Input Box */}
-			{replyingTo === commentObj.id && (
-				<div className="mt-5">
-					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
-						<img src={isAdmin ? abdulImg : resolveImg(authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
-						{isEditingName ? (
-							<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} onBlur={handleNameEditToggle} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleNameEditToggle(); } }} autoFocus className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none" />
-						) : (
-							<>
-								<span className="text-md text-primary ">{userName}</span>
-								<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-									<MdEdit size={15} /> <div className="text-sm">Edit</div>
-								</div>
-							</>
-						)}
-					</div>
-					<InputComment
-						comment={replyComment}
-						setComment={setReplyComment}
-						handleSubmit={() => handleReplySubmit(commentObj.id)}
-						onCancel={() => { setReplyingTo(null); setReplyComment(""); }}
-					/>
-				</div>
-			)}
-
-			<div className="mt-5 border-b-[1px] border-color-text-hovering "></div>
-
-			{/* Nested Replies */}
-			{commentObj.replies && commentObj.replies.length > 0 && (
-				<div className="mt-5">
-					{commentObj.replies.map(reply => renderComment(reply, true))}
-				</div>
-			)}
-		</div>
-	);
 
 	return (
 		<div className="min-h-screen bg-background text-primary pb-50">
@@ -391,61 +91,12 @@ const BlogDetail = () => {
 				</div>
 			</div>
 
-			{/* response section */}
-			<div className="mt-20 mb-15 border-b-[1px] border-color-text-hovering "></div>
 			<div className="px-5 md:px-20 lg:px-40 2xl:px-60">
-				<div>
-					<h2 className="text-xl font-semibold my-5">
-						Responses ({dataComments.length})
-					</h2>
-				</div>
-				{/* Input comment */}
-				<div>
-					<div
-						onClick={handleNameEditToggle}
-						className="flex items-center gap-3 group cursor-none"
-					>
-						<img
-							src={isAdmin ? abdulImg : resolveImg(authorImgDefault)}
-							alt="author"
-							className="h-8 w-8 rounded-full object-cover"
-						/>
-						{isEditingName ? (
-							<input
-								type="text"
-								value={userName}
-								onChange={(e) => setUserName(e.target.value)}
-								onBlur={handleNameEditToggle}
-								onKeyDown={(e) => {
-									if (e.key === "Enter" && !e.shiftKey) {
-										e.preventDefault(); 
-										handleNameEditToggle();
-									}
-								}}
-								autoFocus
-								className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none"
-							/>
-						) : (
-							<>
-								<span className="text-md text-primary ">{userName}</span>
-								<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-									<MdEdit size={15} /> <div className="text-sm">Edit</div>
-								</div>
-							</>
-						)}
-					</div>
-					<InputComment
-						comment={comment}
-						setComment={setComment}
-						handleSubmit={handleSubmitRespond}
-					/>
-				</div>
-
-				<div className="my-10 border-b-[1px] border-color-text-hovering "></div>
-
-				{/* All Comments */}
-				{dataComments.map((comment) => renderComment(comment))}
+				<div className="my-15 border-b-[1px] border-color-text-hovering "></div>
 			</div>
+
+			{/* Comment Section */}
+			<CommentSection comments={dataComments} handlers={handlers} />
 		</div>
 	);
 };

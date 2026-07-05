@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { getWritings, deleteWriting, createWriting, updateWriting, uploadFile } from "@services/adminService";
+import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
-import { useToast } from "@components/ui/Toast/ToastProvider";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { resolveImg } from "@utils/imageUtils";
+import { useAdminWritings } from "./useAdminWritings";
 
 const quillModules = {
     toolbar: [
@@ -17,64 +17,18 @@ const quillModules = {
 };
 
 const AdminWritings = () => {
-    const [writings, setWritings] = useState([]);
-    const [editing, setEditing] = useState(null);
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const toast = useToast();
-
-    const [formData, setFormData] = useState({ title: "", author: "", image: "", content: "" });
-
-    const fetchWritings = async () => {
-        try {
-            const data = await getWritings();
-            setWritings(data);
-        } catch (e) { console.error(e); }
-    };
-
-    useEffect(() => { fetchWritings(); }, []);
-
-    const handleDelete = async (id) => {
-        if (!window.confirm("Delete this writing?")) return;
-        await deleteWriting(id);
-        fetchWritings();
-        toast.success("Writing deleted successfully");
-    };
-
-    const handleEdit = (w) => {
-        setEditing(w);
-        setFormData({ title: w.title, author: w.author, image: w.image, content: w.content || "" });
-        setIsFormOpen(true);
-    };
-
-    const handleAddNew = () => {
-        setEditing(null);
-        setFormData({ title: "", author: "", image: "", content: "" });
-        setIsFormOpen(true);
-    };
-
-    const handleImageUpload = async (e) => {
-        if (!e.target.files[0]) return;
-        const res = await uploadFile(e.target.files[0]);
-        setFormData(prev => ({ ...prev, image: res.url }));
-        toast.success("Image uploaded!");
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (editing) {
-                await updateWriting(editing.id, formData);
-                toast.success("Writing updated successfully");
-            } else {
-                await createWriting(formData);
-                toast.success("Writing created successfully");
-            }
-            setIsFormOpen(false);
-            fetchWritings();
-        } catch (err) {
-            toast.error("Failed to save writing");
-        }
-    };
+    const {
+        writings,
+        isFormOpen,
+        setIsFormOpen,
+        formData,
+        setFormData,
+        handleDelete,
+        handleEdit,
+        handleAddNew,
+        handleImageUpload,
+        handleSubmit
+    } = useAdminWritings();
 
     return (
         <div>
@@ -91,7 +45,7 @@ const AdminWritings = () => {
                         <label>Image URL or Upload:</label>
                         <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
                         <input type="file" onChange={handleImageUpload} />
-                        {formData.image && <img src={formData.image.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${formData.image}` : formData.image} alt="preview" className="h-20 w-32 object-cover" />}
+                        {formData.image && <img src={resolveImg(formData.image)} alt="preview" className="h-20 w-32 object-cover" />}
                     </div>
                     
                     <div className="admin-quill-editor">

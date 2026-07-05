@@ -1,47 +1,11 @@
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import React from "react";
 import authorImg from "@assets/img/author/no_profile.jpeg";
-import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
-import {
-	slugify,
-	handleImageNavigation,
-} from "@utils/navigationImageAnimation.js";
-import { useNavigate } from "react-router";
-import { useLenis } from "lenis/react";
-import { AppContext } from "@/App";
-import { getAllWritings } from "@services/postService";
+import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
+import { useAllBlog } from "./useAllBlog";
 
 const AllBlog = () => {
-	const { navbarRef, preloaderRef } = React.useContext(AppContext);
-	const lenis = useLenis();
-	const navigate = useNavigate();
-
-	const headerContainerRef = useRef([]);
-	const imageRefs = useRef([]);
-	const [blogs, setBlogs] = useState([]);
-
-	const resolveImg = (imgStr, defaultImg) => {
-		if (!imgStr) return defaultImg;
-		if (imgStr.startsWith("/static")) return `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${imgStr}`;
-		if (imgStr.startsWith("@assets")) return defaultImg;
-		return imgStr;
-	};
-
-	useEffect(() => {
-		const fetchBlogs = async () => {
-			const data = await getAllWritings();
-			setBlogs(data);
-		};
-		fetchBlogs();
-	}, []);
-
-	useLayoutEffect(() => {
-		if (blogs.length > 0 && headerContainerRef.current[0]) {
-			AnimateHeader({
-				headerContainerRef: { current: headerContainerRef.current[0] },
-			});
-		}
-	}, [blogs]);
+	const { blogs, headerContainerRef, imageRefs, onImageNavigate } = useAllBlog();
 
 	return (
 		<div className="bg-background min-h-[100vh] text-primary ">
@@ -87,23 +51,13 @@ const AllBlog = () => {
 									</div>
 								</div>
 								<div className="tracking-[2px]">{dayjs(blog.published_at).format("MMM D, YYYY")}</div>
-								{/* <div className="tracking-[2px]">5 MIN AGO</div> */}
 							</div>
 						</div>
 
 						{/* blog img */}
 						<a
 							data-name="view"
-							onClick={() =>
-								handleImageNavigation(
-									`/blog/${slugify(blog.title)}`,
-									imageRefs.current[index],
-									navbarRef,
-									preloaderRef,
-									lenis,
-									navigate
-								)
-							}
+							onClick={() => onImageNavigate(blog, index)}
 							className={` group overflow-hidden max-h-[50vh] ${
 								index == 0
 									? "lg:max-h-[80vh]  lg:mx-15 xl:mx-25 2xl:mx-40 "
@@ -135,7 +89,6 @@ const AllBlog = () => {
 								<div className="tracking-[2px] uppercase">BY {blog.author}</div>
 							</div>
 							<div className="tracking-[2px]">{dayjs(blog.published_at).format("MMM D, YYYY")}</div>
-							{/* <div className="tracking-[2px]">5 MIN AGO</div> */}
 						</div>
 					</div>
 				))}

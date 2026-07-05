@@ -25,3 +25,27 @@ export const AnimateRef = (ref) => {
 		}
 	);
 };
+
+export const animateHoverImageEnter = (imageContainerRef, imageHolderRef, index) => {
+	if (!imageContainerRef?.current || !imageHolderRef?.current) return;
+	gsap.to(imageContainerRef.current, {
+		scale: 1,
+		duration: 0.5,
+		ease: "expoScale(0.5,7, none)",
+	});
+
+	gsap.to(imageHolderRef.current, {
+		y: index * -350,
+		duration: 0.6,
+		ease: "expoScale(0.5,7, none)",
+	});
+};
+
+export const animateHoverImageLeave = (imageContainerRef) => {
+	if (!imageContainerRef?.current) return;
+	gsap.to(imageContainerRef.current, {
+		scale: 0,
+		duration: 0.5,
+		ease: "expoScale(0.5,7, none)",
+	});
+};
