@@ -94,7 +94,7 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
         >
             {/* Images Container */}
             <div 
-                className={`w-full h-full flex ${!isDragging ? 'transition-transform duration-700 ease-in-out' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                className={`w-full h-full flex ${!isDragging ? 'transition-transform duration-700 ease-in-out' : ''}    `}
                 style={{ transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))` }}
             >
                 {images.map((img, i) => (
