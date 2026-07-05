@@ -5,7 +5,7 @@ export default function CustomCursor() {
 
 	return (
 		<div
-			className={`bg-cursor fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-4  
+			className={`bg-cursor fixed pointer-events-none h-5 translate-z-100 mix-blend-difference rounded-full z-[9999]  
 				${hovering ? " scale-230" : ""}
 				${hoveringImage ? "scale-200 w-10" : "w-5"}
 				${shouldHide ? "hidden" : ""}

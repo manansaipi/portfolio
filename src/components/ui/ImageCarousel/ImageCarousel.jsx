@@ -7,6 +7,7 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
+    const [dragOffset, setDragOffset] = useState(0);
 
     useEffect(() => {
         if (!images || images.length <= 1) return;
@@ -28,20 +29,23 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
         setTouchEnd(null);
         setTouchStart(clientX);
         setIsDragging(true);
+        setDragOffset(0);
     };
 
     const handleDragMove = (clientX) => {
         if (isDragging) {
             setTouchEnd(clientX);
+            setDragOffset(clientX - touchStart);
         }
     };
 
     const handleDragEnd = () => {
-        if (!isDragging || touchStart === null || touchEnd === null) {
-            setIsDragging(false);
+        setIsDragging(false);
+        if (touchStart === null || touchEnd === null) {
+            setDragOffset(0);
             return;
         }
-        setIsDragging(false);
+        
         const distance = touchStart - touchEnd;
         const minSwipeDistance = 50;
 
@@ -50,6 +54,8 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
         } else if (distance < -minSwipeDistance) {
             prevSlide();
         }
+        
+        setDragOffset(0);
     };
 
     if (!images || images.length === 0) return null;
@@ -88,8 +94,8 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
         >
             {/* Images Container */}
             <div 
-                className={`w-full h-full flex transition-transform duration-700 ease-in-out ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                className={`w-full h-full flex ${!isDragging ? 'transition-transform duration-700 ease-in-out' : ''} ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                style={{ transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))` }}
             >
                 {images.map((img, i) => (
                     <img
