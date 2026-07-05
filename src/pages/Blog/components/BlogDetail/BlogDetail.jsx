@@ -24,7 +24,7 @@ import authorImgDefault from "@assets/img/author/Matteo.jpg";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
-	const { navbarRef, preloaderRef, handleButtonNavigation } =
+	const { navbarRef, preloaderRef, handleButtonNavigation, isAdmin } =
 		React.useContext(AppContext);
 	const lenis = useLenis();
 	const navigate = useNavigate();
@@ -51,6 +51,17 @@ const BlogDetail = () => {
 	useEffect(() => {
 		localStorage.setItem("likedComments", JSON.stringify(likedComments));
 	}, [likedComments]);
+
+	const handleDeleteComment = async (commentId) => {
+		if (!window.confirm("Are you sure you want to delete this comment?")) return;
+		try {
+			const { deleteComment } = await import("@services/adminService");
+			await deleteComment(commentId);
+			if (currentBlog) fetchData(currentBlog.id);
+		} catch (error) {
+			console.error("Error deleting comment:", error);
+		}
+	};
 
 	const toggleLike = async (commentId) => {
 		// Determine the new like state before updating
@@ -193,7 +204,7 @@ const BlogDetail = () => {
 			<div className="mt-3" dangerouslySetInnerHTML={{ __html: commentObj.content }}></div>
 			<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
 				<div
-					className="flex items-center gap-2 cursor-pointer hover:text-red-500 transition-colors"
+					className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors"
 					onClick={() => toggleLike(commentObj.id)}
 				>
 					{likedComments[commentObj.id] ? (
@@ -206,25 +217,31 @@ const BlogDetail = () => {
 					</span>
 				</div>
 				<div
-					className="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+					className="flex items-center gap-2 cursor-none hover:text-primary transition-colors"
 					onClick={() => {
 						if (replyingTo === commentObj.id) {
 							setReplyingTo(null);
-							setReplyComment("");
 						} else {
 							setReplyingTo(commentObj.id);
-							setReplyComment("");
 						}
 					}}
 				>
-					<span className="text-sm underline">Reply</span>
+					<span className="text-sm font-semibold">Reply</span>
 				</div>
+				{isAdmin && (
+					<div
+						className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors ml-4"
+						onClick={() => handleDeleteComment(commentObj.id)}
+					>
+						<span className="text-sm font-semibold">Delete</span>
+					</div>
+				)}
 			</div>
 			
 			{/* Reply Input Box */}
 			{replyingTo === commentObj.id && (
 				<div className="mt-5">
-					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-pointer">
+					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
 						<img src={resolveImg(currentBlog.author_img, authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
 						{isEditingName ? (
 							<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} onBlur={handleNameEditToggle} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleNameEditToggle(); } }} autoFocus className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none" />
@@ -327,7 +344,7 @@ const BlogDetail = () => {
 				<div>
 					<div
 						onClick={handleNameEditToggle}
-						className="flex items-center gap-3 group cursor-pointer"
+						className="flex items-center gap-3 group cursor-none"
 					>
 						<img
 							src={resolveImg(currentBlog.author_img, authorImgDefault)}

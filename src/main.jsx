@@ -15,11 +15,13 @@ import Contact from "@pages/Contact/Contact.jsx";
 import NotFound from "@pages/NotFound/NotFound.jsx";
 import AllBlog from "@pages/Blog/components/AllBlog/AllBlog.jsx";
 import BlogDetail from "@pages/Blog/components/BlogDetail/BlogDetail.jsx";
+import AdminPanel from "@pages/Admin/AdminPanel.jsx";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<BrowserRouter>
 			<Routes>
+				<Route path="/dashboard-secret" element={<AdminPanel />} />
 				<Route path="/" element={<App />}>
 					<Route path="about" element={<About />} />
 					<Route path="work" element={<Experience />}>

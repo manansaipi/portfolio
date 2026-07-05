@@ -9,12 +9,15 @@ import Navbar from "@components/layout/Navbar/Navbar";
 import Home from "@pages/Home/Home";
 import Footer from "@components/layout/Footer/Footer";
 import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
+import AdminLogin from "@components/ui/AdminLogin/AdminLogin";
 
 export const AppContext = React.createContext({});
 
 const App = () => {
     const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
     const [theme, setTheme] = useState("dark");
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
     const location = useLocation();
     const preloaderRef = useRef();
@@ -22,6 +25,30 @@ const App = () => {
     const navigate = useNavigate();
     const lenis = useLenis();
     const headerContainerRef = useRef(); 
+
+    useEffect(() => {
+        setIsAdmin(localStorage.getItem("isAdmin") === "true");
+        const handleStorage = () => setIsAdmin(localStorage.getItem("isAdmin") === "true");
+        window.addEventListener('storage', handleStorage);
+        
+        const handleKeyDown = (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'x') {
+                e.preventDefault();
+                const token = localStorage.getItem("admin_token");
+                if (token) {
+                    navigate('/dashboard-secret');
+                } else {
+                    setShowLoginModal(true);
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('storage', handleStorage);
+        }
+    }, [navigate]);
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
@@ -38,19 +65,6 @@ const App = () => {
     }
 
     const toggleTheme = () => {
-        // setEnabled(!enabled);
-        // IMPORTANT TODO : HANDLE THE DEFAULT THEME SWITCH BUTTON , ID THE DEFAULT WAS LIGHT, THE BUTTON SHOULD ON THE RIGHT SIDE
-        //TODO : ADD DEFAULT THEME BASED ON USER THEME SETTING
-        //TODO : STORE USER PREFERENCED SETTING INTO LOCAL STORAGE
-
-        // if (enabled) {
-        //     document.documentElement.classList.add("dark");
-        //     document.documentElement.classList.remove("light");
-        // } else {
-        //     document.documentElement.classList.add("light");
-        //     document.documentElement.classList.remove("dark");
-        // }
-
         const newTheme = theme === "light" ? "dark" : "light";
         setTheme(newTheme);
 
@@ -69,6 +83,8 @@ const App = () => {
                     headerContainerRef,
                     toggleTheme,
                     theme,
+                    isAdmin,
+                    setIsAdmin,
                 }}
             >
                 <ReactLenis root>
@@ -88,6 +104,8 @@ const App = () => {
                     </div>
 
                     {entranceAnimationDone && <Footer />}
+                    
+                    {showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
                 </ReactLenis>
             </AppContext.Provider>
         </>

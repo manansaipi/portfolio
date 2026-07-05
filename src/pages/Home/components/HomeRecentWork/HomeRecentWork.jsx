@@ -16,6 +16,40 @@ const HomeRecentWork = ({}) => {
 	const imageContainerRef = useRef();
 	const imageHolderRef = useRef();
 	const imageRefs = useRef([]);
+	const [recentWorks, setRecentWorks] = useState(Works); // Fallback to hardcoded initially
+
+	useEffect(() => {
+		const fetchWorks = async () => {
+			try {
+				const { getExperiences } = await import("@services/adminService");
+				const data = await getExperiences();
+				if (data && data.length > 0) {
+					// Map backend fields to the frontend expected schema
+					const backendUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+					const mappedWorks = data.map(w => {
+						const imgUrl = w.img ? (w.img.startsWith("/static") ? `${backendUrl}${w.img}` : w.img) : "";
+						return {
+							id: w.id,
+							company: w.company,
+							role: w.position,
+							startDate: w.start_date,
+							endDate: w.end_date,
+							desc: w.description,
+							img: imgUrl,
+							points: w.points ? JSON.parse(w.points) : [],
+							iamges: w.images ? JSON.parse(w.images).map(img => img.startsWith("/static") ? `${backendUrl}${img}` : img) : [],
+							bgColor: w.bg_color || "bg-neutral-800",
+							url: w.url || ""
+						};
+					});
+					setRecentWorks(mappedWorks);
+				}
+			} catch (e) {
+				console.error("Failed to fetch works, using hardcoded fallback", e);
+			}
+		};
+		fetchWorks();
+	}, []);
 
 	useLayoutEffect(() => {
 		if (imageContainerRef.current) {
@@ -53,11 +87,11 @@ const HomeRecentWork = ({}) => {
 	return (
 		<div className="  bg-light-dark px-5 md:px-10 lg:px-25 xl:px-30 ">
 			{/* mobile-medium size */}
-			<ListRecentWorkMobile works={Works} />
+			<ListRecentWorkMobile works={recentWorks} />
 
 			{/* large size */}
 			<ListRecentWorkLarge
-				works={Works}
+				works={recentWorks}
 				handleHover={handleHover}
 				imageRefs={imageRefs}
 			/>
@@ -71,7 +105,7 @@ const HomeRecentWork = ({}) => {
 
 			{/* hovered image */}
 			<HoveredImages
-				datas={Works}
+				datas={recentWorks}
 				imageHolderRef={imageHolderRef}
 				imageContainerRef={imageContainerRef}
 				imageRefs={imageRefs}
