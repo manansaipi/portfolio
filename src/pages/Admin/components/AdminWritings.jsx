@@ -1,20 +1,10 @@
-import React from "react";
+import React, { useRef, useMemo } from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { resolveImg } from "@utils/imageUtils";
 import { useAdminWritings } from "./useAdminWritings";
-
-const quillModules = {
-    toolbar: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-    ],
-};
+import { uploadFile } from "@services/adminService";
 
 const AdminWritings = () => {
     const {
@@ -32,6 +22,48 @@ const AdminWritings = () => {
         addMultipleImageUrl,
         handleSubmit
     } = useAdminWritings();
+
+    const quillRef = useRef(null);
+
+    const imageHandler = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (file) {
+                try {
+                    const res = await uploadFile(file);
+                    const url = resolveImg(res.url);
+                    const quill = quillRef.current.getEditor();
+                    const range = quill.getSelection(true);
+                    quill.insertEmbed(range.index, 'image', url);
+                    quill.setSelection(range.index + 1);
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    alert("Failed to upload image");
+                }
+            }
+        };
+    };
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['blockquote', 'code-block'],
+                ['link', 'image'],
+                ['clean']
+            ],
+            handlers: {
+                image: imageHandler
+            }
+        }
+    }), []);
 
     return (
         <div>
@@ -75,10 +107,11 @@ const AdminWritings = () => {
                     <div className="admin-quill-editor">
                         <label className="mb-2 block">Content:</label>
                         <ReactQuill
+                            ref={quillRef}
                             theme="snow"
                             value={formData.content}
                             onChange={(value) => setFormData({...formData, content: value})}
-                            modules={quillModules}
+                            modules={modules}
                             className="bg-white text-black rounded"
                             style={{ minHeight: "200px" }}
                         />
