@@ -8,7 +8,7 @@ export const useAdminWritings = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const toast = useToast();
 
-    const [formData, setFormData] = useState({ title: "", author: "", image: "", content: "" });
+    const [formData, setFormData] = useState({ title: "", author: "Abdul Mannan Saipi", image: "", content: "" });
 
     const fetchWritings = async () => {
         try {
@@ -34,7 +34,7 @@ export const useAdminWritings = () => {
 
     const handleAddNew = () => {
         setEditing(null);
-        setFormData({ title: "", author: "", image: "", content: "" });
+        setFormData({ title: "", author: "Abdul Mannan Saipi", image: "", content: "" });
         setIsFormOpen(true);
     };
 

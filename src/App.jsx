@@ -10,7 +10,6 @@ import Home from "@pages/Home/Home";
 import Footer from "@components/layout/Footer/Footer";
 import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
 import AdminLogin from "@components/ui/AdminLogin/AdminLogin";
-import { ToastProvider } from "@components/ui/Toast/ToastProvider";
 import FloatingAdminButton from "@components/ui/FloatingAdminButton/FloatingAdminButton";
 
 export const AppContext = React.createContext({});
@@ -75,43 +74,41 @@ const App = () => {
     };
 
     return (
-        <ToastProvider>
-            <AppContext.Provider
-                value={{
-                    preloaderRef,
-                    navbarRef,
-                    handleButtonNavigation,
-                    entranceAnimationDone,
-                    headerContainerRef,
-                    toggleTheme,
-                    theme,
-                    isAdmin,
-                    setIsAdmin,
-                }}
-            >
-                <ReactLenis root>
-                    <CustomCursor />
-                    <PreLoader
-                        setEntranceAnimationDone={setEntranceAnimationDone}
-                        preloaderRef={preloaderRef}
-                    />
-                    <div ref={navbarRef}>
-                        <Navbar />
-                    </div>
-                    <div className={isHome ? "" : "hidden"}>
-                        <Home />
-                    </div>
-                    <div className={isHome ? "hidden" : ""}>
-                        <Outlet />
-                    </div>
+        <AppContext.Provider
+            value={{
+                preloaderRef,
+                navbarRef,
+                handleButtonNavigation,
+                entranceAnimationDone,
+                headerContainerRef,
+                toggleTheme,
+                theme,
+                isAdmin,
+                setIsAdmin,
+            }}
+        >
+            <ReactLenis root>
+                <CustomCursor />
+                <PreLoader
+                    setEntranceAnimationDone={setEntranceAnimationDone}
+                    preloaderRef={preloaderRef}
+                />
+                <div ref={navbarRef}>
+                    <Navbar />
+                </div>
+                <div className={isHome ? "" : "hidden"}>
+                    <Home />
+                </div>
+                <div className={isHome ? "hidden" : ""}>
+                    <Outlet />
+                </div>
 
-                    {entranceAnimationDone && <Footer />}
-                    
-                    {showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
-                    <FloatingAdminButton />
-                </ReactLenis>
-            </AppContext.Provider>
-        </ToastProvider>
+                {entranceAnimationDone && <Footer />}
+                
+                {showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
+                <FloatingAdminButton />
+            </ReactLenis>
+        </AppContext.Provider>
     );
 };
 

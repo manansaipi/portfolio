@@ -44,7 +44,7 @@ const AllBlog = () => {
 									<img
 										src={resolveImg(blog.author_img, authorImg)}
 										alt="author_img"
-										className="max-h-[5vh] rounded-full object-cover"
+										className="h-8 w-8 rounded-full object-cover"
 									/>
 									<div className="tracking-[2px] uppercase">
 										BY {blog.author}

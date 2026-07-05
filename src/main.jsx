@@ -16,27 +16,30 @@ import NotFound from "@pages/NotFound/NotFound.jsx";
 import AllBlog from "@pages/Blog/components/AllBlog/AllBlog.jsx";
 import BlogDetail from "@pages/Blog/components/BlogDetail/BlogDetail.jsx";
 import AdminPanel from "@pages/Admin/AdminPanel.jsx";
+import { ToastProvider } from "@components/ui/Toast/ToastProvider";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
-		<BrowserRouter>
-			<Routes>
-				<Route path="/dashboard-secret" element={<AdminPanel />} />
-				<Route path="/" element={<App />}>
-					<Route path="about" element={<About />} />
-					<Route path="work" element={<Experience />}>
-						<Route index element={<ExperienceEntrance />} />
-						<Route path=":workId" element={<ExperienceDetail />} />
+		<ToastProvider>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/dashboard-secret" element={<AdminPanel />} />
+					<Route path="/" element={<App />}>
+						<Route path="about" element={<About />} />
+						<Route path="work" element={<Experience />}>
+							<Route index element={<ExperienceEntrance />} />
+							<Route path=":workId" element={<ExperienceDetail />} />
+						</Route>
+						<Route path="blog" element={<Blog />}>
+							<Route index element={<AllBlog />} />
+							<Route path=":blogId" element={<BlogDetail />} />
+						</Route>
+						<Route path="contact" element={<Contact />} />
+						<Route path="*" element={<NotFound />} /> {/* Catch-all route */}
 					</Route>
-					<Route path="blog" element={<Blog />}>
-						<Route index element={<AllBlog />} />
-						<Route path=":blogId" element={<BlogDetail />} />
-					</Route>
-					<Route path="contact" element={<Contact />} />
-					<Route path="*" element={<NotFound />} /> {/* Catch-all route */}
-				</Route>
-			</Routes>
-		</BrowserRouter>
+				</Routes>
+			</BrowserRouter>
+		</ToastProvider>
 		<Analytics />
 	</StrictMode>
 );
