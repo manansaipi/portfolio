@@ -6,6 +6,7 @@ import { MdVerified } from "react-icons/md";
 import authorImgDefault from "@assets/img/author/no_profile.jpeg";
 import { resolveImg } from "@utils/imageUtils.js";
 import dayjs from "dayjs";
+import ImageCarousel from "@components/ui/ImageCarousel/ImageCarousel";
 
 const BlogDetail = () => {
 	const handlers = useBlogDetail();
@@ -38,24 +39,45 @@ const BlogDetail = () => {
 		);
 	}
 
+	let parsedImages = [];
+	try {
+		if (currentBlog.images) {
+			parsedImages = JSON.parse(currentBlog.images);
+		}
+	} catch (e) {}
+
+	// Prepend main image to the front of the carousel if we have a main image
+	let allImages = [];
+	if (currentBlog.image) allImages.push(currentBlog.image);
+	if (parsedImages.length > 0) allImages = [...allImages, ...parsedImages];
+
 	return (
 		<div className="min-h-screen bg-background text-primary pb-50">
 			{/* Image Header */}
-			<div className="w-full overflow-hidden">
-				<img
-					ref={imageRef}
-					src={currentBlog.image}
-					alt="Blog header"
-					className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
-					onError={(e) => {
-						e.target.onerror = null;
-						e.target.src = `https://placehold.co/800x450/333333/FFFFFF?text=Image+Not+Found`;
-					}}
-				/>
+			<div className="w-full overflow-hidden h-[70vh]">
+				{allImages.length > 1 ? (
+					<ImageCarousel
+						ref={imageRef}
+						images={allImages}
+						className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
+						autoSlideInterval={10000}
+					/>
+				) : (
+					<img
+						ref={imageRef}
+						src={currentBlog.image}
+						alt="Blog header"
+						className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
+						onError={(e) => {
+							e.target.onerror = null;
+							e.target.src = `https://placehold.co/800x450/333333/FFFFFF?text=Image+Not+Found`;
+						}}
+					/>
+				)}
 			</div>
 
 			{/* Main Content */}
-			<div className="pt-[75vh] px-5 md:px-20 lg:px-40 2xl:px-60 flex flex-col gap-8">
+			<div className="pt-[5vh] px-5 md:px-20 lg:px-40 2xl:px-60 flex flex-col gap-8">
 				{/* Title */}
 				<div
 					ref={headerRef}

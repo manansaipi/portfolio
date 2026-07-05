@@ -8,7 +8,7 @@ export const useAdminExperiences = () => {
     const [editing, setEditing] = useState(null); 
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    const [formData, setFormData] = useState({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "" });
+    const [formData, setFormData] = useState({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "", order: "" });
 
     const fetchItems = async () => {
         try { setItems(await getExperiences()); } catch (e) { console.error(e); }
@@ -32,14 +32,15 @@ export const useAdminExperiences = () => {
             start_date: w.start_date, 
             end_date: w.end_date, 
             img: w.img,
-            points: (w.points || "")
+            points: (w.points || ""),
+            order: w.order !== null && w.order !== undefined ? w.order : ""
         });
         setIsFormOpen(true);
     };
 
     const handleAddNew = () => {
         setEditing(null);
-        setFormData({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "" });
+        setFormData({ company: "", position: "", description: "", start_date: "", end_date: "", img: "", points: "", order: "" });
         setIsFormOpen(true);
     };
 
@@ -53,6 +54,8 @@ export const useAdminExperiences = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = { ...formData };
+        if (payload.order === "") payload.order = null;
+        else payload.order = parseInt(payload.order, 10);
         try {
             if (editing) {
                 await updateExperience(editing.id, payload);

@@ -27,6 +27,9 @@ const AdminWritings = () => {
         handleEdit,
         handleAddNew,
         handleImageUpload,
+        handleMultipleImageUpload,
+        removeMultipleImage,
+        addMultipleImageUrl,
         handleSubmit
     } = useAdminWritings();
 
@@ -41,11 +44,32 @@ const AdminWritings = () => {
                 <form onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Author" value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} required />
+                    <input type="number" className="bg-transparent border-b p-2 outline-none" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />
+                    
                     <div className="flex flex-col gap-2">
-                        <label>Image URL or Upload:</label>
+                        <label className="font-bold">Main Image (Thumbnail):</label>
                         <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
                         <input type="file" onChange={handleImageUpload} />
                         {formData.image && <img src={resolveImg(formData.image)} alt="preview" className="h-20 w-32 object-cover" />}
+                    </div>
+
+                    <div className="flex flex-col gap-2 border-t pt-4 border-light-dark">
+                        <label className="font-bold">Carousel Images (Detail Page):</label>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                            {formData.images && formData.images.map((img, i) => (
+                                <div key={i} className="relative group">
+                                    <img src={resolveImg(img)} alt="carousel" className="h-20 w-32 object-cover rounded" />
+                                    <div onClick={() => removeMultipleImage(i)} className="absolute inset-0 bg-black/50 text-white flex justify-center items-center opacity-0 group-hover:opacity-100 cursor-pointer rounded transition-opacity">Remove</div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex gap-2">
+                            <input type="file" onChange={handleMultipleImageUpload} className="flex-1" />
+                            <button type="button" onClick={() => {
+                                const url = window.prompt("Enter Image URL:");
+                                addMultipleImageUrl(url);
+                            }} className="px-2 py-1 border rounded hover:bg-light-dark">Add URL</button>
+                        </div>
                     </div>
                     
                     <div className="admin-quill-editor">

@@ -28,6 +28,7 @@ const AdminCertificates = () => {
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Name" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Description / Issuer" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Year (e.g., 2024)" value={formData.year} onChange={e => setFormData({...formData, year: e.target.value})} required />
+                    <input type="number" className="bg-transparent border-b p-2 outline-none" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Link (Optional)" value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Background Color (Optional)" value={formData.bg_color} onChange={e => setFormData({...formData, bg_color: e.target.value})} />
                     

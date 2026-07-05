@@ -7,7 +7,7 @@ export const useAdminCertificates = () => {
     const [items, setItems] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
-    const [formData, setFormData] = useState({ name: "", description: "", year: "", img: "", bg_color: "", link: "" });
+    const [formData, setFormData] = useState({ name: "", description: "", year: "", img: "", bg_color: "", link: "", order: "" });
 
     const fetchItems = async () => {
         try { setItems(await getCertificates()); } catch (e) { console.error(e); }
@@ -23,7 +23,7 @@ export const useAdminCertificates = () => {
     };
 
     const handleAddNew = () => {
-        setFormData({ name: "", description: "", year: "", img: "", bg_color: "", link: "" });
+        setFormData({ name: "", description: "", year: "", img: "", bg_color: "", link: "", order: "" });
         setIsFormOpen(true);
     };
 
@@ -35,8 +35,11 @@ export const useAdminCertificates = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const payload = { ...formData };
+        if (payload.order === "") payload.order = null;
+        else payload.order = parseInt(payload.order, 10);
         try {
-            await createCertificate(formData);
+            await createCertificate(payload);
             setIsFormOpen(false);
             fetchItems();
             toast.success("Certificate created successfully");

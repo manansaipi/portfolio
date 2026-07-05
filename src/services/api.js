@@ -16,3 +16,22 @@ api.interceptors.request.use((config) => {
 });
 
 export default api;
+
+const cache = new Map();
+
+export const cachedGet = async (url, duration = 60000, force = false) => {
+    if (!force && cache.has(url)) {
+        const { data, timestamp } = cache.get(url);
+        if (Date.now() - timestamp < duration) {
+            return data;
+        }
+    }
+    const response = await api.get(url);
+    cache.set(url, { data: response.data, timestamp: Date.now() });
+    return response.data;
+};
+
+export const clearCache = (url) => {
+    if (url) cache.delete(url);
+    else cache.clear();
+};

@@ -32,6 +32,7 @@ const AdminExperiences = () => {
                         <input className="bg-transparent border-b p-2 outline-none w-1/2" placeholder="Start Date (e.g., Jan 2024)" value={formData.start_date} onChange={e => setFormData({...formData, start_date: e.target.value})} required />
                         <input className="bg-transparent border-b p-2 outline-none w-1/2" placeholder="End Date (e.g., Present)" value={formData.end_date} onChange={e => setFormData({...formData, end_date: e.target.value})} />
                     </div>
+                    <input type="number" className="bg-transparent border-b p-2 outline-none w-full" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />
                     <div className="flex flex-col gap-2">
                         <label>Image URL or Upload:</label>
                         <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.img} onChange={e => setFormData({...formData, img: e.target.value})} />
