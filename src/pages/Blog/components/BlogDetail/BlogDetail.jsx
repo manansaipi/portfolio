@@ -107,9 +107,15 @@ const BlogDetail = () => {
 				{/* Content */}
 				<div
 					ref={contentRef}
-					className="text-lg leading-relaxed text-primary blog-content-html break-words overflow-hidden whitespace-pre-wrap"
+					className="text-lg leading-relaxed text-primary blog-content-html break-words overflow-hidden"
 				>
-					<div dangerouslySetInnerHTML={{ __html: currentBlog.content.replace(/&nbsp;/g, ' ') }} />
+					<div dangerouslySetInnerHTML={{ 
+						__html: currentBlog.content
+							.replace(/&nbsp;/g, ' ')
+							.replace(/<p><\/p>/g, '<p><br></p>')
+							.replace(/\\n/g, '<br />')
+							.replace(/\n/g, '<br />') 
+					}} />
 				</div>
 			</div>
 
