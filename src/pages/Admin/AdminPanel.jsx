@@ -25,7 +25,10 @@ const AdminPanel = () => {
         <div className="min-h-screen bg-background text-primary px-5 md:px-20 py-20 cursor-auto">
             <div className="flex justify-between items-center mb-10">
                 <h1 className="text-4xl font-bold">Secret Admin Panel</h1>
-                <PrimaryButton label="Exit Admin Mode" handleOnClick={exitAdmin} />
+                <div className="flex gap-4">
+                    <button onClick={() => navigate("/")} className="px-4 py-2 border rounded cursor-none hover:bg-light-dark transition-colors">Back to Website</button>
+                    <PrimaryButton label="Exit Admin Mode" handleOnClick={exitAdmin} />
+                </div>
             </div>
             
             <div className="flex gap-4 mb-5 border-b border-light-dark pb-2">
