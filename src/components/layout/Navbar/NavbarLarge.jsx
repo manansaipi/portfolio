@@ -46,7 +46,7 @@ const NavbarLarge = () => {
                 {
                     opacity: 1,
                     stagger: 0.075,
-                    delay: 7.1,
+                    delay: import.meta.env.DEV ? 0.1 : 7.1,
                 }
             );
         }
