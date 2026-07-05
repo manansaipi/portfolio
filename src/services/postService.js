@@ -1,9 +1,9 @@
-import api, { cachedGet } from "@services/api";
+import api from "@services/api";
 import blogs from "@constants/blogs";
 
 export const getAllWritings = async () => {
     try {
-        const data = await cachedGet("/api/writings");
+        const data = (await api.get("/api/writings")).data;
         return data;
     } catch (error) {
         console.warn("Failed to fetch writings from API, falling back to constant data.", error.message);
@@ -13,7 +13,7 @@ export const getAllWritings = async () => {
 
 export const getCommentByPostId = async (postId) => {
     try {
-        const data = await cachedGet(`/api/writings/${postId}/comments`, 10000); // 10s cache for comments
+        const data = (await api.get(`/api/writings/${postId}/comments`)).data;
         return data;
     } catch (error) {
         console.warn(`Failed to fetch comments for post ${postId}, falling back to constant data.`, error.message);
