@@ -30,7 +30,7 @@ const AllBlog = () => {
 							>
 								<div className="w-full text-3xl lg:text-4xl">{blog.title}</div>
 								<div className="w-full text-lg text-color-text-hovering line-clamp-3">
-									{blog.content ? blog.content.replace(/<[^>]*>?/gm, '') : "No content available."}
+									{blog.content ? new DOMParser().parseFromString(blog.content, 'text/html').body.textContent : "No content available."}
 								</div>
 							</div>
 
@@ -84,7 +84,7 @@ const AllBlog = () => {
 								<img
 									src={resolveImg(blog.author_img, authorImg)}
 									alt="author_img"
-									className="max-h-[5vh] rounded-full object-cover"
+									className="h-8 w-8 rounded-full object-cover"
 								/>
 								<div className="tracking-[2px] uppercase">BY {blog.author}</div>
 							</div>
