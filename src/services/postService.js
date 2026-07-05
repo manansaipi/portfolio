@@ -1,5 +1,4 @@
 import api, { cachedGet } from "@services/api";
-import comments from "@constants/comments";
 import blogs from "@constants/blogs";
 
 export const getAllWritings = async () => {
@@ -18,7 +17,7 @@ export const getCommentByPostId = async (postId) => {
         return data;
     } catch (error) {
         console.warn(`Failed to fetch comments for post ${postId}, falling back to constant data.`, error.message);
-        return comments;
+        return error;
     }
 };
 
