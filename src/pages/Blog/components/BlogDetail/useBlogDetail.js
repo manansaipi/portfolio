@@ -24,6 +24,9 @@ export const useBlogDetail = () => {
 	const [editingComment, setEditingComment] = useState(null);
 	const [editContent, setEditContent] = useState("");
 	const [isEditingName, setIsEditingName] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+	const [submittingReplyId, setSubmittingReplyId] = useState(null);
 
 	const [userName, setUserName] = useState(() => {
 		if (localStorage.getItem("isAdmin") === "true") {
@@ -62,12 +65,14 @@ export const useBlogDetail = () => {
 
 	useEffect(() => {
 		const fetchCurrentBlog = async () => {
+			setIsLoading(true);
 			const fetchedBlogs = await getAllWritings();
 			const foundBlog = fetchedBlogs.find((blog) => slugify(blog.title) === blogId);
 			if (foundBlog) {
-				fetchData(foundBlog.id);
+				await fetchData(foundBlog.id);
 				setCurrentBlog(foundBlog);
 			}
+			setIsLoading(false);
 		};
 		fetchCurrentBlog();
 	}, [blogId]);
@@ -142,24 +147,30 @@ export const useBlogDetail = () => {
 
 	async function handleSubmitRespond() {
 		try {
+			setIsSubmittingComment(true);
 			const commentInput = comment;
-			setComment("");
 			await addComment(currentBlog.id, commentInput, userName);
 			await fetchData(currentBlog.id);
+			setComment("");
 		} catch (error) {
 			console.error("Error submitting response:", error);
+		} finally {
+			setIsSubmittingComment(false);
 		}
 	}
 
 	async function handleReplySubmit(parentId) {
 		try {
+			setSubmittingReplyId(parentId);
 			const commentInput = replyComment;
-			setReplyComment("");
-			setReplyingTo(null);
 			await addComment(currentBlog.id, commentInput, userName, parentId);
 			await fetchData(currentBlog.id);
+			setReplyComment("");
+			setReplyingTo(null);
 		} catch (error) {
 			console.error("Error submitting response:", error);
+		} finally {
+			setSubmittingReplyId(null);
 		}
 	}
 
@@ -190,5 +201,8 @@ export const useBlogDetail = () => {
 		handleNameEditToggle,
 		handleSubmitRespond,
 		handleReplySubmit,
+		isLoading,
+		isSubmittingComment,
+		submittingReplyId,
 	};
 };

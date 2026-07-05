@@ -7,6 +7,7 @@ const InputComment = ({
 	setComment,
 	handleSubmit,
 	onCancel,
+	isSubmitting,
 	autoFocus = false
 }) => {
 	const inputCommentRef = useRef();
@@ -15,23 +16,14 @@ const InputComment = ({
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
-			gsap.to(inputCommentContainer.current, { minHeight: "18vh", height: "auto", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { height: "18vh", duration: 0.3 });
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
-			gsap.to(inputCommentContainer.current, { minHeight: "6vh", height: "6vh", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { height: "6vh", duration: 0.3 });
 			if (onCancel) onCancel();
 		}
 	}
-
-	useEffect(() => {
-		if (autoFocus && inputCommentRef.current) {
-			handleClickComment("open");
-			setTimeout(() => {
-				inputCommentRef.current.focus();
-			}, 100);
-		}
-	}, [autoFocus]);
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderLine, setIsUnderLine] = useState(false);
@@ -51,6 +43,25 @@ const InputComment = ({
 			document.removeEventListener("selectionchange", handleSelectionChange);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (autoFocus && inputCommentRef.current) {
+			handleClickComment("open");
+			// Add a slight delay to allow the animation to start before focusing
+			setTimeout(() => {
+				if (inputCommentRef.current) {
+					inputCommentRef.current.focus();
+					// Move cursor to end if there's content, otherwise just focus
+					const range = document.createRange();
+					const sel = window.getSelection();
+					range.selectNodeContents(inputCommentRef.current);
+					range.collapse(false);
+					sel.removeAllRanges();
+					sel.addRange(range);
+				}
+			}, 100);
+		}
+	}, [autoFocus]);
 
 	function resetInput() {
 		if (comment.length > 0) {
@@ -74,7 +85,8 @@ const InputComment = ({
 					onInput={(e) => setComment(e.currentTarget.innerHTML)}
 					onMouseDown={() => handleClickComment("open")}
 					onKeyDown={(e) => {
-						console.log(comment);
+						
+						if (isSubmitting) return;
 
 						if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
 							e.preventDefault();
@@ -93,15 +105,17 @@ const InputComment = ({
 						}
 						if (e.key === "Enter" && !e.shiftKey) {
 							e.preventDefault(); // Prevent default form submission or newline
-							handleSubmit();
-							resetInput();
+							if (!isSubmitting && comment.trim().length > 0) {
+								handleSubmit();
+								resetInput();
+							}
 						}
 					}}
-					className={`w-full max-h-[30vh] overflow-y-auto resize-none py-2 cursor-none placeholder:text-color-text-hovering ${
+					className={`w-full resize-none scroll- py-2 cursor-none placeholder:text-color-text-hovering ${
 						isBold ? "placeholder:font-semibold" : ""
 					} ${
 						isItalic ? "placeholder:italic" : ""
-					} text-sm border border-light-dark rounded-sm outline-none transition-all`}
+					} text-sm border border-light-dark rounded-sm outline-none focus:heigh-50 transition-all`}
 					suppressContentEditableWarning={true}
 				/>
 
@@ -115,6 +129,9 @@ const InputComment = ({
 					>
 						What are your thoughts?
 					</span>
+				)}
+				{isSubmitting && (
+					<div className="absolute inset-0 bg-light-dark/50 z-10 flex items-center justify-center pointer-events-none rounded-sm"></div>
 				)}
 			</div>
 			<div ref={commentActionsRef} className="flex justify-between opacity-0">
@@ -173,18 +190,28 @@ const InputComment = ({
 						Cancel
 					</div>
 					<button
-						disabled={comment.length === 0}
+						disabled={comment.length === 0 || isSubmitting}
 						onClick={() => {
 							handleSubmit();
 							resetInput();
 						}}
 						className={`border px-3 p-1 disabled: rounded-2xl ${
-							comment.length === 0
+							comment.length === 0 || isSubmitting
 								? "border-[#36393b] text-[#36393b] pointer-events-none"
 								: "border-color-text-hovering text-primary"
 						}`}
 					>
-						Respond
+						{isSubmitting ? (
+							<span className="flex items-center gap-2">
+								<svg className="animate-spin h-4 w-4 text-[#36393b]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+									<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+									<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+								</svg>
+								Posting...
+							</span>
+						) : (
+							"Respond"
+						)}
 					</button>
 				</div>
 			</div>

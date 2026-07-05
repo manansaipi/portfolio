@@ -10,7 +10,7 @@ import ImageCarousel from "@components/ui/ImageCarousel/ImageCarousel";
 
 const BlogDetail = () => {
 	const handlers = useBlogDetail();
-	const { currentBlog, dataComments, handleButtonNavigation } = handlers;
+	const { currentBlog, dataComments, handleButtonNavigation, isLoading } = handlers;
 
 	const headerRef = useRef();
 	const contentRef = useRef();
@@ -21,6 +21,22 @@ const BlogDetail = () => {
 			imageRef.current.classList.remove("z-7");
 		}
 	}, [currentBlog]);
+
+	if (isLoading) {
+		return (
+			<div className="min-h-screen bg-background px-5 md:px-20 lg:px-40 2xl:px-60 pt-20 animate-pulse flex flex-col gap-8">
+				<div className="w-full h-[70vh] bg-[#2A2D30] rounded-md shadow-lg"></div>
+				<div className="h-12 w-3/4 bg-[#2A2D30] rounded-md"></div>
+				<div className="h-6 w-1/4 bg-[#2A2D30] rounded-md"></div>
+				<div className="space-y-4 mt-8">
+					<div className="h-4 w-full bg-[#2A2D30] rounded-md"></div>
+					<div className="h-4 w-full bg-[#2A2D30] rounded-md"></div>
+					<div className="h-4 w-full bg-[#2A2D30] rounded-md"></div>
+					<div className="h-4 w-3/4 bg-[#2A2D30] rounded-md"></div>
+				</div>
+			</div>
+		);
+	}
 
 	if (!currentBlog) {
 		return (

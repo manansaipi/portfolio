@@ -16,6 +16,7 @@ const CommentSection = ({ comments, handlers }) => {
 		setComment,
 		handleNameEditToggle,
 		handleSubmitRespond,
+		isSubmittingComment,
 	} = handlers;
 
 	return (
@@ -64,6 +65,7 @@ const CommentSection = ({ comments, handlers }) => {
 					comment={comment}
 					setComment={setComment}
 					handleSubmit={handleSubmitRespond}
+					isSubmitting={isSubmittingComment}
 				/>
 			</div>
 

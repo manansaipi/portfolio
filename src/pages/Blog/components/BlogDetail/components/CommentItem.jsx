@@ -34,6 +34,7 @@ const CommentItem = ({
 		handleReplySubmit,
 		replyComment,
 		setReplyComment,
+		submittingReplyId,
 	} = handlers;
 
 	return (
@@ -121,22 +122,17 @@ const CommentItem = ({
 				<div className="mt-5">
 					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
 						<img src={isAdmin ? abdulImg : resolveImg(authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
-						{isEditingName ? (
-							<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} onBlur={handleNameEditToggle} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleNameEditToggle(); } }} autoFocus className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none" />
-						) : (
-							<>
-								<span className="text-md text-primary ">{userName}</span>
-								<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-									<MdEdit size={15} /> <div className="text-sm">Edit</div>
-								</div>
-							</>
-						)}
+						<span className="text-md text-primary ">{userName}</span>
+						<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+							<MdEdit size={15} /> <div className="text-sm">Edit</div>
+						</div>
 					</div>
 					<InputComment
 						comment={replyComment}
 						setComment={setReplyComment}
 						handleSubmit={() => handleReplySubmit(commentObj.id)}
 						onCancel={() => { setReplyingTo(null); setReplyComment(""); }}
+						isSubmitting={submittingReplyId === commentObj.id}
 						autoFocus={true}
 					/>
 				</div>
