@@ -1,35 +1,16 @@
-import React, { useLayoutEffect, useRef } from "react";
-import blogs from "@constants/blogs";
+import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
-import { AppContext } from "@/App";
-import { AnimateRef } from "@utils/animationUtils";
-import gsap from "gsap";
-import { useNavigate } from "react-router";
-import { useLenis } from "lenis/react";
-import {
-	slugify,
-	handleImageNavigation,
-} from "@utils/navigationImageAnimation";
+import { useHomeBlog } from "./useHomeBlog";
+import dayjs from "dayjs";
 
 const HomeBlog = () => {
 	const {
+		blogs,
+		titleRef,
+		imageRefs,
+		onImageNavigate,
 		handleButtonNavigation,
-		entranceAnimationDone,
-		navbarRef,
-		preloaderRef,
-	} = React.useContext(AppContext);
-
-	const lenis = useLenis();
-	const navigate = useNavigate();
-	const titleRef = useRef();
-	const imageRefs = useRef([]);
-
-	useLayoutEffect(() => {
-		let ctx = gsap.context(() => {
-			AnimateRef(titleRef);
-		});
-		return () => ctx.revert();
-	}, [entranceAnimationDone]);
+	} = useHomeBlog();
 
 	return (
 		<div className="bg-light-dark  text-primary pb-20 mb:pb-30 lg:pb-50">
@@ -49,18 +30,9 @@ const HomeBlog = () => {
 					{blogs.slice(0, 2).map((blog, index) => (
 						<a
 							key={index}
-							onClick={() =>
-								handleImageNavigation(
-									`/blog/${slugify(blog.title)}`,
-									imageRefs.current[index],
-									navbarRef,
-									preloaderRef,
-									lenis,
-									navigate
-								)
-							}
+							onClick={() => onImageNavigate(blog, index)}
 							data-name="view"
-							className="group w-full"
+							className="group w-full cursor-none"
 						>
 							<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[30vh] max-h-[50vh] ">
 								<img
@@ -79,9 +51,9 @@ const HomeBlog = () => {
 
 							<div
 								data-name="view"
-								className="text-color-text-hovering  text-sm font-bold"
+								className="text-color-text-hovering  text-sm font-bold tracking-[2px] uppercase mt-2"
 							>
-								{blog.date}
+								{dayjs(blog.published_at).format("MMM D, YYYY")}
 							</div>
 						</a>
 					))}
