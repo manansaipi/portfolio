@@ -6,7 +6,8 @@ const InputComment = ({
 	comment,
 	setComment,
 	handleSubmit,
-	onCancel
+	onCancel,
+	autoFocus = false
 }) => {
 	const inputCommentRef = useRef();
 	const inputCommentContainer = useRef();
@@ -14,14 +15,23 @@ const InputComment = ({
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
-			gsap.to(inputCommentContainer.current, { height: "18vh", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { minHeight: "18vh", height: "auto", duration: 0.3 });
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
-			gsap.to(inputCommentContainer.current, { height: "6vh", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { minHeight: "6vh", height: "6vh", duration: 0.3 });
 			if (onCancel) onCancel();
 		}
 	}
+
+	useEffect(() => {
+		if (autoFocus && inputCommentRef.current) {
+			handleClickComment("open");
+			setTimeout(() => {
+				inputCommentRef.current.focus();
+			}, 100);
+		}
+	}, [autoFocus]);
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderLine, setIsUnderLine] = useState(false);
@@ -87,11 +97,11 @@ const InputComment = ({
 							resetInput();
 						}
 					}}
-					className={`w-full resize-none scroll- py-2 cursor-none placeholder:text-color-text-hovering ${
+					className={`w-full max-h-[30vh] overflow-y-auto resize-none py-2 cursor-none placeholder:text-color-text-hovering ${
 						isBold ? "placeholder:font-semibold" : ""
 					} ${
 						isItalic ? "placeholder:italic" : ""
-					} text-sm border border-light-dark rounded-sm outline-none focus:heigh-50 transition-all`}
+					} text-sm border border-light-dark rounded-sm outline-none transition-all`}
 					suppressContentEditableWarning={true}
 				/>
 

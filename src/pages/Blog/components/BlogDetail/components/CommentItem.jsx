@@ -137,6 +137,7 @@ const CommentItem = ({
 						setComment={setReplyComment}
 						handleSubmit={() => handleReplySubmit(commentObj.id)}
 						onCancel={() => { setReplyingTo(null); setReplyComment(""); }}
+						autoFocus={true}
 					/>
 				</div>
 			)}
