@@ -1,4 +1,4 @@
-import authorImg from "@assets/img/author/Matteo.jpg";
+import authorImg from "@assets/img/author/no_profile.jpeg";
 
 const comments = [
     {

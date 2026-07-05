@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
-import authorImg from "@assets/img/author/Matteo.jpg";
+import authorImg from "@assets/img/author/no_profile.jpeg";
 import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
 import {
 	slugify,
@@ -65,10 +65,8 @@ const AllBlog = () => {
 								} mb-5`}
 							>
 								<div className="w-full text-3xl lg:text-4xl">{blog.title}</div>
-								<div className="w-full text-lg text-color-text-hovering">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-									Accusamus, omnis. Lorem ipsum dolor sit amet. Lorem ipsum
-									dolor sit amet.
+								<div className="w-full text-lg text-color-text-hovering line-clamp-3">
+									{blog.content ? blog.content.replace(/<[^>]*>?/gm, '') : "No content available."}
 								</div>
 							</div>
 

@@ -12,6 +12,28 @@ const Certificate = () => {
 	const { handleButtonNavigation } = React.useContext(AppContext);
 	const { entranceAnimationDone } = React.useContext(AppContext);
 
+	const [certificates, setCertificates] = React.useState([]);
+
+	React.useEffect(() => {
+		const fetchCerts = async () => {
+			try {
+				const { getCertificates } = await import("@services/adminService");
+				const data = await getCertificates();
+				// Map description to desc to be compatible with existing components
+				const mappedData = data.map(c => ({
+					...c,
+					desc: c.description,
+					// resolve backend URL for uploaded images
+					img: c.img?.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${c.img}` : c.img
+				}));
+				setCertificates(mappedData);
+			} catch (e) {
+				console.error("Failed to load certificates:", e);
+			}
+		};
+		fetchCerts();
+	}, []);
+
 	const certTitle = useRef();
 	const certDesc = useRef();
 	const imageContainerRef = useRef();
@@ -22,14 +44,7 @@ const Certificate = () => {
 		if (imageContainerRef.current) {
 			gsap.set(imageContainerRef.current, { scale: 0 });
 		}
-
-		// let ctx = gsap.context(() => {
-		// 	AnimateRef(certTitle);
-		// 	AnimateRef(certDesc);
-		// });
-
-		// return () => ctx.revert();
-	}, [entranceAnimationDone]);
+	}, [entranceAnimationDone, certificates]);
 
 	function handleHover(eventName, index) {
 		if (eventName == "enter") {

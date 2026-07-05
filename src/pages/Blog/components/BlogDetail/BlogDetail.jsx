@@ -20,7 +20,9 @@ import {
 } from "@services/postService.js";
 import dayjs from "dayjs";
 import { MdVerified } from "react-icons/md";
-import authorImgDefault from "@assets/img/author/Matteo.jpg";
+import authorImgDefault from "@assets/img/author/no_profile.jpeg";
+import abdulImg from "@assets/img/author/abdulmannansaipi.png";
+import { useToast } from "@components/ui/Toast/ToastProvider";
 
 const BlogDetail = () => {
 	const { blogId } = useParams();
@@ -33,15 +35,22 @@ const BlogDetail = () => {
 	const contentRef = useRef();
 	const imageRef = useRef();
 
+	const toast = useToast();
+
 	const [currentBlog, setCurrentBlog] = useState(null);
 	const [isEditingName, setIsEditingName] = useState(false);
 	const [userName, setUserName] = useState(() => {
+		if (localStorage.getItem("isAdmin") === "true") {
+			return "Abdul Mannan Saipi";
+		}
 		const storedName = localStorage.getItem("commentUserName");
 		return storedName ? storedName : "Anonymous";
 	});
 	const [comment, setComment] = useState("");
 	const [replyComment, setReplyComment] = useState("");
 	const [replyingTo, setReplyingTo] = useState(null);
+	const [editingComment, setEditingComment] = useState(null);
+	const [editContent, setEditContent] = useState("");
 	
 	const [likedComments, setLikedComments] = useState(() => {
 		const storedLikes = localStorage.getItem("likedComments");
@@ -52,14 +61,44 @@ const BlogDetail = () => {
 		localStorage.setItem("likedComments", JSON.stringify(likedComments));
 	}, [likedComments]);
 
+	useEffect(() => {
+		if (isAdmin) {
+			setUserName("Abdul Mannan Saipi");
+		} else {
+			const storedName = localStorage.getItem("commentUserName");
+			setUserName(storedName ? storedName : "Anonymous");
+		}
+	}, [isAdmin]);
+
 	const handleDeleteComment = async (commentId) => {
 		if (!window.confirm("Are you sure you want to delete this comment?")) return;
 		try {
 			const { deleteComment } = await import("@services/adminService");
 			await deleteComment(commentId);
 			if (currentBlog) fetchData(currentBlog.id);
+			toast.success("Comment deleted successfully");
 		} catch (error) {
 			console.error("Error deleting comment:", error);
+			toast.error("Failed to delete comment");
+		}
+	};
+
+	const handleEditComment = (commentObj) => {
+		setEditingComment(commentObj.id);
+		setEditContent(commentObj.content);
+	};
+
+	const handleSaveEdit = async (commentId) => {
+		try {
+			const { updateComment } = await import("@services/adminService");
+			await updateComment(commentId, { content: editContent });
+			setEditingComment(null);
+			setEditContent("");
+			if (currentBlog) fetchData(currentBlog.id);
+			toast.success("Comment updated successfully");
+		} catch (error) {
+			console.error("Error updating comment:", error);
+			toast.error("Failed to update comment");
 		}
 	};
 
@@ -187,21 +226,38 @@ const BlogDetail = () => {
 		<div key={commentObj.id} className={`mb-10 ${isReply ? 'ml-10 border-l border-[#333] pl-5' : ''}`}>
 			<div className="flex items-center gap-3 group">
 				<img
-					src={resolveImg(commentObj.profile_img, authorImgDefault)}
+					src={commentObj.is_author ? abdulImg : resolveImg(commentObj.profile_img, authorImgDefault)}
 					alt="author"
 					className="h-8 w-8 rounded-full object-cover"
 				/>
 				<div className="flex flex-col">
 					<div className="flex flex-row items-center gap-2">
 						<span className="text-md text-primary ">{commentObj.username}</span>
-						{commentObj.isVerified && <MdVerified size={15} />}
+						{commentObj.is_author && <MdVerified size={15} />}
 					</div>
 					<span className="text-xs text-color-text-hovering">
 						{dayjs(commentObj.created_at).format("ddd, DD MMM YYYY HH:mm")}
 					</span>
 				</div>
 			</div>
-			<div className="mt-3" dangerouslySetInnerHTML={{ __html: commentObj.content }}></div>
+			<div className="mt-3">
+				{editingComment === commentObj.id ? (
+					<div className="flex flex-col gap-2">
+						<textarea
+							value={editContent}
+							onChange={(e) => setEditContent(e.target.value)}
+							className="bg-transparent border border-color-text-hovering rounded p-2 text-primary outline-none resize-none h-20 cursor-none"
+							autoFocus
+						/>
+						<div className="flex gap-2">
+							<span className="text-xs px-3 py-1 bg-white text-black rounded font-semibold cursor-none" onClick={() => handleSaveEdit(commentObj.id)}>Save</span>
+							<span className="text-xs px-3 py-1 border border-color-text-hovering rounded cursor-none" onClick={() => setEditingComment(null)}>Cancel</span>
+						</div>
+					</div>
+				) : (
+					<div dangerouslySetInnerHTML={{ __html: commentObj.content }}></div>
+				)}
+			</div>
 			<div className="flex mt-2 gap-5 text-color-text-hovering items-center h-5">
 				<div
 					className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors"
@@ -229,12 +285,20 @@ const BlogDetail = () => {
 					<span className="text-sm font-semibold">Reply</span>
 				</div>
 				{isAdmin && (
-					<div
-						className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors ml-4"
-						onClick={() => handleDeleteComment(commentObj.id)}
-					>
-						<span className="text-sm font-semibold">Delete</span>
-					</div>
+					<>
+						<div
+							className="flex items-center gap-2 cursor-none hover:text-blue-400 transition-colors"
+							onClick={() => handleEditComment(commentObj)}
+						>
+							<span className="text-sm font-semibold">Edit</span>
+						</div>
+						<div
+							className="flex items-center gap-2 cursor-none hover:text-red-500 transition-colors"
+							onClick={() => handleDeleteComment(commentObj.id)}
+						>
+							<span className="text-sm font-semibold">Delete</span>
+						</div>
+					</>
 				)}
 			</div>
 			
@@ -242,7 +306,7 @@ const BlogDetail = () => {
 			{replyingTo === commentObj.id && (
 				<div className="mt-5">
 					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
-						<img src={resolveImg(currentBlog.author_img, authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
+						<img src={isAdmin ? abdulImg : resolveImg(authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
 						{isEditingName ? (
 							<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} onBlur={handleNameEditToggle} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleNameEditToggle(); } }} autoFocus className="bg-transparent border-b text-primary text-md focus:outline-none cursor-none" />
 						) : (
@@ -321,14 +385,9 @@ const BlogDetail = () => {
 				{/* Content */}
 				<div
 					ref={contentRef}
-					className="text-lg leading-relaxed text-primary"
+					className="text-lg leading-relaxed text-primary blog-content-html"
 				>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-						lacinia odio vitae vestibulum vestibulum. Cras venenatis euismod
-						malesuada. Nullam ac erat ante. Integer varius nisi in tellus
-						tincidunt, id pulvinar felis efficitur.
-					</p>
+					<div dangerouslySetInnerHTML={{ __html: currentBlog.content }} />
 				</div>
 			</div>
 
@@ -347,7 +406,7 @@ const BlogDetail = () => {
 						className="flex items-center gap-3 group cursor-none"
 					>
 						<img
-							src={resolveImg(currentBlog.author_img, authorImgDefault)}
+							src={isAdmin ? abdulImg : resolveImg(authorImgDefault)}
 							alt="author"
 							className="h-8 w-8 rounded-full object-cover"
 						/>

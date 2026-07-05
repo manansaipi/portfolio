@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { getWritings, deleteWriting, createWriting, updateWriting, uploadFile } from "@services/adminService";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
+import { useToast } from "@components/ui/Toast/ToastProvider";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
+const quillModules = {
+    toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean']
+    ],
+};
 
 const AdminWritings = () => {
     const [writings, setWritings] = useState([]);
-    const [editing, setEditing] = useState(null); // null if creating, object if editing
+    const [editing, setEditing] = useState(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const toast = useToast();
 
     const [formData, setFormData] = useState({ title: "", author: "", image: "", content: "" });
 
@@ -22,6 +37,7 @@ const AdminWritings = () => {
         if (!window.confirm("Delete this writing?")) return;
         await deleteWriting(id);
         fetchWritings();
+        toast.success("Writing deleted successfully");
     };
 
     const handleEdit = (w) => {
@@ -40,17 +56,24 @@ const AdminWritings = () => {
         if (!e.target.files[0]) return;
         const res = await uploadFile(e.target.files[0]);
         setFormData(prev => ({ ...prev, image: res.url }));
+        toast.success("Image uploaded!");
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (editing) {
-            await updateWriting(editing.id, formData);
-        } else {
-            await createWriting(formData);
+        try {
+            if (editing) {
+                await updateWriting(editing.id, formData);
+                toast.success("Writing updated successfully");
+            } else {
+                await createWriting(formData);
+                toast.success("Writing created successfully");
+            }
+            setIsFormOpen(false);
+            fetchWritings();
+        } catch (err) {
+            toast.error("Failed to save writing");
         }
-        setIsFormOpen(false);
-        fetchWritings();
     };
 
     return (
@@ -70,10 +93,22 @@ const AdminWritings = () => {
                         <input type="file" onChange={handleImageUpload} />
                         {formData.image && <img src={formData.image.startsWith("/static") ? `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"}${formData.image}` : formData.image} alt="preview" className="h-20 w-32 object-cover" />}
                     </div>
-                    <textarea className="bg-transparent border p-2 outline-none h-32" placeholder="Content (HTML allowed)" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} />
-                    <div className="flex gap-4">
-                        <button type="submit" className="px-4 py-2 bg-white text-black font-bold rounded">Save</button>
-                        <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 border rounded">Cancel</button>
+                    
+                    <div className="admin-quill-editor">
+                        <label className="mb-2 block">Content:</label>
+                        <ReactQuill
+                            theme="snow"
+                            value={formData.content}
+                            onChange={(value) => setFormData({...formData, content: value})}
+                            modules={quillModules}
+                            className="bg-white text-black rounded"
+                            style={{ minHeight: "200px" }}
+                        />
+                    </div>
+
+                    <div className="flex gap-4 mt-4">
+                        <button type="submit" className="px-4 py-2 bg-white text-black font-bold rounded cursor-none">Save</button>
+                        <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 border rounded cursor-none">Cancel</button>
                     </div>
                 </form>
             )}
@@ -85,7 +120,7 @@ const AdminWritings = () => {
                             <div className="font-bold">{w.title}</div>
                             <div className="text-sm opacity-50">By {w.author} - {new Date(w.published_at).toLocaleDateString()}</div>
                         </div>
-                        <div className="flex gap-4 cursor-pointer">
+                        <div className="flex gap-4 cursor-none">
                             <div onClick={() => handleEdit(w)} className="hover:text-blue-400">Edit</div>
                             <div onClick={() => handleDelete(w.id)} className="hover:text-red-400">Delete</div>
                         </div>

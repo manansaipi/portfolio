@@ -19,6 +19,7 @@ export const deleteCertificate = async (id) => (await api.delete(`/api/certifica
 
 // --- COMMENTS ---
 export const deleteComment = async (id) => (await api.delete(`/api/comments/${id}`)).data;
+export const updateComment = async (id, data) => (await api.put(`/api/comments/${id}`, data)).data;
 
 // --- UPLOAD ---
 export const uploadFile = async (file) => {

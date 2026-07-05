@@ -31,7 +31,7 @@ const HoveredImages = ({ imageContainerRef, imageHolderRef, datas, imageRefs }) 
                 {datas.map((data, index) => (
                     <div
                         key={index}
-                        className={` ${data.bgColor} w-[400px] h-[350px]`}
+                        className={` ${data.bgColor || data.bg_color} w-[400px] h-[350px]`}
                     >
                         <div className="px-10 w-full h-full flex items-center justify-center">
                             <img

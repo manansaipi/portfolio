@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getCertificates, deleteCertificate, createCertificate, uploadFile } from "@services/adminService";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
+import { useToast } from "@components/ui/Toast/ToastProvider";
 
 const AdminCertificates = () => {
+    const toast = useToast();
     const [items, setItems] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -18,6 +20,7 @@ const AdminCertificates = () => {
         if (!window.confirm("Delete this certificate?")) return;
         await deleteCertificate(id);
         fetchItems();
+        toast.success("Certificate deleted successfully");
     };
 
     const handleAddNew = () => {
@@ -33,9 +36,14 @@ const AdminCertificates = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createCertificate(formData);
-        setIsFormOpen(false);
-        fetchItems();
+        try {
+            await createCertificate(formData);
+            setIsFormOpen(false);
+            fetchItems();
+            toast.success("Certificate created successfully");
+        } catch (err) {
+            toast.error("Failed to create certificate");
+        }
     };
 
     return (

@@ -30,7 +30,7 @@ const Works = [
 	},
 	{
 		id: 1,
-		company: "LG Sinar Mas",
+		company: "LG Sinar Mas",	
 		role: "Software Engineer",
 		desc: "From December 2024 to December 2025, I've been working as a Software Engineer at LG Sinar Mas Technology Solutions, where I contribute to the development of smart factory systems for EV (Electric Vehicle) battery manufacturing across multiple countries.",
 		startDate: "Dec 2024",

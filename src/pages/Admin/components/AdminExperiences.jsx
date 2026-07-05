@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getExperiences, deleteExperience, createExperience, updateExperience, uploadFile } from "@services/adminService";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
+import { useToast } from "@components/ui/Toast/ToastProvider";
 
 const AdminExperiences = () => {
+    const toast = useToast();
     const [items, setItems] = useState([]);
     const [editing, setEditing] = useState(null); 
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -19,6 +21,7 @@ const AdminExperiences = () => {
         if (!window.confirm("Delete this experience?")) return;
         await deleteExperience(id);
         fetchItems();
+        toast.success("Experience deleted successfully");
     };
 
     const handleEdit = (w) => {
@@ -45,18 +48,25 @@ const AdminExperiences = () => {
         if (!e.target.files[0]) return;
         const res = await uploadFile(e.target.files[0]);
         setFormData(prev => ({ ...prev, img: res.url }));
+        toast.success("Image uploaded!");
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = { ...formData };
-        if (editing) {
-            await updateExperience(editing.id, payload);
-        } else {
-            await createExperience(payload);
+        try {
+            if (editing) {
+                await updateExperience(editing.id, payload);
+                toast.success("Experience updated successfully");
+            } else {
+                await createExperience(payload);
+                toast.success("Experience created successfully");
+            }
+            setIsFormOpen(false);
+            fetchItems();
+        } catch (err) {
+            toast.error("Failed to save experience");
         }
-        setIsFormOpen(false);
-        fetchItems();
     };
 
     return (
