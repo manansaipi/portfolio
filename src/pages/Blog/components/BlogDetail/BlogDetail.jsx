@@ -107,9 +107,9 @@ const BlogDetail = () => {
 				{/* Content */}
 				<div
 					ref={contentRef}
-					className="text-lg leading-relaxed text-primary blog-content-html"
+					className="text-lg leading-relaxed text-primary blog-content-html break-words overflow-hidden"
 				>
-					<div dangerouslySetInnerHTML={{ __html: currentBlog.content }} />
+					<div dangerouslySetInnerHTML={{ __html: currentBlog.content.replace(/&nbsp;/g, ' ') }} />
 				</div>
 			</div>
 
