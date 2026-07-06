@@ -62,3 +62,14 @@ body::-webkit-scrollbar {
     --color-text-hovering: 127, 127, 127;
     --light-dark: 230, 230, 230;
 }
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradientMove 3s ease infinite;
+}

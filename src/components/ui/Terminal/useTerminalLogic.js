@@ -3,18 +3,20 @@ import { AppContext } from '../../../App';
 import { getAllWorks } from '@services/workService';
 import { getAllWritings } from '@services/postService';
 import { getCertificates } from '@services/adminService';
+import { askAI } from '@services/aiService';
 
 const AVAILABLE_COMMANDS = [
-    '/help', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
+    '/help', '/ask', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
     '/certificates', '/clear', '/theme', 'whoami', 'date'
 ];
 
 export const useTerminalLogic = () => {
     const { toggleTheme, theme } = useContext(AppContext);
     
+    const [isAiMode, setIsAiMode] = useState(false);
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
-        { type: 'system', content: 'Welcome to Portfolio Terminal v2.0' },
+        { type: 'system', content: 'Welcome to Manan Saipi\'s Portfolio Terminal v2.0' },
         { type: 'system', content: 'Type /help to see available commands.' },
     ]);
 
@@ -24,26 +26,94 @@ export const useTerminalLogic = () => {
     const suggestion = matches.length > 0 ? matches[0] : '';
 
     const handleCommand = async (e) => {
+        if (e.ctrlKey && e.key.toLowerCase() === 'c') {
+            if (isAiMode) {
+                setIsAiMode(false);
+                setInput('');
+                setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
+                return;
+            }
+        }
+
         if (e.key === 'Tab') {
             e.preventDefault();
             if (suggestion) {
                 setInput(suggestion);
             }
         } else if (e.key === 'Enter') {
+            const currentPrompt = isAiMode ? 'ai@manansaipis-portfolio:~$ ' : 'guest@manansaipis-portfolio:~$ ';
+            
             if (!input.trim()) {
-                setHistory((prev) => [...prev, { type: 'command', content: `guest@portfolio:~$ ` }]);
+                setHistory((prev) => [...prev, { type: 'command', content: currentPrompt }]);
                 return;
             }
 
             const command = input.trim().toLowerCase();
+            const originalInput = input.trim();
             setInput('');
-            setHistory((prev) => [...prev, { type: 'command', content: `guest@portfolio:~$ ${command}` }]);
+            setHistory((prev) => [...prev, { type: 'command', content: `${currentPrompt}${originalInput}` }]);
+
+            if (isAiMode) {
+                if (command === '/exit') {
+                    setIsAiMode(false);
+                    setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
+                    return;
+                }
+
+                setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                try {
+                    const response = await askAI(originalInput);
+                    setHistory((prev) => {
+                        const newHistory = [...prev];
+                        newHistory.pop(); // Remove "Thinking..."
+                        const lines = response.split('\n');
+                        return [...newHistory, ...lines.map(line => ({ type: 'ai-response', content: line || ' ' }))];
+                    });
+                } catch (error) {
+                    setHistory((prev) => {
+                        const newHistory = [...prev];
+                        newHistory.pop();
+                        return [...newHistory, { type: 'error', content: 'Failed to connect to AI.' }];
+                    });
+                }
+                return;
+            }
+
+            if (command.startsWith('/ask')) {
+                setIsAiMode(true);
+                setHistory((prev) => [
+                    ...prev, 
+                    { type: 'system', content: 'Entered AI mode. You can now chat freely! Type /exit or press Ctrl+C to leave.' }
+                ]);
+                
+                const question = originalInput.substring(4).trim();
+                if (question) {
+                    setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                    try {
+                        const response = await askAI(question);
+                        setHistory((prev) => {
+                            const newHistory = [...prev];
+                            newHistory.pop();
+                            const lines = response.split('\n');
+                            return [...newHistory, ...lines.map(line => ({ type: 'ai-response', content: line || ' ' }))];
+                        });
+                    } catch (error) {
+                        setHistory((prev) => {
+                            const newHistory = [...prev];
+                            newHistory.pop();
+                            return [...newHistory, { type: 'error', content: 'Failed to connect to AI.' }];
+                        });
+                    }
+                }
+                return;
+            }
 
             switch (command) {
                 case '/help':
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: 'Available commands:' },
+                        { type: 'highlight', content: '/ask [msg]    - Enter AI Chat mode to ask about me' },
                         { type: 'output', content: '  /about        - Brief information about me' },
                         { type: 'output', content: '  /experience   - Fetch my latest work experiences' },
                         { type: 'output', content: '  /education    - My educational background' },
@@ -151,7 +221,12 @@ export const useTerminalLogic = () => {
                     setHistory((prev) => [...prev, { type: 'output', content: 'guest' }]);
                     break;
                 case 'date':
-                    setHistory((prev) => [...prev, { type: 'output', content: new Date().toString() }]);
+                    const jakartaDate = new Date().toLocaleString('en-US', { 
+                        timeZone: 'Asia/Jakarta',
+                        weekday: 'short', month: 'short', day: '2-digit', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+                    }) + ' WIB (Jakarta)';
+                    setHistory((prev) => [...prev, { type: 'output', content: jakartaDate }]);
                     break;
                 default:
                     setHistory((prev) => [
@@ -167,7 +242,8 @@ export const useTerminalLogic = () => {
         input,
         setInput,
         history,
-        suggestion,
-        handleCommand
+        suggestion: isAiMode ? '' : suggestion, // disable suggestions in AI mode
+        handleCommand,
+        isAiMode
     };
 };
