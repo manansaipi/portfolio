@@ -16,11 +16,11 @@ const InputComment = ({
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
-			gsap.to(inputCommentContainer.current, { height: "18vh", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { minHeight: "18vh", duration: 0.3 });
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
-			gsap.to(inputCommentContainer.current, { height: "6vh", duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { minHeight: "6vh", duration: 0.3 });
 			if (onCancel) onCancel();
 		}
 	}
@@ -78,7 +78,7 @@ const InputComment = ({
 	return (
 		<div
 			ref={inputCommentContainer}
-			className="w-full h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
+			className="w-full min-h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
 		>
 			<div className=" relative w-full">
 				<div
@@ -167,8 +167,8 @@ const InputComment = ({
 						<GrItalic size={22} />
 					</div>
 					<div
-						onClick={() => {
-							inputCommentRef.current.focus();
+						onMouseDown={(e) => {
+							e.preventDefault(); // Prevent losing focus
 							document.execCommand("underline");
 							setIsUnderLine(document.queryCommandState("underline"));
 						}}
