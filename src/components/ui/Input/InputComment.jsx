@@ -20,8 +20,13 @@ const InputComment = ({
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
 		} else {
 			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
-			gsap.to(inputCommentContainer.current, { minHeight: "6vh", duration: 0.3 });
-			if (onCancel) onCancel();
+			gsap.to(inputCommentContainer.current, { 
+				minHeight: "6vh", 
+				duration: 0.3,
+				onComplete: () => {
+					if (onCancel) onCancel();
+				}
+			});
 		}
 	}
 	const [isBold, setIsBold] = useState(false);
