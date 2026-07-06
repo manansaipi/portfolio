@@ -131,7 +131,7 @@ export const useTerminalLogic = () => {
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: 'Hello! I am Abdul Mannan Saipi.' },
-                        { type: 'output', content: 'I am a Software Engineer proficient in full-stack web, mobile, and machine learning development.' },
+                        { type: 'output', content: 'I am a Software Engineer with over 2 years of experience, proficient in full-stack web, mobile, and machine learning development.' },
                         { type: 'output', content: 'Currently working as a Software Engineer at Samsung R&D Indonesia.' },
                         { type: 'output', content: 'I turn problems into products. Every line of code is written with clarity and purpose.' }
                     ]);

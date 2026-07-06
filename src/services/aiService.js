@@ -13,6 +13,7 @@ If a user asks how to leave, exit, or stop chatting with you, let them know they
 
 --- Context about Abdul Mannan Saipi ---
 Role: Software Engineer
+Experience Level: Over 2 years of professional experience
 Location: Central Jakarta, Indonesia
 Contact: abdulmannan.saipi@gmail.com
 

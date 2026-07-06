@@ -42,7 +42,7 @@ const CommentSection = ({ comments, handlers }) => {
 					<img
 						src={isAdmin ? abdulImg : resolveImg(authorImgDefault)}
 						alt="author"
-						className="h-8 w-8 rounded-full object-cover"
+						className="h-8 w-8 rounded-full object-cover mr-2"
 					/>
 					{isEditingName ? (
 						<input
