@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
 import { MdVerified, MdEdit } from "react-icons/md";
@@ -32,10 +32,12 @@ const CommentItem = ({
 		handleDeleteComment,
 		handleNameEditToggle,
 		handleReplySubmit,
-		replyComment,
-		setReplyComment,
+		handleReplySubmit,
 		submittingReplyId,
 	} = handlers;
+
+	const [isReplyBoxVisible, setIsReplyBoxVisible] = useState(false);
+	const [localReplyComment, setLocalReplyComment] = useState("");
 
 	return (
 		<div className={`mb-10 ${isReply ? 'ml-10 border-l border-[#333] pl-5' : ''}`}>
@@ -90,6 +92,7 @@ const CommentItem = ({
 				<div
 					className="flex items-center gap-2 cursor-none hover:text-primary transition-colors"
 					onClick={() => {
+						setIsReplyBoxVisible(true);
 						if (replyingTo === commentObj.id) {
 							setReplyingTo(null);
 						} else {
@@ -118,7 +121,7 @@ const CommentItem = ({
 			</div>
 			
 			{/* Reply Input Box */}
-			{replyingTo === commentObj.id && (
+			{isReplyBoxVisible && (
 				<div className="mt-5">
 					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
 						<img src={isAdmin ? abdulImg : resolveImg(authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
@@ -128,12 +131,12 @@ const CommentItem = ({
 						</div>
 					</div>
 					<InputComment
-						comment={replyComment}
-						setComment={setReplyComment}
-						handleSubmit={() => handleReplySubmit(commentObj.id)}
-						onCancel={() => { setReplyingTo(null); setReplyComment(""); }}
+						comment={localReplyComment}
+						setComment={setLocalReplyComment}
+						handleSubmit={() => handleReplySubmit(commentObj.id, localReplyComment, () => setLocalReplyComment(""))}
+						onCancel={() => { setReplyingTo(null); }}
 						isSubmitting={submittingReplyId === commentObj.id}
-						autoFocus={true}
+						autoFocus={replyingTo === commentObj.id}
 					/>
 				</div>
 			)}

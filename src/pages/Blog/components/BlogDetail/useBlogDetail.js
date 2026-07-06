@@ -20,7 +20,6 @@ export const useBlogDetail = () => {
 	const [currentBlog, setCurrentBlog] = useState(location.state?.blog || null);
 	const [dataComments, setDataComments] = useState([]);
 	const [comment, setComment] = useState("");
-	const [replyComment, setReplyComment] = useState("");
 	const [replyingTo, setReplyingTo] = useState(null);
 	const [editingComment, setEditingComment] = useState(null);
 	const [editContent, setEditContent] = useState("");
@@ -171,13 +170,12 @@ export const useBlogDetail = () => {
 		}
 	}
 
-	async function handleReplySubmit(parentId) {
+	async function handleReplySubmit(parentId, commentInput, onSuccess) {
 		try {
 			setSubmittingReplyId(parentId);
-			const commentInput = replyComment;
 			await addComment(currentBlog.id, commentInput, userName, parentId);
 			await fetchData(currentBlog.id);
-			setReplyComment("");
+			if (onSuccess) onSuccess();
 			setReplyingTo(null);
 		} catch (error) {
 			console.error("Error submitting response:", error);
@@ -194,8 +192,6 @@ export const useBlogDetail = () => {
 		setUserName,
 		comment,
 		setComment,
-		replyComment,
-		setReplyComment,
 		replyingTo,
 		setReplyingTo,
 		editingComment,

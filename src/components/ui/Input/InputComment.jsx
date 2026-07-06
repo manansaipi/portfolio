@@ -83,7 +83,7 @@ const InputComment = ({
 	return (
 		<div
 			ref={inputCommentContainer}
-			className="w-full min-h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
+			className="w-full h-[1vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
 		>
 			<div className=" relative w-full">
 				<div
