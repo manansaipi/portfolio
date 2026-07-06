@@ -19,18 +19,25 @@ const CommentSection = ({ comments, handlers }) => {
 		isSubmittingComment,
 	} = handlers;
 
+	const countComments = (commentsList) => {
+		return commentsList.reduce((acc, c) => {
+			return acc + 1 + (c.replies ? countComments(c.replies) : 0);
+		}, 0);
+	};
+	const totalComments = countComments(comments);
+
 	return (
 		<div className="px-5 md:px-20 lg:px-40 2xl:px-60">
 			<div>
 				<h2 className="text-xl font-semibold my-5">
-					Responses ({comments.length})
+					Responses ({totalComments})
 				</h2>
 			</div>
 			{/* Input comment */}
 			<div>
 				<div
 					onClick={handleNameEditToggle}
-					className="flex items-center gap-3 group mb-2 cursor-none"
+					className="flex items-center gap-1 group mb-2 cursor-none"
 				>
 					<img
 						src={isAdmin ? abdulImg : resolveImg(authorImgDefault)}
@@ -54,9 +61,12 @@ const CommentSection = ({ comments, handlers }) => {
 						/>
 					) : (
 						<>
-							<span className="text-md text-primary ">{userName}</span>
-							<div className="flex gap-1 items-center text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-								<MdEdit size={15} /> <div className="text-sm">Edit</div>
+							<div className="flex gap-2 items-center">
+								<span className="text-md text-primary ">{userName} </span>
+								<MdEdit className="text-color-text-hovering" size={15} /> 
+							</div>
+							<div className="text-color-text-hovering opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+								<div className="text-sm">Edit</div>
 							</div>
 						</>
 					)}
