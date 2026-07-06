@@ -19,12 +19,21 @@ const TerminalFloating = () => {
     const containerRef = useRef(null);
 
     // Initial default size and position for Rnd
-    const initialSize = { width: 1260, height: 720 };
-    const [size, setSize] = useState(initialSize);
-    const [position, setPosition] = useState({ 
-        x: typeof window !== 'undefined' ? window.innerWidth / 2 - 300 : 0, 
-        y: typeof window !== 'undefined' ? window.innerHeight / 2 - 200 : 0 
-    });
+    const getInitialSize = () => {
+        if (typeof window !== 'undefined') {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (w < 768) return { width: w - 32, height: Math.min(500, h * 0.7) }; // Mobile
+            if (w < 1300) return { width: Math.max(600, w * 0.8), height: h * 0.7 }; // Tablet / Small Desktop
+            return { width: 1260, height: 720 }; // Large Desktop
+        }
+        return { width: 1260, height: 720 };
+    };
+
+    const [size, setSize] = useState(getInitialSize());
+    
+    // We update position whenever it is opened so initial state can just be 0
+    const [position, setPosition] = useState({ x: 0, y: 0 });
 
     // Close terminal on click outside
     useEffect(() => {
@@ -97,8 +106,9 @@ const TerminalFloating = () => {
     const toggleOpen = () => {
         if (!isOpen) {
             // Extract numeric values from size string (e.g. "600px" -> 600)
-            const w = parseFloat(size.width) || 600;
-            const h = parseFloat(size.height) || 400;
+            const currentInitial = getInitialSize();
+            const w = parseFloat(size.width) || currentInitial.width;
+            const h = parseFloat(size.height) || currentInitial.height;
 
             // Reset position to center of the CURRENT viewport (accounting for scroll)
             setPosition({ 
@@ -110,10 +120,9 @@ const TerminalFloating = () => {
         setIsOpen(!isOpen);
     };
 
-    // If maximized, we bypass Rnd sizing/positioning and use fixed classes
     const terminalClasses = `
         cursor-none bg-black/75 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col overflow-hidden transition-all duration-300
-        ${isMaximized ? 'fixed inset-0 z-[100] rounded-none w-screen h-screen' : 'rounded-lg w-full h-full'}
+        ${isMaximized ? 'fixed inset-0 z-5 rounded-none w-screen h-screen' : 'rounded-lg w-full h-full'}
         ${isMinimized && !isMaximized ? 'h-[44px] !min-h-0' : ''}
     `;
 
@@ -122,7 +131,7 @@ const TerminalFloating = () => {
             {/* Floating Toggle Button */}
             <button 
                 onClick={toggleOpen}
-                className={`cursor-none terminal-toggle-btn fixed bottom-6 right-6 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl transition-all z-[90] ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
+                className={`cursor-none terminal-toggle-btn fixed bottom-6 right-6 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl transition-all z-5 ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
                 title="Open Terminal"
             >
                 <MdTerminal size={28} />
@@ -132,7 +141,7 @@ const TerminalFloating = () => {
             {isOpen && (
                 <Rnd
                     ref={rndRef}
-                    className={`z-100 ${isMaximized ? '!transform-none' : ''}`}
+                    className={`z-5 ${isMaximized ? '!transform-none' : ''}`}
                     size={isMaximized ? { width: '100%', height: '100%' } : isMinimized ? { width: size.width, height: 44 } : size}
                     position={isMaximized ? { x: 0, y: 0 } : position}
                     onDrag={(e, d) => {
@@ -159,7 +168,7 @@ const TerminalFloating = () => {
                             setPosition(position);
                         }
                     }}
-                    minWidth={300}
+                    minWidth={280}
                     minHeight={isMinimized ? 44 : 200}
                     dragHandleClassName="terminal-header"
                     disableDragging={isMaximized}
