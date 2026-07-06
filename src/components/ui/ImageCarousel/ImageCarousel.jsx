@@ -15,7 +15,7 @@ const ImageCarousel = forwardRef(({ images, autoSlideInterval = 5000, className 
             setCurrentIndex((prev) => (prev + 1) % images.length);
         }, autoSlideInterval);
         return () => clearInterval(interval);
-    }, [images, autoSlideInterval]);
+    }, [images, autoSlideInterval, currentIndex]);
 
     const prevSlide = () => {
         setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));

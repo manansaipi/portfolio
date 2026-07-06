@@ -64,7 +64,7 @@ const BlogDetail = () => {
 						ref={imageRef}
 						images={allImages}
 						className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
-						autoSlideInterval={10000}
+						autoSlideInterval={5000}
 					/>
 				) : (
 					<img

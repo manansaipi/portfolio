@@ -11,6 +11,7 @@ import Footer from "@components/layout/Footer/Footer";
 import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
 import AdminLogin from "@components/ui/AdminLogin/AdminLogin";
 import FloatingAdminButton from "@components/ui/FloatingAdminButton/FloatingAdminButton";
+import TerminalFloating from "@components/ui/Terminal/TerminalFloating";
 
 export const AppContext = React.createContext({});
 
@@ -106,6 +107,7 @@ const App = () => {
                 {entranceAnimationDone && <Footer />}
                 
                 {showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
+                <TerminalFloating />
                 <FloatingAdminButton />
             </ReactLenis>
         </AppContext.Provider>
