@@ -16,7 +16,7 @@ export const useTerminalLogic = () => {
     const [isAiMode, setIsAiMode] = useState(false);
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
-        { type: 'system', content: 'Welcome to Manan Saipi\'s Portfolio Terminal v2.0' },
+        { type: 'system', content: 'Welcome to My Portfolio Terminal' },
         { type: 'system', content: 'Type /help to see available commands.' },
     ]);
 
