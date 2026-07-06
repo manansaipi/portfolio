@@ -1,20 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef }) => {
+const renderFormattedText = (text) => {
+    if (typeof text !== 'string') return text;
+    // Split by the specific keywords, preserving them in the array
+    const parts = text.split(/(\/help|\/exit|Ctrl\+C)/gi);
+    return parts.map((part, i) => {
+        const lower = part.toLowerCase();
+        if (lower === '/help' || lower === '/exit' || lower === 'ctrl+c') {
+            return <strong key={i} className="font-bold text-white bg-white/10 px-1 rounded mx-0.5">{part}</strong>;
+        }
+        return part;
+    });
+};
+
+const TypewriterText = ({ text, delay = 15 }) => {
+    const [currentText, setCurrentText] = useState('');
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        if (currentIndex < text.length) {
+            const randomDelay = delay + Math.random() * 20;
+            const timeout = setTimeout(() => {
+                setCurrentText(prev => prev + text[currentIndex]);
+                setCurrentIndex(prev => prev + 1);
+            }, randomDelay);
+            return () => clearTimeout(timeout);
+        }
+    }, [currentIndex, delay, text]);
+
+    return <span>{currentText}</span>;
+};
+
+const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {
     return (
         <div ref={bodyRef} className="flex-1 p-4 overflow-y-auto font-mono text-sm md:text-base [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {history.map((line, i) => (
                 <div key={i} className={`mb-1.5 leading-relaxed break-words ${
                     line.type === 'command' ? 'text-white font-semibold' :
                     line.type === 'error' ? 'text-red-400' :
-                    line.type === 'system' ? 'text-green-400 opacity-80' : 'text-gray-300'
+                    line.type === 'system' ? 'text-green-400 opacity-80' : 
+                    line.type === 'highlight' ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 drop-shadow-md animate-gradient' :
+                    line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
-                    {line.content}
+                    {line.type === 'ai-response' ? (
+                        <TypewriterText text={line.content} />
+                    ) : line.type === 'command' && line.content.startsWith('ai@manansaipis-portfolio:~$') ? (
+                        <>
+                            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient">
+                                ai@manansaipis-portfolio:~$
+                            </span>
+                            <span className="ml-2">{line.content.replace('ai@manansaipis-portfolio:~$ ', '')}</span>
+                        </>
+                    ) : line.type === 'command' && line.content.startsWith('guest@manansaipis-portfolio:~$') ? (
+                        <>
+                            <span className="text-green-400">
+                                guest@manansaipis-portfolio:~$
+                            </span>
+                            <span className="ml-2">{line.content.replace('guest@manansaipis-portfolio:~$ ', '')}</span>
+                        </>
+                    ) : (
+                        renderFormattedText(line.content)
+                    )}
                 </div>
             ))}
             
             <div className="flex items-center mt-2 relative">
-                <span className="text-green-400 font-semibold mr-2 shrink-0">guest@portfolio:~$</span>
+                <span className={`${isAiMode ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient drop-shadow-md' : 'text-green-400'} font-semibold mr-2 shrink-0`}>
+                    {isAiMode ? 'ai@manansaipis-portfolio:~$' : 'guest@manansaipis-portfolio:~$' }
+                </span>
                 <div className="relative flex-1 flex items-center min-w-0">
                     <input
                         ref={inputRef}

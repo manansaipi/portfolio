@@ -30,7 +30,7 @@ const TerminalHeader = ({ setIsOpen, isMinimized, setIsMinimized, isMaximized, s
                     <MdOpenInFull className="text-black/50 opacity-0 group-hover:opacity-100 w-3 h-3" />
                 </button>
             </div>
-            <div className="text-white/50 text-xs font-mono font-medium tracking-wider pointer-events-none">guest@portfolio: ~</div>
+            <div className="text-white/50 text-xs font-mono font-medium tracking-wider pointer-events-none">guest@manansaipi-portfolio: ~</div>
             <div className="w-16"></div> {/* Spacer for centering */}
         </div>
     );

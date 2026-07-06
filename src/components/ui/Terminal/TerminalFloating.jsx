@@ -10,7 +10,7 @@ const TerminalFloating = () => {
     const [isMinimized, setIsMinimized] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
 
-    const { input, setInput, history, suggestion, handleCommand } = useTerminalLogic();
+    const { input, setInput, history, suggestion, handleCommand, isAiMode } = useTerminalLogic();
 
     const bottomRef = useRef(null);
     const bodyRef = useRef(null);
@@ -19,7 +19,7 @@ const TerminalFloating = () => {
     const containerRef = useRef(null);
 
     // Initial default size and position for Rnd
-    const initialSize = { width: 600, height: 400 };
+    const initialSize = { width: 1260, height: 720 };
     const [size, setSize] = useState(initialSize);
     const [position, setPosition] = useState({ 
         x: typeof window !== 'undefined' ? window.innerWidth / 2 - 300 : 0, 
@@ -192,6 +192,7 @@ const TerminalFloating = () => {
                                 handleCommand={handleCommand}
                                 suggestion={suggestion}
                                 bottomRef={bottomRef}
+                                isAiMode={isAiMode}
                             />
                         )}
                     </div>
