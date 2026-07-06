@@ -32,7 +32,6 @@ const CommentItem = ({
 		handleDeleteComment,
 		handleNameEditToggle,
 		handleReplySubmit,
-		handleReplySubmit,
 		submittingReplyId,
 	} = handlers;
 
