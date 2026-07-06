@@ -16,13 +16,13 @@ const InputComment = ({
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
-			gsap.to(inputCommentContainer.current, { minHeight: "18vh", duration: 0.3 });
-			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.3 });
+			gsap.to(inputCommentContainer.current, { minHeight: "18vh", duration: 0.4 });
+			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.4 });
 		} else {
-			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.3 });
+			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.4 });
 			gsap.to(inputCommentContainer.current, { 
 				minHeight: "6vh", 
-				duration: 0.3,
+				duration: 0.4,
 				onComplete: () => {
 					if (onCancel) onCancel();
 				}
@@ -83,7 +83,7 @@ const InputComment = ({
 	return (
 		<div
 			ref={inputCommentContainer}
-			className="w-full min-h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-sm bg-light-dark"
+			className="w-full h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-md bg-light-dark"
 		>
 			<div className=" relative w-full">
 				<div
