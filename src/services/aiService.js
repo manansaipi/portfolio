@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const API_KEY_1 = import.meta.env.VITE_GEMINI_API_KEY || "";
 const API_KEY_2 = import.meta.env.VITE_GEMINI_API_KEY_2 || "";
 const API_KEYS = [API_KEY_1, API_KEY_2].filter(key => key !== "");
+const MODELS = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
 
 const SYSTEM_PROMPT = `
 You are an AI assistant built into the terminal of Abdul Mannan Saipi's personal portfolio website.
@@ -78,31 +79,33 @@ export const askAI = async (question) => {
         return "System error: Gemini API key is missing. The site owner needs to add VITE_GEMINI_API_KEY to their environment variables.";
     }
 
-    // Fallback system: try each key sequentially
+    // Fallback system: try each key and each model sequentially
     for (const key of API_KEYS) {
-        try {
-            const genAI = new GoogleGenerativeAI(key);
-            const model = genAI.getGenerativeModel({ 
-                model: "gemini-2.5-flash",
-                systemInstruction: SYSTEM_PROMPT 
-            });
+        for (const modelName of MODELS) {
+            try {
+                const genAI = new GoogleGenerativeAI(key);
+                const model = genAI.getGenerativeModel({ 
+                    model: modelName,
+                    systemInstruction: SYSTEM_PROMPT 
+                });
 
-            const result = await model.generateContent({
-                contents: [{ role: "user", parts: [{ text: question }] }],
-                generationConfig: {
-                    maxOutputTokens: 150, // Maximize token savings by keeping it concise
-                    temperature: 0.7,
+                const result = await model.generateContent({
+                    contents: [{ role: "user", parts: [{ text: question }] }],
+                    generationConfig: {
+                        maxOutputTokens: 150, // Maximize token savings by keeping it concise
+                        temperature: 0.7,
+                    }
+                });
+                
+                return result.response.text();
+            } catch (error) {
+                console.warn(`AI Error with a key using model ${modelName}:`, error.message);
+                // If it's the last key in the array and the last model, let it fail
+                if (key === API_KEYS[API_KEYS.length - 1] && modelName === MODELS[MODELS.length - 1]) {
+                    return "Sorry, the AI service is currently unavailable or quota exceeded.";
                 }
-            });
-            
-            return result.response.text();
-        } catch (error) {
-            console.error("AI Error with a key:", error);
-            // If it's the last key in the array, let it fail
-            if (key === API_KEYS[API_KEYS.length - 1]) {
-                return "Sorry, the AI service is currently unavailable or quota exceeded.";
+                // Otherwise, loop will continue to the next model or next key
             }
-            // Otherwise, loop will continue to the next key
         }
     }
     
