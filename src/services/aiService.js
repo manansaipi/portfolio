@@ -46,6 +46,34 @@ Projects:
 `;
 
 export const askAI = async (question) => {
+    // Check IP-based rate limit
+    try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        if (ipResponse.ok) {
+            const { ip } = await ipResponse.json();
+            const today = new Date().toISOString().split('T')[0];
+            const rateLimitKey = `ai_rate_limit_${ip}`;
+            
+            let rateLimitData = JSON.parse(localStorage.getItem(rateLimitKey) || '{}');
+            
+            if (rateLimitData.date !== today) {
+                // Reset limit for new day
+                rateLimitData = { date: today, count: 0 };
+            }
+            
+            if (rateLimitData.count >= 3) {
+                return "Sorry, you have reached the maximum limit of 3 AI prompts per day for your IP address.";
+            }
+            
+            // Increment the count (we save it after successful generation or right away)
+            rateLimitData.count += 1;
+            localStorage.setItem(rateLimitKey, JSON.stringify(rateLimitData));
+        }
+    } catch (e) {
+        console.warn("Failed to fetch IP or check rate limit", e);
+        // We can either block or allow if IP fetch fails. Allowing is safer for UX.
+    }
+
     if (API_KEYS.length === 0) {
         return "System error: Gemini API key is missing. The site owner needs to add VITE_GEMINI_API_KEY to their environment variables.";
     }
