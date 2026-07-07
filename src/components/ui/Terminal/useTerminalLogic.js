@@ -199,10 +199,15 @@ export const useTerminalLogic = () => {
                     setHistory((prev) => [...prev, { type: 'system', content: 'Fetching experiences from API...' }]);
                     try {
                         const works = await getAllWorks();
-                        const worksOutput = works.map((w, index) => ({
-                            type: 'output',
-                            content: `[${index + 1}] ${w.title} at ${w.company} (${w.duration}) - ${w.type}`
-                        }));
+                        const worksOutput = works.map((w, index) => {
+                            const role = w.position || w.role || 'Unknown Role';
+                            const startDate = w.start_date || w.startDate || 'Unknown';
+                            const endDate = w.end_date || w.endDate || 'Unknown';
+                            return {
+                                type: 'output',
+                                content: `[${index + 1}] ${role} at ${w.company} (${startDate} - ${endDate})`
+                            };
+                        });
                         setHistory((prev) => [...prev, ...worksOutput]);
                         systemResponseText = `[Fetched ${works.length} experiences]`;
                     } catch (err) {
