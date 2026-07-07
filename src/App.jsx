@@ -33,13 +33,6 @@ const App = () => {
         const handleStorage = () => setIsAdmin(localStorage.getItem("isAdmin") === "true");
         window.addEventListener('storage', handleStorage);
         
-        // Check for login modal trigger from ProtectedRoute
-        if (location.state?.showLogin) {
-            setShowLoginModal(true);
-            // Clear the state so it doesn't reopen on reload
-            navigate(location.pathname, { replace: true, state: {} });
-        }
-        
         const handleKeyDown = (e) => {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'x') {
                 e.preventDefault();
@@ -58,6 +51,15 @@ const App = () => {
             window.removeEventListener('storage', handleStorage);
         }
     }, [navigate]);
+
+    // Separate useEffect to handle login modal trigger
+    useEffect(() => {
+        if (location.state?.showLogin) {
+            setShowLoginModal(true);
+            // Clear the state so it doesn't reopen on reload
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state, navigate, location.pathname]);
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
