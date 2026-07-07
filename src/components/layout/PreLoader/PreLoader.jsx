@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useLocation } from "react-router";
+import { useLenis } from "lenis/react";
 
 const PreLoader = ({
 	setEntranceAnimationDone,
@@ -8,13 +9,29 @@ const PreLoader = ({
 	preloaderTextRef,
 }) => {
 	const location = useLocation();
+	const lenis = useLenis();
+    const lenisRef = useRef(lenis);
+    const isPreloadingRef = useRef(true);
+
+    useEffect(() => {
+        lenisRef.current = lenis;
+        if (lenis && isPreloadingRef.current) {
+            lenis.scrollTo(0, {immediate: true});
+            lenis.stop();
+            window.scrollTo(0, 0);
+        }
+    }, [lenis]);
+
 	useEffect(() => {
 		document.body.style.overflow = "hidden";
-		document.body.setAttribute("data-lenis-prevent", "true");
+        document.body.removeAttribute("data-lenis-prevent");
+
 		const tl = gsap.timeline({
 			onComplete: () => {
+                isPreloadingRef.current = false;
 				setEntranceAnimationDone(true); // Show the rest of the components
 				document.body.style.overflow = "";
+				if (lenisRef.current) lenisRef.current.start();
 			},
 		});
 

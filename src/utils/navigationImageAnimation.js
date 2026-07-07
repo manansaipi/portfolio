@@ -79,6 +79,7 @@ function handleImageNavigation(path, imageElement, navbarRef, preloaderRef, leni
                 clone.remove();
                 document.body.style.overflow = ""; // standard no-scroll implementation
                 document.body.style.position = ""; // standard no-scroll implementation
+                document.body.removeAttribute("data-lenis-prevent");
             }, 1500);
         },
     });

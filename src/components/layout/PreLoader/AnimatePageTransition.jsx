@@ -24,7 +24,10 @@ export const AnimatePageTransition = ({
 			opacity: 0,
 			duration: 1,
 			delay: 1.5, // -> 1.5
-			onComplete: () => (document.body.style.overflow = ""),
+			onComplete: () => {
+                document.body.style.overflow = "";
+                document.body.removeAttribute("data-lenis-prevent");
+            },
 		});
 	}
 };
