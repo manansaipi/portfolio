@@ -13,20 +13,22 @@ const renderFormattedText = (text) => {
     });
 };
 
-const TypewriterText = ({ text, delay = 15 }) => {
-    const [currentText, setCurrentText] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
+const TypewriterText = ({ line, delay = 15 }) => {
+    const [currentText, setCurrentText] = useState(line._completed ? line.content : '');
+    const [currentIndex, setCurrentIndex] = useState(line._completed ? line.content.length : 0);
 
     useEffect(() => {
-        if (currentIndex < text.length) {
+        if (currentIndex < line.content.length) {
             const randomDelay = delay + Math.random() * 20;
             const timeout = setTimeout(() => {
-                setCurrentText(prev => prev + text[currentIndex]);
+                setCurrentText(prev => prev + line.content[currentIndex]);
                 setCurrentIndex(prev => prev + 1);
             }, randomDelay);
             return () => clearTimeout(timeout);
+        } else {
+            line._completed = true;
         }
-    }, [currentIndex, delay, text]);
+    }, [currentIndex, delay, line]);
 
     return <span>{currentText}</span>;
 };
@@ -43,7 +45,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
                     {line.type === 'ai-response' ? (
-                        <TypewriterText text={line.content} />
+                        <TypewriterText line={line} />
                     ) : line.type === 'command' && line.content.startsWith('ai@manansaipis-portfolio:~$') ? (
                         <>
                             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient">

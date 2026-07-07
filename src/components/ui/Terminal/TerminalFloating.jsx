@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Rnd } from 'react-rnd';
 import { MdTerminal } from 'react-icons/md';
 import { useTerminalLogic } from './useTerminalLogic';
 import TerminalHeader from './TerminalHeader';
 import TerminalBody from './TerminalBody';
+import { AppContext } from '../../../App';
 
 const TerminalFloating = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +12,7 @@ const TerminalFloating = () => {
     const [isMaximized, setIsMaximized] = useState(false);
 
     const { input, setInput, history, suggestion, handleCommand, isAiMode } = useTerminalLogic();
+    const { headerContainerRef } = useContext(AppContext);
 
     const bottomRef = useRef(null);
     const bodyRef = useRef(null);
@@ -116,6 +118,10 @@ const TerminalFloating = () => {
                 y: window.scrollY + (window.innerHeight / 2 - h / 2) 
             });
             setIsMinimized(false);
+            
+            if (headerContainerRef?.current) {
+                headerContainerRef.current.classList.remove("z-7");
+            }
         }
         setIsOpen(!isOpen);
     };
@@ -126,7 +132,7 @@ const TerminalFloating = () => {
         ${isMinimized && !isMaximized ? 'h-[44px] !min-h-0' : ''}
     `;
 
-    return (
+    return ( 
         <>
             {/* Floating Toggle Button */}
             <button 
