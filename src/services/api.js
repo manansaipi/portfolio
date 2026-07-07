@@ -15,5 +15,20 @@ api.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Token is invalid or expired
+            localStorage.removeItem("admin_token");
+            // Only redirect if we are not already on the home page to prevent loop
+            if (window.location.pathname !== "/") {
+                window.location.href = "/";
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;
 
