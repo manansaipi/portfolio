@@ -30,7 +30,7 @@ const TypewriterText = ({ line, delay = 15 }) => {
         }
     }, [currentIndex, delay, line]);
 
-    return <span>{currentText}</span>;
+    return <span className="whitespace-pre-wrap">{currentText}</span>;
 };
 
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {

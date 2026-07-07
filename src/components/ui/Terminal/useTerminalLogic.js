@@ -66,8 +66,7 @@ export const useTerminalLogic = () => {
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         newHistory.pop(); // Remove "Thinking..."
-                        const lines = response.split('\n');
-                        return [...newHistory, ...lines.map(line => ({ type: 'ai-response', content: line || ' ' }))];
+                        return [...newHistory, { type: 'ai-response', content: response || ' ' }];
                     });
                 } catch (error) {
                     setHistory((prev) => {
@@ -94,8 +93,7 @@ export const useTerminalLogic = () => {
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             newHistory.pop();
-                            const lines = response.split('\n');
-                            return [...newHistory, ...lines.map(line => ({ type: 'ai-response', content: line || ' ' }))];
+                            return [...newHistory, { type: 'ai-response', content: response || ' ' }];
                         });
                     } catch (error) {
                         setHistory((prev) => {
