@@ -41,7 +41,13 @@ export const useTerminalLogic = () => {
                 setInput(suggestion);
             }
         } else if (e.key === 'Enter') {
-            const currentPrompt = isAiMode ? 'ai@manansaipis-portfolio:~$ ' : 'guest@manansaipis-portfolio:~$ ';
+            if (!isAiMode && suggestion && input.trim().toLowerCase() !== suggestion.toLowerCase()) {
+                e.preventDefault();
+                setInput(suggestion);
+                return;
+            }
+
+            const currentPrompt = isAiMode ? 'ai@manansaipi-portfolio:~$ ' : 'guest@manansaipi-portfolio:~$ ';
             
             if (!input.trim()) {
                 setHistory((prev) => [...prev, { type: 'command', content: currentPrompt }]);

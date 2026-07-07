@@ -34,8 +34,38 @@ const TypewriterText = ({ line, delay = 15 }) => {
 };
 
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {
+    const [touchStart, setTouchStart] = useState({ x: null, y: null });
+
+    const handleTouchStart = (e) => {
+        setTouchStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    };
+
+    const handleTouchEnd = (e) => {
+        if (touchStart.x === null) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        
+        const diffX = touchEndX - touchStart.x;
+        const diffY = touchEndY - touchStart.y;
+
+        // If swipe distance is > 40px horizontally and more horizontal than vertical
+        if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (suggestion) {
+                setInput(suggestion);
+                inputRef.current?.focus();
+            }
+        }
+        setTouchStart({ x: null, y: null });
+    };
+
     return (
-        <div ref={bodyRef} className="flex-1 p-4 overflow-y-auto font-mono text-sm md:text-base [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div 
+            ref={bodyRef} 
+            className="flex-1 p-4 overflow-y-auto font-mono text-sm md:text-base [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            data-lenis-prevent="true"
+        >
             {history.map((line, i) => (
                 <div key={i} className={`mb-1.5 leading-relaxed break-words ${
                     line.type === 'command' ? 'text-white font-semibold' :
@@ -46,19 +76,19 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                 }`}>
                     {line.type === 'ai-response' ? (
                         <TypewriterText line={line} />
-                    ) : line.type === 'command' && line.content.startsWith('ai@manansaipis-portfolio:~$') ? (
+                    ) : line.type === 'command' && line.content.startsWith('ai@manansaipi-portfolio:~$') ? (
                         <>
                             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient">
-                                ai@manansaipis-portfolio:~$
+                                ai@manansaipi-portfolio:~$
                             </span>
-                            <span className="ml-2">{line.content.replace('ai@manansaipis-portfolio:~$ ', '')}</span>
+                            <span className="ml-2">{line.content.replace('ai@manansaipi-portfolio:~$ ', '')}</span>
                         </>
-                    ) : line.type === 'command' && line.content.startsWith('guest@manansaipis-portfolio:~$') ? (
+                    ) : line.type === 'command' && line.content.startsWith('guest@manansaipi-portfolio:~$') ? (
                         <>
                             <span className="text-green-400">
-                                guest@manansaipis-portfolio:~$
+                                guest@manansaipi-portfolio:~$
                             </span>
-                            <span className="ml-2">{line.content.replace('guest@manansaipis-portfolio:~$ ', '')}</span>
+                            <span className="ml-2">{line.content.replace('guest@manansaipi-portfolio:~$ ', '')}</span>
                         </>
                     ) : (
                         renderFormattedText(line.content)
@@ -68,7 +98,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
             
             <div className="flex items-center mt-2 relative">
                 <span className={`${isAiMode ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient drop-shadow-md' : 'text-green-400'} font-semibold mr-2 shrink-0`}>
-                    {isAiMode ? 'ai@manansaipis-portfolio:~$' : 'guest@manansaipis-portfolio:~$' }
+                    {isAiMode ? 'ai@manansaipi-portfolio:~$' : 'guest@manansaipi-portfolio:~$' }
                 </span>
                 <div className="relative flex-1 flex items-center min-w-0">
                     <input
@@ -81,9 +111,28 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                         autoComplete="off"
                         spellCheck="false"
                     />
-                    <div className="absolute inset-0 flex items-center pointer-events-none font-mono text-white/30 z-0">
+                    <div className="absolute inset-0 flex items-center pointer-events-none font-mono text-white/30 z-20">
                         <span className="invisible">{input}</span>
-                        <span>{suggestion ? suggestion.slice(input.length) : ''}</span>
+                        <span 
+                            className={`pointer-events-auto ${suggestion ? 'cursor-pointer' : ''}`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if(suggestion) {
+                                    setInput(suggestion);
+                                    inputRef.current?.focus();
+                                }
+                            }}
+                            onTouchEnd={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if(suggestion) {
+                                    setInput(suggestion);
+                                    inputRef.current?.focus();
+                                }
+                            }}
+                        >
+                            {suggestion ? suggestion.slice(input.length) : ''}
+                        </span>
                     </div>
                 </div>
             </div>

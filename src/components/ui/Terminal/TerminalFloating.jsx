@@ -25,7 +25,7 @@ const TerminalFloating = () => {
         if (typeof window !== 'undefined') {
             const w = window.innerWidth;
             const h = window.innerHeight;
-            if (w < 768) return { width: w - 32, height: Math.min(500, h * 0.7) }; // Mobile
+            if (w < 768) return { width: w - 32, height: Math.min(850, h * 0.9) }; // Mobile
             if (w < 1300) return { width: Math.max(600, w * 0.8), height: h * 0.7 }; // Tablet / Small Desktop
             return { width: 1260, height: 720 }; // Large Desktop
         }
@@ -177,6 +177,7 @@ const TerminalFloating = () => {
                     minWidth={280}
                     minHeight={isMinimized ? 44 : 200}
                     dragHandleClassName="terminal-header"
+                    cancel="button"
                     disableDragging={isMaximized}
                     enableResizing={
                         !isMaximized && !isMinimized
