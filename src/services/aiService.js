@@ -78,8 +78,8 @@ export const askAI = async (question) => {
                 rateLimitData = { date: today, count: 0 };
             }
             
-            if (rateLimitData.count >= 3) {
-                return "Sorry, you have reached the maximum limit of 3 AI prompts per day for your IP address.";
+            if (rateLimitData.count >= 5) {
+                return "Sorry, you have reached the maximum limit of 5 AI prompts per day for your IP address.";
             }
             
             // Increment the count (we save it after successful generation or right away)
