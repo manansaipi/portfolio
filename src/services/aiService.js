@@ -4,7 +4,14 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const API_KEY_1 = import.meta.env.VITE_GEMINI_API_KEY || "";
 const API_KEY_2 = import.meta.env.VITE_GEMINI_API_KEY_2 || "";
 const API_KEYS = [API_KEY_1, API_KEY_2].filter(key => key !== "");
-const MODELS = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"];
+const MODELS = [
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview",
+    "gemini-3.1-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-2.5-pro"
+];
 
 const SYSTEM_PROMPT = `
 You are an AI assistant built into the terminal of Abdul Mannan Saipi's personal portfolio website.
