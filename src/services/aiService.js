@@ -54,6 +54,15 @@ Projects:
 `;
 
 export const askAI = async (question) => {
+    // If in development mode, use a mock response to save API quota
+    if (import.meta.env.DEV) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve("This is a mock response from the AI since you are running in development mode. It saves your Gemini API quota!");
+            }, 1000);
+        });
+    }
+
     // Check IP-based rate limit
     try {
         const ipResponse = await fetch('https://api.ipify.org?format=json');

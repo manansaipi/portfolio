@@ -128,7 +128,7 @@ const TerminalFloating = () => {
 
     const terminalClasses = `
         cursor-none bg-black/75 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col overflow-hidden transition-all duration-300
-        ${isMaximized ? 'fixed inset-0 z-5 rounded-none w-screen h-screen' : 'rounded-lg w-full h-full'}
+        ${isMaximized ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' : 'rounded-lg w-full h-full'}
         ${isMinimized && !isMaximized ? 'h-[44px] !min-h-0' : ''}
     `;
 
@@ -137,7 +137,7 @@ const TerminalFloating = () => {
             {/* Floating Toggle Button */}
             <button 
                 onClick={toggleOpen}
-                className={`cursor-none terminal-toggle-btn fixed bottom-6 right-6 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl transition-all z-5 ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
+                className={`cursor-none terminal-toggle-btn fixed bottom-6 right-6 w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white shadow-xl transition-all z-50 ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
                 title="Open Terminal"
             >
                 <MdTerminal size={28} />
@@ -147,7 +147,7 @@ const TerminalFloating = () => {
             {isOpen && (
                 <Rnd
                     ref={rndRef}
-                    className={`z-5 ${isMaximized ? '!transform-none' : ''}`}
+                    className={`z-50 ${isMaximized ? '!transform-none' : ''}`}
                     size={isMaximized ? { width: '100%', height: '100%' } : isMinimized ? { width: size.width, height: 44 } : size}
                     position={isMaximized ? { x: 0, y: 0 } : position}
                     onDrag={(e, d) => {
