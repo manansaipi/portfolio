@@ -4,8 +4,8 @@ const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem("admin_token");
     
     if (!token) {
-        // Redirect to home if not logged in
-        return <Navigate to="/" replace />;
+        // Redirect to home and trigger login modal
+        return <Navigate to="/" replace state={{ showLogin: true }} />;
     }
     
     return children;
