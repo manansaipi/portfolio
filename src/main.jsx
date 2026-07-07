@@ -18,12 +18,18 @@ import BlogDetail from "@pages/Blog/components/BlogDetail/BlogDetail.jsx";
 import AdminPanel from "@pages/Admin/AdminPanel.jsx";
 import { ToastProvider } from "@components/ui/Toast/ToastProvider";
 
+import ProtectedRoute from "@components/ui/ProtectedRoute/ProtectedRoute";
+
 createRoot(document.getElementById("root")).render(
 	<StrictMode>
 		<ToastProvider>
 			<BrowserRouter>
 				<Routes>
-					<Route path="/dashboard-secret" element={<AdminPanel />} />
+					<Route path="/dashboard-secret" element={
+						<ProtectedRoute>
+							<AdminPanel />
+						</ProtectedRoute>
+					} />
 					<Route path="/" element={<App />}>
 						<Route path="about" element={<About />} />
 						<Route path="work" element={<Experience />}>
