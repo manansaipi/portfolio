@@ -17,7 +17,6 @@ const AdminPanel = () => {
     }, []);
 
     const exitAdmin = () => {
-        localStorage.removeItem("isAdmin");
         localStorage.removeItem("admin_token");
         navigate("/");
     };

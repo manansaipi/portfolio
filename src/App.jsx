@@ -29,8 +29,8 @@ const App = () => {
     const headerContainerRef = useRef(); 
 
     useEffect(() => {
-        setIsAdmin(localStorage.getItem("isAdmin") === "true");
-        const handleStorage = () => setIsAdmin(localStorage.getItem("isAdmin") === "true");
+        setIsAdmin(!!localStorage.getItem("admin_token"));
+        const handleStorage = () => setIsAdmin(!!localStorage.getItem("admin_token"));
         window.addEventListener('storage', handleStorage);
         
         const handleKeyDown = (e) => {

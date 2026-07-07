@@ -28,7 +28,6 @@ const AdminLogin = ({ onClose }) => {
 
             const token = response.data.access_token;
             localStorage.setItem("admin_token", token);
-            localStorage.setItem("isAdmin", "true");
             setIsAdmin(true);
             onClose(); // Close the modal
         } catch (err) {
