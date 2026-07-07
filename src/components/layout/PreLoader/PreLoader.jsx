@@ -39,7 +39,7 @@ const PreLoader = ({
 			tl.to(preloaderRef.current, {
 				opacity: 0,
 				duration: 1.5,
-				delay: import.meta.env.DEV ? 0 : 7, //-> 7
+				delay: import.meta.env.DEV ? 7 : 7, //-> 7
 			});
 		} else {
 			tl.fromTo(

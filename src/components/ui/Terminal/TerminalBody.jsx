@@ -33,6 +33,19 @@ const TypewriterText = ({ line, delay = 15 }) => {
     return <span className="whitespace-pre-wrap">{currentText}</span>;
 };
 
+const ThinkingAnimation = () => {
+    const [dots, setDots] = useState('');
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDots(prev => prev.length >= 3 ? '' : prev + '.');
+        }, 500);
+        return () => clearInterval(interval);
+    }, []);
+
+    return <span className="animate-pulse">Thinking{dots}</span>;
+};
+
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
 
@@ -76,6 +89,8 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                 }`}>
                     {line.type === 'ai-response' ? (
                         <TypewriterText line={line} />
+                    ) : line.content === 'Thinking...' ? (
+                        <ThinkingAnimation />
                     ) : line.type === 'command' && line.content.startsWith('ai@manansaipi-portfolio:~$') ? (
                         <>
                             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient">

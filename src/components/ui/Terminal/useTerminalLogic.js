@@ -4,6 +4,7 @@ import { getAllWorks } from '@services/workService';
 import { getAllWritings } from '@services/postService';
 import { getCertificates } from '@services/adminService';
 import { askAI } from '@services/aiService';
+import { logTerminalCommand } from '@services/terminalService';
 
 const AVAILABLE_COMMANDS = [
     '/help', '/ask', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
@@ -59,28 +60,35 @@ export const useTerminalLogic = () => {
             setInput('');
             setHistory((prev) => [...prev, { type: 'command', content: `${currentPrompt}${originalInput}` }]);
 
+            const startTime = performance.now();
+
             if (isAiMode) {
                 if (command === '/exit') {
                     setIsAiMode(false);
                     setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
+                    logTerminalCommand(originalInput, true, 'Exited AI mode.', Math.round(performance.now() - startTime));
                     return;
                 }
 
                 setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                let responseTextToLog = '';
                 try {
                     const response = await askAI(originalInput);
+                    responseTextToLog = response || ' ';
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         newHistory.pop(); // Remove "Thinking..."
-                        return [...newHistory, { type: 'ai-response', content: response || ' ' }];
+                        return [...newHistory, { type: 'ai-response', content: responseTextToLog }];
                     });
                 } catch (error) {
+                    responseTextToLog = 'Failed to connect to AI.';
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         newHistory.pop();
-                        return [...newHistory, { type: 'error', content: 'Failed to connect to AI.' }];
+                        return [...newHistory, { type: 'error', content: responseTextToLog }];
                     });
                 }
+                logTerminalCommand(originalInput, true, responseTextToLog, Math.round(performance.now() - startTime));
                 return;
             }
 
@@ -94,26 +102,35 @@ export const useTerminalLogic = () => {
                 const question = originalInput.substring(4).trim();
                 if (question) {
                     setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                    let responseTextToLog = '';
                     try {
                         const response = await askAI(question);
+                        responseTextToLog = response || ' ';
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             newHistory.pop();
-                            return [...newHistory, { type: 'ai-response', content: response || ' ' }];
+                            return [...newHistory, { type: 'ai-response', content: responseTextToLog }];
                         });
                     } catch (error) {
+                        responseTextToLog = 'Failed to connect to AI.';
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             newHistory.pop();
-                            return [...newHistory, { type: 'error', content: 'Failed to connect to AI.' }];
+                            return [...newHistory, { type: 'error', content: responseTextToLog }];
                         });
                     }
+                    logTerminalCommand(originalInput, false, responseTextToLog, Math.round(performance.now() - startTime));
+                } else {
+                    logTerminalCommand(originalInput, false, 'Entered AI mode.', Math.round(performance.now() - startTime));
                 }
                 return;
             }
 
+            let systemResponseText = '';
+
             switch (command) {
                 case '/help':
+                    systemResponseText = '[Displayed available commands]';
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: 'Available commands:' },
@@ -132,6 +149,7 @@ export const useTerminalLogic = () => {
                     ]);
                     break;
                 case '/about':
+                    systemResponseText = '[Displayed about section]';
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: 'Hello! I am Abdul Mannan Saipi.' },
@@ -141,6 +159,7 @@ export const useTerminalLogic = () => {
                     ]);
                     break;
                 case '/education':
+                    systemResponseText = '[Displayed education]';
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: '🎓 President University (Sep 2021 - Dec 2024)' },
@@ -152,6 +171,7 @@ export const useTerminalLogic = () => {
                     ]);
                     break;
                 case '/skills':
+                    systemResponseText = '[Displayed skills]';
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: '💻 Languages: Python, Dart, JavaScript, TypeScript, Java, PHP, C#, VB, SQL' },
@@ -162,6 +182,7 @@ export const useTerminalLogic = () => {
                     ]);
                     break;
                 case '/projects':
+                    systemResponseText = '[Displayed projects]';
                     setHistory((prev) => [
                         ...prev,
                         { type: 'output', content: '📱 AudioVision: Real-Time Object Detection Mobile App' },
@@ -183,8 +204,10 @@ export const useTerminalLogic = () => {
                             content: `[${index + 1}] ${w.title} at ${w.company} (${w.duration}) - ${w.type}`
                         }));
                         setHistory((prev) => [...prev, ...worksOutput]);
+                        systemResponseText = `[Fetched ${works.length} experiences]`;
                     } catch (err) {
                         setHistory((prev) => [...prev, { type: 'error', content: 'Error fetching experiences.' }]);
+                        systemResponseText = 'Error fetching experiences.';
                     }
                     break;
                 case '/writings':
@@ -196,8 +219,10 @@ export const useTerminalLogic = () => {
                             content: `[${index + 1}] ${p.title} - ${p.category} (${p.date || 'Unknown date'})`
                         }));
                         setHistory((prev) => [...prev, ...postsOutput]);
+                        systemResponseText = `[Fetched ${posts.length} writings]`;
                     } catch (err) {
                         setHistory((prev) => [...prev, { type: 'error', content: 'Error fetching writings.' }]);
+                        systemResponseText = 'Error fetching writings.';
                     }
                     break;
                 case '/certificates':
@@ -209,20 +234,26 @@ export const useTerminalLogic = () => {
                             content: `[${index + 1}] ${c.name} (${c.year})`
                         }));
                         setHistory((prev) => [...prev, ...certsOutput]);
+                        systemResponseText = `[Fetched ${certs.length} certificates]`;
                     } catch (err) {
                         setHistory((prev) => [...prev, { type: 'error', content: 'Error fetching certificates.' }]);
+                        systemResponseText = 'Error fetching certificates.';
                     }
                     break;
                 case '/clear':
                     setHistory([]);
+                    systemResponseText = '[Cleared screen]';
                     break;
                 case '/theme':
                     toggleTheme();
                     const newThemeState = theme === 'light' ? 'dark' : 'light';
-                    setHistory((prev) => [...prev, { type: 'system', content: `Switched to ${newThemeState} mode.` }]);
+                    const themeMsg = `Switched to ${newThemeState} mode.`;
+                    setHistory((prev) => [...prev, { type: 'system', content: themeMsg }]);
+                    systemResponseText = themeMsg;
                     break;
                 case 'whoami':
                     setHistory((prev) => [...prev, { type: 'output', content: 'guest' }]);
+                    systemResponseText = 'guest';
                     break;
                 case 'date':
                     const jakartaDate = new Date().toLocaleString('en-US', { 
@@ -231,6 +262,7 @@ export const useTerminalLogic = () => {
                         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
                     }) + ' WIB (Jakarta)';
                     setHistory((prev) => [...prev, { type: 'output', content: jakartaDate }]);
+                    systemResponseText = jakartaDate;
                     break;
                 default:
                     setHistory((prev) => [
@@ -238,7 +270,10 @@ export const useTerminalLogic = () => {
                         { type: 'error', content: `Command not found: ${command}` },
                         { type: 'output', content: 'Type /help for a list of commands.' }
                     ]);
+                    systemResponseText = `Command not found: ${command}`;
             }
+
+            logTerminalCommand(originalInput, false, systemResponseText, Math.round(performance.now() - startTime));
         }
     };
 

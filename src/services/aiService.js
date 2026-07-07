@@ -20,7 +20,7 @@ export const askAI = async (question) => {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve("This is a mock response from the AI since you are running in development mode. It saves your Gemini API quota!");
-            }, 1000);
+            }, 4000);
         });
     }
 
