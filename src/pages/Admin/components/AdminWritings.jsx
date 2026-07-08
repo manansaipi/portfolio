@@ -9,6 +9,7 @@ import { uploadFile } from "@services/adminService";
 const AdminWritings = () => {
     const {
         writings,
+        editing,
         isFormOpen,
         setIsFormOpen,
         formData,
@@ -73,7 +74,7 @@ const AdminWritings = () => {
             </div>
 
             {isFormOpen && (
-                <form onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
+                <form key={editing ? editing.id : 'new'} onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Author" value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} required />
                     <input type="number" className="bg-transparent border-b p-2 outline-none" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />

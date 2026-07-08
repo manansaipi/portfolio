@@ -32,9 +32,9 @@ export const useAdminWritings = () => {
         try { if (w.images) parsedImages = JSON.parse(w.images); } catch(e) {}
         
         setFormData({ 
-            title: w.title, 
-            author: w.author, 
-            image: w.image, 
+            title: w.title || "", 
+            author: w.author || "", 
+            image: w.image || "", 
             content: w.content || "",
             order: w.order !== null && w.order !== undefined ? w.order : "",
             images: parsedImages

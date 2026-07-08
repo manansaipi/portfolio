@@ -127,7 +127,7 @@ const InputComment = ({
 							}
 						}
 					}}
-					className={`w-full resize-none scroll- py-2 cursor-text caret-white placeholder:text-color-text-hovering ${
+					className={`w-full resize-none scroll- py-2 cursor-none placeholder:text-color-text-hovering ${
 						isBold ? "placeholder:font-semibold" : ""
 					} ${
 						isItalic ? "placeholder:italic" : ""

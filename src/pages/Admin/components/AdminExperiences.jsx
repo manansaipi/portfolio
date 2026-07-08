@@ -6,6 +6,7 @@ import { useAdminExperiences } from "./useAdminExperiences";
 const AdminExperiences = () => {
     const {
         items,
+        editing,
         isFormOpen,
         setIsFormOpen,
         formData,
@@ -25,7 +26,7 @@ const AdminExperiences = () => {
             </div>
 
             {isFormOpen && (
-                <form onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
+                <form key={editing ? editing.id : 'new'} onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Company" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} required />
                     <input className="bg-transparent border-b p-2 outline-none" placeholder="Position" value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} required />
                     <div className="flex gap-4">
