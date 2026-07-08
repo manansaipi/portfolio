@@ -8,7 +8,8 @@ const InputComment = ({
 	handleSubmit,
 	onCancel,
 	isSubmitting,
-	autoFocus = false
+	autoFocus = false,
+	placeholderText = "What are your thoughts?"
 }) => {
 	const inputCommentRef = useRef();
 	const inputCommentContainer = useRef();
@@ -39,7 +40,6 @@ const InputComment = ({
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderLine, setIsUnderLine] = useState(false);
-	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		const handleSelectionChange = () => {
@@ -143,7 +143,7 @@ const InputComment = ({
 							${isUnderLine ? "underline" : ""}
 							`}
 					>
-						What are your thoughts?
+						{placeholderText}
 					</span>
 				)}
 				{isSubmitting && (

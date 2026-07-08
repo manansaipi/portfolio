@@ -121,7 +121,7 @@ const CommentItem = ({
 			
 			{/* Reply Input Box */}
 			{isReplyBoxVisible && (
-				<div className="mt-5">
+				<div className="mt-5 ml-10 border-l border-[#333] pl-5">
 					<div onClick={handleNameEditToggle} className="flex items-center gap-3 group mb-2 cursor-none">
 						<img src={isAdmin ? abdulImg : resolveImg(authorImgDefault)} alt="author" className="h-8 w-8 rounded-full object-cover" />
 						<span className="text-md text-primary ">{userName}</span>
@@ -136,6 +136,7 @@ const CommentItem = ({
 						onCancel={() => { setReplyingTo(null); }}
 						isSubmitting={submittingReplyId === commentObj.id}
 						autoFocus={replyingTo === commentObj.id}
+						placeholderText={`Reply to ${commentObj.username}...`}
 					/>
 				</div>
 			)}
