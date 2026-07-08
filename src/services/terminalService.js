@@ -21,12 +21,23 @@ export const logTerminalCommand = async (inputText, isAiMode = false, responseTe
     }
 };
 
-export const getTerminalLogs = async () => {
+export const getTerminalLogs = async (skip = 0, limit = 10) => {
     const token = localStorage.getItem('admin_token');
     if (!token) throw new Error("Not authorized");
     
-    const response = await axios.get(`${API_URL}/api/terminal/logs/`, {
+    const response = await axios.get(`${API_URL}/api/terminal/logs/?skip=${skip}&limit=${limit}`, {
         headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+};
+
+export const deleteTerminalLogs = async (logIds) => {
+    const token = localStorage.getItem('admin_token');
+    if (!token) throw new Error("Not authorized");
+    
+    const response = await axios.delete(`${API_URL}/api/terminal/logs/`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { log_ids: logIds }
     });
     return response.data;
 };

@@ -1,40 +1,110 @@
 import React, { useState, useEffect } from 'react';
-import { getTerminalLogs } from '@services/terminalService';
+import { getTerminalLogs, deleteTerminalLogs } from '@services/terminalService';
 
 const AdminTerminalLogs = () => {
     const [logs, setLogs] = useState([]);
+    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [page, setPage] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+    const [selectedLogs, setSelectedLogs] = useState([]);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const fetchLogs = async () => {
+        setLoading(true);
+        try {
+            const data = await getTerminalLogs(page * pageSize, pageSize);
+            setLogs(data.items);
+            setTotal(data.total);
+            // Clear selection on page change or refresh
+            setSelectedLogs([]);
+        } catch (err) {
+            setError(err.message || "Failed to fetch logs");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchLogs = async () => {
-            try {
-                const data = await getTerminalLogs();
-                setLogs(data);
-            } catch (err) {
-                setError(err.message || "Failed to fetch logs");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchLogs();
-    }, []);
+    }, [page, pageSize]);
 
-    if (loading) return <div>Loading terminal logs...</div>;
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedLogs(logs.map(log => log.id));
+        } else {
+            setSelectedLogs([]);
+        }
+    };
+
+    const handleSelectOne = (id) => {
+        if (selectedLogs.includes(id)) {
+            setSelectedLogs(selectedLogs.filter(logId => logId !== id));
+        } else {
+            setSelectedLogs([...selectedLogs, id]);
+        }
+    };
+
+    const handleDeleteSelected = async () => {
+        if (!window.confirm(`Are you sure you want to delete ${selectedLogs.length} log(s)?`)) {
+            return;
+        }
+
+        setIsDeleting(true);
+        try {
+            await deleteTerminalLogs(selectedLogs);
+            setSelectedLogs([]);
+            if (selectedLogs.length === logs.length && page > 0) {
+                setPage(page - 1);
+            } else {
+                fetchLogs();
+            }
+        } catch (err) {
+            alert(err.message || "Failed to delete logs");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    if (loading && logs.length === 0) return <div>Loading terminal logs...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
+
+    const allSelected = logs.length > 0 && selectedLogs.length === logs.length;
 
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Terminal Logs</h2>
-                <div className="text-sm text-gray-400">Total logs: {logs.length}</div>
+                <div className="flex items-center gap-4">
+                    <div className="text-sm text-gray-400">Total logs: {total}</div>
+                    {selectedLogs.length > 0 && (
+                        <button 
+                            onClick={handleDeleteSelected}
+                            disabled={isDeleting}
+                            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm disabled:opacity-50"
+                        >
+                            {isDeleting ? 'Deleting...' : `Delete Selected (${selectedLogs.length})`}
+                        </button>
+                    )}
+                </div>
             </div>
             
             <div className="overflow-x-auto max-h-[600px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <table className="w-full text-left border-collapse">
-                    <thead className="sticky top-0 bg-background z-10">
+                <table className="w-full text-left border-collapse relative">
+                    <thead className="sticky top-0 bg-background z-10 shadow-sm shadow-light-dark">
                         <tr className="border-b border-light-dark">
+                            <th className="p-3 w-10">
+                                <input 
+                                    type="checkbox" 
+                                    checked={allSelected}
+                                    onChange={handleSelectAll}
+                                    className="cursor-pointer"
+                                />
+                            </th>
                             <th className="p-3">Time</th>
                             <th className="p-3">IP Address</th>
                             <th className="p-3">Location</th>
@@ -49,11 +119,19 @@ const AdminTerminalLogs = () => {
                     <tbody>
                         {logs.length === 0 ? (
                             <tr>
-                                <td colSpan="9" className="p-4 text-center text-gray-500">No terminal logs found.</td>
+                                <td colSpan="10" className="p-4 text-center text-gray-500">No terminal logs found.</td>
                             </tr>
                         ) : (
                             logs.map((log) => (
                                 <tr key={log.id} className="border-b border-light-dark hover:bg-light-dark transition-colors">
+                                    <td className="p-3">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={selectedLogs.includes(log.id)}
+                                            onChange={() => handleSelectOne(log.id)}
+                                            className="cursor-pointer"
+                                        />
+                                    </td>
                                     <td className="p-3 text-sm text-gray-400 whitespace-nowrap align-top">
                                         {new Date(log.created_at).toLocaleString()}
                                         <div className="text-xs text-gray-500 mt-1">{log.execution_time_ms ? `${log.execution_time_ms} ms` : ''}</div>
@@ -92,6 +170,47 @@ const AdminTerminalLogs = () => {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            <div className="flex justify-between items-center mt-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                    <span>Rows per page:</span>
+                    <select 
+                        value={pageSize}
+                        onChange={(e) => {
+                            setPageSize(Number(e.target.value));
+                            setPage(0);
+                        }}
+                        className="bg-transparent border border-light-dark rounded px-2 py-1"
+                    >
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                    <span>
+                        {total === 0 ? '0' : page * pageSize + 1} - {Math.min((page + 1) * pageSize, total)} of {total}
+                    </span>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={() => setPage(page - 1)}
+                            disabled={page === 0 || loading}
+                            className="px-3 py-1 border border-light-dark rounded hover:bg-light-dark disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Prev
+                        </button>
+                        <button 
+                            onClick={() => setPage(page + 1)}
+                            disabled={page >= totalPages - 1 || loading}
+                            className="px-3 py-1 border border-light-dark rounded hover:bg-light-dark disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
