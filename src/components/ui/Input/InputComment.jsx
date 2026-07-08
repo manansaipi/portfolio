@@ -13,12 +13,15 @@ const InputComment = ({
 	const inputCommentRef = useRef();
 	const inputCommentContainer = useRef();
 	const commentActionsRef = useRef();
+	const [isOpen, setIsOpen] = useState(false);
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
+			setIsOpen(true);
 			gsap.to(inputCommentContainer.current, { minHeight: "18vh", duration: 0.4 });
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.4 });
 		} else {
+			setIsOpen(false);
 			gsap.to(commentActionsRef.current, { opacity: 0, duration: 0.4 });
 			gsap.to(inputCommentContainer.current, { 
 				minHeight: "6vh", 
@@ -83,7 +86,7 @@ const InputComment = ({
 	return (
 		<div
 			ref={inputCommentContainer}
-			className="w-full h-[6vh] mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-md bg-light-dark"
+			className={`w-full mt-2 pt-1 pb-5 px-5 flex flex-col justify-between rounded-md bg-light-dark ${isOpen ? 'min-h-[6vh]' : 'h-[6vh]'}`}
 		>
 			<div className=" relative w-full">
 				<div
