@@ -15,6 +15,7 @@ export const useTerminalLogic = () => {
     const { toggleTheme, theme } = useContext(AppContext);
     
     const [isAiMode, setIsAiMode] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         { type: 'system', content: 'Welcome to My Portfolio Terminal' },
@@ -27,6 +28,11 @@ export const useTerminalLogic = () => {
     const suggestion = matches.length > 0 ? matches[0] : '';
 
     const handleCommand = async (e) => {
+        if (isProcessing) {
+            e.preventDefault();
+            return;
+        }
+
         if (e.ctrlKey && e.key.toLowerCase() === 'c') {
             if (isAiMode) {
                 setIsAiMode(false);
@@ -61,12 +67,14 @@ export const useTerminalLogic = () => {
             setHistory((prev) => [...prev, { type: 'command', content: `${currentPrompt}${originalInput}` }]);
 
             const startTime = performance.now();
+            setIsProcessing(true);
 
             if (isAiMode) {
                 if (command === '/exit') {
                     setIsAiMode(false);
                     setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
                     logTerminalCommand(originalInput, true, 'Exited AI mode.', Math.round(performance.now() - startTime));
+                    setIsProcessing(false);
                     return;
                 }
 
@@ -89,6 +97,7 @@ export const useTerminalLogic = () => {
                     });
                 }
                 logTerminalCommand(originalInput, true, responseTextToLog, Math.round(performance.now() - startTime));
+                setIsProcessing(false);
                 return;
             }
 
@@ -123,6 +132,7 @@ export const useTerminalLogic = () => {
                 } else {
                     logTerminalCommand(originalInput, false, 'Entered AI mode.', Math.round(performance.now() - startTime));
                 }
+                setIsProcessing(false);
                 return;
             }
 
@@ -279,6 +289,7 @@ export const useTerminalLogic = () => {
             }
 
             logTerminalCommand(originalInput, false, systemResponseText, Math.round(performance.now() - startTime));
+            setIsProcessing(false);
         }
     };
 
