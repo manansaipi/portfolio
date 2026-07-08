@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { AppContext } from '../../../App';
 import { getAllWorks } from '@services/workService';
 import { getAllWritings } from '@services/postService';
 import { getCertificates } from '@services/adminService';
 import { askAI } from '@services/aiService';
-import { logTerminalCommand } from '@services/terminalService';
+import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminalService';
 
 const AVAILABLE_COMMANDS = [
     '/help', '/ask', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
@@ -14,6 +14,15 @@ const AVAILABLE_COMMANDS = [
 export const useTerminalLogic = () => {
     const { toggleTheme, theme } = useContext(AppContext);
     
+    const lastLogTimeRef = useRef(0);
+    const logTerminalCommand = (originalInput, isAiMode, responseText, timeMs) => {
+        const now = Date.now();
+        if (now - lastLogTimeRef.current > 1500) {
+            apiLogTerminalCommand(originalInput, isAiMode, responseText, timeMs);
+            lastLogTimeRef.current = now;
+        }
+    };
+
     const [isAiMode, setIsAiMode] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [input, setInput] = useState('');
