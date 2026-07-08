@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTerminalLogs, deleteTerminalLogs } from '@services/terminalService';
+import { getTerminalLogs, deleteTerminalLogs, getTerminalCountries } from '@services/terminalService';
 
 const AdminTerminalLogs = () => {
     const [logs, setLogs] = useState([]);
@@ -12,10 +12,38 @@ const AdminTerminalLogs = () => {
     const [selectedLogs, setSelectedLogs] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
 
+    // Filter states
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [filterAiMode, setFilterAiMode] = useState("all");
+    const [filterCountry, setFilterCountry] = useState("all");
+    const [availableCountries, setAvailableCountries] = useState([]);
+
+    // Fetch unique countries on mount
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const countries = await getTerminalCountries();
+                setAvailableCountries(countries);
+            } catch (err) {
+                console.error("Failed to fetch countries", err);
+            }
+        };
+        fetchCountries();
+    }, []);
+
+    // Debounce search input
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+        return () => clearTimeout(handler);
+    }, [search]);
+
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const data = await getTerminalLogs(page * pageSize, pageSize);
+            const data = await getTerminalLogs(page * pageSize, pageSize, debouncedSearch, filterAiMode, filterCountry);
             setLogs(data.items);
             setTotal(data.total);
             // Clear selection on page change or refresh
@@ -27,9 +55,14 @@ const AdminTerminalLogs = () => {
         }
     };
 
+    // Reset page to 0 when filters change
+    useEffect(() => {
+        setPage(0);
+    }, [debouncedSearch, filterAiMode, filterCountry, pageSize]);
+
     useEffect(() => {
         fetchLogs();
-    }, [page, pageSize]);
+    }, [page, pageSize, debouncedSearch, filterAiMode, filterCountry]);
 
     const handleSelectAll = (e) => {
         if (e.target.checked) {
@@ -77,20 +110,53 @@ const AdminTerminalLogs = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col gap-6 mb-6">
                 <h2 className="text-2xl font-bold">Terminal Logs</h2>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="flex flex-wrap items-center gap-4 w-full md:w-auto flex-1">
+                    <input 
+                        type="text" 
+                        placeholder="Search logs..." 
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="bg-transparent border border-light-dark rounded px-3 py-1.5 w-full md:w-64 focus:outline-none focus:border-primary text-sm"
+                    />
+                    
+                    <select 
+                        value={filterAiMode}
+                        onChange={(e) => setFilterAiMode(e.target.value)}
+                        className="bg-transparent border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm"
+                    >
+                        <option value="all">All Modes</option>
+                        <option value="ai">AI Mode</option>
+                        <option value="system">System Mode</option>
+                    </select>
+
+                    <select 
+                        value={filterCountry}
+                        onChange={(e) => setFilterCountry(e.target.value)}
+                        className="bg-transparent border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm max-w-[200px]"
+                    >
+                        <option value="all">All Countries</option>
+                        {availableCountries.map(c => (
+                            <option key={c} value={c}>{c}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="flex items-center gap-4 whitespace-nowrap">
                     <div className="text-sm text-gray-400">Total logs: {total}</div>
                     {selectedLogs.length > 0 && (
                         <button 
                             onClick={handleDeleteSelected}
                             disabled={isDeleting}
-                            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm disabled:opacity-50"
+                            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm disabled:opacity-50"
                         >
                             {isDeleting ? 'Deleting...' : `Delete Selected (${selectedLogs.length})`}
                         </button>
                     )}
                 </div>
+            </div>
             </div>
             
             <div className="overflow-x-auto max-h-[600px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">

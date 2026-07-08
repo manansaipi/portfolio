@@ -17,8 +17,11 @@ const InputComment = ({
 
 	function handleClickComment(toggle) {
 		if (toggle === "open") {
-			setIsOpen(true);
-			gsap.to(inputCommentContainer.current, { minHeight: "18vh", duration: 0.4 });
+			gsap.to(inputCommentContainer.current, { 
+				minHeight: "18vh", 
+				duration: 0.4, 
+				onComplete: ()=> setIsOpen(true)
+			});
 			gsap.to(commentActionsRef.current, { opacity: 1, duration: 0.4 });
 		} else {
 			setIsOpen(false);
@@ -30,11 +33,13 @@ const InputComment = ({
 					if (onCancel) onCancel();
 				}
 			});
+			setIsOpen(false);
 		}
 	}
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderLine, setIsUnderLine] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
 		const handleSelectionChange = () => {
@@ -94,7 +99,7 @@ const InputComment = ({
 					contentEditable
 					onInput={(e) => setComment(e.currentTarget.innerHTML)}
 					onMouseDown={() => handleClickComment("open")}
-					onKeyDown={(e) => {
+					onKeyDown={async (e) => {
 						
 						if (isSubmitting) return;
 
@@ -115,9 +120,10 @@ const InputComment = ({
 						}
 						if (e.key === "Enter" && !e.shiftKey) {
 							e.preventDefault(); // Prevent default form submission or newline
-							if (!isSubmitting && comment.trim().length > 0) {
-								handleSubmit();
+							if (!isSubmitting && comment.trim().length > 0 && comment !== "<br>") {
+								await handleSubmit();
 								resetInput();
+								handleClickComment("close");
 							}
 						}
 					}}
@@ -201,9 +207,10 @@ const InputComment = ({
 					</div>
 					<button
 						disabled={comment.length === 0 || isSubmitting}
-						onClick={() => {
-							handleSubmit();
+						onClick={async () => {
+							await handleSubmit();
 							resetInput();
+							handleClickComment("close");
 						}}
 						className={`border px-3 p-1 disabled: rounded-2xl ${
 							comment.length === 0 || isSubmitting

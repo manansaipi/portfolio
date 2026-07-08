@@ -3,6 +3,7 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null) => {
+    if (import.meta.env.DEV) return;
     try {
         const payload = {
             input_text: inputText,
@@ -21,11 +22,26 @@ export const logTerminalCommand = async (inputText, isAiMode = false, responseTe
     }
 };
 
-export const getTerminalLogs = async (skip = 0, limit = 10) => {
+export const getTerminalLogs = async (skip = 0, limit = 10, search = '', isAiMode = 'all', country = 'all') => {
     const token = localStorage.getItem('admin_token');
     if (!token) throw new Error("Not authorized");
     
-    const response = await axios.get(`${API_URL}/api/terminal/logs/?skip=${skip}&limit=${limit}`, {
+    let url = `${API_URL}/api/terminal/logs/?skip=${skip}&limit=${limit}`;
+    if (search) url += `&search=${encodeURIComponent(search)}`;
+    if (isAiMode !== 'all') url += `&is_ai_mode=${isAiMode}`;
+    if (country !== 'all') url += `&country=${encodeURIComponent(country)}`;
+
+    const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data;
+};
+
+export const getTerminalCountries = async () => {
+    const token = localStorage.getItem('admin_token');
+    if (!token) throw new Error("Not authorized");
+    
+    const response = await axios.get(`${API_URL}/api/terminal/logs/countries`, {
         headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;

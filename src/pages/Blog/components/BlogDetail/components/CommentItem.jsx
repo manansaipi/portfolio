@@ -132,7 +132,7 @@ const CommentItem = ({
 					<InputComment
 						comment={localReplyComment}
 						setComment={setLocalReplyComment}
-						handleSubmit={() => handleReplySubmit(commentObj.id, localReplyComment, () => setLocalReplyComment(""))}
+						handleSubmit={() => handleReplySubmit(commentObj.id, localReplyComment, () => { setLocalReplyComment(""); setIsReplyBoxVisible(false); })}
 						onCancel={() => { setReplyingTo(null); }}
 						isSubmitting={submittingReplyId === commentObj.id}
 						autoFocus={replyingTo === commentObj.id}

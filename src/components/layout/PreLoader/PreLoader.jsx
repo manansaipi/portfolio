@@ -36,10 +36,17 @@ const PreLoader = ({
 		});
 
 		if (location.pathname === "/") {
+			let loadDelay = 7;
+			if (import.meta.env.DEV || sessionStorage.getItem('hasVisited')) {
+				loadDelay = 0;
+			} else {
+				sessionStorage.setItem('hasVisited', 'true');
+			}
+
 			tl.to(preloaderRef.current, {
 				opacity: 0,
 				duration: 1.5,
-				delay: import.meta.env.DEV ? 0 : 7, //-> 7
+				delay: loadDelay,
 			});
 		} else {
 			tl.fromTo(
