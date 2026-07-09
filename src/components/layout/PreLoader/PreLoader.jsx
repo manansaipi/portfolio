@@ -37,10 +37,10 @@ const PreLoader = ({
 
 		if (location.pathname === "/") {
 			let loadDelay = 7;
-			if (import.meta.env.DEV || sessionStorage.getItem('hasVisited')) {
+			if (localStorage.getItem('hasVisited')) {
 				loadDelay = 0;
 			} else {
-				sessionStorage.setItem('hasVisited', 'true');
+				localStorage.setItem('hasVisited', 'true');
 			}
 
 			tl.to(preloaderRef.current, {
