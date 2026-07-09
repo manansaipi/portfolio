@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const renderInlineFormatting = (text) => {
     if (typeof text !== 'string') return text;
@@ -161,9 +161,10 @@ const renderFormattedText = (text) => {
     return renderInlineFormatting(text);
 };
 
-const TypewriterText = ({ line, delay = 15, onComplete }) => {
+const TypewriterText = ({ line, delay = 15 }) => {
     const [currentText, setCurrentText] = useState(line._completed ? line.content : '');
     const [currentIndex, setCurrentIndex] = useState(line._completed ? line.content.length : 0);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (currentIndex < line.content.length) {
@@ -175,11 +176,19 @@ const TypewriterText = ({ line, delay = 15, onComplete }) => {
             return () => clearTimeout(timeout);
         } else {
             line._completed = true;
-            if (onComplete) onComplete();
         }
-    }, [currentIndex, delay, line, onComplete]);
+    }, [currentIndex, delay, line]);
 
-    return <span className="whitespace-pre-wrap">{currentText}</span>;
+    useEffect(() => {
+        if (!line._completed && containerRef.current) {
+            const scrollContainer = containerRef.current.closest('.overflow-y-auto');
+            if (scrollContainer) {
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            }
+        }
+    }, [currentText, line._completed]);
+
+    return <div ref={containerRef} className="flex flex-col gap-1">{renderMarkdown(currentText)}</div>;
 };
 
 const ThinkingAnimation = () => {
@@ -197,8 +206,6 @@ const ThinkingAnimation = () => {
 
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
-    const [tick, setTick] = useState(0);
-    const triggerUpdate = () => setTick(t => t + 1);
 
     const handleTouchStart = (e) => {
         setTouchStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
@@ -239,11 +246,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
                     {line.type === 'ai-response' ? (
-                        line._completed ? (
-                            <div className="flex flex-col gap-1">{renderMarkdown(line.content)}</div>
-                        ) : (
-                            <TypewriterText line={line} onComplete={triggerUpdate} />
-                        )
+                        <TypewriterText line={line} />
                     ) : line.content === 'Thinking...' ? (
                         <ThinkingAnimation />
                     ) : line.type === 'command' && line.content.startsWith('ai@manansaipi-portfolio:~$') ? (

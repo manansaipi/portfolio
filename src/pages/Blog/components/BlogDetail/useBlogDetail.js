@@ -28,13 +28,12 @@ export const useBlogDetail = () => {
 	const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 	const [submittingReplyId, setSubmittingReplyId] = useState(null);
 
-	const [userName, setUserName] = useState(() => {
-		if (localStorage.getItem("isAdmin") === "true") {
-			return "Abdul Mannan Saipi";
-		}
-		const storedName = localStorage.getItem("commentUserName");
-		return storedName ? storedName : "Anonymous";
-	});
+	const resolveUserName = (isAdminUser) => {
+		if (isAdminUser) return "Abdul Mannan Saipi";
+		return localStorage.getItem("commentUserName") || "Anonymous";
+	};
+
+	const [userName, setUserName] = useState(() => resolveUserName(isAdmin));
 
 	const [likedComments, setLikedComments] = useState(() => {
 		const storedLikes = localStorage.getItem("likedComments");
@@ -46,12 +45,7 @@ export const useBlogDetail = () => {
 	}, [likedComments]);
 
 	useEffect(() => {
-		if (isAdmin) {
-			setUserName("Abdul Mannan Saipi");
-		} else {
-			const storedName = localStorage.getItem("commentUserName");
-			setUserName(storedName ? storedName : "Anonymous");
-		}
+		setUserName(resolveUserName(isAdmin));
 	}, [isAdmin]);
 
 	const fetchData = async (postId) => {
