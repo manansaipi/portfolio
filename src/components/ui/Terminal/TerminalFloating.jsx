@@ -142,6 +142,7 @@ const TerminalFloating = ({ isEmbed = false }) => {
                                 suggestion={suggestion}
                                 bottomRef={bottomRef}
                                 isAiMode={isAiMode}
+                                isEmbed={isEmbed}
                             />
                         )}
                     </div>

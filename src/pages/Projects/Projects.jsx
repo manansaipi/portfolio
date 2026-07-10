@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "@/constants/projects";
 import LaptopMockup from "@/components/ui/LaptopMockup/LaptopMockup";
+import MobileMockup from "@/components/ui/MobileMockup/MobileMockup";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,7 +91,12 @@ const RichProjectShowcase = ({ project, index }) => {
                     
                     {/* Left side: Interactive Device Frame */}
                     <div className="w-full lg:w-3/5 xl:w-2/3 relative order-2 lg:order-1">
-                        <LaptopMockup project={project} />
+                        <div className="hidden lg:block">
+                            <LaptopMockup project={project} />
+                        </div>
+                        <div className="block lg:hidden">
+                            <MobileMockup project={project} />
+                        </div>
                     </div>
 
                     {/* Right side: Features & Tech Stack */}

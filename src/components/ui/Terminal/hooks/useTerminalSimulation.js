@@ -17,6 +17,8 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
             const fakeCursor = document.getElementById('embed-fake-cursor');
             const toggleBtn = document.querySelector('.terminal-toggle-btn');
             
+            const isMobile = window.innerWidth < 768;
+
             if (fakeCursor && toggleBtn) {
                 const { default: gsap } = await import('gsap');
 
@@ -32,7 +34,9 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                 const toggleCoords = getCoords(toggleBtn);
 
                 // 1. Zoom in to the floating terminal button using its exact position as the center
-                gsap.to(document.body, { scale: 1.3, transformOrigin: `${toggleCoords.x}px ${toggleCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                if (!isMobile) {
+                    gsap.to(document.body, { scale: 1.3, transformOrigin: `${toggleCoords.x}px ${toggleCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                }
 
                 // Move cursor to toggle button starting from the center of the page
                 gsap.set(fakeCursor, { 
@@ -55,7 +59,11 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                 await gsap.to(fakeCursor, { scale: 1, duration: 0.15 });
                 
                 // 2. Zoom out
-                await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                if (!isMobile) {
+                    await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                } else {
+                    await new Promise(r => setTimeout(r, 500)); // Just a small pause
+                }
 
                 // 3. Zoom in to the full screen button
                 const maxBtn = document.getElementById('terminal-maximize-btn');
@@ -63,7 +71,9 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                     const maxCoords = getCoords(maxBtn);
                     
                     // Zoom using the button as origin
-                    gsap.to(document.body, { scale: 1.3, transformOrigin: `${maxCoords.x}px ${maxCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                    if (!isMobile) {
+                        gsap.to(document.body, { scale: 1.3, transformOrigin: `${maxCoords.x}px ${maxCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                    }
 
                     await gsap.to(fakeCursor, { 
                         x: maxCoords.x, 
@@ -78,10 +88,15 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                     await gsap.to(fakeCursor, { scale: 0.8, duration: 0.15 });
                     maxBtn.click();
                     await gsap.to(fakeCursor, { scale: 1, duration: 0.15 });
+                    
                 }
 
                 // Zoom back out immediately after clicking maximize
-                await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                if (!isMobile) {
+                    await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                } else {
+                    await new Promise(r => setTimeout(r, 500));
+                }
                 
                 // 4. Zoom to the user who is typing
                 let inputCoords;
@@ -98,7 +113,13 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                         y: window.scrollY
                     };
                 }
-                await gsap.to(document.body, { scale: 1.4, transformOrigin: `${inputCoords.x}px ${inputCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                
+                // Do not zoom on mobile because the screen is already narrow/zoomed
+                if (!isMobile) {
+                    await gsap.to(document.body, { scale: 1.4, transformOrigin: `${inputCoords.x}px ${inputCoords.y}px`, duration: 2.5, ease: "power2.inOut" });
+                } else {
+                    await new Promise(r => setTimeout(r, 500));
+                }
             }
 
             // Wait a bit before typing starts
@@ -125,7 +146,10 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                 if (isCancelled) return;
                 
                 // Hack to trigger React's controlled input submission
-                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+                const prototype = inputEl.tagName.toLowerCase() === 'textarea' 
+                    ? window.HTMLTextAreaElement.prototype 
+                    : window.HTMLInputElement.prototype;
+                const nativeInputValueSetter = Object.getOwnPropertyDescriptor(prototype, "value").set;
                 nativeInputValueSetter.call(inputEl, currentText);
                 inputEl.dispatchEvent(new Event('input', { bubbles: true }));
                 inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
@@ -137,7 +161,7 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
             if (!isCancelled) {
                 await typeAndEnter("/help", 3500);
                 await typeAndEnter("/ask", 2000);
-                await typeAndEnter("who is abdul mannan saipi ?", 7000); 
+                await typeAndEnter("who is abdul mannan saipi ?", 10000); 
             }
 
             // 5. Zoom to close the terminal
@@ -177,7 +201,9 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
                 }
 
                 // Zoom out and resume
-                await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                if (!isMobile) {
+                    await gsap.to(document.body, { scale: 1, duration: 2.5, ease: "power2.inOut" });
+                }
             }
 
             // Allow auto-scroll to resume

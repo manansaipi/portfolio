@@ -3,7 +3,7 @@ import { renderFormattedText } from './utils/terminalFormatters';
 import TypewriterText from './components/TypewriterText';
 import ThinkingAnimation from './components/ThinkingAnimation';
 
-const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode }) => {
+const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode, isEmbed }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
     const [isIdle, setIsIdle] = useState(true);
     const idleTimeoutRef = useRef(null);
@@ -78,51 +78,55 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                 </div>
             ))}
             
-            <div className="flex items-center mt-2 relative">
-                <span className={`${isAiMode ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient drop-shadow-md' : 'text-green-400'} font-semibold mr-2 shrink-0`}>
-                    {isAiMode ? 'ai@manansaipi-portfolio:~$' : 'guest@manansaipi-portfolio:~$' }
-                </span>
-                <div className="relative flex-1 flex items-center min-w-0">
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleCommand}
-                        onScroll={(e) => {
-                            if (fakeLayerRef.current) {
-                                fakeLayerRef.current.scrollLeft = e.target.scrollLeft;
+            <div className="relative mt-2 w-full">
+                {/* Visible Fake Layer */}
+                <div className="pointer-events-none font-mono whitespace-pre-wrap break-all leading-relaxed w-full">
+                    <span className={`${isAiMode ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient drop-shadow-md' : 'text-green-400'} font-semibold mr-2`}>
+                        {isAiMode ? 'ai@manansaipi-portfolio:~$' : 'guest@manansaipi-portfolio:~$' }
+                    </span>
+                    <span className="text-white">{input}</span>
+                    {/* Caret */}
+                    <span className={`inline-block align-middle w-[2px] h-[1.1em] bg-white rounded-sm -ml-[1px] translate-y-[-1px] transition-opacity duration-300 ${isIdle ? 'animate-ms-caret' : 'opacity-100'}`}></span>
+                    <span 
+                        className={`pointer-events-auto text-white/30 ml-1 relative z-20 ${isEmbed ? '' : 'cursor-pointer'}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if(suggestion && !isEmbed) {
+                                setInput(suggestion);
+                                inputRef.current?.focus();
                             }
                         }}
-                        className="relative z-10 w-full bg-transparent border-none outline-none text-white font-mono p-0 m-0 caret-transparent"
-                        autoComplete="off"
-                        spellCheck="false"
-                    />
-                    <div ref={fakeLayerRef} className="absolute inset-0 flex items-center pointer-events-none font-mono z-20 overflow-hidden">
-                        <span className="invisible whitespace-pre">{input}</span>
-                        <span className={`w-[2px] h-[1.2em] bg-white rounded-sm shrink-0 -ml-[1px] transition-opacity duration-300 ${isIdle ? 'animate-ms-caret' : 'opacity-100'}`}></span>
-                        <span 
-                            className={`pointer-events-auto text-white/30 ml-1`}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if(suggestion) {
-                                    setInput(suggestion);
-                                    inputRef.current?.focus();
-                                }
-                            }}
-                            onTouchEnd={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if(suggestion) {
-                                    setInput(suggestion);
-                                    inputRef.current?.focus();
-                                }
-                            }}
-                        >
-                            {suggestion ? suggestion.slice(input.length) : ''}
-                        </span>
-                    </div>
+                        onTouchEnd={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if(suggestion && !isEmbed) {
+                                setInput(suggestion);
+                                inputRef.current?.focus();
+                            }
+                        }}
+                    >
+                        {suggestion ? suggestion.slice(input.length) : ''}
+                    </span>
                 </div>
+
+                {/* Hidden interactive textarea */}
+                <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleCommand(e);
+                        } else {
+                            handleCommand(e);
+                        }
+                    }}
+                    className={`absolute inset-0 w-full h-full opacity-0 text-transparent bg-transparent border-none outline-none resize-none z-10 ${isEmbed ? 'pointer-events-none' : 'cursor-text'}`}
+                    autoComplete="off"
+                    spellCheck="false"
+                    readOnly={isEmbed}
+                />
             </div>
             <div ref={bottomRef} />
         </div>

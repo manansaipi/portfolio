@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "@/constants/projects";
 import { AppContext } from "@/App";
 import LaptopMockup from "@/components/ui/LaptopMockup/LaptopMockup";
+import MobileMockup from "@/components/ui/MobileMockup/MobileMockup";
 import gsap from "gsap";
 import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
 
@@ -40,17 +41,22 @@ const ProjectShowcase = ({ project }) => {
 	}, []);
 
 	return (
-		<div ref={showcaseRef} className="relative flex flex-col items-center pt-8 pb-16 px-5 w-full">
+		<div ref={showcaseRef} className="relative flex flex-col items-center md:pt-8 pb-16 px-5 w-full">
 			{/* Ambient glow */}
 			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.015)_30%,transparent_70%)] pointer-events-none z-0 blur-[40px]" />
 
 			{/* Device Frame */}
-			<div className="relative z-10 w-full max-w-[900px] lg:max-w-[700px] xl:max-w-[900px] mx-auto">
-				<LaptopMockup project={project} />
+			<div className="relative w-full max-w-[900px] lg:max-w-[700px] xl:max-w-[900px] mx-auto">
+				<div className="hidden md:block">
+					<LaptopMockup project={project} />
+				</div>
+				<div className="block md:hidden">
+					<MobileMockup project={project} />
+				</div>
 			</div>
 
 			{/* Project Info */}
-			<div ref={infoRef} className="relative z-10 flex flex-col items-center gap-4 mt-10 text-center">
+			<div ref={infoRef} className="relative flex flex-col items-center gap-4 md:mt-10 text-center">
 				<div className="text-[1.25rem] md:text-[1.5rem] xl:text-[1.75rem] font-bold tracking-[0.05em]">
 					{project.title}
 				</div>

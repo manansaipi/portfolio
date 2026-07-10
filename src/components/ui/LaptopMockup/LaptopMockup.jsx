@@ -30,7 +30,7 @@ const LaptopMockup = ({ project }) => {
     }, []);
 
     return (
-        <div ref={frameRef} className="w-full relative z-10">
+        <div ref={frameRef} className="w-full relative ">
             {/* Bezel */}
             <div className="relative bg-[linear-gradient(145deg,rgba(40,40,40,1)_0%,rgba(28,28,28,1)_50%,rgba(35,35,35,1)_100%)] rounded-t-[8px] md:rounded-t-[14px] p-[10px_6px_6px] md:p-[18px_10px_10px] xl:p-[24px_14px_14px] shadow-2xl border border-white/5">
                 
