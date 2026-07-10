@@ -168,7 +168,6 @@ const AdminTerminalLogs = () => {
                                     type="checkbox" 
                                     checked={allSelected}
                                     onChange={handleSelectAll}
-                                    className="cursor-pointer"
                                 />
                             </th>
                             <th className="p-3">Time</th>
@@ -195,7 +194,6 @@ const AdminTerminalLogs = () => {
                                             type="checkbox" 
                                             checked={selectedLogs.includes(log.id)}
                                             onChange={() => handleSelectOne(log.id)}
-                                            className="cursor-pointer"
                                         />
                                     </td>
                                     <td className="p-3 text-sm text-gray-400 whitespace-nowrap align-top">

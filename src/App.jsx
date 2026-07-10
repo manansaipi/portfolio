@@ -16,7 +16,8 @@ import TerminalFloating from "@components/ui/Terminal/TerminalFloating";
 export const AppContext = React.createContext({});
 
 const App = () => {
-    const [entranceAnimationDone, setEntranceAnimationDone] = useState(false);
+    const isEmbed = new URLSearchParams(window.location.search).get('embed') === 'true';
+    const [entranceAnimationDone, setEntranceAnimationDone] = useState(isEmbed);
     const [theme, setTheme] = useState("dark");
     const [isAdmin, setIsAdmin] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -61,6 +62,42 @@ const App = () => {
         }
     }, [location.state, navigate, location.pathname]);
 
+    // Auto-scroll logic for iframe embedding
+    const isAutoScroll = new URLSearchParams(window.location.search).get('autoScroll') === 'true';
+    useEffect(() => {
+        if (isEmbed && isAutoScroll) {
+            let scrollFrame;
+            let delayTimeout;
+            let isScrolling = true;
+            
+            const startScroll = () => {
+                if (window.disableAutoScroll) {
+                    scrollFrame = requestAnimationFrame(startScroll);
+                    return;
+                }
+                const docHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight);
+                const winHeight = window.innerHeight;
+                
+                if (window.scrollY + winHeight >= docHeight - 10) {
+                    window.scrollTo(0, 0); // Reset
+                    isScrolling = false;
+                    delayTimeout = setTimeout(() => { isScrolling = true; }, 2000);
+                } else if (isScrolling) {
+                    window.scrollBy(0, 3); // Increased speed
+                }
+                scrollFrame = requestAnimationFrame(startScroll);
+            };
+            
+            // Wait 2 seconds before starting auto-scroll
+            delayTimeout = setTimeout(startScroll, 2000);
+
+            return () => {
+                if (scrollFrame) cancelAnimationFrame(scrollFrame);
+                if (delayTimeout) clearTimeout(delayTimeout);
+            };
+        }
+    }, [isEmbed, isAutoScroll]);
+
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
     function handleButtonNavigation(href) {
@@ -98,14 +135,18 @@ const App = () => {
             }}
         >
             <ReactLenis root>
-                <CustomCursor />
-                <PreLoader
-                    setEntranceAnimationDone={setEntranceAnimationDone}
-                    preloaderRef={preloaderRef}
-                />
-                <div ref={navbarRef}>
-                    <Navbar />
-                </div>
+                {!isEmbed && <CustomCursor />}
+                {!isEmbed && (
+                    <PreLoader
+                        setEntranceAnimationDone={setEntranceAnimationDone}
+                        preloaderRef={preloaderRef}
+                    />
+                )}
+                {!isEmbed && (
+                    <div ref={navbarRef}>
+                        <Navbar />
+                    </div>
+                )}
                 <div className={isHome ? "" : "hidden"}>
                     <Home />
                 </div>
@@ -113,11 +154,11 @@ const App = () => {
                     <Outlet />
                 </div>
 
-                {entranceAnimationDone && <Footer />}
+                {!isEmbed && entranceAnimationDone && <Footer />}
                 
-                {showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
-                <TerminalFloating />
-                <FloatingAdminButton />
+                {!isEmbed && showLoginModal && <AdminLogin onClose={() => setShowLoginModal(false)} />}
+                <TerminalFloating isEmbed={isEmbed} />
+                {!isEmbed && <FloatingAdminButton />}
             </ReactLenis>
         </AppContext.Provider>
     );

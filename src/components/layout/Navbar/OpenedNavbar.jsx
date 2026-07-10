@@ -68,13 +68,20 @@ const OpenedNavbar = ({
 				<div className=" flex flex-col  justify-center items-start bg-primary pl-5 pt-14 mb-8  md:pt-5 md:pl-3  w-full">
 					<div
 						ref={navigationListRef}
-						className="flex flex-col gap-0 font-bold text-6xl text-background overflow-hidden mb-7 md:mb-8 "
+						className="flex flex-col gap-0 font-bold text-5xl text-background overflow-hidden mb-7 md:mb-8 "
 					>
 						<div
 							className={getLinkClass("/about")}
 							onClick={handleOpenNavbar}
 						>
 							<a onClick={() => handleButtonNavigation("/about")}>ABOUT</a>
+						</div>
+
+						<div
+							className={getLinkClass("/projects")}
+							onClick={handleOpenNavbar}
+						>
+							<a onClick={() => handleButtonNavigation("/projects")}>PROJECTS</a>
 						</div>
 
 						<div
@@ -90,6 +97,7 @@ const OpenedNavbar = ({
 							<a onClick={() => handleButtonNavigation("/blog")}>WRITING</a>
 						</div>
 
+						
 						<div
 							className={getLinkClass("/contact")}
 							onClick={handleOpenNavbar}

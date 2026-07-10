@@ -3,6 +3,7 @@ import HomeRecentWork from "@pages/Home/components/HomeRecentWork/HomeRecentWork
 import HomeEntrance from "@pages/Home/components/HomeEntrance/HomeEntrance";
 import HomeAbout from "@pages/Home/components/HomeAbout/HomeAbout";
 import HomeProject from "@pages/Home/components/HomeProject/HomeProject";
+import HomeRecentProject from "@pages/Home/components/HomeRecentProject/HomeRecentProject";
 import HomeBlog from "@pages/Home/components/HomeBlog/HomeBlog";
 import { AppContext } from "@/App";
 
@@ -15,6 +16,7 @@ const Home = () => {
 			
 			<div style={{ display: entranceAnimationDone ? 'block' : 'none' }}>
 				<HomeAbout />
+				<HomeRecentProject />
 				<HomeRecentWork />
 				<HomeBlog />
 			</div>

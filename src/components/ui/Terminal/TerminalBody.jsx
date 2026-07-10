@@ -108,7 +108,7 @@ const renderInlineFormatting = (text) => {
                     href={part.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-blue-400 hover:text-blue-300 underline cursor-pointer font-semibold"
+                    className="text-blue-400 hover:text-blue-300 underline font-semibold"
                 >
                     {part.label}
                 </a>
@@ -287,7 +287,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     <div className="absolute inset-0 flex items-center pointer-events-none font-mono text-white/30 z-20">
                         <span className="invisible">{input}</span>
                         <span 
-                            className={`pointer-events-auto ${suggestion ? 'cursor-pointer' : ''}`}
+                            className={`pointer-events-auto`}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 if(suggestion) {

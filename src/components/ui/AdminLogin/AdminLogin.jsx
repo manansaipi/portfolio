@@ -66,14 +66,14 @@ const AdminLogin = ({ onClose }) => {
                         <button 
                             type="submit" 
                             disabled={isLoading}
-                            className="flex-1 bg-white text-black font-bold py-3 rounded cursor-pointer hover:bg-gray-200 transition-colors"
+                            className="flex-1 bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition-colors"
                         >
                             {isLoading ? "Logging in..." : "Login"}
                         </button>
                         <button 
                             type="button" 
                             onClick={onClose}
-                            className="flex-1 border border-light-dark text-primary font-bold py-3 rounded cursor-pointer hover:bg-light-dark transition-colors"
+                            className="flex-1 border border-light-dark text-primary font-bold py-3 rounded hover:bg-light-dark transition-colors"
                         >
                             Cancel
                         </button>

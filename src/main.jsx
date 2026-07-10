@@ -15,6 +15,7 @@ import Contact from "@pages/Contact/Contact.jsx";
 import NotFound from "@pages/NotFound/NotFound.jsx";
 import AllBlog from "@pages/Blog/components/AllBlog/AllBlog.jsx";
 import BlogDetail from "@pages/Blog/components/BlogDetail/BlogDetail.jsx";
+import Projects from "@pages/Projects/Projects.jsx";
 import AdminPanel from "@pages/Admin/AdminPanel.jsx";
 import { ToastProvider } from "@components/ui/Toast/ToastProvider";
 
@@ -40,6 +41,7 @@ createRoot(document.getElementById("root")).render(
 							<Route index element={<AllBlog />} />
 							<Route path=":blogId" element={<BlogDetail />} />
 						</Route>
+						<Route path="projects" element={<Projects />} />
 						<Route path="contact" element={<Contact />} />
 						<Route path="*" element={<NotFound />} /> {/* Catch-all route */}
 					</Route>
