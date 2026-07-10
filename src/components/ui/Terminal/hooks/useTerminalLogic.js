@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from 'react';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../../../App';
 import { getAllWorks } from '@services/workService';
 import { getAllWritings } from '@services/postService';
 import { getCertificates } from '@services/adminService';

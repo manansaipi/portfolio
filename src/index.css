@@ -104,3 +104,12 @@ body::-webkit-scrollbar {
         transform: scale(0.4) translateY(0%);
     }
 }
+
+@keyframes ms-caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-ms-caret {
+  animation: ms-caret-blink 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}

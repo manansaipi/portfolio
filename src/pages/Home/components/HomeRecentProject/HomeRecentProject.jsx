@@ -109,7 +109,7 @@ const HomeRecentProject = () => {
 				</div>
 			</div>
 
-			<div className="flex gap-20 mt-10">
+			<div className="flex flex-col lg:flex-row  lg:gap-10">
 				{PROJECTS.map(project => (
 					<ProjectShowcase key={project.id} project={project} />
 				))}

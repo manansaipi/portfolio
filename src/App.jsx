@@ -1,17 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { Outlet, useLocation, useNavigate } from "react-router";
-
+import { useAdminAuth } from "./hooks/useAdminAuth";
+import { useLoginModalTrigger } from "./hooks/useLoginModalTrigger";
+import { useAutoScroll } from "./hooks/useAutoScroll";
+import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
 import CustomCursor from "@components/ui/CustomCursor/CustomCursor";
 import PreLoader from "@components/layout/PreLoader/PreLoader";
-
-import Navbar from "@components/layout/Navbar/Navbar";
-import Home from "@pages/Home/Home";
 import Footer from "@components/layout/Footer/Footer";
-import { AnimatePageTransition } from "@components/layout/PreLoader/AnimatePageTransition";
 import AdminLogin from "@components/ui/AdminLogin/AdminLogin";
+import Navbar from "@components/layout/Navbar/Navbar";
 import FloatingAdminButton from "@components/ui/FloatingAdminButton/FloatingAdminButton";
 import TerminalFloating from "@components/ui/Terminal/TerminalFloating";
+import Home from "@pages/Home/Home";
 
 export const AppContext = React.createContext({});
 
@@ -29,74 +30,10 @@ const App = () => {
     const lenis = useLenis();
     const headerContainerRef = useRef(); 
 
-    useEffect(() => {
-        setIsAdmin(!!localStorage.getItem("admin_token"));
-        const handleStorage = () => setIsAdmin(!!localStorage.getItem("admin_token"));
-        window.addEventListener('storage', handleStorage);
-        
-        const handleKeyDown = (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'x') {
-                e.preventDefault();
-                const token = localStorage.getItem("admin_token");
-                if (token) {
-                    navigate('/dashboard-secret');
-                } else {
-                    setShowLoginModal(true);
-                }
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('storage', handleStorage);
-        }
-    }, [navigate]);
-
-    // Separate useEffect to handle login modal trigger
-    useEffect(() => {
-        if (location.state?.showLogin) {
-            setShowLoginModal(true);
-            // Clear the state so it doesn't reopen on reload
-            navigate(location.pathname, { replace: true, state: {} });
-        }
-    }, [location.state, navigate, location.pathname]);
-
-    // Auto-scroll logic for iframe embedding
-    const isAutoScroll = new URLSearchParams(window.location.search).get('autoScroll') === 'true';
-    useEffect(() => {
-        if (isEmbed && isAutoScroll) {
-            let scrollFrame;
-            let delayTimeout;
-            let isScrolling = true;
-            
-            const startScroll = () => {
-                if (window.disableAutoScroll) {
-                    scrollFrame = requestAnimationFrame(startScroll);
-                    return;
-                }
-                const docHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight);
-                const winHeight = window.innerHeight;
-                
-                if (window.scrollY + winHeight >= docHeight - 10) {
-                    window.scrollTo(0, 0); // Reset
-                    isScrolling = false;
-                    delayTimeout = setTimeout(() => { isScrolling = true; }, 2000);
-                } else if (isScrolling) {
-                    window.scrollBy(0, 3); // Increased speed
-                }
-                scrollFrame = requestAnimationFrame(startScroll);
-            };
-            
-            // Wait 2 seconds before starting auto-scroll
-            delayTimeout = setTimeout(startScroll, 2000);
-
-            return () => {
-                if (scrollFrame) cancelAnimationFrame(scrollFrame);
-                if (delayTimeout) clearTimeout(delayTimeout);
-            };
-        }
-    }, [isEmbed, isAutoScroll]);
+    // Custom Hooks
+    useAdminAuth(setIsAdmin, setShowLoginModal);
+    useLoginModalTrigger(setShowLoginModal);
+    useAutoScroll(isEmbed);
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
