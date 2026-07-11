@@ -14,8 +14,15 @@ import FakeCursor from './components/FakeCursor';
 const TerminalFloating = ({ isEmbed = false }) => {
     // Start closed even in embed mode, because the animated cursor will click it open
     const [isOpen, setIsOpen] = useState(false);
+    const [hasOpened, setHasOpened] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
+
+    React.useEffect(() => {
+        if (isOpen) {
+            setHasOpened(true);
+        }
+    }, [isOpen]);
 
     const { input, setInput, history, suggestion, handleCommand, isAiMode } = useTerminalLogic();
     const { headerContainerRef } = useContext(AppContext);
@@ -72,9 +79,13 @@ const TerminalFloating = ({ isEmbed = false }) => {
         ${isMinimized && !isMaximized ? 'h-[44px] !min-h-0' : ''}
     `;
 
+    const shouldShowToggleBtn = !(isEmbed && hasOpened && !isOpen);
+
     return ( 
         <>
-            <TerminalToggleButton isOpen={isOpen} toggleOpen={toggleOpen} isEmbed={isEmbed} />
+            {shouldShowToggleBtn && (
+                <TerminalToggleButton isOpen={isOpen} toggleOpen={toggleOpen} isEmbed={isEmbed} />
+            )}
 
             {/* Terminal Window via Rnd */}
             {isOpen && (
