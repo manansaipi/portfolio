@@ -26,7 +26,7 @@ export const PROJECTS = [
 			{ title: "Multi-Language Voice Commands", desc: "Speak naturally globally with automated voice commands." }
 		],
 		url: "https://fp-capstone.github.io/audio-vision-web/",
-		embedUrl: "http://localhost:5174/audio-vision-web/?autoScroll=true",
+		embedUrl: "https://fp-capstone.github.io/audio-vision-web/?autoScroll=true",
 		autoScrollMode: "internal",
 	},
 	{
