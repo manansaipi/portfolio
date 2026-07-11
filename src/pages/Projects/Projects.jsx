@@ -76,7 +76,7 @@ const RichProjectShowcase = ({ project, index }) => {
                             href={project.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 mt-8 px-6 py-3 text-sm font-semibold tracking-widest text-primary border border-white/20 rounded-full hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group"
+                            className="inline-flex items-center gap-2 mt-8 px-6 py-3 text-sm font-semibold tracking-widest text-primary border border-white/20 rounded-full hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 group cursor-none"
                         >
                             VISIT LIVE SITE
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
