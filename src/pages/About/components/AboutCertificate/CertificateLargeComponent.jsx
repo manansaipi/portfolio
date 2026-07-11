@@ -14,6 +14,8 @@ const CertificateLargeComponent = ({
 	const certListRef = useRef();
 
 	useLayoutEffect(() => {
+		if (!certificates || certificates.length === 0) return;
+
 		let ctx = gsap.context(() => {
 			ScrollTrigger.create({
 				trigger: certDescContainerRef.current,
@@ -30,15 +32,18 @@ const CertificateLargeComponent = ({
 				},
 			});
 
-			const children = certListRef.current.children;
-			gsap.set(children, { color: "#6a6a6a" });
+			const children = gsap.utils.toArray(certListRef.current.children);
+			
+			if (children.length > 0) {
+				gsap.set(children, { color: "#6a6a6a" });
+			}
 
 			// Set default text once when mounted
 			const defaultTitle = "Certifications & Achievements:";
 			const defaultDesc =
 				"I’ve turned a collection of online lessons into a foundation of real-world capability.";
 
-			[...children].forEach((child, index) => {
+			children.forEach((child, index) => {
 				gsap.to(child, {
 					color: "#ffffff",
 					duration: 0.00001,
@@ -50,14 +55,16 @@ const CertificateLargeComponent = ({
 						// markers: true,
 					},
 					onStart: () => {
-						certTitle.current.textContent = certificates[index].name;
-						certDesc.current.textContent = certificates[index].desc;
+						if (certificates[index]) {
+							certTitle.current.textContent = certificates[index].name;
+							certDesc.current.textContent = certificates[index].desc;
+						}
 					},
 				});
 			});
 		});
 		return () => ctx.revert();
-	}, []);
+	}, [certificates]);
 
 	useEffect(() => {
 		let mouseX = 0;
