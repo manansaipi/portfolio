@@ -18,7 +18,7 @@ export const PROJECTS = [
 		id: "audio-vision",
 		title: "Audio Vision",
 		description: "A Voice-Based Navigation App for the Visually Impaired, developed as a capstone project. It enhances mobility, safety, and independence through smart voice-based navigation and real-time object detection.",
-		techStack: ["Flutter", "React", "Tailwind", "YOLO", "Firebase", "Google Maps API"],
+		techStack: ["Flutter", "Dart", "YOLOv8", "TensorFlow Lite", "Google Maps API", "Google Directions API", "Google Places API", "Speech-to-Text", "Text-to-Speech", "Firebase Realtime Database", "Firebase Authentication", "Express.js", "Node.js"],
 		features: [
 			{ title: "Voice-Guided Navigation", desc: "Turn-by-turn auditory directions to guide users safely to their destination." },
 			{ title: "Real-Time Object Detection", desc: "Advanced AI detects obstacles and provides immediate auditory feedback." },
@@ -44,5 +44,19 @@ export const PROJECTS = [
 		embedUrl: "https://manansaipi.github.io/roti-li-doku?autoScroll=true",
 		autoScrollMode: "internal",
 	},
-
+	{
+		id: "serfee-api",
+		title: "Serfee API",
+		description: "A location-based help request and task marketplace backend for communities to request and offer assistance with daily tasks. Features geofencing, real-time chat, and a robust offer/response system.",
+		techStack: ["Node.js", "Express.js", "Google Cloud", "Firebase", "MySQL"],
+		features: [
+			{ title: "Location-Based Services", desc: "Fetch nearby tasks based on latitude, longitude, and radius using the Haversine formula." },
+			{ title: "Offer & Response System", desc: "Marketplace system allowing taskers to submit offers and posters to accept or reject." },
+			{ title: "Real-time Messaging", desc: "Integrated real-time chat system via Firebase Realtime Database." },
+			{ title: "Task Management", desc: "Create, update, and search tasks with image upload to Cloud Storage." }
+		],
+		url: "https://serfee.github.io/serfee-api-web/",
+		embedUrl: "https://serfee.github.io/serfee-api-web/?autoScroll=true",
+		autoScrollMode: "internal",
+	},
 ];

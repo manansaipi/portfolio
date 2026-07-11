@@ -22,7 +22,7 @@ export const useAutoScroll = (isEmbed) => {
                     isScrolling = false;
                     delayTimeout = setTimeout(() => { isScrolling = true; }, 2000);
                 } else if (isScrolling) {
-                    const speed = window.innerWidth < 768 ? 3 : 4;
+                    const speed = window.innerWidth < 768 ? 2 : 3;
                     window.scrollBy({ top: speed, left: 0, behavior: 'instant' });
                 }
                 scrollFrame = requestAnimationFrame(startScroll);
