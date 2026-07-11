@@ -42,7 +42,7 @@ const MobileMockup = ({ project }) => {
                     <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.04)_0%,transparent_40%,transparent_60%,rgba(255,255,255,0.01)_100%)] pointer-events-none z-20" />
                     
                     {/* Iframe wrapper - for mobile we scale the iframe slightly so it acts as a ~375px mobile device */}
-                    <div className={`absolute top-0 left-0 w-[125%] h-[125%] origin-top-left scale-[0.8] z-10 ${project.autoScrollMode === 'css' ? 'animate-[scrollWebsite_35s_ease-in-out_infinite] [animation-delay:2s] will-change-transform' : ''}`}>
+                    <div className={`absolute top-0 left-0 w-[125%] h-[125%] origin-top-left scale-[0.8] z-10 ${project.autoScrollMode === 'css' ? 'animate-[scrollWebsite_25s_ease-in-out_infinite] [animation-delay:2s] will-change-transform' : ''}`}>
                         <iframe
                             src={project.embedUrl}
                             title={`${project.title} Preview`}

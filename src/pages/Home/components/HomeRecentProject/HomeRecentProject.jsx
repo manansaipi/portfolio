@@ -116,7 +116,7 @@ const HomeRecentProject = () => {
 			</div>
 
 			<div className="flex flex-col lg:flex-row  lg:gap-10">
-				{PROJECTS.map(project => (
+				{PROJECTS.slice(0, 2).map(project => (
 					<ProjectShowcase key={project.id} project={project} />
 				))}
 			</div>

@@ -43,7 +43,7 @@ const LaptopMockup = ({ project }) => {
                     <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.03)_0%,transparent_40%,transparent_60%,rgba(255,255,255,0.01)_100%)] pointer-events-none z-20" />
                     
                     {/* Iframe wrapper */}
-                    <div className={`absolute top-0 left-0 w-[250%] h-[250%] origin-top-left scale-[0.4] z-10 ${project.autoScrollMode === 'css' ? 'animate-[scrollWebsite_35s_ease-in-out_infinite] [animation-delay:2s] will-change-transform' : ''}`}>
+                    <div className={`absolute top-0 left-0 w-[250%] h-[250%] origin-top-left scale-[0.4] z-10 ${project.autoScrollMode === 'css' ? 'animate-[scrollWebsite_25s_ease-in-out_infinite] [animation-delay:2s] will-change-transform' : ''}`}>
                         <iframe
                             src={project.embedUrl}
                             title={`${project.title} Preview`}
