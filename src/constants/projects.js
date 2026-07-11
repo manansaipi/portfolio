@@ -2,20 +2,6 @@ const PORTFOLIO_URL = window.location.origin;
 
 export const PROJECTS = [
 	{
-		id: "netflix-clone",
-		title: "Netflix Clone",
-		description: "A full-featured Netflix clone allowing users to search and discover movies seamlessly using the TMDB API, featuring custom interactive animations.",
-		techStack: ["React", "TypeScript", "Tailwind CSS", "Vite", "React Router"],
-		features: [
-			{ title: "Movie Search", desc: "Real-time movie search utilizing the TMDB (IMDB) API." },
-			{ title: "Interactive UI", desc: "Netflix-inspired interface with responsive carousels and detail modals." },
-			{ title: "Automated Demo", desc: "Custom simulated user interactions and fake cursor sequence." }
-		],
-		url: "https://s-frontend-omega.vercel.app/",
-		embedUrl: "http://localhost:5174/?autoScroll=true",
-		autoScrollMode: "internal",
-	},
-	{
 		id: "portfolio",
 		title: "Personal Portfolio",
 		description: "A thoughtfully crafted portfolio showcasing my journey as a software engineer — featuring smooth animations, an AI-powered terminal, and a full-stack blog system.",
@@ -41,6 +27,22 @@ export const PROJECTS = [
 		],
 		url: "https://fp-capstone.github.io/audio-vision-web/",
 		embedUrl: "https://fp-capstone.github.io/audio-vision-web/?autoScroll=true",
+		autoScrollMode: "internal",
+	},
+	{
+		id: "netflix-clone",
+		title: "Netflix Clone",
+		description: "A full-featured Netflix clone allowing users to search and discover movies seamlessly using the TMDB API, featuring custom interactive animations and a robust FastAPI backend for user authentication and managing favorite movies.",
+		techStack: ["React", "TypeScript", "Tailwind CSS", "Vite", "React Router", "FastAPI", "MySQL", "JWT"],
+		features: [
+			{ title: "Movie Search", desc: "Real-time movie search utilizing the TMDB (IMDB) API." },
+			{ title: "Interactive UI", desc: "Netflix-inspired interface with responsive carousels and detail modals." },
+			{ title: "User Authentication", desc: "Secure login and registration system using JWT." },
+			{ title: "Favorite Movies", desc: "Save and manage favorite movies seamlessly with a FastAPI and MySQL backend." },
+			{ title: "Automated Demo", desc: "Custom simulated user interactions and fake cursor sequence." }
+		],
+		url: "https://s-frontend-omega.vercel.app/",
+		embedUrl: "https://s-frontend-omega.vercel.app/?autoScroll=true",
 		autoScrollMode: "internal",
 	},
 	{
