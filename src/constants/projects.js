@@ -26,8 +26,22 @@ export const PROJECTS = [
 			{ title: "Scrollytelling", desc: "Framer Motion powered elements that reveal beautifully on scroll." }
 		],
 		url: "https://manansaipi.github.io/roti-li-doku",
-		// Using local URL temporarily so you can see the new auto-scroll code working if you run the local server!
 		embedUrl: "https://manansaipi.github.io/roti-li-doku?autoScroll=true",
-		autoScrollMode: "internal", // Uses JS inside the iframe to scroll itself
+		autoScrollMode: "internal",
+	},
+	{
+		id: "audio-vision",
+		title: "Audio Vision",
+		description: "A Voice-Based Navigation App for the Visually Impaired, developed as a capstone project. It enhances mobility, safety, and independence through smart voice-based navigation and real-time object detection.",
+		techStack: ["Flutter", "React", "Tailwind", "YOLO", "Firebase", "Google Maps API"],
+		features: [
+			{ title: "Voice-Guided Navigation", desc: "Turn-by-turn auditory directions to guide users safely to their destination." },
+			{ title: "Real-Time Object Detection", desc: "Advanced AI detects obstacles and provides immediate auditory feedback." },
+			{ title: "Haptic Feedback", desc: "Multi-sensory vibrations for physical feedback and spatial awareness." },
+			{ title: "Multi-Language Voice Commands", desc: "Speak naturally globally with automated voice commands." }
+		],
+		url: "https://fp-capstone.github.io/audio-vision-web/",
+		embedUrl: "https://fp-capstone.github.io/audio-vision-web/?autoScroll=true",
+		autoScrollMode: "internal",
 	}
 ];
