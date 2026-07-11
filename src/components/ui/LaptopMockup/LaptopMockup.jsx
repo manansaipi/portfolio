@@ -48,7 +48,8 @@ const LaptopMockup = ({ project }) => {
                             src={project.embedUrl}
                             title={`${project.title} Preview`}
                             loading="lazy"
-                            sandbox="allow-same-origin allow-scripts"
+                            sandbox="allow-same-origin allow-scripts allow-popups"
+                            allow="autoplay"
                             className="w-full h-full border-none pointer-events-none block"
                         />
                     </div>

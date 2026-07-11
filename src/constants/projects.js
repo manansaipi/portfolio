@@ -2,6 +2,20 @@ const PORTFOLIO_URL = window.location.origin;
 
 export const PROJECTS = [
 	{
+		id: "netflix-clone",
+		title: "Netflix Clone",
+		description: "A full-featured Netflix clone allowing users to search and discover movies seamlessly using the TMDB API, featuring custom interactive animations.",
+		techStack: ["React", "TypeScript", "Tailwind CSS", "Vite", "React Router"],
+		features: [
+			{ title: "Movie Search", desc: "Real-time movie search utilizing the TMDB (IMDB) API." },
+			{ title: "Interactive UI", desc: "Netflix-inspired interface with responsive carousels and detail modals." },
+			{ title: "Automated Demo", desc: "Custom simulated user interactions and fake cursor sequence." }
+		],
+		url: "https://s-frontend-omega.vercel.app/",
+		embedUrl: "http://localhost:5174/?autoScroll=true",
+		autoScrollMode: "internal",
+	},
+	{
 		id: "portfolio",
 		title: "Personal Portfolio",
 		description: "A thoughtfully crafted portfolio showcasing my journey as a software engineer — featuring smooth animations, an AI-powered terminal, and a full-stack blog system.",
@@ -59,18 +73,5 @@ export const PROJECTS = [
 		embedUrl: "https://serfee.github.io/serfee-api-web/?autoScroll=true",
 		autoScrollMode: "internal",
 	},
-	{
-		id: "netflix-clone",
-		title: "Netflix Clone",
-		description: "A full-featured Netflix clone allowing users to search and discover movies seamlessly using the TMDB API, featuring custom interactive animations.",
-		techStack: ["React", "TypeScript", "Tailwind CSS", "Vite", "React Router"],
-		features: [
-			{ title: "Movie Search", desc: "Real-time movie search utilizing the TMDB (IMDB) API." },
-			{ title: "Interactive UI", desc: "Netflix-inspired interface with responsive carousels and detail modals." },
-			{ title: "Automated Demo", desc: "Custom simulated user interactions and fake cursor sequence." }
-		],
-		url: "https://s-frontend-omega.vercel.app/",
-		embedUrl: "https://s-frontend-omega.vercel.app/?autoScroll=true",
-		autoScrollMode: "internal",
-	},
+
 ];
