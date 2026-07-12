@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "@/constants/projects";
 import { AppContext } from "@/App";
 import LaptopMockup from "@/components/ui/LaptopMockup/LaptopMockup";
+import TabletMockup from "@/components/ui/TabletMockup/TabletMockup";
 import MobileMockup from "@/components/ui/MobileMockup/MobileMockup";
 import gsap from "gsap";
 import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
@@ -48,8 +49,11 @@ const ProjectShowcase = ({ project }) => {
 
 			{/* Device Frame */}
 			<div className="relative w-full max-w-[900px] lg:max-w-[700px] xl:max-w-[900px] mx-auto">
-				<div className="hidden md:block">
+				<div className="hidden lg:block">
 					<LaptopMockup project={project} />
+				</div>
+				<div className="hidden md:block lg:hidden">
+					<TabletMockup project={project} />
 				</div>
 				<div className="block md:hidden">
 					<MobileMockup project={project} />
@@ -131,7 +135,7 @@ const HomeRecentProject = () => {
 				</div>
 			</div>
 
-			<div className="flex flex-col lg:flex-row  lg:gap-10">
+			<div className="flex flex-col xl:flex-row  lg:gap-10">
 				{PROJECTS.slice(0, 2).map(project => (
 					<ProjectShowcase key={project.id} project={project} />
 				))}

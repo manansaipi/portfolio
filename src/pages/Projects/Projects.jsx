@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "@/constants/projects";
 import LaptopMockup from "@/components/ui/LaptopMockup/LaptopMockup";
+import TabletMockup from "@/components/ui/TabletMockup/TabletMockup";
 import MobileMockup from "@/components/ui/MobileMockup/MobileMockup";
 import Magnet from "@/components/ui/Magnet/Magnet";
 
@@ -110,7 +111,10 @@ const RichProjectShowcase = ({ project, index }) => {
                         <div className="hidden lg:block">
                             <LaptopMockup project={project} />
                         </div>
-                        <div className="block lg:hidden">
+                        <div className="hidden md:block lg:hidden">
+                            <TabletMockup project={project} />
+                        </div>
+                        <div className="block md:hidden">
                             <MobileMockup project={project} />
                         </div>
                     </div>
