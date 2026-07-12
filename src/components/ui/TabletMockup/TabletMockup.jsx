@@ -30,15 +30,15 @@ const TabletMockup = ({ project }) => {
     }, []);
 
     return (
-        <div ref={frameRef} className="w-full max-w-[500px] md:max-w-[640px] mx-auto relative my-8">
+        <div ref={frameRef} className="w-full max-w-[380px] md:max-w-[460px] mx-auto relative my-8">
             {/* Tablet Bezel */}
-            <div className="relative bg-[linear-gradient(145deg,rgba(40,40,40,1)_0%,rgba(28,28,28,1)_50%,rgba(35,35,35,1)_100%)] rounded-[24px] md:rounded-[32px] p-[16px] md:p-[24px] shadow-2xl border border-white/10 ring-1 ring-black/50">
+            <div className="relative bg-[linear-gradient(145deg,rgba(40,40,40,1)_0%,rgba(28,28,28,1)_50%,rgba(35,35,35,1)_100%)] rounded-[24px] md:rounded-[32px] p-[16px] md:p-[20px] shadow-2xl border border-white/10 ring-1 ring-black/50">
                 
                 {/* Camera */}
-                <div className="absolute top-[8px] md:top-[12px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] md:w-[6px] md:h-[6px] rounded-full bg-[radial-gradient(circle,rgba(60,60,70,1)_0%,rgba(30,30,35,1)_100%)] shadow-[inset_0_0_2px_rgba(255,255,255,0.2)]" />
+                <div className="absolute top-[8px] md:top-[10px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] md:w-[6px] md:h-[6px] rounded-full bg-[radial-gradient(circle,rgba(60,60,70,1)_0%,rgba(30,30,35,1)_100%)] shadow-[inset_0_0_2px_rgba(255,255,255,0.2)]" />
 
                 {/* Screen */}
-                <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[8px] md:rounded-[12px] bg-black">
+                <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[8px] md:rounded-[10px] bg-black">
                     {/* Glass reflection */}
                     <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.04)_0%,transparent_40%,transparent_60%,rgba(255,255,255,0.01)_100%)] pointer-events-none z-20" />
                     
