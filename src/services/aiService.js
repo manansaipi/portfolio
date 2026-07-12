@@ -5,15 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 export const askAI = async (question) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
 
-    if (!import.meta.env.DEV && isEmbed) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve("Abdul Mannan Saipi is a Software Engineer with over 2 years of professional experience. He is currently based in Central Jakarta, Indonesia.\n\nThroughout his career, he has worked at Samsung R&D Indonesia, LG Sinarmas Technology Solutions, PT Mattel Indonesia, and the Sekretariat Jendral DPR RI.");
-            }, 2000);
-        });
-    }
-
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || isEmbed) {
         
         const questionLower = question.toLowerCase();
         let mockResponse = "";

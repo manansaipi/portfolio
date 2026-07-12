@@ -159,9 +159,18 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
 
             // Sequence of commands requested by user
             if (!isCancelled) {
+                const questions = [
+                    "who is abdul mannan saipi ?",
+                    "what is his email ?",
+                    "can you share his social media ?",
+                    "what is his experience ?",
+                    "what is his nickname ?"
+                ];
+                const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
                 await typeAndEnter("/help", 3500);
                 await typeAndEnter("/ask", 2000);
-                await typeAndEnter("who is abdul mannan saipi ?", 10000); 
+                await typeAndEnter(randomQuestion, 10000); 
             }
 
             // 5. Zoom to close the terminal

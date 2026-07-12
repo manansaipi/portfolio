@@ -3,7 +3,8 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null) => {
-    if (import.meta.env.DEV) return;
+    const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
+    if (import.meta.env.DEV || isEmbed) return;
     try {
         const payload = {
             input_text: inputText,

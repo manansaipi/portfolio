@@ -11,6 +11,7 @@ export const PROJECTS = [
 			{ title: "Full-Stack Blog", desc: "Markdown-supported blog engine connected to a FastAPI backend." },
 			{ title: "Fluid Animations", desc: "Awwwards-winning level smooth scrolling and GSAP staggered entrances." },
 		],
+		githubUrl: "https://github.com/manansaipi/portfolio",
 		embedUrl: import.meta.env.DEV ? 'http://localhost:5173/?embed=true&autoScroll=true' : 'https://manansaipi.com/?embed=true&autoScroll=true',
 		autoScrollMode: "internal", // Uses JS inside the iframe to scroll itself
 	},
@@ -25,6 +26,7 @@ export const PROJECTS = [
 			{ title: "Haptic Feedback", desc: "Multi-sensory vibrations for physical feedback and spatial awareness." },
 			{ title: "Multi-Language Voice Commands", desc: "Speak naturally globally with automated voice commands." }
 		],
+		githubUrl: "https://github.com/FP-CAPSTONE/audio-vision-web",
 		url: "https://fp-capstone.github.io/audio-vision-web/",
 		embedUrl: "https://fp-capstone.github.io/audio-vision-web/?autoScroll=true",
 		autoScrollMode: "internal",
@@ -41,6 +43,7 @@ export const PROJECTS = [
 			{ title: "Favorite Movies", desc: "Save and manage favorite movies seamlessly with a FastAPI and MySQL backend." },
 			{ title: "Automated Demo", desc: "Custom simulated user interactions and fake cursor sequence." }
 		],
+		githubUrl: "https://github.com/manansaipi/s-frontend",
 		url: "https://s-frontend-omega.vercel.app/",
 		embedUrl: "https://s-frontend-omega.vercel.app/?autoScroll=true",
 		autoScrollMode: "internal",
@@ -56,6 +59,7 @@ export const PROJECTS = [
 			{ title: "Bento Grid Gallery", desc: "Aesthetic asymmetrical image gallery with hover effects." },
 			{ title: "Scrollytelling", desc: "Framer Motion powered elements that reveal beautifully on scroll." }
 		],
+		githubUrl: "https://github.com/manansaipi/roti-li-doku",
 		url: "https://manansaipi.github.io/roti-li-doku",
 		embedUrl: "https://manansaipi.github.io/roti-li-doku?autoScroll=true",
 		autoScrollMode: "internal",
@@ -71,6 +75,7 @@ export const PROJECTS = [
 			{ title: "Real-time Messaging", desc: "Integrated real-time chat system via Firebase Realtime Database." },
 			{ title: "Task Management", desc: "Create, update, and search tasks with image upload to Cloud Storage." }
 		],
+		githubUrl: "https://github.com/serfee/serfee-api-web",
 		url: "https://serfee.github.io/serfee-api-web/",
 		embedUrl: "https://serfee.github.io/serfee-api-web/?autoScroll=true",
 		autoScrollMode: "internal",
