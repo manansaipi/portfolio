@@ -6,6 +6,7 @@ import AdminWritings from "./components/AdminWritings";
 import AdminExperiences from "./components/AdminExperiences";
 import AdminCertificates from "./components/AdminCertificates";
 import AdminTerminalLogs from "./components/AdminTerminalLogs";
+import AdminUsers from "./components/AdminUsers";
 
 const AdminPanel = () => {
     const navigate = useNavigate();
@@ -36,6 +37,7 @@ const AdminPanel = () => {
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'experiences' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('experiences')}>Experiences</button>
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'certificates' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('certificates')}>Certificates</button>
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'terminal' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('terminal')}>Terminal Logs</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'users' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('users')}>Users</button>
             </div>
 
             <div className="p-10 border border-light-dark rounded-md">
@@ -43,6 +45,7 @@ const AdminPanel = () => {
                 {activeTab === "experiences" && <AdminExperiences />}
                 {activeTab === "certificates" && <AdminCertificates />}
                 {activeTab === "terminal" && <AdminTerminalLogs />}
+                {activeTab === "users" && <AdminUsers />}
             </div>
         </div>
     );
