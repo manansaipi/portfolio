@@ -17,7 +17,7 @@ export const useTerminalSimulation = ({ isEmbed, setInput, inputRef }) => {
             const fakeCursor = document.getElementById('embed-fake-cursor');
             const toggleBtn = document.querySelector('.terminal-toggle-btn');
             
-            const isMobile = window.innerWidth < 768;
+            const isMobile = window.innerWidth < 1024;
 
             if (fakeCursor && toggleBtn) {
                 const { default: gsap } = await import('gsap');
