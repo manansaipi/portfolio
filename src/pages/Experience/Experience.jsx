@@ -4,11 +4,11 @@ import ExperienceEntrance from "@pages/Experience/components/ExperienceEntrance/
 
 const Experience = () => {
 	return (
-		<>
+		<div class="overflow-x-hidden">
 			{/* <ExperienceEntrance /> */}
 			{/* i think better not using outlet here  */}
 			<Outlet />
-		</>
+		</div >
 	);
 };
 

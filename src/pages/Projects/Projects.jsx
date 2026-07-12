@@ -63,7 +63,7 @@ const RichProjectShowcase = ({ project, index }) => {
             {/* Background Ambient Gradient */}
             <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[500px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.01)_40%,transparent_70%)] pointer-events-none z-0 blur-[60px]" />
 
-            <div className="container mx-auto px-5 md:px-10 lg:px-20 relative z-10">
+            <div className="container mx-auto px-5 md:px-10 lg:px-20 relative">
                 {/* Header */}
                 <div ref={titleRef} className="mb-16 md:mb-24 text-center">
                     <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
