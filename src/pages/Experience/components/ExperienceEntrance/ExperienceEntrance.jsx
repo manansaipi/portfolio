@@ -13,8 +13,7 @@ import {
 import Works from "@constants/works";
 
 const ExperienceEntrance = () => {
-	const { navbarRef } = React.useContext(AppContext);
-	const { preloaderRef } = React.useContext(AppContext);
+	const { navbarRef, preloaderRef, handleButtonNavigation } = React.useContext(AppContext);
 	const lenis = useLenis();
 	const navigate = useNavigate();
 
@@ -89,6 +88,15 @@ const ExperienceEntrance = () => {
 					// TODO : we can use scroll trigger to expand what i am doing in each work instead of using another route
 				))}
 			</div>
+			
+			{!isExperienceDetail && (
+				<div className="flex justify-center py-20">
+					<PrimaryButton
+						label={"MY BLOG"}
+						handleOnClick={() => handleButtonNavigation("/blog")}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };

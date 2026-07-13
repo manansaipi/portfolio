@@ -39,8 +39,8 @@ const Certificate = () => {
 
 			<div className="flex justify-center py-20">
 				<PrimaryButton
-					label={"MY WORK"}
-					handleOnClick={() => handleButtonNavigation("/work")}
+					label={"MY PROJECTS"}
+					handleOnClick={() => handleButtonNavigation("/projects")}
 				/>
 			</div>
 		</>

@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import authorImg from "@assets/img/author/no_profile.webp";
 import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
 import { useAllBlog } from "./useAllBlog";
+import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
+import { AppContext } from "@/App";
 
 const AllBlog = () => {
 	const { blogs, headerContainerRef, imageRefs, onImageNavigate } = useAllBlog();
+	const { handleButtonNavigation } = useContext(AppContext);
 
 	return (
 		<div className="bg-background min-h-[100vh] text-primary ">
@@ -92,6 +95,13 @@ const AllBlog = () => {
 						</div>
 					</div>
 				))}
+			</div>
+
+			<div className="flex justify-center py-20">
+				<PrimaryButton
+					label={"CONTACT ME"}
+					handleOnClick={() => handleButtonNavigation("/contact")}
+				/>
 			</div>
 		</div>
 	);

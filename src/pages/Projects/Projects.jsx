@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useContext } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS } from "@/constants/projects";
@@ -6,6 +6,8 @@ import LaptopMockup from "@/components/ui/LaptopMockup/LaptopMockup";
 import TabletMockup from "@/components/ui/TabletMockup/TabletMockup";
 import MobileMockup from "@/components/ui/MobileMockup/MobileMockup";
 import Magnet from "@/components/ui/Magnet/Magnet";
+import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
+import { AppContext } from "@/App";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -159,6 +161,7 @@ const RichProjectShowcase = ({ project, index }) => {
 
 const Projects = () => {
     const pageRef = useRef();
+    const { handleButtonNavigation } = useContext(AppContext);
 
     useLayoutEffect(() => {
         let ctx = gsap.context(() => {
@@ -183,6 +186,13 @@ const Projects = () => {
 				{PROJECTS.map((project, index) => (
 					<RichProjectShowcase key={project.id} project={project} index={index} />
 				))}
+			</div>
+
+			<div className="flex justify-center py-20">
+				<PrimaryButton
+					label={"MY WORK"}
+					handleOnClick={() => handleButtonNavigation("/work")}
+				/>
 			</div>
 		</div>
 	);
