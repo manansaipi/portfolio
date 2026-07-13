@@ -3,8 +3,8 @@ import { resolveImg } from "@utils/imageUtils";
 import { MdEdit } from "react-icons/md";
 import InputComment from "@components/ui/Input/InputComment.jsx";
 import CommentItem from "./CommentItem";
-import authorImgDefault from "@assets/img/author/no_profile.jpeg";
-import abdulImg from "@assets/img/author/abdulmannansaipi.png";
+import authorImgDefault from "@assets/img/author/no_profile.webp";
+import abdulImg from "@assets/img/author/abdulmannansaipi.webp";
 
 const CommentSection = ({ comments, handlers }) => {
 	const {

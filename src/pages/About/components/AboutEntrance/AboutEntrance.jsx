@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import graduate1 from "@assets/img/profiles/graduate1.JPG";
-import graduate2 from "@assets/img/profiles/graduate2.JPG";
+import graduate1 from "@assets/img/profiles/graduate1.webp";
+import graduate2 from "@assets/img/profiles/graduate2.webp";
 import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);

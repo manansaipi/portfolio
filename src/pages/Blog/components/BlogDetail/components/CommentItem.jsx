@@ -5,8 +5,8 @@ import { MdVerified, MdEdit } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import InputComment from "@components/ui/Input/InputComment.jsx";
-import authorImgDefault from "@assets/img/author/no_profile.jpeg";
-import abdulImg from "@assets/img/author/abdulmannansaipi.png";
+import authorImgDefault from "@assets/img/author/no_profile.webp";
+import abdulImg from "@assets/img/author/abdulmannansaipi.webp";
 
 const CommentItem = ({
 	commentObj,

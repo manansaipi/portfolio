@@ -1,5 +1,5 @@
 import React from "react";
-import authorImg from "@assets/img/author/no_profile.jpeg";
+import authorImg from "@assets/img/author/no_profile.webp";
 import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
 import { useAllBlog } from "./useAllBlog";

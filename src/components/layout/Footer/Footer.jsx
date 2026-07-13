@@ -1,5 +1,5 @@
 import React from "react";
-import bgImage from "@assets/img/bg/noise-transparent.png"; // adjust the path as needed
+import bgImage from "@assets/img/bg/noise-transparent.webp"; // adjust the path as needed
 
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
 import { AppContext } from "@/App";

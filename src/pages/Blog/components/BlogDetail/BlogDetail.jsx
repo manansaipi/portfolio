@@ -3,10 +3,11 @@ import { useBlogDetail } from "./useBlogDetail";
 import CommentSection from "./components/CommentSection";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton.jsx";
 import { MdVerified } from "react-icons/md";
-import authorImgDefault from "@assets/img/author/no_profile.jpeg";
+import authorImgDefault from "@assets/img/author/no_profile.webp";
 import { resolveImg } from "@utils/imageUtils.js";
 import dayjs from "dayjs";
 import ImageCarousel from "@components/ui/ImageCarousel/ImageCarousel";
+import { Helmet } from "react-helmet-async";
 
 const BlogDetail = () => {
 	const handlers = useBlogDetail();

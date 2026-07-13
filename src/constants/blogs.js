@@ -1,4 +1,4 @@
-import authorImg from "@assets/img/author/abdulmannansaipi.png";
+import authorImg from "@assets/img/author/abdulmannansaipi.webp";
 
 const blogs = [
 	{

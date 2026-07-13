@@ -1,5 +1,5 @@
 import React from "react";
-import bobendprImg from "@assets/img/profiles/bobendpr.jpg"; // adjust the path as needed
+import bobendprImg from "@assets/img/profiles/bobendpr.webp"; // adjust the path as needed
 
 const ImageIntro = ({imgContainerRef, imgRef, className}) => {
     return (

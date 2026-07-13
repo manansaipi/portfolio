@@ -12,7 +12,8 @@ import AdminLogin from "@components/ui/AdminLogin/AdminLogin";
 import Navbar from "@components/layout/Navbar/Navbar";
 import FloatingAdminButton from "@components/ui/FloatingAdminButton/FloatingAdminButton";
 import TerminalFloating from "@components/ui/Terminal/TerminalFloating";
-import Home from "@pages/Home/Home";
+import { Helmet } from 'react-helmet-async';
+const Home = React.lazy(() => import("@pages/Home/Home"));
 
 export const AppContext = React.createContext({});
 
@@ -72,6 +73,10 @@ const App = () => {
             }}
         >
             <ReactLenis root>
+                <Helmet>
+                    <title>Abdul Mannan Saipi | Portfolio</title>
+                    <meta name="description" content="Portfolio of Abdul Mannan Saipi, a Software Engineer based in Indonesia." />
+                </Helmet>
                 {!isEmbed && <CustomCursor />}
                 {!isEmbed && (
                     <PreLoader
@@ -85,7 +90,9 @@ const App = () => {
                     </div>
                 )}
                 <div className={isHome ? "" : "hidden"}>
-                    <Home />
+                    <React.Suspense fallback={null}>
+                        <Home />
+                    </React.Suspense>
                 </div>
                 <div className={isHome ? "hidden" : ""}>
                     <Outlet />

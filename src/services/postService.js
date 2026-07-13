@@ -3,6 +3,9 @@ import comments from "@constants/comments";
 import blogs from "@constants/blogs";
 
 export const getAllWritings = async () => {
+    const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
+    if (isEmbed) return blogs;
+
     try {
         const response = await api.get("/api/writings");
         return response.data;

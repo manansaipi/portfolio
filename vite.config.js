@@ -26,4 +26,16 @@ export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	base: "/",
 	assetsInclude: ["**/*.glb", "**/*.jpeg", "**/*.jpg", "**/*.JPEG", "**/*.JPG"],
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					'vendor-react': ['react', 'react-dom', 'react-router'],
+					'vendor-three': ['three', '@react-three/fiber', '@react-three/drei', '@react-three/rapier'],
+					'vendor-gsap': ['gsap', '@gsap/react'],
+					'vendor-utils': ['axios', 'dayjs', 'lenis']
+				}
+			}
+		}
+	}
 });

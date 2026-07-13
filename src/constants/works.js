@@ -1,13 +1,13 @@
-import galadinerlgsm from "@assets/img/profiles/galadinerlgsm.JPEG";
-import samsung from "@assets/img/profiles/SAMSUNG.jpg";
-import lg1 from "@assets/img/profiles/lg1.jpeg";
-import lg2 from "@assets/img/profiles/lg2.jpeg";
-import mattel from "@assets/img/profiles/mattel.jpg";
-import mattel1 from "@assets/img/profiles/mattel1.jpeg";
-import mattel2 from "@assets/img/profiles/mattel2.jpeg";
-import dpr from "@assets/img/profiles/dpr.JPEG";
-import dpr1 from "@assets/img/profiles/dpr1.jpeg";
-import dpr2 from "@assets/img/profiles/dpr2.jpeg";
+import galadinerlgsm from "@assets/img/profiles/galadinerlgsm.webp";
+import samsung from "@assets/img/profiles/SAMSUNG.webp";
+import lg1 from "@assets/img/profiles/lg1.webp";
+import lg2 from "@assets/img/profiles/lg2.webp";
+import mattel from "@assets/img/profiles/mattel.webp";
+import mattel1 from "@assets/img/profiles/mattel1.webp";
+import mattel2 from "@assets/img/profiles/mattel2.webp";
+import dpr from "@assets/img/profiles/dpr.webp";
+import dpr1 from "@assets/img/profiles/dpr1.webp";
+import dpr2 from "@assets/img/profiles/dpr2.webp";
 
 const Works = [
 	{
