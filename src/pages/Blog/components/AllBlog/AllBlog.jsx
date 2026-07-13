@@ -99,8 +99,8 @@ const AllBlog = () => {
 
 			<div className="flex justify-center py-20">
 				<PrimaryButton
-					label={"CONTACT ME"}
-					handleOnClick={() => handleButtonNavigation("/contact")}
+					label={"GUESTBOOK"}
+					handleOnClick={() => handleButtonNavigation("/guestbook")}
 				/>
 			</div>
 		</div>

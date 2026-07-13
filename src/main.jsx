@@ -20,6 +20,7 @@ const NotFound = lazy(() => import("@pages/NotFound/NotFound.jsx"));
 const AllBlog = lazy(() => import("@pages/Blog/components/AllBlog/AllBlog.jsx"));
 const BlogDetail = lazy(() => import("@pages/Blog/components/BlogDetail/BlogDetail.jsx"));
 const Projects = lazy(() => import("@pages/Projects/Projects.jsx"));
+const Guestbook = lazy(() => import("@pages/Guestbook/Guestbook.jsx"));
 const AdminPanel = lazy(() => import("@pages/Admin/AdminPanel.jsx"));
 
 import { HelmetProvider } from 'react-helmet-async';
@@ -56,6 +57,7 @@ createRoot(document.getElementById("root")).render(
                                 <Route path=":blogId" element={<BlogDetail />} />
                             </Route>
                             <Route path="projects" element={<Projects />} />
+                            <Route path="guestbook" element={<Guestbook />} />
                             <Route path="contact" element={<Contact />} />
                             <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
                         </Route>

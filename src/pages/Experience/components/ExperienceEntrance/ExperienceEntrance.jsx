@@ -27,7 +27,7 @@ const ExperienceEntrance = () => {
 	}, []);
 
 	return (
-		<div className="pt-[20vh] pb-100 bg-light-dark text-primary px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75">
+		<div className="pt-[20vh] bg-light-dark text-primary px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75">
 			{!isExperienceDetail && (
 				<div
 					ref={headerContainerRef}
@@ -90,7 +90,7 @@ const ExperienceEntrance = () => {
 			</div>
 			
 			{!isExperienceDetail && (
-				<div className="flex justify-center py-20">
+				<div className="flex justify-center pb-20">
 					<PrimaryButton
 						label={"MY BLOG"}
 						handleOnClick={() => handleButtonNavigation("/blog")}

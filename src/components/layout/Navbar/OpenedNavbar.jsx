@@ -96,7 +96,6 @@ const OpenedNavbar = ({
 						>
 							<a onClick={() => handleButtonNavigation("/blog")}>WRITING</a>
 						</div>
-
 						
 						<div
 							className={getLinkClass("/contact")}
