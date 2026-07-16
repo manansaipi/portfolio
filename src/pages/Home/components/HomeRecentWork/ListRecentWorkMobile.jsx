@@ -19,7 +19,7 @@ const ListRecentWorkMobile = ({ works }) => {
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-10">
-			{works.slice(0, 3).map((work, index) => {
+			{works.map((work, index) => {
 				return (
 					<a
 						key={work.id}
@@ -36,6 +36,7 @@ const ListRecentWorkMobile = ({ works }) => {
 						data-name="view"
 						className={`flex flex-col
 							                ${index === 2 ? "md:col-span-2" : ""} 
+											${index > 2 ? "md:hidden" : ""}
 							gap-5 text-white h-full w-full group`}
 					>
 						<div className={`h-[50vh]  ${work.bgColor} pointer-events-none `}>

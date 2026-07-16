@@ -41,11 +41,11 @@ const AdminPanel = () => {
             </div>
 
             <div className="p-10 border border-light-dark rounded-md">
-                {activeTab === "writings" && <AdminWritings />}
-                {activeTab === "experiences" && <AdminExperiences />}
-                {activeTab === "certificates" && <AdminCertificates />}
-                {activeTab === "terminal" && <AdminTerminalLogs />}
-                {activeTab === "users" && <AdminUsers />}
+                <div style={{ display: activeTab === "writings" ? "block" : "none" }}><AdminWritings /></div>
+                <div style={{ display: activeTab === "experiences" ? "block" : "none" }}><AdminExperiences /></div>
+                <div style={{ display: activeTab === "certificates" ? "block" : "none" }}><AdminCertificates /></div>
+                <div style={{ display: activeTab === "terminal" ? "block" : "none" }}><AdminTerminalLogs /></div>
+                <div style={{ display: activeTab === "users" ? "block" : "none" }}><AdminUsers /></div>
             </div>
         </div>
     );

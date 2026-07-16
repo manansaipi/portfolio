@@ -37,10 +37,14 @@ const PreLoader = ({
 
 		if (location.pathname === "/") {
 			let loadDelay = 7;
-			if (localStorage.getItem('hasVisited')) {
+			const visitedTimestamp = localStorage.getItem('hasVisitedTimestamp');
+			const now = new Date().getTime();
+			const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+			
+			if (visitedTimestamp && (now - parseInt(visitedTimestamp, 10)) < sevenDaysInMs) {
 				loadDelay = 0;
 			} else {
-				localStorage.setItem('hasVisited', 'true');
+				localStorage.setItem('hasVisitedTimestamp', now.toString());
 			}
 
 			tl.to(preloaderRef.current, {

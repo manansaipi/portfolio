@@ -1,9 +1,9 @@
 import api from "@services/api";
 
 // --- WRITings (Blogs) ---
-export const getWritings = async () => (await api.get("/api/writings")).data;
+export const getWritings = async () => (await api.get("/api/writings/")).data;
 export const createWriting = async (data) => {
-    const res = await api.post("/api/writings", data);
+    const res = await api.post("/api/writings/", data);
     return res.data;
 };
 export const updateWriting = async (id, data) => {
@@ -16,9 +16,9 @@ export const deleteWriting = async (id) => {
 };
 
 // --- EXPERIENCES (Works) ---
-export const getExperiences = async () => (await api.get("/api/experiences")).data;
+export const getExperiences = async () => (await api.get("/api/experiences/")).data;
 export const createExperience = async (data) => {
-    const res = await api.post("/api/experiences", data);
+    const res = await api.post("/api/experiences/", data);
     return res.data;
 };
 export const updateExperience = async (id, data) => {
@@ -31,9 +31,9 @@ export const deleteExperience = async (id) => {
 };
 
 // --- CERTIFICATES ---
-export const getCertificates = async () => (await api.get("/api/certificates")).data;
+export const getCertificates = async () => (await api.get("/api/certificates/")).data;
 export const createCertificate = async (data) => {
-    const res = await api.post("/api/certificates", data);
+    const res = await api.post("/api/certificates/", data);
     return res.data;
 };
 export const updateCertificate = async (id, data) => {
@@ -59,16 +59,16 @@ export const updateComment = async (id, data) => {
 export const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    const response = await api.post("/api/upload", formData, {
+    const response = await api.post("/api/upload/", formData, {
         headers: { "Content-Type": "multipart/form-data" }
     });
     return response.data;
 };
 
 // --- USERS ---
-export const getUsers = async () => (await api.get("/api/users")).data;
+export const getUsers = async () => (await api.get("/api/users/")).data;
 export const createUser = async (data) => {
-    const res = await api.post("/api/users", data);
+    const res = await api.post("/api/users/", data);
     return res.data;
 };
 export const deleteUser = async (id) => {

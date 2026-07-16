@@ -2,17 +2,30 @@ import api from "@services/api";
 import comments from "@constants/comments";
 import blogs from "@constants/blogs";
 
+let cachedWritings = null;
+let fetchWritingsPromise = null;
+
 export const getAllWritings = async () => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
     if (isEmbed) return blogs;
 
-    try {
-        const response = await api.get("/api/writings");
-        return response.data;
-    } catch (error) {
-        console.warn("Failed to fetch writings from API, falling back to constant data.", error.message);
-        return blogs;
-    }
+    if (cachedWritings) return cachedWritings;
+    if (fetchWritingsPromise) return fetchWritingsPromise;
+
+    fetchWritingsPromise = (async () => {
+        try {
+            const response = await api.get("/api/writings/");
+            cachedWritings = response.data;
+            return cachedWritings;
+        } catch (error) {
+            console.warn("Failed to fetch writings from API, falling back to constant data.", error.message);
+            return blogs;
+        } finally {
+            fetchWritingsPromise = null;
+        }
+    })();
+    
+    return fetchWritingsPromise;
 };
 
 export const getCommentByPostId = async (postId) => {
