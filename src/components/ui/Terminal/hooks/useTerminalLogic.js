@@ -202,17 +202,17 @@ export const useTerminalLogic = () => {
                     break;
                 case '/projects':
                     systemResponseText = '[Displayed projects]';
-                    setHistory((prev) => [
-                        ...prev,
-                        { type: 'output', content: '📱 AudioVision: Real-Time Object Detection Mobile App' },
-                        { type: 'output', content: '   Uses YOLOv8 and TensorFlow Lite to assist visually impaired users with audio navigation.' },
-                        { type: 'output', content: ' ' },
-                        { type: 'output', content: '☁️ Serfee API: Robust Backend for Mobile Services' },
-                        { type: 'output', content: '   RESTful APIs deployed on GCP using Cloud Run, App Engine, Docker, and CI/CD pipelines.' },
-                        { type: 'output', content: ' ' },
-                        { type: 'output', content: '🎫 Ticketing Web Application v2' },
-                        { type: 'output', content: '   Built with Laravel and Bootstrap, integrating Telegram chatbots for instant notifications.' }
-                    ]);
+                    import('@constants/projects').then(({ PROJECTS }) => {
+                        const projectsOutput = [];
+                        PROJECTS.forEach((p, idx) => {
+                            if (idx > 0) projectsOutput.push({ type: 'output', content: ' ' });
+                            projectsOutput.push({ type: 'output', content: `🚀 ${p.title}` });
+                            projectsOutput.push({ type: 'output', content: `   ${p.description}` });
+                        });
+                        setHistory((prev) => [...prev, ...projectsOutput]);
+                    }).catch(err => {
+                        setHistory((prev) => [...prev, { type: 'error', content: 'Failed to load projects.' }]);
+                    });
                     break;
                 case '/experience':
                     setHistory((prev) => [...prev, { type: 'system', content: 'Fetching experiences from API...' }]);

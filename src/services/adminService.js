@@ -59,16 +59,16 @@ export const updateComment = async (id, data) => {
 export const uploadFile = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
-    const response = await api.post("/api/upload/", formData, {
+    const response = await api.post("/api/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
     });
     return response.data;
 };
 
 // --- USERS ---
-export const getUsers = async () => (await api.get("/api/users/")).data;
+export const getUsers = async () => (await api.get("/api/users")).data;
 export const createUser = async (data) => {
-    const res = await api.post("/api/users/", data);
+    const res = await api.post("/api/users", data);
     return res.data;
 };
 export const deleteUser = async (id) => {
