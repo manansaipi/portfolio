@@ -11,6 +11,7 @@ const HomeBlog = () => {
 		imageRefs,
 		onImageNavigate,
 		handleButtonNavigation,
+		isLoading,
 	} = useHomeBlog();
 
 	return (
@@ -28,37 +29,47 @@ const HomeBlog = () => {
 					</div>
 				</div>
 				<div className="flex flex-col md:flex-row gap-5 ">
-					{blogs.slice(0, 2).map((blog, index) => (
-						<a
-							key={index}
-							onClick={() => onImageNavigate(blog, index)}
-                            onMouseEnter={() => prefetchComments(blog.id)}
-							data-name="view"
-							className="group w-full cursor-none"
-						>
-							<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[30vh] max-h-[50vh] ">
-								<img
-									ref={(el) => (imageRefs.current[index] = el)}
-									className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out w-full max-h-[70vh] "
-									src={blog.image}
-									alt="img"
-								/>
+					{isLoading ? (
+						[1, 2].map((item) => (
+							<div key={item} className="w-full">
+								<div className="my-2 w-full min-h-[30vh] max-h-[50vh] bg-white/5 animate-pulse rounded"></div>
+								<div className="h-8 bg-white/5 animate-pulse rounded mt-4 mb-2 w-3/4"></div>
+								<div className="h-4 bg-white/5 animate-pulse rounded w-1/4 mt-2"></div>
 							</div>
-							<div
+						))
+					) : (
+						blogs.slice(0, 2).map((blog, index) => (
+							<a
+								key={index}
+								onClick={() => onImageNavigate(blog, index)}
+								onMouseEnter={() => prefetchComments(blog.id)}
 								data-name="view"
-								className="text-2xl font-bold"
+								className="group w-full cursor-none"
 							>
-								{blog.title}
-							</div>
+								<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[30vh] max-h-[50vh] ">
+									<img
+										ref={(el) => (imageRefs.current[index] = el)}
+										className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out w-full max-h-[70vh] "
+										src={blog.image}
+										alt="img"
+									/>
+								</div>
+								<div
+									data-name="view"
+									className="text-2xl font-bold"
+								>
+									{blog.title}
+								</div>
 
-							<div
-								data-name="view"
-								className="text-color-text-hovering  text-sm font-bold tracking-[2px] uppercase mt-2"
-							>
-								{dayjs(blog.published_at).format("MMM D, YYYY")}
-							</div>
-						</a>
-					))}
+								<div
+									data-name="view"
+									className="text-color-text-hovering  text-sm font-bold tracking-[2px] uppercase mt-2"
+								>
+									{dayjs(blog.published_at).format("MMM D, YYYY")}
+								</div>
+							</a>
+						))
+					)}
 				</div>
 			</div>
 			<div className="flex  items-center justify-center">

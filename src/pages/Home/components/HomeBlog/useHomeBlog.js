@@ -21,6 +21,7 @@ export const useHomeBlog = () => {
 	const imageRefs = useRef([]);
 
 	const [blogs, setBlogs] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchBlogs = async () => {
@@ -29,6 +30,8 @@ export const useHomeBlog = () => {
 				setBlogs(data);
 			} catch (error) {
 				console.error("Error fetching blogs:", error);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchBlogs();
@@ -59,5 +62,6 @@ export const useHomeBlog = () => {
 		imageRefs,
 		onImageNavigate,
 		handleButtonNavigation,
+		isLoading,
 	};
 };
