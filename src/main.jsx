@@ -22,6 +22,7 @@ const BlogDetail = lazy(() => import("@pages/Blog/components/BlogDetail/BlogDeta
 const Projects = lazy(() => import("@pages/Projects/Projects.jsx"));
 const Guestbook = lazy(() => import("@pages/Guestbook/Guestbook.jsx"));
 const AdminPanel = lazy(() => import("@pages/Admin/AdminPanel.jsx"));
+const Social = lazy(() => import("@pages/Social/Social.jsx"));
 
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -59,6 +60,7 @@ createRoot(document.getElementById("root")).render(
                             <Route path="projects" element={<Projects />} />
                             <Route path="guestbook" element={<Guestbook />} />
                             <Route path="contact" element={<Contact />} />
+                            <Route path="social" element={<Social />} />
                             <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
                         </Route>
                     </Routes>
