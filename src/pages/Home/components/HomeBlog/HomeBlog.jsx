@@ -2,6 +2,7 @@ import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
 import { useHomeBlog } from "./useHomeBlog";
 import dayjs from "dayjs";
+import { prefetchComments } from "@services/postService";
 
 const HomeBlog = () => {
 	const {
@@ -31,6 +32,7 @@ const HomeBlog = () => {
 						<a
 							key={index}
 							onClick={() => onImageNavigate(blog, index)}
+                            onMouseEnter={() => prefetchComments(blog.id)}
 							data-name="view"
 							className="group w-full cursor-none"
 						>

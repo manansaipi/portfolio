@@ -98,13 +98,6 @@ const OpenedNavbar = ({
 						</div>
 						
 						<div
-							className={getLinkClass("/social")}
-							onClick={handleOpenNavbar}
-						>
-							<a onClick={() => handleButtonNavigation("/social")}>SOCIAL</a>
-						</div>
-						
-						<div
 							className={getLinkClass("/contact")}
 							onClick={handleOpenNavbar}
 						>

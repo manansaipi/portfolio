@@ -28,14 +28,30 @@ export const getAllWritings = async () => {
     return fetchWritingsPromise;
 };
 
+let commentsCache = {};
+let commentsPromises = {};
+
+export const prefetchComments = (postId) => {
+    getCommentByPostId(postId).catch(() => {});
+};
+
 export const getCommentByPostId = async (postId) => {
-    try {
-        const response = await api.get(`/api/writings/${postId}/comments`);
-        return response.data;
-    } catch (error) {
-        console.warn(`Failed to fetch comments for post ${postId}, falling back to constant data.`, error.message);
-        return error;
-    }
+    if (commentsCache[postId]) return commentsCache[postId];
+    if (commentsPromises[postId]) return commentsPromises[postId];
+
+    commentsPromises[postId] = (async () => {
+        try {
+            const response = await api.get(`/api/writings/${postId}/comments`);
+            commentsCache[postId] = response.data;
+            return response.data;
+        } catch (error) {
+            console.warn(`Failed to fetch comments for post ${postId}, falling back to constant data.`, error.message);
+            return error;
+        } finally {
+            delete commentsPromises[postId];
+        }
+    })();
+    return commentsPromises[postId];
 };
 
 export const addComment = async (postId, comment, name = "Anonymous", parentId = null) => {
@@ -47,6 +63,7 @@ export const addComment = async (postId, comment, name = "Anonymous", parentId =
         if (parentId) payload.parent_id = parentId;
         
         const response = await api.post(`/api/writings/${postId}/comments`, payload);
+        delete commentsCache[postId];
         return response.data;
     } catch (error) {
         console.warn("Failed to add comment via API, simulating success.", error.message);

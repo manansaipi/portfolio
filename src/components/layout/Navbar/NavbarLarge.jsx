@@ -113,17 +113,6 @@ const NavbarLarge = () => {
                                 </a>
                             </Magnet>
                         </div>
-                        <div className={getLinkClass("/social")}>
-                            <Magnet>
-                                <a
-                                    onClick={() =>
-                                        handleButtonNavigation("/social")
-                                    }
-                                >
-                                    Social
-                                </a>
-                            </Magnet>
-                        </div>
                         <div className={getLinkClass("/contact")}>
                             <Magnet>
                                 <a

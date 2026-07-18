@@ -4,6 +4,7 @@ import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
 import { useAllBlog } from "./useAllBlog";
 import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
+import { prefetchComments } from "@services/postService";
 import { AppContext } from "@/App";
 
 const AllBlog = () => {
@@ -61,6 +62,7 @@ const AllBlog = () => {
 						<a
 							data-name="view"
 							onClick={() => onImageNavigate(blog, index)}
+                            onMouseEnter={() => prefetchComments(blog.id)}
 							className={` group overflow-hidden max-h-[50vh] ${
 								index == 0
 									? "lg:max-h-[80vh]  lg:mx-15 xl:mx-25 2xl:mx-40 "
