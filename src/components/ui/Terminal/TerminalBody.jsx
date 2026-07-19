@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { renderFormattedText } from './utils/terminalFormatters';
 import TypewriterText from './components/TypewriterText';
 import ThinkingAnimation from './components/ThinkingAnimation';
+import MatrixRain from './components/MatrixRain';
 
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode, isEmbed, isProcessing, isStreaming, setIsStreaming }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
@@ -70,7 +71,9 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     line.type === 'highlight' ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 drop-shadow-md animate-gradient' :
                     line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
-                    {line.type === 'ai-response' ? (
+                    {line.type === 'matrix' ? (
+                        <MatrixRain />
+                    ) : line.type === 'ai-response' ? (
                         <TypewriterText line={line} setIsStreaming={setIsStreaming} />
                     ) : line.content === 'Thinking...' ? (
                         <ThinkingAnimation />

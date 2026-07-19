@@ -28,6 +28,8 @@ export const useTerminalLogic = (isEmbed = false) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
     const [input, setInput] = useState('');
+    const [commandHistory, setCommandHistory] = useState([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
     const [history, setHistory] = useState([
         { type: 'system', content: 'Welcome to My Portfolio Terminal' },
         { type: 'system', content: 'Type /help to see available commands.' },
@@ -78,6 +80,30 @@ export const useTerminalLogic = (isEmbed = false) => {
             }
         }
 
+        if (e.key === 'ArrowUp') {
+            if (commandHistory.length > 0) {
+                e.preventDefault();
+                const newIndex = historyIndex + 1 < commandHistory.length ? historyIndex + 1 : historyIndex;
+                if (newIndex !== -1) {
+                    setHistoryIndex(newIndex);
+                    setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+                }
+            }
+            return;
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex > -1) {
+                e.preventDefault();
+                const newIndex = historyIndex - 1;
+                setHistoryIndex(newIndex);
+                if (newIndex === -1) {
+                    setInput('');
+                } else {
+                    setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+                }
+            }
+            return;
+        }
+
         if (e.key === 'Tab') {
             e.preventDefault();
             if (suggestion) {
@@ -99,6 +125,14 @@ export const useTerminalLogic = (isEmbed = false) => {
 
             const command = input.trim().toLowerCase();
             const originalInput = input.trim();
+            if (originalInput) {
+                setCommandHistory(prev => {
+                    if (prev.length > 0 && prev[prev.length - 1] === originalInput) return prev;
+                    return [...prev, originalInput];
+                });
+            }
+            setHistoryIndex(-1);
+            
             setInput('');
             setHistory((prev) => [...prev, { type: 'command', content: `${currentPrompt}${originalInput}` }]);
 
@@ -210,6 +244,31 @@ export const useTerminalLogic = (isEmbed = false) => {
                         { type: 'output', content: '  /clear        - Clear terminal screen' },
                         { type: 'output', content: '  whoami        - Print current user' },
                         { type: 'output', content: '  date          - Print current date and time' }
+                    ]);
+                    break;
+                case 'sudo rm -rf /':
+                    systemResponseText = 'NICE TRY! 💥';
+                    setHistory((prev) => [
+                        ...prev,
+                        { type: 'error', content: 'PERMISSION DENIED: Nice try, but you do not have root privileges.' },
+                        { type: 'error', content: 'This incident will be reported to Santa Claus.' }
+                    ]);
+                    break;
+                case 'ping':
+                    systemResponseText = 'pong';
+                    const pingTime = Math.floor(Math.random() * 20) + 1;
+                    setHistory((prev) => [
+                        ...prev,
+                        { type: 'output', content: `PONG! Response time: ${pingTime}ms` },
+                        { type: 'output', content: '🏓 Ah, a classic. I am alive and well!' }
+                    ]);
+                    break;
+                case '/matrix':
+                    systemResponseText = 'Entering the Matrix...';
+                    setHistory((prev) => [
+                        ...prev,
+                        { type: 'system', content: 'Wake up, Neo...' },
+                        { type: 'matrix' }
                     ]);
                     break;
                 case '/about':
