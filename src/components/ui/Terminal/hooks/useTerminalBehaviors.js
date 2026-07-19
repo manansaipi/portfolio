@@ -40,10 +40,10 @@ export const useTerminalBehaviors = ({
 
     // Focus input on open
     useEffect(() => {
-        if (isOpen && !isMinimized) {
+        if (isOpen && !isMinimized && !isEmbed) {
             setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
         }
-    }, [isOpen, isMinimized, isMaximized, inputRef]);
+    }, [isOpen, isMinimized, isMaximized, inputRef, isEmbed]);
 
     // Close terminal if scrolled out of view
     useEffect(() => {

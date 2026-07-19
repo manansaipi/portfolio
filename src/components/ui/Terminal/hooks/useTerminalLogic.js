@@ -3,7 +3,7 @@ import { AppContext } from '../../../../App';
 import { getAllWorks } from '@services/work';
 import { getAllWritings } from '@services/post';
 import { getCertificates } from '@services/admin';
-import { askAI, generateSpeech } from '@services/ai';
+import { askAI } from '@services/ai';
 import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
 
 const AVAILABLE_COMMANDS = [
@@ -51,25 +51,21 @@ export const useTerminalLogic = (isEmbed = false) => {
             }
         };
 
-        const speakText = async (text) => {
-            if (!text) return null;
+        const playAudio = async (audioResult) => {
+            if (!audioResult || !audioResult.audioBlob) return null;
             stopSpeech();
             
-            const result = await generateSpeech(text);
-            if (result && result.audioBlob) {
-                const audioUrl = URL.createObjectURL(result.audioBlob);
-                const audioRef = new window.Audio(audioUrl);
-                
-                try {
-                    await audioRef.play();
-                    return { audioRef: audioRef, alignment: result.alignment };
-                } catch (e) {
-                    console.error("Audio playback blocked by browser:", e);
-                    // Return null so the terminal falls back to normal typing without audio sync
-                    return null;
-                }
+            const audioUrl = URL.createObjectURL(audioResult.audioBlob);
+            const audioObj = new window.Audio(audioUrl);
+            
+            try {
+                await audioObj.play();
+                return { audioRef: audioObj, alignment: audioResult.alignment };
+            } catch (e) {
+                console.error("Audio playback blocked by browser:", e);
+                // Return null so the terminal falls back to normal typing without audio sync
+                return null;
             }
-            return null;
         };
 
         if (e.ctrlKey && e.key.toLowerCase() === 'c') {
@@ -123,12 +119,13 @@ export const useTerminalLogic = (isEmbed = false) => {
                 setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
                 let responseTextToLog = '';
                 try {
-                    const response = await askAI(originalInput);
-                    responseTextToLog = response || ' ';
+                    const responseObj = await askAI(originalInput);
+                    // Handle both mock strings and the new combined object
+                    responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
                     
                     let syncData = null;
-                    if (!isEmbed) {
-                        syncData = await speakText(responseTextToLog);
+                    if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                        syncData = await playAudio(responseObj.audioResult);
                     }
                     
                     setHistory((prev) => {
@@ -162,12 +159,13 @@ export const useTerminalLogic = (isEmbed = false) => {
                     setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
                     let responseTextToLog = '';
                     try {
-                        const response = await askAI(question);
-                        responseTextToLog = response || ' ';
+                        const responseObj = await askAI(question);
+                        // Handle both mock strings and the new combined object
+                        responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
                         
                         let syncData = null;
-                        if (!isEmbed) {
-                            syncData = await speakText(responseTextToLog);
+                        if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                            syncData = await playAudio(responseObj.audioResult);
                         }
                         
                         setHistory((prev) => {

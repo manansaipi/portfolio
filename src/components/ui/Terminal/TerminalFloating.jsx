@@ -49,7 +49,7 @@ const TerminalFloating = ({ isEmbed = false }) => {
     });
 
     const handleTerminalClick = () => {
-        if (!isMinimized) {
+        if (!isMinimized && !isEmbed) {
             inputRef.current?.focus({ preventScroll: true });
         }
     };
