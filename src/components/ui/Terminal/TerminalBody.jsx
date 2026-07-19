@@ -3,7 +3,7 @@ import { renderFormattedText } from './utils/terminalFormatters';
 import TypewriterText from './components/TypewriterText';
 import ThinkingAnimation from './components/ThinkingAnimation';
 
-const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode, isEmbed }) => {
+const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode, isEmbed, isProcessing, isStreaming, setIsStreaming }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
     const [isIdle, setIsIdle] = useState(true);
     const idleTimeoutRef = useRef(null);
@@ -55,7 +55,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
                     {line.type === 'ai-response' ? (
-                        <TypewriterText line={line} />
+                        <TypewriterText line={line} setIsStreaming={setIsStreaming} />
                     ) : line.content === 'Thinking...' ? (
                         <ThinkingAnimation />
                     ) : line.type === 'command' && line.content.startsWith('ai@manansaipi-portfolio:~$') ? (
@@ -86,7 +86,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     </span>
                     <span className="text-white">{input}</span>
                     {/* Caret */}
-                    <span className={`inline-block align-middle w-[2px] h-[1.1em] bg-white rounded-sm -ml-[1px] translate-y-[-1px] transition-opacity duration-300 ${isIdle ? 'animate-ms-caret' : 'opacity-100'}`}></span>
+                    <span className={`inline-block align-middle w-[2px] h-[1.1em] bg-white rounded-sm -ml-[1px] translate-y-[-1px] transition-opacity duration-300 ${(!isProcessing && !isStreaming && isIdle) ? 'animate-ms-caret' : 'opacity-0'}`}></span>
                     <span 
                         className={`pointer-events-auto text-white/30 ml-1 relative z-20 ${isEmbed ? '' : 'cursor-pointer'}`}
                         onClick={(e) => {
@@ -122,10 +122,10 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                             handleCommand(e);
                         }
                     }}
-                    className={`absolute inset-0 w-full h-full opacity-0 text-transparent bg-transparent border-none outline-none resize-none z-10 ${isEmbed ? 'pointer-events-none' : 'cursor-text'}`}
+                    className={`absolute inset-0 w-full h-full opacity-0 text-transparent bg-transparent border-none outline-none resize-none z-10 ${(isEmbed || isProcessing || isStreaming) ? 'pointer-events-none' : 'cursor-text'}`}
                     autoComplete="off"
                     spellCheck="false"
-                    readOnly={isEmbed}
+                    readOnly={isEmbed || isProcessing || isStreaming}
                 />
             </div>
             <div ref={bottomRef} />

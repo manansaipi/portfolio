@@ -26,6 +26,7 @@ export const useTerminalLogic = (isEmbed = false) => {
 
     const [isAiMode, setIsAiMode] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isStreaming, setIsStreaming] = useState(false);
     const [input, setInput] = useState('');
     const [history, setHistory] = useState([
         { type: 'system', content: 'Welcome to My Portfolio Terminal' },
@@ -38,7 +39,7 @@ export const useTerminalLogic = (isEmbed = false) => {
     const suggestion = matches.length > 0 ? matches[0] : '';
 
     const handleCommand = async (e) => {
-        if (isProcessing) {
+        if (isProcessing || isStreaming) {
             e.preventDefault();
             return;
         }
@@ -135,6 +136,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                         newHistory.pop(); // Remove "Thinking..."
                         return [...newHistory, { type: 'ai-response', content: responseTextToLog, syncData }];
                     });
+                    setIsStreaming(true);
                 } catch (error) {
                     responseTextToLog = 'Failed to connect to AI.';
                     setHistory((prev) => {
@@ -173,6 +175,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                             newHistory.pop();
                             return [...newHistory, { type: 'ai-response', content: responseTextToLog, syncData }];
                         });
+                        setIsStreaming(true);
                     } catch (error) {
                         responseTextToLog = 'Failed to connect to AI.';
                         setHistory((prev) => {
@@ -352,6 +355,9 @@ export const useTerminalLogic = (isEmbed = false) => {
         history,
         suggestion: isAiMode ? '' : suggestion, // disable suggestions in AI mode
         handleCommand,
-        isAiMode
+        isAiMode,
+        isProcessing,
+        isStreaming,
+        setIsStreaming
     };
 };

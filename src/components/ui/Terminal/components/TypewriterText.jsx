@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { renderMarkdownWithProgress } from '../utils/terminalFormatters';
 
-const TypewriterText = ({ line, delay = 15 }) => {
+const TypewriterText = ({ line, delay = 15, setIsStreaming }) => {
     const [spokenCount, setSpokenCount] = useState(line._completed ? line.content.length : 0);
     const containerRef = useRef(null);
     const animationFrameRef = useRef(null);
@@ -40,6 +40,7 @@ const TypewriterText = ({ line, delay = 15 }) => {
                 if (currentSpokenCount >= alignment.character_start_times_seconds.length || audio.ended) {
                     setSpokenCount(line.content.length);
                     line._completed = true;
+                    if (setIsStreaming) setIsStreaming(false);
                 } else {
                     animationFrameRef.current = requestAnimationFrame(updateText);
                 }
@@ -65,6 +66,7 @@ const TypewriterText = ({ line, delay = 15 }) => {
                     setSpokenCount(currentIndex);
                 } else {
                     line._completed = true;
+                    if (setIsStreaming) setIsStreaming(false);
                     clearInterval(interval);
                 }
             }, delay * 5); // delay is per character, multiply by 5 roughly for words
