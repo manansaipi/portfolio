@@ -15,6 +15,12 @@ export const useTerminalLogic = (isEmbed = false) => {
     const { toggleTheme, theme } = useContext(AppContext);
     const audioRef = useRef(null);
     
+    useEffect(() => {
+        if (!audioRef.current) {
+            audioRef.current = new window.Audio();
+        }
+    }, []);
+    
     const lastLogTimeRef = useRef(0);
     const logTerminalCommand = (originalInput, isAiMode, responseText, timeMs) => {
         const now = Date.now();
@@ -54,15 +60,15 @@ export const useTerminalLogic = (isEmbed = false) => {
         };
 
         const playAudio = async (audioResult) => {
-            if (!audioResult || !audioResult.audioBlob) return null;
+            if (!audioResult || !audioResult.audioBlob || !audioRef.current) return null;
             stopSpeech();
             
             const audioUrl = URL.createObjectURL(audioResult.audioBlob);
-            const audioObj = new window.Audio(audioUrl);
+            audioRef.current.src = audioUrl;
             
             try {
-                await audioObj.play();
-                return { audioRef: audioObj, alignment: audioResult.alignment };
+                await audioRef.current.play();
+                return { audioRef: audioRef.current, alignment: audioResult.alignment };
             } catch (e) {
                 console.error("Audio playback blocked by browser:", e);
                 // Return null so the terminal falls back to normal typing without audio sync
@@ -114,6 +120,18 @@ export const useTerminalLogic = (isEmbed = false) => {
                 e.preventDefault();
                 setInput(suggestion);
                 return;
+            }
+
+            // iOS WebKit Autoplay Unlock: synchronously interact with the persistent audio object 
+            // during the trusted user gesture (Enter keydown) before any async API calls.
+            if (audioRef.current) {
+                if (!audioRef.current.src || audioRef.current.src === window.location.href) {
+                    // Load a tiny silent MP3 base64 to initialize the audio context
+                    audioRef.current.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//MQAAAAAAASWAAAAA";
+                }
+                audioRef.current.play().then(() => {
+                    audioRef.current.pause();
+                }).catch(() => {}); // Ignore play() interrupt errors
             }
 
             const currentPrompt = isAiMode ? 'ai@manansaipi-portfolio:~$ ' : 'guest@manansaipi-portfolio:~$ ';
