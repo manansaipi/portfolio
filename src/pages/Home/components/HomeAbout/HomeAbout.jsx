@@ -4,7 +4,7 @@ import { AppContext } from "@/App";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimateRef } from "@utils/animationUtils";
-import { getAllWorks } from "@services/workService";
+import { getAllWorks } from "@services/work";
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -1,18 +1,19 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { AppContext } from '../../../../App';
-import { getAllWorks } from '@services/workService';
-import { getAllWritings } from '@services/postService';
-import { getCertificates } from '@services/adminService';
-import { askAI } from '@services/aiService';
-import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminalService';
+import { getAllWorks } from '@services/work';
+import { getAllWritings } from '@services/post';
+import { getCertificates } from '@services/admin';
+import { askAI, generateSpeech } from '@services/ai';
+import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
 
 const AVAILABLE_COMMANDS = [
     '/help', '/ask', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
     '/certificates', '/clear', '/theme', 'whoami', 'date'
 ];
 
-export const useTerminalLogic = () => {
+export const useTerminalLogic = (isEmbed = false) => {
     const { toggleTheme, theme } = useContext(AppContext);
+    const audioRef = useRef(null);
     
     const lastLogTimeRef = useRef(0);
     const logTerminalCommand = (originalInput, isAiMode, responseText, timeMs) => {
@@ -42,8 +43,37 @@ export const useTerminalLogic = () => {
             return;
         }
 
+        const stopSpeech = () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
+        };
+
+        const speakText = async (text) => {
+            if (!text) return null;
+            stopSpeech();
+            
+            const result = await generateSpeech(text);
+            if (result && result.audioBlob) {
+                const audioUrl = URL.createObjectURL(result.audioBlob);
+                const audioRef = new window.Audio(audioUrl);
+                
+                try {
+                    await audioRef.play();
+                    return { audioRef: audioRef, alignment: result.alignment };
+                } catch (e) {
+                    console.error("Audio playback blocked by browser:", e);
+                    // Return null so the terminal falls back to normal typing without audio sync
+                    return null;
+                }
+            }
+            return null;
+        };
+
         if (e.ctrlKey && e.key.toLowerCase() === 'c') {
             if (isAiMode) {
+                stopSpeech();
                 setIsAiMode(false);
                 setInput('');
                 setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
@@ -80,6 +110,7 @@ export const useTerminalLogic = () => {
 
             if (isAiMode) {
                 if (command === '/exit') {
+                    stopSpeech();
                     setIsAiMode(false);
                     setHistory((prev) => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
                     logTerminalCommand(originalInput, true, 'Exited AI mode.', Math.round(performance.now() - startTime));
@@ -87,15 +118,22 @@ export const useTerminalLogic = () => {
                     return;
                 }
 
+                stopSpeech();
                 setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
                 let responseTextToLog = '';
                 try {
                     const response = await askAI(originalInput);
                     responseTextToLog = response || ' ';
+                    
+                    let syncData = null;
+                    if (!isEmbed) {
+                        syncData = await speakText(responseTextToLog);
+                    }
+                    
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         newHistory.pop(); // Remove "Thinking..."
-                        return [...newHistory, { type: 'ai-response', content: responseTextToLog }];
+                        return [...newHistory, { type: 'ai-response', content: responseTextToLog, syncData }];
                     });
                 } catch (error) {
                     responseTextToLog = 'Failed to connect to AI.';
@@ -124,10 +162,16 @@ export const useTerminalLogic = () => {
                     try {
                         const response = await askAI(question);
                         responseTextToLog = response || ' ';
+                        
+                        let syncData = null;
+                        if (!isEmbed) {
+                            syncData = await speakText(responseTextToLog);
+                        }
+                        
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             newHistory.pop();
-                            return [...newHistory, { type: 'ai-response', content: responseTextToLog }];
+                            return [...newHistory, { type: 'ai-response', content: responseTextToLog, syncData }];
                         });
                     } catch (error) {
                         responseTextToLog = 'Failed to connect to AI.';

@@ -16,7 +16,7 @@ export const useAboutCertificate = () => {
 	useEffect(() => {
 		const fetchCerts = async () => {
 			try {
-				const { getCertificates } = await import("@services/adminService");
+				const { getCertificates } = await import("@services/admin");
 				const data = await getCertificates();
 				// Map description to desc to be compatible with existing components
 				const mappedData = data.map(c => ({

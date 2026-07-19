@@ -7,7 +7,7 @@ import {
 	getCommentByPostId,
 	addComment,
 	likeComment,
-} from "@services/postService.js";
+} from "@services/post";
 import { slugify } from "@utils/navigationImageAnimation.js";
 
 export const useBlogDetail = () => {
@@ -85,7 +85,7 @@ export const useBlogDetail = () => {
 	const handleDeleteComment = async (commentId) => {
 		if (!window.confirm("Are you sure you want to delete this comment?")) return;
 		try {
-			const { deleteComment } = await import("@services/adminService");
+			const { deleteComment } = await import("@services/admin");
 			await deleteComment(commentId);
 			if (currentBlog) fetchData(currentBlog.id);
 			toast.success("Comment deleted successfully");
@@ -102,7 +102,7 @@ export const useBlogDetail = () => {
 
 	const handleSaveEdit = async (commentId) => {
 		try {
-			const { updateComment } = await import("@services/adminService");
+			const { updateComment } = await import("@services/admin");
 			await updateComment(commentId, { content: editContent });
 			setEditingComment(null);
 			setEditContent("");

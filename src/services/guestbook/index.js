@@ -1,4 +1,4 @@
-import api from './api';
+import api from '../api';
 
 export const getGuestbookEntries = async (skip = 0, limit = 100) => {
     const response = await api.get(`/api/guestbook/?skip=${skip}&limit=${limit}`);

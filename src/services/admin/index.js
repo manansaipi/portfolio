@@ -1,4 +1,4 @@
-import api from "@services/api";
+import api from "../api";
 
 // --- WRITings (Blogs) ---
 export const getWritings = async () => (await api.get("/api/writings/")).data;

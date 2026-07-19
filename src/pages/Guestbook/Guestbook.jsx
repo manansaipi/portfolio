@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import gsap from "gsap";
 import { useLenis } from "lenis/react";
 import dayjs from "dayjs";
-import { getGuestbookEntries, createGuestbookEntry, updateGuestbookEntry, deleteGuestbookEntry } from "@/services/guestbookService";
+import { getGuestbookEntries, createGuestbookEntry, updateGuestbookEntry, deleteGuestbookEntry } from "@services/guestbook";
 import { useToast } from "@/components/ui/Toast/ToastProvider";
 import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
 import { AppContext } from "@/App";

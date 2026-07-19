@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, useEffect, useContext } from "react";
 import { AppContext } from "@/App";
-import { getAllWritings } from "@services/postService";
+import { getAllWritings } from "@services/post";
 import { AnimateRef } from "@utils/animationUtils";
 import { useNavigate } from "react-router";
 import { useLenis } from "lenis/react";

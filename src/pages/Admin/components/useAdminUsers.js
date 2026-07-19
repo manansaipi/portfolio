@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUsers, createUser, deleteUser } from '@services/adminService';
+import { getUsers, createUser, deleteUser } from '@services/admin';
 
 const useAdminUsers = () => {
     const [users, setUsers] = useState([]);

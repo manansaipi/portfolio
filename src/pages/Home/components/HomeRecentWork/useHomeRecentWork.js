@@ -32,7 +32,7 @@ export const useHomeRecentWork = () => {
 			isFetchingWorks = true;
 			fetchWorksPromise = (async () => {
 				try {
-					const { getExperiences } = await import("@services/adminService");
+					const { getExperiences } = await import("@services/admin");
 					const data = await getExperiences();
 					if (data && data.length > 0) {
 						// Map backend fields to the frontend expected schema

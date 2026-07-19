@@ -4,7 +4,7 @@ import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { resolveImg } from "@utils/imageUtils";
 import { useAdminWritings } from "./useAdminWritings";
-import { uploadFile } from "@services/adminService";
+import { uploadFile } from "@services/admin";
 
 const AdminWritings = () => {
     const {

@@ -24,7 +24,7 @@ const TerminalFloating = ({ isEmbed = false }) => {
         }
     }, [isOpen]);
 
-    const { input, setInput, history, suggestion, handleCommand, isAiMode } = useTerminalLogic();
+    const { input, setInput, history, suggestion, handleCommand, isAiMode } = useTerminalLogic(isEmbed);
     const { headerContainerRef } = useContext(AppContext);
 
     const bottomRef = useRef(null);

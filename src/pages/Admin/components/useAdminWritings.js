@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getWritings, deleteWriting, createWriting, updateWriting, uploadFile } from "@services/adminService";
+import { getWritings, deleteWriting, createWriting, updateWriting, uploadFile } from "@services/admin";
 import { useToast } from "@components/ui/Toast/ToastProvider";
 
 export const useAdminWritings = () => {

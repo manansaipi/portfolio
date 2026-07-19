@@ -1,4 +1,4 @@
-import api from "@services/api";
+import api from "../api";
 import comments from "@constants/comments";
 import blogs from "@constants/blogs";
 

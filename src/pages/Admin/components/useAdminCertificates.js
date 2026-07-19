@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCertificates, deleteCertificate, createCertificate, updateCertificate, uploadFile } from "@services/adminService";
+import { getCertificates, deleteCertificate, createCertificate, updateCertificate, uploadFile } from "@services/admin";
 import { useToast } from "@components/ui/Toast/ToastProvider";
 
 export const useAdminCertificates = () => {

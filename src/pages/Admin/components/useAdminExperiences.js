@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getExperiences, deleteExperience, createExperience, updateExperience, uploadFile } from "@services/adminService";
+import { getExperiences, deleteExperience, createExperience, updateExperience, uploadFile } from "@services/admin";
 import { useToast } from "@components/ui/Toast/ToastProvider";
 
 export const useAdminExperiences = () => {

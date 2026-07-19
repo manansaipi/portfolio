@@ -1,4 +1,4 @@
-import api from "@services/api";
+import api from "../api";
 import works from "@constants/works";
 
 let cachedWorksData = null;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTerminalLogs, deleteTerminalLogs, getTerminalCountries } from '@services/terminalService';
+import { getTerminalLogs, deleteTerminalLogs, getTerminalCountries } from '@services/terminal';
 
 const AdminTerminalLogs = () => {
     const [logs, setLogs] = useState([]);

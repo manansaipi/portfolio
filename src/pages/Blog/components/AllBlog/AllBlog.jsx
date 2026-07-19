@@ -4,7 +4,7 @@ import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
 import { useAllBlog } from "./useAllBlog";
 import PrimaryButton from "@/components/ui/Buttons/PrimaryButton";
-import { prefetchComments } from "@services/postService";
+import { prefetchComments } from "@services/post";
 import { AppContext } from "@/App";
 
 const AllBlog = () => {
