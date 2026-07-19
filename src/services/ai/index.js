@@ -38,7 +38,8 @@ export const generateSpeech = async (text) => {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
             const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+            const mimeType = response.data.audio_format || 'audio/mpeg';
+            const blob = new Blob([byteArray], { type: mimeType });
             
             return {
                 audioBlob: blob,

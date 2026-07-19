@@ -23,9 +23,13 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
     }, [input]);
 
     const updateCursorPosition = () => {
-        if (inputRef.current) {
-            setCursorPosition(inputRef.current.selectionStart);
-        }
+        // Use setTimeout to ensure we read the selectionStart AFTER the browser
+        // has processed the default keystroke action (like moving the cursor).
+        setTimeout(() => {
+            if (inputRef.current) {
+                setCursorPosition(inputRef.current.selectionStart);
+            }
+        }, 0);
     };
 
     const handleTouchStart = (e) => {
@@ -135,6 +139,10 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     onKeyUp={updateCursorPosition}
                     onKeyDown={(e) => {
                         updateCursorPosition();
+                        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Home' || e.key === 'End') {
+                            // Let the browser handle the cursor movement, update position in the next tick
+                            setTimeout(updateCursorPosition, 0);
+                        }
                         if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
                             handleCommand(e);

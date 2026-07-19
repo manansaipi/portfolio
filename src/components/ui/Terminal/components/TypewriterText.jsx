@@ -51,8 +51,44 @@ const TypewriterText = ({ line, delay = 15, setIsStreaming }) => {
             return () => {
                 if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
             };
+        } else if (syncData && syncData.audioRef) {
+            // Fallback for Gemini or others: We have audio but no precise alignment.
+            // We estimate progress based on audio duration.
+            const audio = syncData.audioRef;
+            
+            const updateText = () => {
+                const currentTime = audio.currentTime;
+                // audio.duration might be NaN initially until metadata is loaded
+                const duration = (isNaN(audio.duration) || !isFinite(audio.duration)) ? 0 : audio.duration;
+                
+                if (duration > 0) {
+                    const progress = Math.min(1, currentTime / duration);
+                    let currentSpokenCount = Math.floor(progress * line.content.length);
+                    
+                    // Advance to next space for word-by-word feel
+                    while (currentSpokenCount > 0 && currentSpokenCount < line.content.length && !/\s/.test(line.content[currentSpokenCount])) {
+                        currentSpokenCount++;
+                    }
+                    
+                    setSpokenCount(currentSpokenCount);
+                }
+                
+                if (audio.ended || (duration > 0 && currentTime >= duration - 0.1)) {
+                    setSpokenCount(line.content.length);
+                    line._completed = true;
+                    if (setIsStreaming) setIsStreaming(false);
+                } else {
+                    animationFrameRef.current = requestAnimationFrame(updateText);
+                }
+            };
+            
+            animationFrameRef.current = requestAnimationFrame(updateText);
+            
+            return () => {
+                if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+            };
         } else {
-            // Fallback to original fixed delay if no audio sync data
+            // Fallback to original fixed delay if absolutely no audio sync data
             let currentIndex = 0;
             const interval = setInterval(() => {
                 if (currentIndex < line.content.length) {
