@@ -6,6 +6,7 @@ import ThinkingAnimation from './components/ThinkingAnimation';
 const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleCommand, suggestion, bottomRef, isAiMode, isEmbed, isProcessing, isStreaming, setIsStreaming }) => {
     const [touchStart, setTouchStart] = useState({ x: null, y: null });
     const [isIdle, setIsIdle] = useState(true);
+    const [cursorPosition, setCursorPosition] = useState(0);
     const idleTimeoutRef = useRef(null);
     const fakeLayerRef = useRef(null);
 
@@ -13,8 +14,19 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
         setIsIdle(false);
         if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
         idleTimeoutRef.current = setTimeout(() => setIsIdle(true), 500);
+        
+        if (inputRef.current) {
+            setCursorPosition(inputRef.current.selectionStart);
+        }
+        
         return () => clearTimeout(idleTimeoutRef.current);
     }, [input]);
+
+    const updateCursorPosition = () => {
+        if (inputRef.current) {
+            setCursorPosition(inputRef.current.selectionStart);
+        }
+    };
 
     const handleTouchStart = (e) => {
         setTouchStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
@@ -84,9 +96,10 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     <span className={`${isAiMode ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient drop-shadow-md' : 'text-green-400'} font-semibold mr-2`}>
                         {isAiMode ? 'ai@manansaipi-portfolio:~$' : 'guest@manansaipi-portfolio:~$' }
                     </span>
-                    <span className="text-white">{input}</span>
+                    <span className="text-white">{input.slice(0, cursorPosition)}</span>
                     {/* Caret */}
                     <span className={`inline-block align-middle w-[2px] h-[1.1em] bg-white rounded-sm -ml-[1px] translate-y-[-1px] transition-opacity duration-300 ${(!isProcessing && !isStreaming && isIdle) ? 'animate-ms-caret' : 'opacity-0'}`}></span>
+                    <span className="text-white">{input.slice(cursorPosition)}</span>
                     <span 
                         className={`pointer-events-auto text-white/30 ml-1 relative z-20 ${isEmbed ? '' : 'cursor-pointer'}`}
                         onClick={(e) => {
@@ -113,8 +126,15 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                 <textarea
                     ref={inputRef}
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={(e) => {
+                        setInput(e.target.value);
+                        updateCursorPosition();
+                    }}
+                    onSelect={updateCursorPosition}
+                    onClick={updateCursorPosition}
+                    onKeyUp={updateCursorPosition}
                     onKeyDown={(e) => {
+                        updateCursorPosition();
                         if (e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
                             handleCommand(e);
