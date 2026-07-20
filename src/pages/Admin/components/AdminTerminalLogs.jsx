@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getTerminalLogs, deleteTerminalLogs, getTerminalCountries } from '@services/terminal';
+import { getTerminalLogs, deleteTerminalLogs, getTerminalCountries, getTerminalIps } from '@services/terminal';
 
 const AdminTerminalLogs = () => {
     const [logs, setLogs] = useState([]);
@@ -17,19 +17,25 @@ const AdminTerminalLogs = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [filterAiMode, setFilterAiMode] = useState("all");
     const [filterCountry, setFilterCountry] = useState("all");
+    const [filterIp, setFilterIp] = useState("all");
     const [availableCountries, setAvailableCountries] = useState([]);
+    const [availableIps, setAvailableIps] = useState([]);
 
     // Fetch unique countries on mount
     useEffect(() => {
-        const fetchCountries = async () => {
+        const fetchData = async () => {
             try {
-                const countries = await getTerminalCountries();
+                const [countries, ips] = await Promise.all([
+                    getTerminalCountries(),
+                    getTerminalIps()
+                ]);
                 setAvailableCountries(countries);
+                setAvailableIps(ips);
             } catch (err) {
-                console.error("Failed to fetch countries", err);
+                console.error("Failed to fetch filters", err);
             }
         };
-        fetchCountries();
+        fetchData();
     }, []);
 
     // Debounce search input
@@ -43,7 +49,7 @@ const AdminTerminalLogs = () => {
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const data = await getTerminalLogs(page * pageSize, pageSize, debouncedSearch, filterAiMode, filterCountry);
+            const data = await getTerminalLogs(page * pageSize, pageSize, debouncedSearch, filterAiMode, filterCountry, filterIp);
             setLogs(data.items);
             setTotal(data.total);
             // Clear selection on page change or refresh
@@ -58,11 +64,11 @@ const AdminTerminalLogs = () => {
     // Reset page to 0 when filters change
     useEffect(() => {
         setPage(0);
-    }, [debouncedSearch, filterAiMode, filterCountry, pageSize]);
+    }, [debouncedSearch, filterAiMode, filterCountry, filterIp, pageSize]);
 
     useEffect(() => {
         fetchLogs();
-    }, [page, pageSize, debouncedSearch, filterAiMode, filterCountry]);
+    }, [page, pageSize, debouncedSearch, filterAiMode, filterCountry, filterIp]);
 
     const handleSelectAll = (e) => {
         if (e.target.checked) {
@@ -125,7 +131,7 @@ const AdminTerminalLogs = () => {
                     <select 
                         value={filterAiMode}
                         onChange={(e) => setFilterAiMode(e.target.value)}
-                        className="bg-transparent border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm"
+                        className="bg-[#0a0a0a] border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm"
                     >
                         <option value="all">All Modes</option>
                         <option value="ai">AI Mode</option>
@@ -135,11 +141,22 @@ const AdminTerminalLogs = () => {
                     <select 
                         value={filterCountry}
                         onChange={(e) => setFilterCountry(e.target.value)}
-                        className="bg-transparent border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm max-w-[200px]"
+                        className="bg-[#0a0a0a] border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm max-w-[150px]"
                     >
                         <option value="all">All Countries</option>
                         {availableCountries.map(c => (
                             <option key={c} value={c}>{c}</option>
+                        ))}
+                    </select>
+
+                    <select 
+                        value={filterIp}
+                        onChange={(e) => setFilterIp(e.target.value)}
+                        className="bg-[#0a0a0a] border border-light-dark rounded px-3 py-1.5 focus:outline-none text-sm max-w-[150px]"
+                    >
+                        <option value="all">All IPs</option>
+                        {availableIps.map(ip => (
+                            <option key={ip} value={ip}>{ip}</option>
                         ))}
                     </select>
                 </div>
@@ -256,7 +273,7 @@ const AdminTerminalLogs = () => {
                             setPageSize(Number(e.target.value));
                             setPage(0);
                         }}
-                        className="bg-transparent border border-light-dark rounded px-2 py-1"
+                        className="bg-[#0a0a0a] border border-light-dark rounded px-2 py-1"
                     >
                         <option value={10}>10</option>
                         <option value={25}>25</option>
