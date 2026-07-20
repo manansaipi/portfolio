@@ -175,6 +175,7 @@ const AdminTerminalLogs = () => {
                             <th className="p-3">Location</th>
                             <th className="p-3">Input</th>
                             <th className="p-3">Response</th>
+                            <th className="p-3">Audio</th>
                             <th className="p-3">Mode</th>
                             <th className="p-3">Screen & Lang</th>
                             <th className="p-3">Referrer</th>
@@ -184,7 +185,7 @@ const AdminTerminalLogs = () => {
                     <tbody>
                         {logs.length === 0 ? (
                             <tr>
-                                <td colSpan="10" className="p-4 text-center text-gray-500">No terminal logs found.</td>
+                                <td colSpan="11" className="p-4 text-center text-gray-500">No terminal logs found.</td>
                             </tr>
                         ) : (
                             logs.map((log) => (
@@ -211,6 +212,16 @@ const AdminTerminalLogs = () => {
                                     </td>
                                     <td className="p-3 text-sm text-gray-300 align-top min-w-[200px] max-w-xs overflow-y-auto max-h-32 block">
                                         {log.response_text || '-'}
+                                    </td>
+                                    <td className="p-3 align-top min-w-[250px]">
+                                        {log.audio_base64 ? (
+                                            <audio controls className="h-8 w-full opacity-80 hover:opacity-100 transition-opacity">
+                                                <source src={`data:audio/mp3;base64,${log.audio_base64}`} type="audio/mpeg" />
+                                                Not supported.
+                                            </audio>
+                                        ) : (
+                                            <span className="text-gray-500 text-xs italic">-</span>
+                                        )}
                                     </td>
                                     <td className="p-3 align-top">
                                         {log.is_ai_mode ? (

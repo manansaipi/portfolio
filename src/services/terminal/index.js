@@ -1,6 +1,6 @@
 import api from '../api';
 
-export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null) => {
+export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null, audioBase64 = null) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
     if (import.meta.env.DEV || isEmbed) return;
     try {
@@ -9,6 +9,7 @@ export const logTerminalCommand = async (inputText, isAiMode = false, responseTe
             is_ai_mode: isAiMode,
             response_text: responseText,
             execution_time_ms: executionTimeMs,
+            audio_base64: audioBase64,
             screen_width: typeof window !== 'undefined' ? window.innerWidth : null,
             screen_height: typeof window !== 'undefined' ? window.innerHeight : null,
             language: typeof navigator !== 'undefined' ? navigator.language : null,

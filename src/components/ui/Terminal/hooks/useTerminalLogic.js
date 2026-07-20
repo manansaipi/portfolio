@@ -22,10 +22,10 @@ export const useTerminalLogic = (isEmbed = false) => {
     }, []);
     
     const lastLogTimeRef = useRef(0);
-    const logTerminalCommand = (originalInput, isAiMode, responseText, timeMs) => {
+    const logTerminalCommand = (originalInput, isAiMode, responseText, timeMs, audioBase64 = null) => {
         const now = Date.now();
         if (now - lastLogTimeRef.current > 1500) {
-            apiLogTerminalCommand(originalInput, isAiMode, responseText, timeMs);
+            apiLogTerminalCommand(originalInput, isAiMode, responseText, timeMs, audioBase64);
             lastLogTimeRef.current = now;
         }
     };
@@ -170,6 +170,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                 stopSpeech();
                 setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
                 let responseTextToLog = '';
+                let audioBase64Data = null;
                 try {
                     const responseObj = await askAI(originalInput);
                     // Handle both mock strings and the new combined object
@@ -177,6 +178,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                     
                     let syncData = null;
                     if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                        audioBase64Data = responseObj.audioResult.audioBase64;
                         syncData = await playAudio(responseObj.audioResult);
                     }
                     
@@ -194,7 +196,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                         return [...newHistory, { type: 'error', content: responseTextToLog }];
                     });
                 }
-                logTerminalCommand(originalInput, true, responseTextToLog, Math.round(performance.now() - startTime));
+                logTerminalCommand(originalInput, true, responseTextToLog, Math.round(performance.now() - startTime), audioBase64Data);
                 setIsProcessing(false);
                 return;
             }
@@ -210,6 +212,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                 if (question) {
                     setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
                     let responseTextToLog = '';
+                    let audioBase64Data = null;
                     try {
                         const responseObj = await askAI(question);
                         // Handle both mock strings and the new combined object
@@ -217,6 +220,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                         
                         let syncData = null;
                         if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                            audioBase64Data = responseObj.audioResult.audioBase64;
                             syncData = await playAudio(responseObj.audioResult);
                         }
                         
@@ -234,7 +238,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                             return [...newHistory, { type: 'error', content: responseTextToLog }];
                         });
                     }
-                    logTerminalCommand(originalInput, false, responseTextToLog, Math.round(performance.now() - startTime));
+                    logTerminalCommand(originalInput, false, responseTextToLog, Math.round(performance.now() - startTime), audioBase64Data);
                 } else {
                     logTerminalCommand(originalInput, false, 'Entered AI mode.', Math.round(performance.now() - startTime));
                 }

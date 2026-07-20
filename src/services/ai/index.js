@@ -26,6 +26,7 @@ export const askAI = async (question) => {
             
             audioResult = {
                 audioBlob: blob,
+                audioBase64: response.data.audio.audio_base64,
                 alignment: response.data.audio.alignment
             };
         }

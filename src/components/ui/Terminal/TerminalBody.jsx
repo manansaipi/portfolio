@@ -108,7 +108,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                     <span className={`inline-block align-middle w-[2px] h-[1.1em] bg-white rounded-sm -ml-[1px] translate-y-[-1px] transition-opacity duration-300 ${(!isProcessing && !isStreaming && isIdle) ? 'animate-ms-caret' : 'opacity-0'}`}></span>
                     <span className="text-white">{input.slice(cursorPosition)}</span>
                     <span 
-                        className={`pointer-events-auto text-white/30 ml-1 relative z-20 ${isEmbed ? '' : 'cursor-pointer'}`}
+                        className={`text-white/30 relative z-20 ${isEmbed ? '' : 'cursor-pointer'}`}
                         onClick={(e) => {
                             e.stopPropagation();
                             if(suggestion && !isEmbed) {
