@@ -1,8 +1,9 @@
+import { Environment } from '@react-three/drei';
 import api from '../api';
 
 export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null, audioBase64 = null) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-    if (isEmbed) return;
+    if (import.meta.env.DEV && isEmbed) return;
     try {
         const payload = {
             input_text: inputText,
