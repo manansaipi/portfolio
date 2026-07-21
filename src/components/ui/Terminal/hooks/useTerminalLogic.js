@@ -11,6 +11,15 @@ const AVAILABLE_COMMANDS = [
     '/certificates', '/clear', '/theme', 'whoami', 'date'
 ];
 
+const THINKING_MESSAGES = [
+    "Thinking...",
+    "Brewing some virtual coffee...",
+    "Consulting the AI matrix...",
+    "Loading 99%...",
+    "Asking the rubber duck...",
+    "Generating an insightful response..."
+];
+
 export const useTerminalLogic = (isEmbed = false) => {
     const { toggleTheme, theme } = useContext(AppContext);
     const audioRef = useRef(null);
@@ -168,11 +177,24 @@ export const useTerminalLogic = (isEmbed = false) => {
                 }
 
                 stopSpeech();
-                setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                let thinkingIndex = 0;
+                setHistory((prev) => [...prev, { type: 'system', content: THINKING_MESSAGES[0] }]);
+                const thinkingInterval = setInterval(() => {
+                    thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
+                    setHistory((prev) => {
+                        const newHistory = [...prev];
+                        if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'system') {
+                            newHistory[newHistory.length - 1] = { type: 'system', content: THINKING_MESSAGES[thinkingIndex] };
+                        }
+                        return newHistory;
+                    });
+                }, 3000);
+
                 let responseTextToLog = '';
                 let audioBase64Data = null;
                 try {
                     const responseObj = await askAI(originalInput);
+                    clearInterval(thinkingInterval);
                     // Handle both mock strings and the new combined object
                     responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
 
@@ -189,6 +211,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                     });
                     setIsStreaming(true);
                 } catch (error) {
+                    clearInterval(thinkingInterval);
                     responseTextToLog = 'Failed to connect to AI.';
                     setHistory((prev) => {
                         const newHistory = [...prev];
@@ -210,11 +233,24 @@ export const useTerminalLogic = (isEmbed = false) => {
                 
                 const question = originalInput.substring(4).trim();
                 if (question) {
-                    setHistory((prev) => [...prev, { type: 'system', content: 'Thinking...' }]);
+                    let thinkingIndex = 0;
+                    setHistory((prev) => [...prev, { type: 'system', content: THINKING_MESSAGES[0] }]);
+                    const thinkingInterval = setInterval(() => {
+                        thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
+                        setHistory((prev) => {
+                            const newHistory = [...prev];
+                            if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'system') {
+                                newHistory[newHistory.length - 1] = { type: 'system', content: THINKING_MESSAGES[thinkingIndex] };
+                            }
+                            return newHistory;
+                        });
+                    }, 3000);
+
                     let responseTextToLog = '';
                     let audioBase64Data = null;
                     try {
                         const responseObj = await askAI(question);
+                        clearInterval(thinkingInterval);
                         // Handle both mock strings and the new combined object
                         responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
 
@@ -231,6 +267,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                         });
                         setIsStreaming(true);
                     } catch (error) {
+                        clearInterval(thinkingInterval);
                         responseTextToLog = 'Failed to connect to AI.';
                         setHistory((prev) => {
                             const newHistory = [...prev];
