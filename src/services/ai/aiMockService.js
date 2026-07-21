@@ -14,33 +14,10 @@ export const getMockAiResponse = (question) => {
 
     return new Promise(resolve => {
         setTimeout(() => {
-            // A tiny silent MP3 base64 string to simulate audio
-            const mockBase64 = "SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//MQAAAAAAASWAAAAA";
-            
-            try {
-                const byteCharacters = atob(mockBase64);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: 'audio/mp3' });
-                
-                resolve({
-                    text: mockResponse,
-                    audioResult: {
-                        audioBlob: blob,
-                        audioBase64: mockBase64,
-                        alignment: null
-                    }
-                });
-            } catch (e) {
-                // Fallback to text only if Blob creation fails in some mock environments
-                resolve({
-                    text: mockResponse,
-                    audioResult: null
-                });
-            }
-        }, 3000);
+            resolve({
+                text: mockResponse,
+                audioResult: null // Set to null so the terminal uses the fallback manual typing effect
+            });
+        }, 2000);
     });
 };

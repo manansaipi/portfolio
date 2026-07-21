@@ -4,7 +4,7 @@ import { getMockAiResponse } from './aiMockService';
 export const askAI = async (question) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
 
-    if (import.meta.env.DEV && isEmbed) {
+    if (import.meta.env.DEV || isEmbed) {
         return await getMockAiResponse(question);
     }
 
