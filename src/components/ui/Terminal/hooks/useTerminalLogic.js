@@ -3,7 +3,7 @@ import { AppContext } from '../../../../App';
 import { getAllWorks } from '@services/work';
 import { getAllWritings } from '@services/post';
 import { getCertificates } from '@services/admin';
-import { askAI } from '@services/ai';
+import { askAI, generateTTS } from '@services/ai';
 import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
 
 const AVAILABLE_COMMANDS = [
@@ -175,11 +175,15 @@ export const useTerminalLogic = (isEmbed = false) => {
                     const responseObj = await askAI(originalInput);
                     // Handle both mock strings and the new combined object
                     responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
-                    
+
                     let syncData = null;
-                    if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
-                        audioBase64Data = responseObj.audioResult.audioBase64;
-                        syncData = await playAudio(responseObj.audioResult);
+                    if (!isEmbed) {
+                        const signature = responseObj?.signature;
+                        const ttsResult = await generateTTS(responseTextToLog, signature);
+                        if (ttsResult) {
+                            audioBase64Data = ttsResult.audioBase64;
+                            syncData = await playAudio(ttsResult);
+                        }
                     }
                     
                     setHistory((prev) => {
@@ -217,16 +221,20 @@ export const useTerminalLogic = (isEmbed = false) => {
                         const responseObj = await askAI(question);
                         // Handle both mock strings and the new combined object
                         responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
-                        
+
                         let syncData = null;
-                        if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
-                            audioBase64Data = responseObj.audioResult.audioBase64;
-                            syncData = await playAudio(responseObj.audioResult);
+                        if (!isEmbed) {
+                            const signature = responseObj?.signature;
+                            const ttsResult = await generateTTS(responseTextToLog, signature);
+                            if (ttsResult) {
+                                audioBase64Data = ttsResult.audioBase64;
+                                syncData = await playAudio(ttsResult);
+                            }
                         }
                         
                         setHistory((prev) => {
                             const newHistory = [...prev];
-                            newHistory.pop();
+                            newHistory.pop(); // Remove "Thinking..."
                             return [...newHistory, { type: 'ai-response', content: responseTextToLog, syncData }];
                         });
                         setIsStreaming(true);

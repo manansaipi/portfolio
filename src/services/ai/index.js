@@ -4,7 +4,7 @@ import { getMockAiResponse } from './aiMockService';
 export const askAI = async (question) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
 
-    if (import.meta.env.DEV || isEmbed) {
+    if (isEmbed) {
         return await getMockAiResponse(question);
     }
 
@@ -13,27 +13,10 @@ export const askAI = async (question) => {
             question: question
         });
         
-        let audioResult = null;
-        if (response.data.audio && response.data.audio.audio_base64) {
-            const byteCharacters = atob(response.data.audio.audio_base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const mimeType = response.data.audio.audio_format || 'audio/mpeg';
-            const blob = new Blob([byteArray], { type: mimeType });
-            
-            audioResult = {
-                audioBlob: blob,
-                audioBase64: response.data.audio.audio_base64,
-                alignment: response.data.audio.alignment
-            };
-        }
-        
         return {
             text: response.data.response,
-            audioResult: audioResult
+            signature: response.data.signature,
+            audioResult: null
         };
     } catch (error) {
         console.warn("AI Backend Error:", error.message);
@@ -44,6 +27,36 @@ export const askAI = async (question) => {
         }
         
         return { text: "Sorry, the AI service is currently unavailable or quota exceeded.", audioResult: null };
+    }
+};
+
+export const generateTTS = async (text, signature) => {
+    try {
+        const response = await api.post(`/api/tts/generate`, {
+            text: text,
+            signature: signature || ""
+        });
+        
+        if (response.data && response.data.audio_base64) {
+            const byteCharacters = atob(response.data.audio_base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const mimeType = response.data.audio_format || 'audio/mpeg';
+            const blob = new Blob([byteArray], { type: mimeType });
+            
+            return {
+                audioBlob: blob,
+                audioBase64: response.data.audio_base64,
+                alignment: response.data.alignment
+            };
+        }
+        return null;
+    } catch (error) {
+        console.error("TTS Backend Error:", error.message);
+        return null;
     }
 };
 
