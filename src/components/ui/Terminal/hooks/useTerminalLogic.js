@@ -178,13 +178,13 @@ export const useTerminalLogic = (isEmbed = false) => {
 
                 stopSpeech();
                 let thinkingIndex = 0;
-                setHistory((prev) => [...prev, { type: 'system', content: THINKING_MESSAGES[0] }]);
+                setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
                 const thinkingInterval = setInterval(() => {
                     thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
                     setHistory((prev) => {
                         const newHistory = [...prev];
-                        if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'system') {
-                            newHistory[newHistory.length - 1] = { type: 'system', content: THINKING_MESSAGES[thinkingIndex] };
+                        if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {
+                            newHistory[newHistory.length - 1] = { type: 'loading', content: THINKING_MESSAGES[thinkingIndex] };
                         }
                         return newHistory;
                     });
@@ -234,13 +234,13 @@ export const useTerminalLogic = (isEmbed = false) => {
                 const question = originalInput.substring(4).trim();
                 if (question) {
                     let thinkingIndex = 0;
-                    setHistory((prev) => [...prev, { type: 'system', content: THINKING_MESSAGES[0] }]);
+                    setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
                     const thinkingInterval = setInterval(() => {
                         thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
                         setHistory((prev) => {
                             const newHistory = [...prev];
-                            if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'system') {
-                                newHistory[newHistory.length - 1] = { type: 'system', content: THINKING_MESSAGES[thinkingIndex] };
+                            if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {
+                                newHistory[newHistory.length - 1] = { type: 'loading', content: THINKING_MESSAGES[thinkingIndex] };
                             }
                             return newHistory;
                         });

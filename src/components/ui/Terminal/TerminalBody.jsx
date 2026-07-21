@@ -67,7 +67,7 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                 <div key={i} className={`mb-1.5 leading-relaxed break-words ${
                     line.type === 'command' ? 'text-white font-semibold' :
                     line.type === 'error' ? 'text-red-400' :
-                    line.type === 'system' ? 'text-green-400 opacity-80' : 
+                    line.type === 'system' || line.type === 'loading' ? 'text-green-400 opacity-80' : 
                     line.type === 'highlight' ? 'font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 drop-shadow-md animate-gradient' :
                     line.type === 'ai-response' ? 'text-purple-300' : 'text-gray-300'
                 }`}>
@@ -75,8 +75,8 @@ const TerminalBody = ({ bodyRef, history, inputRef, input, setInput, handleComma
                         <MatrixRain />
                     ) : line.type === 'ai-response' ? (
                         <TypewriterText line={line} setIsStreaming={setIsStreaming} />
-                    ) : line.content === 'Thinking...' ? (
-                        <ThinkingAnimation />
+                    ) : line.type === 'loading' ? (
+                        <ThinkingAnimation text={line.content} />
                     ) : line.type === 'command' && line.content.startsWith('ai@manansaipi-portfolio:~$') ? (
                         <>
                             <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-red-400 to-green-400 animate-gradient">
