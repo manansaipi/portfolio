@@ -17,7 +17,13 @@ const THINKING_MESSAGES = [
     "Consulting the AI matrix...",
     "Loading 99%...",
     "Asking the rubber duck...",
-    "Generating an insightful response..."
+    "Generating an insightful response...",
+    "Sorry for the wait, almost there...",
+    "Reticulating splines...",
+    "Checking with the backend hamsters...",
+    "Compiling the best possible answer...",
+    "Still thinking, promise I haven't crashed...",
+    "Gathering data from the cyberverse..."
 ];
 
 export const useTerminalLogic = (isEmbed = false) => {
@@ -180,7 +186,12 @@ export const useTerminalLogic = (isEmbed = false) => {
                 let thinkingIndex = 0;
                 setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
                 const thinkingInterval = setInterval(() => {
-                    thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
+                    let nextIndex;
+                    do {
+                        nextIndex = Math.floor(Math.random() * (THINKING_MESSAGES.length - 1)) + 1;
+                    } while (nextIndex === thinkingIndex);
+                    thinkingIndex = nextIndex;
+                    
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {
@@ -236,7 +247,12 @@ export const useTerminalLogic = (isEmbed = false) => {
                     let thinkingIndex = 0;
                     setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
                     const thinkingInterval = setInterval(() => {
-                        thinkingIndex = (thinkingIndex + 1) % THINKING_MESSAGES.length;
+                        let nextIndex;
+                        do {
+                            nextIndex = Math.floor(Math.random() * (THINKING_MESSAGES.length - 1)) + 1;
+                        } while (nextIndex === thinkingIndex);
+                        thinkingIndex = nextIndex;
+
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {

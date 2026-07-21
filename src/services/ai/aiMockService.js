@@ -44,6 +44,6 @@ export const getMockAiResponse = (question) => {
                     audioResult: null
                 });
             }
-        }, 10000);
+        }, 30000);
     });
 };
