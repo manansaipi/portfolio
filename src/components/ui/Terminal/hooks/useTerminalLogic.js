@@ -188,7 +188,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                         }
                         return newHistory;
                     });
-                }, 3000);
+                }, 5000);
 
                 let responseTextToLog = '';
                 let audioBase64Data = null;
@@ -244,7 +244,7 @@ export const useTerminalLogic = (isEmbed = false) => {
                             }
                             return newHistory;
                         });
-                    }, 3000);
+                    }, 5000);
 
                     let responseTextToLog = '';
                     let audioBase64Data = null;
