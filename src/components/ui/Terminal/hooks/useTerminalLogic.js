@@ -5,26 +5,7 @@ import { getAllWritings } from '@services/post';
 import { getCertificates } from '@services/admin';
 import { askAI } from '@services/ai';
 import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
-
-const AVAILABLE_COMMANDS = [
-    '/help', '/ask', '/about', '/experience', '/education', '/skills', '/projects', '/writings', 
-    '/certificates', '/clear', '/theme', 'whoami', 'date'
-];
-
-const THINKING_MESSAGES = [
-    "Thinking...",
-    "Brewing some virtual coffee...",
-    "Consulting the AI matrix...",
-    "Loading 99%...",
-    "Asking the rubber duck...",
-    "Generating an insightful response...",
-    "Sorry for the wait, almost there...",
-    "Reticulating splines...",
-    "Checking with the backend hamsters...",
-    "Compiling the best possible answer...",
-    "Still thinking, promise I haven't crashed...",
-    "Gathering data from the cyberverse..."
-];
+import { AVAILABLE_COMMANDS, THINKING_MESSAGES, THINKING_MESSAGE_MEDIUM, THINKING_MESSAGE_LONGER } from './consts';
 
 export const useTerminalLogic = (isEmbed = false) => {
     const { toggleTheme, theme } = useContext(AppContext);
@@ -182,20 +163,34 @@ export const useTerminalLogic = (isEmbed = false) => {
                     return;
                 }
 
-                stopSpeech();
-                let thinkingIndex = 0;
-                setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
+                let ticks = 0;
+                let lastMessage = THINKING_MESSAGES[0];
+                setHistory((prev) => [...prev, { type: 'loading', content: lastMessage }]);
                 const thinkingInterval = setInterval(() => {
-                    let nextIndex;
-                    do {
-                        nextIndex = Math.floor(Math.random() * (THINKING_MESSAGES.length - 1)) + 1;
-                    } while (nextIndex === thinkingIndex);
-                    thinkingIndex = nextIndex;
+                    ticks++;
+                    let nextArray;
+                    if (ticks < 2) {
+                        nextArray = THINKING_MESSAGES.slice(1);
+                    } else if (ticks < 4) {
+                        nextArray = THINKING_MESSAGE_MEDIUM;
+                    } else {
+                        nextArray = THINKING_MESSAGE_LONGER;
+                    }
+                    
+                    let randomMsg;
+                    if (nextArray.length > 1) {
+                        do {
+                            randomMsg = nextArray[Math.floor(Math.random() * nextArray.length)];
+                        } while (randomMsg === lastMessage);
+                    } else {
+                        randomMsg = nextArray[0];
+                    }
+                    lastMessage = randomMsg;
                     
                     setHistory((prev) => {
                         const newHistory = [...prev];
                         if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {
-                            newHistory[newHistory.length - 1] = { type: 'loading', content: THINKING_MESSAGES[thinkingIndex] };
+                            newHistory[newHistory.length - 1] = { type: 'loading', content: randomMsg };
                         }
                         return newHistory;
                     });
@@ -244,19 +239,34 @@ export const useTerminalLogic = (isEmbed = false) => {
                 
                 const question = originalInput.substring(4).trim();
                 if (question) {
-                    let thinkingIndex = 0;
-                    setHistory((prev) => [...prev, { type: 'loading', content: THINKING_MESSAGES[0] }]);
+                    let ticks = 0;
+                    let lastMessage = THINKING_MESSAGES[0];
+                    setHistory((prev) => [...prev, { type: 'loading', content: lastMessage }]);
                     const thinkingInterval = setInterval(() => {
-                        let nextIndex;
-                        do {
-                            nextIndex = Math.floor(Math.random() * (THINKING_MESSAGES.length - 1)) + 1;
-                        } while (nextIndex === thinkingIndex);
-                        thinkingIndex = nextIndex;
+                        ticks++;
+                        let nextArray;
+                        if (ticks < 2) {
+                            nextArray = THINKING_MESSAGES.slice(1);
+                        } else if (ticks < 4) {
+                            nextArray = THINKING_MESSAGE_MEDIUM;
+                        } else {
+                            nextArray = THINKING_MESSAGE_LONGER;
+                        }
+                        
+                        let randomMsg;
+                        if (nextArray.length > 1) {
+                            do {
+                                randomMsg = nextArray[Math.floor(Math.random() * nextArray.length)];
+                            } while (randomMsg === lastMessage);
+                        } else {
+                            randomMsg = nextArray[0];
+                        }
+                        lastMessage = randomMsg;
 
                         setHistory((prev) => {
                             const newHistory = [...prev];
                             if (newHistory.length > 0 && newHistory[newHistory.length - 1].type === 'loading') {
-                                newHistory[newHistory.length - 1] = { type: 'loading', content: THINKING_MESSAGES[thinkingIndex] };
+                                newHistory[newHistory.length - 1] = { type: 'loading', content: randomMsg };
                             }
                             return newHistory;
                         });
