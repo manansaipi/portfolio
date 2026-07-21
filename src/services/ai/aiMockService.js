@@ -1,3 +1,5 @@
+import { mockAudioBase64 } from './aiMockAudio';
+
 export const getMockAiResponse = (question) => {
     const questionLower = question.toLowerCase();
     let mockResponse = "";
@@ -9,15 +11,39 @@ export const getMockAiResponse = (question) => {
     } else if (/boben|ben|nickname|panggilan/i.test(questionLower)) {
         mockResponse = "\"Ben\" (or \"Boben\") is the nickname for Abdul Mannan Saipi, used exclusively by his close family and friends. \n\nIs there anything else you'd like to know about Abdul's professional experience or projects? If you'd like to leave, you can type `/exit` or press Ctrl+C.";
     } else {
-        mockResponse = `This is a mock response from the AI for the question: "${question}". Try asking about his contact details, experience, or nickname to see styled markdown tests!`;
+        // Fallback case that perfectly matches the audio from the database
+        mockResponse = "I am the AI assistant for Abdul Mannan Saipi's portfolio. How can I help you learn more about his work, skills, or professional background today?";
     }
 
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve({
-                text: mockResponse,
-                audioResult: null // Set to null so the terminal uses the fallback manual typing effect
-            });
-        }, 2000);
+            // Use the real audio base64 fetched from the database
+            const mockBase64 = mockAudioBase64;
+            
+            try {
+                const byteCharacters = atob(mockBase64);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: 'audio/mp3' });
+                
+                resolve({
+                    text: mockResponse,
+                    audioResult: {
+                        audioBlob: blob,
+                        audioBase64: mockBase64,
+                        alignment: null
+                    }
+                });
+            } catch (e) {
+                // Fallback to text only if Blob creation fails in some mock environments
+                resolve({
+                    text: mockResponse,
+                    audioResult: null
+                });
+            }
+        }, 10000);
     });
 };
