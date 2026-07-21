@@ -13,10 +13,27 @@ export const askAI = async (question) => {
             question: question
         });
         
+        let audioResult = null;
+        if (response.data.audioResult && response.data.audioResult.audio_base64) {
+            const byteCharacters = atob(response.data.audioResult.audio_base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const mimeType = response.data.audioResult.audio_format || 'audio/mpeg';
+            const blob = new Blob([byteArray], { type: mimeType });
+            
+            audioResult = {
+                audioBlob: blob,
+                audioBase64: response.data.audioResult.audio_base64,
+                alignment: response.data.audioResult.alignment
+            };
+        }
+        
         return {
             text: response.data.response,
-            signature: response.data.signature,
-            audioResult: null
+            audioResult: audioResult
         };
     } catch (error) {
         console.warn("AI Backend Error:", error.message);
@@ -30,34 +47,6 @@ export const askAI = async (question) => {
     }
 };
 
-export const generateTTS = async (text, signature) => {
-    try {
-        const response = await api.post(`/api/tts/generate`, {
-            text: text,
-            signature: signature || ""
-        });
-        
-        if (response.data && response.data.audio_base64) {
-            const byteCharacters = atob(response.data.audio_base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const mimeType = response.data.audio_format || 'audio/mpeg';
-            const blob = new Blob([byteArray], { type: mimeType });
-            
-            return {
-                audioBlob: blob,
-                audioBase64: response.data.audio_base64,
-                alignment: response.data.alignment
-            };
-        }
-        return null;
-    } catch (error) {
-        console.error("TTS Backend Error:", error.message);
-        return null;
-    }
-};
+
 
 

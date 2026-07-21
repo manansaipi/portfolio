@@ -3,7 +3,7 @@ import { AppContext } from '../../../../App';
 import { getAllWorks } from '@services/work';
 import { getAllWritings } from '@services/post';
 import { getCertificates } from '@services/admin';
-import { askAI, generateTTS } from '@services/ai';
+import { askAI } from '@services/ai';
 import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
 
 const AVAILABLE_COMMANDS = [
@@ -177,13 +177,9 @@ export const useTerminalLogic = (isEmbed = false) => {
                     responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
 
                     let syncData = null;
-                    if (!isEmbed) {
-                        const signature = responseObj?.signature;
-                        const ttsResult = await generateTTS(responseTextToLog, signature);
-                        if (ttsResult) {
-                            audioBase64Data = ttsResult.audioBase64;
-                            syncData = await playAudio(ttsResult);
-                        }
+                    if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                        audioBase64Data = responseObj.audioResult.audioBase64;
+                        syncData = await playAudio(responseObj.audioResult);
                     }
                     
                     setHistory((prev) => {
@@ -223,13 +219,9 @@ export const useTerminalLogic = (isEmbed = false) => {
                         responseTextToLog = typeof responseObj === 'string' ? responseObj : (responseObj?.text || ' ');
 
                         let syncData = null;
-                        if (!isEmbed) {
-                            const signature = responseObj?.signature;
-                            const ttsResult = await generateTTS(responseTextToLog, signature);
-                            if (ttsResult) {
-                                audioBase64Data = ttsResult.audioBase64;
-                                syncData = await playAudio(ttsResult);
-                            }
+                        if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
+                            audioBase64Data = responseObj.audioResult.audioBase64;
+                            syncData = await playAudio(responseObj.audioResult);
                         }
                         
                         setHistory((prev) => {
