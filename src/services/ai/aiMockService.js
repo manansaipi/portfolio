@@ -1,6 +1,6 @@
 import { mockAudioBase64 } from './aiMockAudio';
 
-export const getMockAiResponse = (question) => {
+export const getMockAiResponse = (question, isEmbed = false) => {
     const questionLower = question.toLowerCase();
     let mockResponse = "";
     
@@ -44,6 +44,6 @@ export const getMockAiResponse = (question) => {
                     audioResult: null
                 });
             }
-        }, 40000);
+        }, isEmbed ? 2000 : 40000);
     });
 };
