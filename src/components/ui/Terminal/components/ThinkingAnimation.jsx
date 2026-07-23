@@ -21,7 +21,6 @@ const ThinkingAnimation = ({ text = "Thinking..." }) => {
     return (
         <span className="text-green-400 opacity-80 animate-pulse">
             {displayedText}
-            <span className="opacity-50 inline-block animate-pulse">_</span>
         </span>
     );
 };

@@ -3,7 +3,7 @@ import api from '../api';
 
 export const logTerminalCommand = async (inputText, isAiMode = false, responseText = null, executionTimeMs = null, audioBase64 = null) => {
     const isEmbed = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('embed') === 'true';
-    if (import.meta.env.DEV ||isEmbed) return;
+    if (isEmbed) return;
     try {
         const payload = {
             input_text: inputText,
@@ -23,7 +23,7 @@ export const logTerminalCommand = async (inputText, isAiMode = false, responseTe
     }
 };
 
-export const getTerminalLogs = async (skip = 0, limit = 10, search = '', isAiMode = 'all', country = 'all', ipAddress = 'all') => {
+export const getTerminalLogs = async (skip = 0, limit = 5, search = '', isAiMode = 'all', country = 'all', ipAddress = 'all') => {
     let url = `/api/terminal/logs/?skip=${skip}&limit=${limit}`;
     if (search) url += `&search=${encodeURIComponent(search)}`;
     if (isAiMode !== 'all') url += `&is_ai_mode=${isAiMode}`;
