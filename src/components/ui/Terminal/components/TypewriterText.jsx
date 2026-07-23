@@ -120,7 +120,7 @@ const TypewriterText = ({ line, delay = 15, setIsStreaming }) => {
     }, [spokenCount, line._completed]);
 
     return (
-        <div ref={containerRef} className="flex flex-col gap-1">
+        <div ref={containerRef} className="flex flex-col gap-1 min-h-[1.5em]">
             {renderMarkdownWithProgress(line.content, spokenCount)}
         </div>
     );

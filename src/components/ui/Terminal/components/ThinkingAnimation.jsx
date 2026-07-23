@@ -19,8 +19,8 @@ const ThinkingAnimation = ({ text = "Thinking..." }) => {
     }, [text]);
 
     return (
-        <span className="text-green-400 opacity-80 animate-pulse">
-            {displayedText}
+        <span className="text-green-400 opacity-80 animate-pulse inline-block min-h-[1.5em]">
+            {displayedText || '\u200B'}
         </span>
     );
 };
