@@ -8,7 +8,7 @@ const AdminTerminalLogs = () => {
     const [error, setError] = useState(null);
 
     const [page, setPage] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(5);
     const [selectedLogs, setSelectedLogs] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -275,6 +275,7 @@ const AdminTerminalLogs = () => {
                         }}
                         className="bg-[#0a0a0a] border border-light-dark rounded px-2 py-1"
                     >
+                        <option value={5}>5</option>
                         <option value={10}>10</option>
                         <option value={25}>25</option>
                         <option value={50}>50</option>
