@@ -113,3 +113,39 @@ body::-webkit-scrollbar {
 .animate-ms-caret {
   animation: ms-caret-blink 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
+
+/* ReactQuill Dark Mode Customization */
+.admin-quill-editor .ql-container.ql-snow {
+    border-color: var(--color-light-dark);
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: transparent;
+    color: var(--color-primary);
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.admin-quill-editor .ql-toolbar.ql-snow {
+    border-color: var(--color-light-dark);
+    background-color: var(--color-light-dark);
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
+.admin-quill-editor .ql-snow .ql-stroke {
+    stroke: var(--color-primary);
+}
+
+.admin-quill-editor .ql-snow .ql-fill, 
+.admin-quill-editor .ql-snow .ql-stroke.ql-fill {
+    fill: var(--color-primary);
+}
+
+.admin-quill-editor .ql-snow .ql-picker {
+    color: var(--color-primary);
+}
+
+.admin-quill-editor .ql-snow .ql-picker-options {
+    background-color: var(--color-background);
+    border-color: var(--color-light-dark);
+}

@@ -74,53 +74,87 @@ const AdminWritings = () => {
             </div>
 
             {isFormOpen && (
-                <form key={editing ? editing.id : 'new'} onSubmit={handleSubmit} className="mb-10 p-5 border border-light-dark rounded flex flex-col gap-4">
-                    <input className="bg-transparent border-b p-2 outline-none" placeholder="Title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
-                    <input className="bg-transparent border-b p-2 outline-none" placeholder="Author" value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} required />
-                    <input type="number" className="bg-transparent border-b p-2 outline-none" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />
+                <form key={editing ? editing.id : 'new'} onSubmit={handleSubmit} className="mb-10 p-6 border border-light-dark rounded-xl flex flex-col gap-6 bg-background/50">
                     
-                    <div className="flex flex-col gap-2">
-                        <label className="font-bold">Main Image (Thumbnail):</label>
-                        <input className="bg-transparent border-b p-2 outline-none" placeholder="Image URL" value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
-                        <input type="file" onChange={handleImageUpload} />
-                        {formData.image && <img src={resolveImg(formData.image)} alt="preview" className="h-20 w-32 object-cover" />}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm opacity-70">Title</label>
+                            <input className="bg-background border border-light-dark p-3 rounded-md outline-none focus:border-primary transition-colors" placeholder="Enter writing title..." value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                        </div>
+                        
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm opacity-70">Author</label>
+                            <input className="bg-background border border-light-dark p-3 rounded-md outline-none focus:border-primary transition-colors" placeholder="Author name..." value={formData.author} onChange={e => setFormData({...formData, author: e.target.value})} required />
+                        </div>
+                    </div>
+                    
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm opacity-70">Order / Priority</label>
+                        <input type="number" className="bg-background border border-light-dark p-3 rounded-md outline-none focus:border-primary transition-colors w-full md:w-1/3" placeholder="Order (e.g. 1, 2, 3)" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} />
+                    </div>
+                    
+                    <div className="flex flex-col gap-3 p-4 border border-light-dark rounded-md bg-background">
+                        <label className="font-bold border-b border-light-dark pb-2">Main Image (Thumbnail):</label>
+                        <div className="flex items-center gap-4">
+                            <input type="file" onChange={handleImageUpload} className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-light-dark file:text-primary hover:file:bg-opacity-80 cursor-none" />
+                        </div>
+                        <input className="bg-background border border-light-dark p-3 rounded-md outline-none focus:border-primary transition-colors" placeholder="Or enter Image URL manually..." value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} />
+                        {formData.image && (
+                            <div className="relative group w-max mt-2">
+                                <img src={resolveImg(formData.image)} alt="preview" className="h-32 w-48 object-cover rounded-md border border-light-dark" />
+                                <div 
+                                    onClick={() => setFormData({...formData, image: ''})} 
+                                    className="absolute inset-0 bg-black/70 text-white flex justify-center items-center opacity-0 group-hover:opacity-100 cursor-none rounded-md transition-opacity"
+                                >
+                                    Remove
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="flex flex-col gap-2 border-t pt-4 border-light-dark">
-                        <label className="font-bold">Carousel Images (Detail Page):</label>
-                        <div className="flex flex-wrap gap-2 mb-2">
+                    <div className="flex flex-col gap-3 p-4 border border-light-dark rounded-md bg-background">
+                        <label className="font-bold border-b border-light-dark pb-2">Carousel Images (Detail Page):</label>
+                        <div className="flex flex-wrap gap-3 mb-2">
                             {formData.images && formData.images.map((img, i) => (
                                 <div key={i} className="relative group">
-                                    <img src={resolveImg(img)} alt="carousel" className="h-20 w-32 object-cover rounded" />
-                                    <div onClick={() => removeMultipleImage(i)} className="absolute inset-0 bg-black/50 text-white flex justify-center items-center opacity-0 group-hover:opacity-100 cursor-pointer rounded transition-opacity">Remove</div>
+                                    <img src={resolveImg(img)} alt="carousel" className="h-24 w-36 object-cover rounded-md border border-light-dark" />
+                                    <div 
+                                        onClick={() => removeMultipleImage(i)} 
+                                        className="absolute inset-0 bg-black/70 text-white flex justify-center items-center opacity-0 group-hover:opacity-100 cursor-none rounded-md transition-opacity"
+                                    >
+                                        Remove
+                                    </div>
                                 </div>
                             ))}
                         </div>
-                        <div className="flex gap-2">
-                            <input type="file" onChange={handleMultipleImageUpload} className="flex-1" />
+                        <div className="flex gap-4 items-center">
+                            <input type="file" onChange={handleMultipleImageUpload} className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-bold file:bg-light-dark file:text-primary hover:file:bg-opacity-80 cursor-none" />
+                            <div className="h-6 w-px bg-light-dark"></div>
                             <button type="button" onClick={() => {
                                 const url = window.prompt("Enter Image URL:");
-                                addMultipleImageUrl(url);
-                            }} className="px-2 py-1 border rounded hover:bg-light-dark">Add URL</button>
+                                if (url) addMultipleImageUrl(url);
+                            }} className="px-4 py-2 text-sm border border-light-dark rounded-md hover:bg-light-dark transition-colors cursor-none shrink-0">
+                                Add Image from URL
+                            </button>
                         </div>
                     </div>
                     
-                    <div className="admin-quill-editor">
-                        <label className="mb-2 block">Content:</label>
+                    <div className="admin-quill-editor flex flex-col gap-1">
+                        <label className="text-sm opacity-70">Content:</label>
                         <ReactQuill
                             ref={quillRef}
                             theme="snow"
                             value={formData.content}
                             onChange={(value) => setFormData({...formData, content: value})}
                             modules={modules}
-                            className="bg-white text-black rounded"
-                            style={{ minHeight: "200px" }}
+                            className="rounded-md"
+                            style={{ minHeight: "300px" }}
                         />
                     </div>
 
-                    <div className="flex gap-4 mt-4">
-                        <button type="submit" className="px-4 py-2 bg-white text-black font-bold rounded cursor-none">Save</button>
-                        <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 border rounded cursor-none">Cancel</button>
+                    <div className="flex gap-4 mt-6 pt-4 border-t border-light-dark">
+                        <button type="submit" className="px-6 py-2 bg-primary text-background font-bold rounded-md hover:opacity-90 transition-opacity cursor-none">Save Changes</button>
+                        <button type="button" onClick={() => setIsFormOpen(false)} className="px-6 py-2 border border-light-dark rounded-md hover:bg-light-dark transition-colors cursor-none">Cancel</button>
                     </div>
                 </form>
             )}
