@@ -7,7 +7,7 @@ import AdminExperiences from "./components/AdminExperiences";
 import AdminCertificates from "./components/AdminCertificates";
 import AdminTerminalLogs from "./components/AdminTerminalLogs";
 import AdminUsers from "./components/AdminUsers";
-
+import AdminPhotos from "./components/AdminPhotos";
 const AdminPanel = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("writings");
@@ -38,6 +38,7 @@ const AdminPanel = () => {
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'certificates' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('certificates')}>Certificates</button>
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'terminal' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('terminal')}>Terminal Logs</button>
                 <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'users' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('users')}>Users</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'photos' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('photos')}>Photos</button>
             </div>
 
             <div className="p-10 border border-light-dark rounded-md">
@@ -46,6 +47,7 @@ const AdminPanel = () => {
                 <div style={{ display: activeTab === "certificates" ? "block" : "none" }}><AdminCertificates /></div>
                 <div style={{ display: activeTab === "terminal" ? "block" : "none" }}><AdminTerminalLogs /></div>
                 <div style={{ display: activeTab === "users" ? "block" : "none" }}><AdminUsers /></div>
+                <div style={{ display: activeTab === "photos" ? "block" : "none" }}><AdminPhotos /></div>
             </div>
         </div>
     );
