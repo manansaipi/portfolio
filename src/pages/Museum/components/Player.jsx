@@ -46,9 +46,16 @@ const Player = ({
   onLookingAtNPC,
   placedArtworks = [],
   onSelectArt,
+  mobileMoveVector = { x: 0, y: 0 },
+  mobileLookDelta = { x: 0, y: 0 },
+  mobileJumpTrigger = 0,
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
+
+  const yaw = useRef(Math.PI);
+  const pitch = useRef(0);
+  const isTouchDevice = useRef(typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
 
   const keys = useRef({ w: false, a: false, s: false, d: false, space: false, crouch: false });
   const velocity = useRef(new THREE.Vector3());
@@ -219,14 +226,58 @@ const Player = ({
       onLookingAtNPC(isInteractive);
     }
 
-    if (!controlsRef.current || !controlsRef.current.isLocked || !enabled) return;
-
     // Determine level floor base (Level 1 base = 3.8m, Level 2 Penthouse base = 15.8m)
     const isLevel2 = camera.position.y >= 10;
     const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
 
     const targetHeight = keys.current.crouch ? baseFloorY - 1.8 : baseFloorY;
     const currentSpeed = keys.current.crouch ? SPEED * 0.5 : SPEED;
+
+    // ── Touch Controls Movement & Camera Look Handler (Mobile) ──
+    const hasMobileInput = (mobileMoveVector && (mobileMoveVector.x !== 0 || mobileMoveVector.y !== 0)) ||
+                           (mobileLookDelta && (mobileLookDelta.x !== 0 || mobileLookDelta.y !== 0));
+
+    if (hasMobileInput || isTouchDevice.current) {
+      if (mobileLookDelta && (mobileLookDelta.x !== 0 || mobileLookDelta.y !== 0)) {
+        const sensitivity = 0.0035;
+        yaw.current -= mobileLookDelta.x * sensitivity;
+        pitch.current -= mobileLookDelta.y * sensitivity;
+        pitch.current = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, pitch.current));
+      }
+      camera.rotation.set(pitch.current, yaw.current, 0, 'YXZ');
+
+      if (enabled && mobileMoveVector && (mobileMoveVector.x !== 0 || mobileMoveVector.y !== 0)) {
+        const touchSpeed = 12 * delta; // Walk speed multiplier for touch
+        const sin = Math.sin(yaw.current);
+        const cos = Math.cos(yaw.current);
+
+        const forwardX = -sin;
+        const forwardZ = -cos;
+        const rightX = cos;
+        const rightZ = -sin;
+
+        const moveX = (rightX * mobileMoveVector.x - forwardX * mobileMoveVector.y) * touchSpeed;
+        const moveZ = (rightZ * mobileMoveVector.x - forwardZ * mobileMoveVector.y) * touchSpeed;
+
+        // Move X & check validity
+        camera.position.x += moveX;
+        if (!checkPositionValid(camera.position.x, camera.position.z)) {
+          camera.position.x -= moveX;
+        }
+
+        // Move Z & check validity
+        camera.position.z += moveZ;
+        if (!checkPositionValid(camera.position.x, camera.position.z)) {
+          camera.position.z -= moveZ;
+        }
+      }
+    }
+
+    if (!controlsRef.current || !controlsRef.current.isLocked || !enabled) return;
+
+    // Sync yaw & pitch on desktop
+    yaw.current = camera.rotation.y;
+    pitch.current = camera.rotation.x;
 
     // Dampen velocity
     velocity.current.x -= velocity.current.x * 10.0 * delta;

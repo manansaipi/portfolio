@@ -18,13 +18,15 @@ import NatureHallDecoration from './components/NatureHallDecoration';
 import ProfessionalHallDecoration from './components/ProfessionalHallDecoration';
 import AdventureHallDecoration from './components/AdventureHallDecoration';
 import FamilyHallDecoration from './components/FamilyHallDecoration';
+import MobileTouchControls from './components/MobileTouchControls';
+import LandscapePrompt from './components/LandscapePrompt';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
 import { getGalleryMedia, getGalleryCategories } from '@services/gallery';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
 
-const DEFAULT_WELCOME_SPEECH = "Hello! I am your AI Portfolio Assistant. Ask me anything about Abdul Mannan Saipi, his projects, skills, or this 3D museum!";
+const DEFAULT_WELCOME_SPEECH = "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.";
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -34,15 +36,20 @@ const Museum = () => {
   const [guestbookEntries, setGuestbookEntries] = useState([]);
   const [selectedStudioSlot, setSelectedStudioSlot] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && (window.innerWidth <= 768 || 'ontouchstart' in window));
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechText, setSpeechText] = useState(DEFAULT_WELCOME_SPEECH);
 
+  // Mobile Analog Touch State
+  const [mobileMoveVector, setMobileMoveVector] = useState({ x: 0, y: 0 });
+  const [mobileLookDelta, setMobileLookDelta] = useState({ x: 0, y: 0 });
+  const [mobileJumpTrigger, setMobileJumpTrigger] = useState(0);
+
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -71,11 +78,7 @@ const Museum = () => {
         setCategories(catData);
         setGuestbookEntries(gbData);
 
-        if (isMobile) {
-          setLoadingState('ready');
-          return;
-        }
-
+        // Always preload textures on both mobile & desktop
         setLoadingState('preloading');
         const urls = data
           .filter(item => item.media_type === 'image')
@@ -186,33 +189,7 @@ const Museum = () => {
     );
   }
 
-  // ── 2. Mobile 2D Fallback ──
-  if (isMobile) {
-    return (
-      <div style={{ background: '#09090b', color: '#ffffff', minHeight: '100vh', padding: '2rem 1rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
-        <Helmet><title>3D Museum | Portfolio</title></Helmet>
-        <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Virtual Photography Museum</h1>
-        <p style={{ opacity: 0.6, marginBottom: '2rem', fontSize: '0.9rem' }}>3D Museum walkthrough is optimized for desktop browsers. Displaying mobile grid view.</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '1rem' }}>
-          {mediaItems.map((item) => (
-            <div key={item.id} style={{ borderRadius: '8px', overflow: 'hidden', background: '#18181b', border: '1px solid #27272a' }}>
-              {item.media_type === 'video' ? (
-                <video src={resolveImg(item.url)} autoPlay loop muted playsInline style={{ width: '100%', display: 'block' }} />
-              ) : (
-                <img src={resolveImg(item.url)} alt={item.title || ''} style={{ width: '100%', display: 'block' }} />
-              )}
-              <div style={{ padding: '0.6rem' }}>
-                <p style={{ fontSize: '0.85rem', fontWeight: 600, margin: 0 }}>{item.title || 'Untitled'}</p>
-                {item.caption && <p style={{ fontSize: '0.75rem', opacity: 0.6, margin: '0.2rem 0 0' }}>{item.caption}</p>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  // ── 3. 3D Virtual Museum Engine (120 FPS High Refresh Rate Support!) ──
+  // ── 2. Full 3D Virtual Museum Engine (Mobile & Desktop Enabled!) ──
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0 }}>
       <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
@@ -270,6 +247,9 @@ const Museum = () => {
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
               onSelectArt={(media) => setSelectedMedia(media)}
+              mobileMoveVector={mobileMoveVector}
+              mobileLookDelta={mobileLookDelta}
+              mobileJumpTrigger={mobileJumpTrigger}
             />
             <Preload all />
           </Suspense>
@@ -315,6 +295,19 @@ const Museum = () => {
           />
         )}
       </div>
+      {/* Landscape Orientation Lock / Rotation Prompt Overlay for Mobile */}
+      <LandscapePrompt />
+
+      {/* Touch D-Pad / Analog Joystick & Touch Look Controls for Mobile */}
+      {isMobile && (
+        <MobileTouchControls
+          onMove={setMobileMoveVector}
+          onLook={(dx, dy) => setMobileLookDelta({ x: dx, y: dy })}
+          onInteract={() => setIsAiChatOpen(true)}
+          onJump={() => setMobileJumpTrigger(Date.now())}
+          isInteractive={isLookingAtNPC}
+        />
+      )}
     </div>
   );
 };

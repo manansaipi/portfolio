@@ -90,7 +90,7 @@ const MuseumMapHUD = ({ isLookingAtNPC = false }) => {
         <div style={{
           background: 'rgba(10, 10, 12, 0.85)', border: '1px solid rgba(255,255,255,0.15)',
           padding: '12px 16px', borderRadius: '8px', color: '#ffffff',
-          backdropFilter: 'blur(8px)', width: '210px',
+          backdropFilter: 'blur(8px)', width: '220px',
           opacity: showControls ? 1 : 0,
           pointerEvents: showControls ? 'auto' : 'none',
           transform: showControls ? 'translateY(0)' : 'translateY(10px)',
@@ -99,12 +99,20 @@ const MuseumMapHUD = ({ isLookingAtNPC = false }) => {
           <div style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '6px', opacity: 0.9 }}>
             CONTROLS
           </div>
-          <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
-            <div>WASD - Walk</div>
-            <div>Mouse - Look Around</div>
-            <div>[E] - Interact</div>
-            <div>ESC - Release Pointer</div>
-          </div>
+          {typeof window !== 'undefined' && ('ontouchstart' in window || window.innerWidth <= 768) ? (
+            <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
+              <div>Left Joystick - Walk</div>
+              <div>Right Screen - Look Around</div>
+              <div>[INTERACT] - Talk / Inspect</div>
+            </div>
+          ) : (
+            <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
+              <div>WASD - Walk</div>
+              <div>Mouse - Look Around</div>
+              <div>[E] - Interact</div>
+              <div>ESC - Release Pointer</div>
+            </div>
+          )}
         </div>
       </div>
     </div>

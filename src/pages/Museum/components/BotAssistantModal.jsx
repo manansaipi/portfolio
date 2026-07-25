@@ -8,7 +8,7 @@ const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChan
   const [messages, setMessages] = useState([
     {
       sender: 'assistant',
-      text: "Hello! I am your AI Portfolio Assistant. Ask me anything about Abdul Mannan Saipi, his projects, skills, or this 3D museum!",
+      text: "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.",
     },
   ]);
   const [input, setInput] = useState('');
