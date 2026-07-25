@@ -15,11 +15,50 @@ const GalleryRoom = () => {
           <meshLambertMaterial color="#dedcd7" side={THREE.DoubleSide} />
         </mesh>
 
-        {/* Level 1 Ceiling (10m height) */}
+        {/* Base Ceiling Slab */}
         <mesh position={[0, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[30, 30]} />
-          <meshLambertMaterial color="#1c1c1e" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#18181b" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* 🌟 Central Grand Skylight Oculus in Main Lobby */}
+        <mesh position={[0, 9.95, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0, 4.8, 32]} />
+          <meshBasicMaterial color="#e0f2fe" side={THREE.DoubleSide} />
+        </mesh>
+
+        {/* Skylight Outer Glowing Frame Ring */}
+        <mesh position={[0, 9.92, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[4.8, 5.2, 32]} />
+          <meshBasicMaterial color="#38bdf8" side={THREE.DoubleSide} />
+        </mesh>
+
+        {/* Coffered Architectural Cross-Beams in Lobby */}
+        {[-10, -5, 5, 10].map((pos) => (
+          <group key={pos}>
+            {/* X-axis Beam */}
+            <mesh position={[0, 9.7, pos]}>
+              <boxGeometry args={[30, 0.4, 0.6]} />
+              <meshLambertMaterial color="#27272a" />
+            </mesh>
+            {/* X-axis LED Light Strip */}
+            <mesh position={[0, 9.49, pos]}>
+              <planeGeometry args={[30, 0.12]} />
+              <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
+            </mesh>
+
+            {/* Z-axis Beam */}
+            <mesh position={[pos, 9.7, 0]}>
+              <boxGeometry args={[0.6, 0.4, 30]} />
+              <meshLambertMaterial color="#27272a" />
+            </mesh>
+            {/* Z-axis LED Light Strip */}
+            <mesh position={[pos, 9.49, 0]} rotation={[0, Math.PI / 2, 0]}>
+              <planeGeometry args={[30, 0.12]} />
+              <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
 
         {/* North Wall Segments */}
         <mesh position={[-9.5, 5, -15]}>
@@ -101,7 +140,12 @@ const GalleryRoom = () => {
         </mesh>
         <mesh position={[0, 10, -21]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[8, 12]} />
-          <meshLambertMaterial color="#222" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#27272a" side={THREE.DoubleSide} />
+        </mesh>
+        {/* LED Strip */}
+        <mesh position={[0, 9.95, -21]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.4, 12]} />
+          <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[-4, 5, -21]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[12, 10, 0.8]} />
@@ -121,7 +165,12 @@ const GalleryRoom = () => {
         </mesh>
         <mesh position={[0, 10, 21]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[8, 12]} />
-          <meshLambertMaterial color="#222" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#27272a" side={THREE.DoubleSide} />
+        </mesh>
+        {/* LED Strip */}
+        <mesh position={[0, 9.95, 21]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.4, 12]} />
+          <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[-4, 5, 21]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[12, 10, 0.8]} />
@@ -141,7 +190,12 @@ const GalleryRoom = () => {
         </mesh>
         <mesh position={[-21, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[12, 8]} />
-          <meshLambertMaterial color="#222" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#27272a" side={THREE.DoubleSide} />
+        </mesh>
+        {/* LED Strip */}
+        <mesh position={[-21, 9.95, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[12, 0.4]} />
+          <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[-21, 5, -4]}>
           <boxGeometry args={[12, 10, 0.8]} />
@@ -161,7 +215,12 @@ const GalleryRoom = () => {
         </mesh>
         <mesh position={[21, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[12, 8]} />
-          <meshLambertMaterial color="#222" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#27272a" side={THREE.DoubleSide} />
+        </mesh>
+        {/* LED Strip */}
+        <mesh position={[21, 9.95, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[12, 0.4]} />
+          <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[21, 5, -4]}>
           <boxGeometry args={[12, 10, 0.8]} />
@@ -181,10 +240,27 @@ const GalleryRoom = () => {
           <planeGeometry args={[30, 50]} />
           <meshLambertMaterial color="#252e25" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Nature Hall Architectural Ceiling */}
         <mesh position={[0, 10, -52]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[30, 50]} />
-          <meshLambertMaterial color="#1a201a" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#141e15" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Wooden Ceiling Beams & Recessed Lighting in Nature Hall */}
+        {[-70, -60, -50, -40, -30].map((bz) => (
+          <group key={bz}>
+            <mesh position={[0, 9.7, bz]}>
+              <boxGeometry args={[30, 0.4, 0.8]} />
+              <meshLambertMaterial color="#1c2b1e" />
+            </mesh>
+            <mesh position={[0, 9.49, bz]}>
+              <planeGeometry args={[30, 0.15]} />
+              <meshBasicMaterial color="#86efac" side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+
         <mesh position={[-15, 5, -52]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[50, 10, 0.8]} />
           <meshLambertMaterial color="#2d3b2d" />
@@ -210,10 +286,27 @@ const GalleryRoom = () => {
           <planeGeometry args={[50, 30]} />
           <meshLambertMaterial color="#1c1c1e" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Street Hall Architectural Ceiling */}
         <mesh position={[-52, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[50, 30]} />
-          <meshLambertMaterial color="#141416" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#18181b" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Industrial Beams & Neon Yellow LED Lighting in Street Hall */}
+        {[-70, -60, -50, -40, -30].map((bx) => (
+          <group key={bx}>
+            <mesh position={[bx, 9.7, 0]}>
+              <boxGeometry args={[0.8, 0.4, 30]} />
+              <meshLambertMaterial color="#27272a" />
+            </mesh>
+            <mesh position={[bx, 9.49, 0]} rotation={[0, Math.PI / 2, 0]}>
+              <planeGeometry args={[30, 0.15]} />
+              <meshBasicMaterial color="#fef08a" side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+
         <mesh position={[-52, 5, -15]}>
           <boxGeometry args={[50, 10, 0.8]} />
           <meshLambertMaterial color="#2b2b2e" />
@@ -239,10 +332,27 @@ const GalleryRoom = () => {
           <planeGeometry args={[50, 30]} />
           <meshLambertMaterial color="#2b231d" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Travel Hall Architectural Ceiling */}
         <mesh position={[52, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[50, 30]} />
-          <meshLambertMaterial color="#211a14" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#211812" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Warm Timber Beams & Amber LED Lighting in Travel Hall */}
+        {[30, 40, 50, 60, 70].map((bx) => (
+          <group key={bx}>
+            <mesh position={[bx, 9.7, 0]}>
+              <boxGeometry args={[0.8, 0.4, 30]} />
+              <meshLambertMaterial color="#3f2d20" />
+            </mesh>
+            <mesh position={[bx, 9.49, 0]} rotation={[0, Math.PI / 2, 0]}>
+              <planeGeometry args={[30, 0.15]} />
+              <meshBasicMaterial color="#fed7aa" side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+
         <mesh position={[52, 5, -15]}>
           <boxGeometry args={[50, 10, 0.8]} />
           <meshLambertMaterial color="#3d3229" />
@@ -268,10 +378,27 @@ const GalleryRoom = () => {
           <planeGeometry args={[30, 50]} />
           <meshLambertMaterial color="#1d222b" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Portrait Hall Architectural Ceiling */}
         <mesh position={[0, 10, 52]} rotation={[Math.PI / 2, 0, 0]}>
           <planeGeometry args={[30, 50]} />
-          <meshLambertMaterial color="#141921" side={THREE.DoubleSide} />
+          <meshLambertMaterial color="#141a24" side={THREE.DoubleSide} />
         </mesh>
+
+        {/* Sleek Blue LED Recessed Beams in Portrait Hall */}
+        {[30, 40, 50, 60, 70].map((bz) => (
+          <group key={bz}>
+            <mesh position={[0, 9.7, bz]}>
+              <boxGeometry args={[30, 0.4, 0.8]} />
+              <meshLambertMaterial color="#1e293b" />
+            </mesh>
+            <mesh position={[0, 9.49, bz]}>
+              <planeGeometry args={[30, 0.15]} />
+              <meshBasicMaterial color="#93c5fd" side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+
         <mesh position={[-15, 5, 52]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[50, 10, 0.8]} />
           <meshLambertMaterial color="#232b38" />
@@ -288,7 +415,6 @@ const GalleryRoom = () => {
           PORTRAITURE & EDITORIAL ARTS
         </Text>
       </group>
-
     </group>
   );
 };
