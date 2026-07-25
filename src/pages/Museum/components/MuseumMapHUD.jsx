@@ -46,7 +46,7 @@ const MuseumMapHUD = ({ categories = [], onNavigate }) => {
         </span>
       </div>
 
-      {/* ── Center Crosshair Dot & Ring Cursor ── */}
+      {/* ── Center Crosshair Dot ── */}
       <div style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center'
@@ -58,7 +58,7 @@ const MuseumMapHUD = ({ categories = [], onNavigate }) => {
         }} />
       </div>
 
-      {/* ── Top-Right Hall Teleport & Signature Buttons ── */}
+      {/* ── Top-Right Hall Quick Teleport Buttons ── */}
       <div style={{ position: 'absolute', top: '16px', right: '16px', pointerEvents: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
         {[
           { slug: 'lobby', label: '🏠 Lobby' },
@@ -71,14 +71,14 @@ const MuseumMapHUD = ({ categories = [], onNavigate }) => {
             key={slug}
             onClick={() => onNavigate(slug)}
             style={{
-              background: slug === 'signature' ? 'rgba(59, 130, 246, 0.85)' : 'rgba(15, 15, 18, 0.85)',
+              background: 'rgba(15, 15, 18, 0.85)',
               color: '#ffffff', border: '1px solid rgba(255,255,255,0.2)',
               padding: '6px 14px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600,
               borderRadius: '6px', backdropFilter: 'blur(8px)', transition: 'all 0.2s ease',
               minWidth: '120px', textAlign: 'center'
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = slug === 'signature' ? 'rgba(37, 99, 235, 1)' : 'rgba(255,255,255,0.25)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = slug === 'signature' ? 'rgba(59, 130, 246, 0.85)' : 'rgba(15, 15, 18, 0.85)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.25)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(15, 15, 18, 0.85)'; }}
           >
             {label}
           </button>
@@ -98,27 +98,8 @@ const MuseumMapHUD = ({ categories = [], onNavigate }) => {
         <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
           <div>WASD - Walk</div>
           <div>Mouse - Look Around</div>
-          <div>Click - Interact</div>
-          <div>ESC - Menu</div>
-        </div>
-      </div>
-
-      {/* ── Bottom-Right Minimap Diagram ── */}
-      <div style={{
-        position: 'absolute', bottom: '20px', right: '20px',
-        width: '140px', height: '90px', background: 'rgba(15, 15, 18, 0.9)',
-        border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px',
-        padding: '8px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-        backdropFilter: 'blur(8px)'
-      }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', height: '45px' }}>
-          <div style={{ background: '#22c55e', opacity: 0.7, borderRadius: '2px' }} title="Nature" />
-          <div style={{ background: '#eab308', opacity: 0.7, borderRadius: '2px' }} title="Street" />
-          <div style={{ background: '#f97316', opacity: 0.7, borderRadius: '2px' }} title="Travel" />
-          <div style={{ background: '#3b82f6', opacity: 0.7, borderRadius: '2px' }} title="Portrait" />
-        </div>
-        <div style={{ background: '#334155', height: '22px', borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ color: '#fbbf24', fontSize: '10px' }}>▲ LOBBY</span>
+          <div>Click - Inspect Image</div>
+          <div>ESC - Release Pointer</div>
         </div>
       </div>
     </div>

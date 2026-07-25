@@ -1,20 +1,20 @@
-// Cross-shaped 3D Virtual Museum Layout (Level 1 Exhibition Wings + Level 2 Rooftop Penthouse)
+// Cross-shaped 3D Virtual Museum Layout Configuration
 
 export const WALKABLE_ZONES = [
-  // Level 1: Main Lobby (X: -14.5 to 14.5, Z: -14.5 to 14.5)
-  { minX: -14.5, maxX: 14.5, minZ: -14.5, maxZ: 14.5, level: 1 },
+  // Level 1: Main Lobby (X: -13.8 to 13.8, Z: -13.8 to 13.8 -- 1.2m wall buffer)
+  { minX: -13.8, maxX: 13.8, minZ: -13.8, maxZ: 13.8, level: 1 },
 
-  // Level 1: Corridors (Width 8m, Length 12m)
-  { minX: -3.8, maxX: 3.8, minZ: -26.8, maxZ: -14.5, level: 1 }, // North (Nature)
-  { minX: -26.8, maxX: -14.5, minZ: -3.8, maxZ: 3.8, level: 1 }, // West (Street)
-  { minX: 14.5, maxX: 26.8, minZ: -3.8, maxZ: 3.8, level: 1 },  // East (Travel)
-  { minX: -3.8, maxX: 3.8, minZ: 14.5, maxZ: 26.8, level: 1 },  // South (Portrait)
+  // Level 1: Corridors (Width 8m, 0.8m wall margin)
+  { minX: -3.2, maxX: 3.2, minZ: -27.5, maxZ: -13.8, level: 1 }, // North (Nature)
+  { minX: -27.5, maxX: -13.8, minZ: -3.2, maxZ: 3.2, level: 1 }, // West (Street)
+  { minX: 13.8, maxX: 27.5, minZ: -3.2, maxZ: 3.2, level: 1 },  // East (Travel)
+  { minX: -3.2, maxX: 3.2, minZ: 13.8, maxZ: 27.5, level: 1 },  // South (Portrait)
 
-  // Level 1: Exhibition Halls
-  { minX: -14.5, maxX: 14.5, minZ: -76.5, maxZ: -26.8, level: 1 }, // Nature Hall (North Wing)
-  { minX: -76.5, maxX: -26.8, minZ: -14.5, maxZ: 14.5, level: 1 }, // Street Hall (West Wing)
-  { minX: 26.8, maxX: 76.5, minZ: -14.5, maxZ: 14.5, level: 1 },  // Travel Hall (East Wing)
-  { minX: -14.5, maxX: 14.5, minZ: 26.8, maxZ: 76.5, level: 1 },  // Portrait Hall (South Wing)
+  // Level 1: Exhibition Halls (1.4m wall & artwork frame buffer -- impossible to enter images!)
+  { minX: -13.6, maxX: 13.6, minZ: -75.8, maxZ: -27.5, level: 1 }, // Nature Hall (North Wing)
+  { minX: -75.8, maxX: -27.5, minZ: -13.6, maxZ: 13.6, level: 1 }, // Street Hall (West Wing)
+  { minX: 27.5, maxX: 75.8, minZ: -13.6, maxZ: 13.6, level: 1 },  // Travel Hall (East Wing)
+  { minX: -13.6, maxX: 13.6, minZ: 27.5, maxZ: 75.8, level: 1 },  // Portrait Hall (South Wing)
 ];
 
 export const HALL_CONFIG = {

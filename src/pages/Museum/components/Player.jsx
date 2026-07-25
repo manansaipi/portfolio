@@ -48,6 +48,29 @@ const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera]);
 
+  // Handle Pointer Lock events to ensure cursor is ALWAYS visible when unlocked (ESC)
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    const onLock = () => {
+      document.body.style.cursor = 'none';
+    };
+
+    const onUnlock = () => {
+      document.body.style.cursor = 'default';
+    };
+
+    controls.addEventListener('lock', onLock);
+    controls.addEventListener('unlock', onUnlock);
+
+    return () => {
+      controls.removeEventListener('lock', onLock);
+      controls.removeEventListener('unlock', onUnlock);
+      document.body.style.cursor = 'default';
+    };
+  }, []);
+
   useEffect(() => {
     const onKeyDown = (e) => {
       switch (e.code) {

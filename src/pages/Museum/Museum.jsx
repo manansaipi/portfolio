@@ -92,8 +92,15 @@ const Museum = () => {
     };
   }, [isMobile]);
 
-  // Handle Escape key to close photo or modal
+  // Handle Escape key & cursor visibility during image focus
   useEffect(() => {
+    if (selectedMedia) {
+      if (document.pointerLockElement) {
+        document.exitPointerLock();
+      }
+      document.body.style.cursor = 'default';
+    }
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         if (selectedMedia) setSelectedMedia(null);
@@ -199,46 +206,49 @@ const Museum = () => {
       <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
 
       <ErrorBoundary3D>
-        <Canvas dpr={1} camera={{ fov: 60, near: 0.1, far: 250, position: [0, 3.8, 0] }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
+        <Canvas dpr={1} camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
           <Suspense fallback={null}>
             <MuseumLighting />
-            <GalleryRoom />
-            <LobbyDecoration onTeleportToLevel2={() => navigateTo('signature')} />
+            <group onClick={() => setSelectedMedia(null)}>
+              <GalleryRoom />
+              <LobbyDecoration onTeleportToLevel2={() => navigateTo('signature')} />
 
-            {/* Signature Sanctuary Room Walls preserved for future placement */}
-            {/* <SignatureRoomWalls
-              entries={guestbookEntries}
-              onOpenStudio={(slot) => setSelectedStudioSlot(slot)}
-            /> */}
+              {/* Signature Sanctuary Room Walls preserved for future placement */}
+              {/* <SignatureRoomWalls
+                entries={guestbookEntries}
+                onOpenStudio={(slot) => setSelectedStudioSlot(slot)}
+              /> */}
 
-            {/* Placed Artworks */}
-            {placedArtworks.map((art) => (
-              art.media_type === 'video' ? (
-                <VideoPiece
-                  key={art.id}
-                  media={art}
-                  position={art.pos}
-                  rotation={art.rot}
-                  onClick={(m) => {
-                    setSelectedMedia(m);
-                    if (document.pointerLockElement) document.exitPointerLock();
-                  }}
-                />
-              ) : (
-                <ArtPiece
-                  key={art.id}
-                  media={art}
-                  position={art.pos}
-                  rotation={art.rot}
-                  onClick={(m) => {
-                    setSelectedMedia(m);
-                    if (document.pointerLockElement) document.exitPointerLock();
-                  }}
-                />
-              )
-            ))}
+              {/* Placed Artworks */}
+              {placedArtworks.map((art) => (
+                art.media_type === 'video' ? (
+                  <VideoPiece
+                    key={art.id}
+                    media={art}
+                    position={art.pos}
+                    rotation={art.rot}
+                    onClick={(m) => {
+                      setSelectedMedia(m);
+                    }}
+                  />
+                ) : (
+                  <ArtPiece
+                    key={art.id}
+                    media={art}
+                    position={art.pos}
+                    rotation={art.rot}
+                    onClick={(m) => {
+                      setSelectedMedia(m);
+                    }}
+                  />
+                )
+              ))}
+            </group>
 
-            <Player teleportTarget={teleportTarget} enabled={!selectedMedia && !selectedStudioSlot} />
+            <Player
+              teleportTarget={teleportTarget}
+              enabled={!selectedStudioSlot}
+            />
             <Preload all />
           </Suspense>
         </Canvas>

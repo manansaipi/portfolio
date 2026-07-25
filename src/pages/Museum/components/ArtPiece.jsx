@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from '@react-three/drei';
-import * as THREE from 'three';
 import { textureCache } from '../utils/TextureCache';
 import { resolveImg } from '@utils/imageUtils';
 
@@ -33,11 +32,28 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
     };
   }, [imgUrl]);
 
+  // Compute dynamic frame width and height based on the loaded image's actual aspect ratio!
+  let frameW = width;
+  let frameH = height;
+
+  if (texture && texture.image && texture.image.width && texture.image.height) {
+    const aspect = texture.image.width / texture.image.height;
+    if (aspect < 0.95) {
+      // 📱 Portrait Orientation (e.g. 3:4, 9:16)
+      frameH = 4.2;
+      frameW = Math.max(2.2, Math.min(4.2 * aspect, 3.6));
+    } else {
+      // 🖼️ Landscape / Square Orientation (e.g. 4:3, 16:9, 1:1)
+      frameW = 4.8;
+      frameH = Math.max(2.4, Math.min(4.8 / aspect, 4.2));
+    }
+  }
+
   return (
     <group position={position} rotation={rotation}>
-      {/* Light Source Focused on Art Piece */}
+      {/* Spotlight Focused on Art Piece */}
       <spotLight
-        position={[0, height / 2 + 0.8, 1.6]}
+        position={[0, frameH / 2 + 0.8, 1.6]}
         target-position={[0, 0, 0]}
         angle={Math.PI / 4}
         penumbra={0.3}
@@ -45,15 +61,11 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
         color="#fffcf5"
       />
 
-      {/* Picture Frame Group */}
+      {/* Dynamic Picture Frame Group */}
       <group
         onClick={(e) => {
           e.stopPropagation();
-          // Only trigger inspect lightbox if pointer lock is ALREADY active
-          if (document.pointerLockElement) {
-            document.exitPointerLock();
-            if (onClick) onClick(media);
-          }
+          if (onClick) onClick(media);
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
@@ -63,37 +75,37 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
           setHovered(false);
         }}
       >
-        {/* Outer Wooden Picture Frame (4 Thin Box Bars around the Artwork) */}
+        {/* Outer Wooden Picture Frame Bars */}
         {/* Top Frame Bar */}
-        <mesh position={[0, height / 2 + 0.1, 0]}>
-          <boxGeometry args={[width + 0.4, 0.2, 0.15]} />
+        <mesh position={[0, frameH / 2 + 0.1, 0]}>
+          <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
         {/* Bottom Frame Bar */}
-        <mesh position={[0, -height / 2 - 0.1, 0]}>
-          <boxGeometry args={[width + 0.4, 0.2, 0.15]} />
+        <mesh position={[0, -frameH / 2 - 0.1, 0]}>
+          <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
         {/* Left Frame Bar */}
-        <mesh position={[-width / 2 - 0.1, 0, 0]}>
-          <boxGeometry args={[0.2, height, 0.15]} />
+        <mesh position={[-frameW / 2 - 0.1, 0, 0]}>
+          <boxGeometry args={[0.2, frameH, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
         {/* Right Frame Bar */}
-        <mesh position={[width / 2 + 0.1, 0, 0]}>
-          <boxGeometry args={[0.2, height, 0.15]} />
+        <mesh position={[frameW / 2 + 0.1, 0, 0]}>
+          <boxGeometry args={[0.2, frameH, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
 
         {/* Backboard */}
         <mesh position={[0, 0, -0.02]}>
-          <planeGeometry args={[width + 0.1, height + 0.1]} />
+          <planeGeometry args={[frameW + 0.1, frameH + 0.1]} />
           <meshLambertMaterial color="#111111" />
         </mesh>
 
-        {/* Actual Image Canvas Surface */}
+        {/* Image Canvas Surface */}
         <mesh position={[0, 0, 0.01]}>
-          <planeGeometry args={[width, height]} />
+          <planeGeometry args={[frameW, frameH]} />
           {texture ? (
             <meshBasicMaterial map={texture} />
           ) : (
@@ -108,23 +120,37 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
           </Text>
         )}
 
-        {/* Hover Highlight Ring Frame */}
+        {/* Clean Rectangular Blue Hover Border */}
         {hovered && (
-          <mesh position={[0, 0, 0.02]}>
-            <planeGeometry args={[width + 0.05, height + 0.05]} />
-            <meshBasicMaterial color="#38bdf8" wireframe />
-          </mesh>
+          <group position={[0, 0, 0.02]}>
+            <mesh position={[0, frameH / 2 + 0.02, 0]}>
+              <planeGeometry args={[frameW + 0.1, 0.04]} />
+              <meshBasicMaterial color="#38bdf8" />
+            </mesh>
+            <mesh position={[0, -frameH / 2 - 0.02, 0]}>
+              <planeGeometry args={[frameW + 0.1, 0.04]} />
+              <meshBasicMaterial color="#38bdf8" />
+            </mesh>
+            <mesh position={[-frameW / 2 - 0.02, 0, 0]}>
+              <planeGeometry args={[0.04, frameH + 0.1]} />
+              <meshBasicMaterial color="#38bdf8" />
+            </mesh>
+            <mesh position={[frameW / 2 + 0.02, 0, 0]}>
+              <planeGeometry args={[0.04, frameH + 0.1]} />
+              <meshBasicMaterial color="#38bdf8" />
+            </mesh>
+          </group>
         )}
       </group>
 
       {/* Exhibit Label Below Frame */}
-      <group position={[0, -height / 2 - 0.5, 0.05]}>
+      <group position={[0, -frameH / 2 - 0.5, 0.05]}>
         <Text
           fontSize={0.22}
           color="#ffffff"
           anchorX="center"
           anchorY="top"
-          maxWidth={width}
+          maxWidth={frameW}
         >
           {media.title || 'Untitled Work'}
         </Text>
@@ -135,7 +161,7 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
             color="#a1a1aa"
             anchorX="center"
             anchorY="top"
-            maxWidth={width}
+            maxWidth={frameW}
           >
             {media.caption}
           </Text>
