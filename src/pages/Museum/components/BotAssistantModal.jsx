@@ -17,6 +17,7 @@ const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChan
   const [streamingText, setStreamingText] = useState('');
   const chatBottomRef = useRef(null);
   const inputRef = useRef(null);
+  const openTimeRef = useRef(Date.now());
 
   const thinkingIntervalRef = useRef(null);
   const typingIntervalRef = useRef(null);
@@ -24,9 +25,10 @@ const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChan
   // Auto-focus input text box when modal opens!
   useEffect(() => {
     if (isOpen) {
+      openTimeRef.current = Date.now();
       setTimeout(() => {
         if (inputRef.current) inputRef.current.focus();
-      }, 100);
+      }, 50);
     }
   }, [isOpen]);
 
@@ -164,7 +166,10 @@ const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChan
   return (
     /* Outer Backdrop: Clicking outside the modal container closes the modal! */
     <div
-      onClick={() => onClose && onClose()}
+      onClick={() => {
+        if (Date.now() - openTimeRef.current < 400) return;
+        if (onClose) onClose();
+      }}
       style={{
         position: 'fixed', inset: 0, zIndex: 999, pointerEvents: 'auto',
         background: 'rgba(0, 0, 0, 0.75)', backdropFilter: 'blur(8px)',

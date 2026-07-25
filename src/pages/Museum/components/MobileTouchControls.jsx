@@ -16,6 +16,8 @@ const MobileTouchControls = ({
   const touchIdRef = useRef(null);
   const lookTouchIdRef = useRef(null);
   const lastLookPos = useRef({ x: 0, y: 0 });
+  const lastButtonTouchTimeRef = useRef(0);
+
 
   // 🕹️ Joystick Touch Handlers (Bottom-Left)
   const handleJoystickStart = (e) => {
@@ -133,7 +135,7 @@ const MobileTouchControls = ({
         onTouchCancel={handleJoystickEnd}
         style={{
           position: 'absolute',
-          bottom: '24px',
+          bottom: '56px',
           left: '24px',
           width: '116px',
           height: '116px',
@@ -169,7 +171,7 @@ const MobileTouchControls = ({
       {/* Control Buttons Container (Bottom-Right - zIndex: 30) */}
       <div style={{
         position: 'absolute',
-        bottom: '40px',
+        bottom: '72px',
         right: '24px',
         width: '200px',
         height: '170px',
@@ -178,7 +180,16 @@ const MobileTouchControls = ({
       }}>
         {/* Crouch Button (Bottom-Left) */}
         <button
-          onClick={(e) => { e.stopPropagation(); if (onCrouchToggle) onCrouchToggle(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (Date.now() - lastButtonTouchTimeRef.current < 500) return;
+            if (onCrouchToggle) onCrouchToggle();
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            lastButtonTouchTimeRef.current = Date.now();
+            if (onCrouchToggle) onCrouchToggle();
+          }}
           style={{
             position: 'absolute',
             bottom: '10px',
@@ -205,7 +216,16 @@ const MobileTouchControls = ({
 
         {/* Jump Button (Bottom-Right) */}
         <button
-          onClick={(e) => { e.stopPropagation(); if (onJump) onJump(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (Date.now() - lastButtonTouchTimeRef.current < 500) return;
+            if (onJump) onJump();
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            lastButtonTouchTimeRef.current = Date.now();
+            if (onJump) onJump();
+          }}
           style={{
             position: 'absolute',
             bottom: '10px',
@@ -232,7 +252,16 @@ const MobileTouchControls = ({
 
         {/* Action Button (Centered above Crouch and Jump) */}
         <button
-          onClick={(e) => { e.stopPropagation(); if (isInteractive && onInteract) onInteract(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (Date.now() - lastButtonTouchTimeRef.current < 500) return;
+            if (isInteractive && onInteract) onInteract();
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation();
+            lastButtonTouchTimeRef.current = Date.now();
+            if (isInteractive && onInteract) onInteract();
+          }}
           style={{
             position: 'absolute',
             bottom: '84px',
