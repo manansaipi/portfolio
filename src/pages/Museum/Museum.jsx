@@ -218,8 +218,8 @@ const Museum = () => {
           <Suspense fallback={null}>
             <MuseumLighting />
             <group onClick={() => setSelectedMedia(null)}>
-              <GalleryRoom />
-              <LobbyDecoration onTeleportToLevel2={() => navigateTo('signature')} />
+              <GalleryRoom categories={categories} />
+              <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
 
               {/* 🤖 Taller Lobby AI Bot Assistant NPC */}
               <BotAssistantNPC

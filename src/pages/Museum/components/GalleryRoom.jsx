@@ -2,7 +2,22 @@ import React from 'react';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-const GalleryRoom = () => {
+// Default icons & fallback names per slug
+const SLUG_META = {
+  nature:   { icon: '🌿', color: '#4ade80', bannerColor: '#4ade80' },
+  street:   { icon: '💼', color: '#facc15', bannerColor: '#facc15' },
+  travel:   { icon: '🧗', color: '#fb923c', bannerColor: '#fb923c' },
+  portrait: { icon: '👨\u200d👩\u200d👧', color: '#60a5fa', bannerColor: '#60a5fa' },
+};
+
+const GalleryRoom = ({ categories = [] }) => {
+  // Build a lookup: slug -> label
+  const catLabels = {};
+  categories.forEach(c => { catLabels[c.slug] = c.label; });
+
+  const getLabel = (slug, fallback) => catLabels[slug] || fallback;
+  const getMeta  = (slug) => SLUG_META[slug] || { icon: '🖼️', color: '#ffffff', bannerColor: '#ffffff' };
+
   return (
     <group>
       {/* ════════════════════════════════════════════════════════════════ */}
@@ -89,8 +104,8 @@ const GalleryRoom = () => {
           <boxGeometry args={[8, 3, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
         </mesh>
-        <Text position={[0, 6.2, -14.5]} fontSize={0.55} color="#15803d" anchorX="center">
-          🌿 NATURE HALL ➔
+        <Text position={[0, 6.2, -14.5]} fontSize={0.55} color={getMeta('nature').color} anchorX="center">
+          {getMeta('nature').icon} {getLabel('nature', 'NATURE HALL').toUpperCase()} ➔
         </Text>
 
         {/* South Wall Segments */}
@@ -106,8 +121,8 @@ const GalleryRoom = () => {
           <boxGeometry args={[8, 3, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
         </mesh>
-        <Text position={[0, 6.2, 14.5]} rotation={[0, Math.PI, 0]} fontSize={0.55} color="#3b82f6" anchorX="center">
-          👤 PORTRAIT HALL ➔
+        <Text position={[0, 6.2, 14.5]} rotation={[0, Math.PI, 0]} fontSize={0.55} color={getMeta('portrait').color} anchorX="center">
+          {getMeta('portrait').icon} {getLabel('portrait', 'FAMILY HALL').toUpperCase()} ➔
         </Text>
 
         {/* West Wall Segments */}
@@ -123,8 +138,8 @@ const GalleryRoom = () => {
           <boxGeometry args={[8, 3, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
         </mesh>
-        <Text position={[-14.5, 6.2, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.55} color="#eab308" anchorX="center">
-          🏙️ STREET HALL ➔
+        <Text position={[-14.5, 6.2, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.55} color={getMeta('street').color} anchorX="center">
+          {getMeta('street').icon} {getLabel('street', 'PROFESSIONAL HALL').toUpperCase()} ➔
         </Text>
 
         {/* East Wall Segments */}
@@ -140,8 +155,8 @@ const GalleryRoom = () => {
           <boxGeometry args={[8, 3, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
         </mesh>
-        <Text position={[14.5, 6.2, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.55} color="#f97316" anchorX="center">
-          ✈️ TRAVEL HALL ➔
+        <Text position={[14.5, 6.2, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.55} color={getMeta('travel').color} anchorX="center">
+          {getMeta('travel').icon} {getLabel('travel', 'ADVENTURE HALL').toUpperCase()} ➔
         </Text>
       </group>
 
@@ -304,8 +319,8 @@ const GalleryRoom = () => {
           <meshLambertMaterial color="#2d3b2d" />
         </mesh>
 
-        <Text position={[0, 8.2, -27.2]} fontSize={0.65} color="#4ade80" anchorX="center">
-          NATURE & WILDLIFE EXHIBITION
+        <Text position={[0, 8.2, -27.2]} fontSize={0.65} color={getMeta('nature').bannerColor} anchorX="center">
+          {getMeta('nature').icon}  {getLabel('nature', 'NATURE HALL').toUpperCase()}
         </Text>
       </group>
 
@@ -369,8 +384,8 @@ const GalleryRoom = () => {
           <meshLambertMaterial color="#2b2b2e" />
         </mesh>
 
-        <Text position={[-27.2, 8.2, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.65} color="#facc15" anchorX="center">
-          URBAN & STREET PHOTOGRAPHY
+        <Text position={[-27.2, 8.2, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.65} color={getMeta('street').bannerColor} anchorX="center">
+          {getMeta('street').icon}  {getLabel('street', 'PROFESSIONAL HALL').toUpperCase()}
         </Text>
       </group>
 
@@ -434,8 +449,8 @@ const GalleryRoom = () => {
           <meshLambertMaterial color="#3d3229" />
         </mesh>
 
-        <Text position={[27.2, 8.2, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.65} color="#fb923c" anchorX="center">
-          WORLD TRAVEL & CULTURES
+        <Text position={[27.2, 8.2, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.65} color={getMeta('travel').bannerColor} anchorX="center">
+          {getMeta('travel').icon}  {getLabel('travel', 'ADVENTURE HALL').toUpperCase()}
         </Text>
       </group>
 
@@ -499,8 +514,8 @@ const GalleryRoom = () => {
           <meshLambertMaterial color="#232b38" />
         </mesh>
 
-        <Text position={[0, 8.2, 27.2]} rotation={[0, Math.PI, 0]} fontSize={0.65} color="#60a5fa" anchorX="center">
-          PORTRAITURE & EDITORIAL ARTS
+        <Text position={[0, 8.2, 27.2]} rotation={[0, Math.PI, 0]} fontSize={0.65} color={getMeta('portrait').bannerColor} anchorX="center">
+          {getMeta('portrait').icon}  {getLabel('portrait', 'FAMILY HALL').toUpperCase()}
         </Text>
       </group>
     </group>

@@ -154,7 +154,7 @@ const AdminGallery = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {categories.map(cat => (
                                 <div key={cat.slug} className="flex flex-col gap-1">
-                                    <label className="text-xs font-semibold capitalize opacity-70">Hall: {cat.slug}</label>
+                                    <label className="text-xs font-semibold capitalize opacity-70">Hall: {cat.label}</label>
                                     <input 
                                         type="text"
                                         value={categoryEdits[cat.slug] || ""}

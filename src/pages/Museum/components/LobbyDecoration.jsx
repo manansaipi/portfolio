@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Text } from '@react-three/drei';
 
-const LobbyDecoration = ({ onTeleportToLevel2 }) => {
+const SLUG_META = {
+  nature:   { icon: '🌿', col: '#4ade80' },
+  street:   { icon: '💼', col: '#facc15' },
+  travel:   { icon: '🧗', col: '#fb923c' },
+  portrait: { icon: '👨\u200d👩\u200d👧', col: '#60a5fa' },
+};
+
+const LobbyDecoration = ({ onTeleportToLevel2, categories = [] }) => {
   const [hoveredBtn, setHoveredBtn] = useState(false);
 
   return (
@@ -35,22 +42,26 @@ const LobbyDecoration = ({ onTeleportToLevel2 }) => {
           </Text>
 
           {/* Hall Box Highlights on Map Diagram */}
-          {[
-            { label: 'NATURE', pos: [-1.4, 0.2, 0.05], col: '#4ade80' },
-            { label: 'STREET', pos: [-0.45, 0.2, 0.05], col: '#facc15' },
-            { label: 'TRAVEL', pos: [0.45, 0.2, 0.05], col: '#fb923c' },
-            { label: 'PORTRAIT', pos: [1.4, 0.2, 0.05], col: '#60a5fa' },
-          ].map(({ label, pos, col }) => (
-            <group key={label} position={pos} rotation={[-Math.PI / 2, 0, 0]}>
-              <mesh>
-                <planeGeometry args={[0.8, 0.6]} />
-                <meshBasicMaterial color="#0f172a" />
-              </mesh>
-              <Text position={[0, 0, 0.01]} fontSize={0.08} color={col} anchorX="center">
-                {label}
-              </Text>
-            </group>
-          ))}
+          {['nature', 'street', 'travel', 'portrait'].map((slug) => {
+            const cat = categories.find(c => c.slug === slug);
+            const label = cat?.label || slug.toUpperCase();
+            const meta = SLUG_META[slug] || { icon: '', col: '#ffffff' };
+            const xPos = { nature: -1.4, street: -0.45, travel: 0.45, portrait: 1.4 }[slug];
+            return (
+              <group key={slug} position={[xPos, 0.2, 0.05]} rotation={[-Math.PI / 2, 0, 0]}>
+                <mesh>
+                  <planeGeometry args={[0.8, 0.6]} />
+                  <meshBasicMaterial color="#0f172a" />
+                </mesh>
+                <Text position={[0, 0.06, 0.01]} fontSize={0.07} color={meta.col} anchorX="center">
+                  {meta.icon}
+                </Text>
+                <Text position={[0, -0.08, 0.01]} fontSize={0.065} color={meta.col} anchorX="center">
+                  {label.toUpperCase()}
+                </Text>
+              </group>
+            );
+          })}
 
           <Text position={[0, -0.6, 0.05]} rotation={[-Math.PI / 2, 0, 0]} fontSize={0.12} color="#fbbf24" anchorX="center">
             ▲ YOU ARE HERE (MAIN LOBBY)
