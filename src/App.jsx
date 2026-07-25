@@ -89,6 +89,7 @@ const App = () => {
                         <Navbar />
                     </div>
                 )}
+                
                 <div className={isHome ? "" : "hidden"}>
                     <React.Suspense fallback={null}>
                         <Home />

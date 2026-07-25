@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
 	define: {
-		'process.env': process.env
+		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
 	},
 	resolve: {
 		alias: {
@@ -31,7 +31,7 @@ export default defineConfig({
 			output: {
 				manualChunks: {
 					'vendor-react': ['react', 'react-dom', 'react-router'],
-					'vendor-three': ['three', '@react-three/fiber', '@react-three/drei', '@react-three/rapier'],
+					'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
 					'vendor-gsap': ['gsap', '@gsap/react'],
 					'vendor-utils': ['axios', 'dayjs', 'lenis']
 				}

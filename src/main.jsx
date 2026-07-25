@@ -22,6 +22,7 @@ const BlogDetail = lazy(() => import("@pages/Blog/components/BlogDetail/BlogDeta
 const Projects = lazy(() => import("@pages/Projects/Projects.jsx"));
 const Guestbook = lazy(() => import("@pages/Guestbook/Guestbook.jsx"));
 const AdminPanel = lazy(() => import("@pages/Admin/AdminPanel.jsx"));
+const Museum = lazy(() => import("@pages/Museum/Museum.jsx"));
 
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -41,6 +42,8 @@ createRoot(document.getElementById("root")).render(
 			<BrowserRouter>
                 <Suspense fallback={<LoadingFallback />}>
                     <Routes>
+                        <Route path="/museum" element={<Museum />} />
+                        <Route path="/scrapbook" element={<Museum />} />
                         <Route path="/dashboard-secret" element={
                             <ProtectedRoute>
                                 <AdminPanel />

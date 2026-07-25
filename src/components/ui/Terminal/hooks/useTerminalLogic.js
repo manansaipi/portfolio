@@ -143,7 +143,7 @@ export const useTerminalLogic = (isEmbed = false) => {
             });
         }
         
-        const isAiLogMode = !isEnteringMode || query;
+        const isAiLogMode = true;
         logCommand(originalInput, isAiLogMode, responseTextToLog, Math.round(performance.now() - startTime), audioBase64Data);
         setIsProcessing(false);
     };

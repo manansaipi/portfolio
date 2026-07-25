@@ -56,9 +56,10 @@ export const updateComment = async (id, data) => {
 };
 
 // --- UPLOAD ---
-export const uploadFile = async (file) => {
+export const uploadFile = async (file, folder = "portfolio_uploads") => {
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("folder", folder);
     const response = await api.post("/api/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
     });
