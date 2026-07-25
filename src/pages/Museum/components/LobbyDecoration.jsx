@@ -9,7 +9,7 @@ const LobbyDecoration = ({ onTeleportToLevel2 }) => {
       {/* ════════════════════════════════════════════════════════════════ */}
       {/* 🧭 1. CENTRAL INFORMATION KIOSK ("THE GALLERY")                  */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <group position={[0, 0, 8]}>
+      <group position={[0, 0, 8]} rotation={[0, Math.PI, 0]}>
         {/* Main Base Body */}
         <mesh position={[0, 0.75, 0]}>
           <boxGeometry args={[4.8, 1.5, 2.8]} />

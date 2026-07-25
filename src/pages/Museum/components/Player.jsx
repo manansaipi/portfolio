@@ -11,6 +11,15 @@ const OBSTACLE_ZONES = [
   { minX: -21.2, maxX: -18.8, minZ: 7.2, maxZ: 8.8, level: 1 },
 ];
 
+// 🚀 Pre-allocate static reusable Vector3 objects to prevent GC frame stutters!
+const _npcBodyPos = new THREE.Vector3(3, 2.2, 6);
+const _npcBubblePos = new THREE.Vector3(3, 3.6, 6);
+const _viewDir = new THREE.Vector3();
+const _toNpcBody = new THREE.Vector3();
+const _toNpcBubble = new THREE.Vector3();
+const _artPos = new THREE.Vector3();
+const _toArt = new THREE.Vector3();
+
 const checkPositionValid = (x, z) => {
   let inZone = false;
   for (const zone of WALKABLE_ZONES) {
@@ -29,22 +38,42 @@ const checkPositionValid = (x, z) => {
   return true;
 };
 
-const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
+const Player = ({
+  position = [0, 3.8, 0],
+  teleportTarget,
+  enabled = true,
+  onInteractE,
+  onLookingAtNPC,
+  placedArtworks = [],
+  onSelectArt,
+}) => {
   const { camera } = useThree();
   const controlsRef = useRef();
 
   const keys = useRef({ w: false, a: false, s: false, d: false, space: false, crouch: false });
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
+  const isLookingAtNPCRef = useRef(false);
+  const lookingAtArtRef = useRef(null);
   
   const SPEED = 180;
   const NORMAL_HEIGHT = 3.8;
-  const CROUCH_HEIGHT = 2.0;
   const JUMP_FORCE = 11;
   const GRAVITY = 28;
 
+  // Pre-parse artwork Vector3 positions to avoid array spread inside useFrame!
+  const parsedArtworks = useRef([]);
+  useEffect(() => {
+    parsedArtworks.current = placedArtworks.map(art => ({
+      art,
+      vec: art.pos ? new THREE.Vector3(...art.pos) : null
+    })).filter(item => item.vec !== null);
+  }, [placedArtworks]);
+
+  // Initial Spawn: Orient camera level at eye height facing directly towards the Portrait Hall (+Z)!
   useEffect(() => {
     camera.position.set(position[0], position[1] || NORMAL_HEIGHT, position[2]);
+    camera.rotation.set(0, Math.PI, 0); // Face South (Portrait Hall) level at eye height!
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera]);
 
@@ -71,7 +100,32 @@ const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
     };
   }, []);
 
+  // 🚀 Automatically re-engage Pointer Lock when Modal closes so user seamlessly returns to game!
   useEffect(() => {
+    if (enabled && controlsRef.current && !controlsRef.current.isLocked) {
+      const timer = setTimeout(() => {
+        if (controlsRef.current && !controlsRef.current.isLocked) {
+          try {
+            controlsRef.current.lock();
+          } catch (err) {
+            console.log("Auto-lock prevented:", err);
+          }
+        }
+      }, 120);
+      return () => clearTimeout(timer);
+    }
+  }, [enabled]);
+
+  // Listen for both KeyE press and mouse click to interact with AI Assistant OR inspect Artworks!
+  useEffect(() => {
+    const triggerInteraction = () => {
+      if (isLookingAtNPCRef.current && onInteractE) {
+        onInteractE();
+      } else if (lookingAtArtRef.current && onSelectArt) {
+        onSelectArt(lookingAtArtRef.current);
+      }
+    };
+
     const onKeyDown = (e) => {
       switch (e.code) {
         case 'KeyW': case 'ArrowUp': keys.current.w = true; break;
@@ -80,8 +134,12 @@ const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
         case 'KeyD': case 'ArrowRight': keys.current.d = true; break;
         case 'Space': keys.current.space = true; break;
         case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = true; break;
+        case 'KeyE':
+          triggerInteraction();
+          break;
       }
     };
+
     const onKeyUp = (e) => {
       switch (e.code) {
         case 'KeyW': case 'ArrowUp': keys.current.w = false; break;
@@ -92,15 +150,21 @@ const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
         case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = false; break;
       }
     };
+
+    const onMouseDown = () => {
+      triggerInteraction();
+    };
     
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
+    document.addEventListener('mousedown', onMouseDown);
     
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
+      document.removeEventListener('mousedown', onMouseDown);
     };
-  }, []);
+  }, [onInteractE, onSelectArt]);
 
   // Teleport effect with multi-level Y support
   useEffect(() => {
@@ -111,6 +175,50 @@ const Player = ({ position = [0, 3.8, 0], teleportTarget, enabled = true }) => {
   }, [teleportTarget, camera]);
 
   useFrame((state, delta) => {
+    camera.getWorldDirection(_viewDir);
+
+    // 1. Raycast Target Check for AI Assistant & Overhead Speech Bubble
+    // Checks aiming at both bot body [3, 2.2, 6] AND overhead speech bubble [3, 3.6, 6] so looking up NEVER hides bubble!
+    const distToNpc = camera.position.distanceTo(_npcBodyPos);
+    let isLookingAtNpc = false;
+
+    if (distToNpc <= 7.0) {
+      _toNpcBody.copy(_npcBodyPos).sub(camera.position).normalize();
+      _toNpcBubble.copy(_npcBubblePos).sub(camera.position).normalize();
+
+      const dotBody = _viewDir.dot(_toNpcBody);
+      const dotBubble = _viewDir.dot(_toNpcBubble);
+
+      isLookingAtNpc = (dotBody > 0.88 || dotBubble > 0.88);
+    }
+    isLookingAtNPCRef.current = isLookingAtNpc;
+
+    // 2. Zero-Allocation Raycast Check for Artworks (Distance <= 8.5m, Dot > 0.94)
+    let bestArt = null;
+    let bestDot = 0.94;
+
+    const list = parsedArtworks.current;
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      const distToArt = camera.position.distanceTo(item.vec);
+
+      if (distToArt <= 8.5) {
+        _toArt.copy(item.vec).sub(camera.position).normalize();
+        const dotArt = _viewDir.dot(_toArt);
+        if (dotArt > bestDot) {
+          bestDot = dotArt;
+          bestArt = item.art;
+        }
+      }
+    }
+    lookingAtArtRef.current = bestArt;
+
+    // Highlight crosshair blue if looking at either AI Assistant OR Artwork!
+    const isInteractive = isLookingAtNpc || Boolean(bestArt);
+    if (onLookingAtNPC) {
+      onLookingAtNPC(isInteractive);
+    }
+
     if (!controlsRef.current || !controlsRef.current.isLocked || !enabled) return;
 
     // Determine level floor base (Level 1 base = 3.8m, Level 2 Penthouse base = 15.8m)

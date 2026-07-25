@@ -65,33 +65,33 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
       <group
         onClick={(e) => {
           e.stopPropagation();
+          // Proximity Enforcement: Only allow inspecting artwork if player is close (distance <= 8.5m)!
+          if (e.distance && e.distance > 8.5) return;
           if (onClick) onClick(media);
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
-          setHovered(true);
+          if (e.distance && e.distance <= 8.5) {
+            setHovered(true);
+          }
         }}
         onPointerOut={() => {
           setHovered(false);
         }}
       >
         {/* Outer Wooden Picture Frame Bars */}
-        {/* Top Frame Bar */}
         <mesh position={[0, frameH / 2 + 0.1, 0]}>
           <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
-        {/* Bottom Frame Bar */}
         <mesh position={[0, -frameH / 2 - 0.1, 0]}>
           <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
-        {/* Left Frame Bar */}
         <mesh position={[-frameW / 2 - 0.1, 0, 0]}>
           <boxGeometry args={[0.2, frameH, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
         </mesh>
-        {/* Right Frame Bar */}
         <mesh position={[frameW / 2 + 0.1, 0, 0]}>
           <boxGeometry args={[0.2, frameH, 0.15]} />
           <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
@@ -120,51 +120,36 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
           </Text>
         )}
 
-        {/* Clean Rectangular Blue Hover Border */}
-        {hovered && (
-          <group position={[0, 0, 0.02]}>
-            <mesh position={[0, frameH / 2 + 0.02, 0]}>
-              <planeGeometry args={[frameW + 0.1, 0.04]} />
-              <meshBasicMaterial color="#38bdf8" />
+        {/* Artpiece Title & Caption Display Board below frame */}
+        {media.title && (
+          <group position={[0, -frameH / 2 - 0.45, 0.05]}>
+            <mesh position={[0, 0, -0.01]}>
+              <planeGeometry args={[Math.min(frameW, 3.8), 0.45]} />
+              <meshBasicMaterial color="#09090b" opacity={0.88} transparent />
             </mesh>
-            <mesh position={[0, -frameH / 2 - 0.02, 0]}>
-              <planeGeometry args={[frameW + 0.1, 0.04]} />
-              <meshBasicMaterial color="#38bdf8" />
-            </mesh>
-            <mesh position={[-frameW / 2 - 0.02, 0, 0]}>
-              <planeGeometry args={[0.04, frameH + 0.1]} />
-              <meshBasicMaterial color="#38bdf8" />
-            </mesh>
-            <mesh position={[frameW / 2 + 0.02, 0, 0]}>
-              <planeGeometry args={[0.04, frameH + 0.1]} />
-              <meshBasicMaterial color="#38bdf8" />
-            </mesh>
+            <Text
+              position={[0, 0.08, 0.01]}
+              fontSize={0.16}
+              color="#ffffff"
+              anchorX="center"
+              anchorY="middle"
+              maxWidth={3.6}
+            >
+              {media.title}
+            </Text>
+            {media.caption && (
+              <Text
+                position={[0, -0.09, 0.01]}
+                fontSize={0.11}
+                color="#a1a1aa"
+                anchorX="center"
+                anchorY="middle"
+                maxWidth={3.6}
+              >
+                {media.caption}
+              </Text>
+            )}
           </group>
-        )}
-      </group>
-
-      {/* Exhibit Label Below Frame */}
-      <group position={[0, -frameH / 2 - 0.5, 0.05]}>
-        <Text
-          fontSize={0.22}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="top"
-          maxWidth={frameW}
-        >
-          {media.title || 'Untitled Work'}
-        </Text>
-        {media.caption && (
-          <Text
-            position={[0, -0.3, 0]}
-            fontSize={0.14}
-            color="#a1a1aa"
-            anchorX="center"
-            anchorY="top"
-            maxWidth={frameW}
-          >
-            {media.caption}
-          </Text>
         )}
       </group>
     </group>

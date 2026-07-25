@@ -53,46 +53,49 @@ const VideoPiece = ({ media, position, rotation, onClick }) => {
       <group
         onClick={(e) => {
           e.stopPropagation();
+          // Proximity Enforcement: Only allow inspecting video if player is close (distance <= 8.5m)!
+          if (e.distance && e.distance > 8.5) return;
           if (onClick) onClick(media);
         }}
         onPointerOver={(e) => {
           e.stopPropagation();
-          setHovered(true);
-          document.body.style.cursor = 'pointer';
+          if (e.distance && e.distance <= 8.5) {
+            setHovered(true);
+          }
         }}
         onPointerOut={() => {
           setHovered(false);
-          document.body.style.cursor = 'auto';
         }}
       >
-        {/* LED Display Casing */}
-        <mesh position={[0, 0, -0.05]} castShadow receiveShadow>
+        {/* Sleek Dark Frame */}
+        <mesh position={[0, 0, -0.01]}>
           <boxGeometry args={[width + 0.2, height + 0.2, 0.1]} />
-          <meshStandardMaterial color={hovered ? '#22252a' : '#111317'} metalness={0.8} roughness={0.2} />
+          <meshLambertMaterial color={hovered ? '#1e293b' : '#0f172a'} />
         </mesh>
 
-        {/* Video Screen */}
-        <mesh position={[0, 0, 0.01]}>
+        {/* Video Canvas */}
+        <mesh position={[0, 0, 0.05]}>
           <planeGeometry args={[width, height]} />
           {videoTexture ? (
             <meshBasicMaterial map={videoTexture} />
           ) : (
-            <meshStandardMaterial color="#050505" />
+            <meshBasicMaterial color="#000000" />
           )}
         </mesh>
 
-        {/* Screen Title Plaque */}
-        <group position={[0, -height / 2 - 0.25, 0.02]}>
+        {/* Label */}
+        {media.title && (
           <Text
-            position={[0, 0, 0]}
-            fontSize={0.08}
-            color={hovered ? '#60a5fa' : '#9ca3af'}
+            position={[0, -height / 2 - 0.25, 0.06]}
+            fontSize={0.14}
+            color="#ffffff"
             anchorX="center"
             anchorY="middle"
+            maxWidth={3.8}
           >
-            ▶ {media.title || 'Video Exhibit'}
+            {media.title}
           </Text>
-        </group>
+        )}
       </group>
     </group>
   );

@@ -9,7 +9,8 @@ import LobbyDecoration from './components/LobbyDecoration';
 import MuseumLighting from './components/MuseumLighting';
 import ArtPiece from './components/ArtPiece';
 import VideoPiece from './components/VideoPiece';
-import SignatureRoomWalls from './components/SignatureRoomWalls';
+import BotAssistantNPC from './components/BotAssistantNPC';
+import BotAssistantModal from './components/BotAssistantModal';
 import DrawingStudioModal from './components/DrawingStudioModal';
 import Player from './components/Player';
 import MuseumMapHUD from './components/MuseumMapHUD';
@@ -18,6 +19,8 @@ import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
 import { getGalleryMedia, getGalleryCategories } from '@services/gallery';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
+
+const DEFAULT_WELCOME_SPEECH = "Hello! I am your AI Portfolio Assistant. Ask me anything about Abdul Mannan Saipi, his projects, skills, or this 3D museum!";
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -29,6 +32,10 @@ const Museum = () => {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth <= 768);
   const [teleportTarget, setTeleportTarget] = useState(null);
+  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+  const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechText, setSpeechText] = useState(DEFAULT_WELCOME_SPEECH);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -92,9 +99,9 @@ const Museum = () => {
     };
   }, [isMobile]);
 
-  // Handle Escape key & cursor visibility during image focus
+  // Handle Escape key & cursor visibility during image/AI focus
   useEffect(() => {
-    if (selectedMedia) {
+    if (selectedMedia || isAiChatOpen) {
       if (document.pointerLockElement) {
         document.exitPointerLock();
       }
@@ -105,11 +112,12 @@ const Museum = () => {
       if (e.key === 'Escape') {
         if (selectedMedia) setSelectedMedia(null);
         if (selectedStudioSlot) setSelectedStudioSlot(null);
+        if (isAiChatOpen) setIsAiChatOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedMedia, selectedStudioSlot]);
+  }, [selectedMedia, selectedStudioSlot, isAiChatOpen]);
 
   // Map uploaded artworks to wall slots in the 4 exhibition halls
   const placedArtworks = useMemo(() => {
@@ -200,24 +208,26 @@ const Museum = () => {
     );
   }
 
-  // ── 3. 3D Virtual Museum Engine ──
+  // ── 3. 3D Virtual Museum Engine (120 FPS High Refresh Rate Support!) ──
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0 }}>
       <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
 
       <ErrorBoundary3D>
-        <Canvas dpr={1} camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
+        <Canvas dpr={[1, 2]} camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
           <Suspense fallback={null}>
             <MuseumLighting />
             <group onClick={() => setSelectedMedia(null)}>
               <GalleryRoom />
               <LobbyDecoration onTeleportToLevel2={() => navigateTo('signature')} />
 
-              {/* Signature Sanctuary Room Walls preserved for future placement */}
-              {/* <SignatureRoomWalls
-                entries={guestbookEntries}
-                onOpenStudio={(slot) => setSelectedStudioSlot(slot)}
-              /> */}
+              {/* 🤖 Taller Lobby AI Bot Assistant NPC */}
+              <BotAssistantNPC
+                onOpenChat={() => setIsAiChatOpen(true)}
+                isSpeaking={isSpeaking}
+                speechText={speechText}
+                isLookingAtNPC={isLookingAtNPC}
+              />
 
               {/* Placed Artworks */}
               {placedArtworks.map((art) => (
@@ -247,7 +257,11 @@ const Museum = () => {
 
             <Player
               teleportTarget={teleportTarget}
-              enabled={!selectedStudioSlot}
+              enabled={!selectedStudioSlot && !isAiChatOpen}
+              onInteractE={() => setIsAiChatOpen(true)}
+              onLookingAtNPC={setIsLookingAtNPC}
+              placedArtworks={placedArtworks}
+              onSelectArt={(media) => setSelectedMedia(media)}
             />
             <Preload all />
           </Suspense>
@@ -258,6 +272,16 @@ const Museum = () => {
       <MuseumMapHUD
         categories={categories}
         onNavigate={navigateTo}
+        isLookingAtNPC={isLookingAtNPC}
+        onOpenAIChat={() => setIsAiChatOpen(true)}
+      />
+
+      {/* 🤖 Interactive AI Bot Assistant Chat Modal */}
+      <BotAssistantModal
+        isOpen={isAiChatOpen}
+        onClose={() => setIsAiChatOpen(false)}
+        onSpeakingChange={setIsSpeaking}
+        onSpeechTextChange={setSpeechText}
       />
 
       {/* Interactive HTML5 Drawing & Text Studio Modal */}
