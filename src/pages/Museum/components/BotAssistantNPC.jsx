@@ -14,17 +14,39 @@ const cleanMarkdownFor3D = (rawText) => {
     .replace(/^[*-\s]+/gm, '• ');            // Clean bullet points
 };
 
-// 🚀 Pre-allocate static reusable vectors for zero-allocation 60 FPS performance!
+const DEFAULT_WELCOME_SPEECH = "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.";
+
 const _npcPos = new THREE.Vector3(3, 2.0, 6);
 const _lookDir = new THREE.Vector3();
 
-const BotAssistantNPC = ({ onOpenChat, isSpeaking = false, speechText = '', isLookingAtNPC = false }) => {
+const BotAssistantNPC = ({ onOpenChat, isLookingAtNPC = false }) => {
   const { camera } = useThree();
   const groupRef = useRef();
   const headRef = useRef();
   const rightArmRef = useRef();
   const leftArmRef = useRef();
   const [isHovered, setIsHovered] = useState(false);
+
+  // Localized states to completely prevent parent Museum.jsx re-renders!
+  const [localSpeechText, setLocalSpeechText] = useState(DEFAULT_WELCOME_SPEECH);
+  const [localIsSpeaking, setLocalIsSpeaking] = useState(false);
+
+  React.useEffect(() => {
+    const handleSpeaking = (e) => {
+      setLocalIsSpeaking(e.detail);
+    };
+    const handleSpeechText = (e) => {
+      setLocalSpeechText(e.detail);
+    };
+
+    window.addEventListener('ai-speaking', handleSpeaking);
+    window.addEventListener('ai-speech-text', handleSpeechText);
+
+    return () => {
+      window.removeEventListener('ai-speaking', handleSpeaking);
+      window.removeEventListener('ai-speech-text', handleSpeechText);
+    };
+  }, []);
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -48,7 +70,7 @@ const BotAssistantNPC = ({ onOpenChat, isSpeaking = false, speechText = '', isLo
     }
 
     // 3. Animated Arm Talking Gestures when Answering Questions
-    if (isSpeaking) {
+    if (localIsSpeaking) {
       if (rightArmRef.current) {
         rightArmRef.current.rotation.x = -Math.PI / 4 + Math.sin(time * 6) * 0.2;
         rightArmRef.current.rotation.z = Math.PI / 8 + Math.cos(time * 4) * 0.1;
@@ -68,8 +90,8 @@ const BotAssistantNPC = ({ onOpenChat, isSpeaking = false, speechText = '', isLo
   });
 
   // STRICT RULE: Show 3D overhead speech bubble ONLY when user is actively pointing at bot (isLookingAtNPC)!
-  const shouldShowBubble = Boolean(isLookingAtNPC && speechText);
-  const formattedSpeechText = cleanMarkdownFor3D(speechText);
+  const shouldShowBubble = Boolean(isLookingAtNPC && localSpeechText);
+  const formattedSpeechText = cleanMarkdownFor3D(localSpeechText);
 
   // Tightly calculate dynamic 3D speech bubble size with ZERO excess height!
   const textLength = formattedSpeechText ? formattedSpeechText.length : 0;

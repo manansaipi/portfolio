@@ -46,16 +46,20 @@ const Player = ({
   onLookingAtNPC,
   placedArtworks = [],
   onSelectArt,
-  mobileMoveVector = { x: 0, y: 0 },
-  mobileLookDelta = { x: 0, y: 0 },
+  mobileMoveVectorRef,
+  mobileLookDeltaRef,
   mobileJumpTrigger = 0,
+  mobileInteractTrigger = 0,
+  mobileCrouched = false,
+  onInteractTypeChange,
+  isMobile = false,
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
 
   const yaw = useRef(Math.PI);
   const pitch = useRef(0);
-  const isTouchDevice = useRef(typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+  const prevLookingAtNpc = useRef(false);
 
   const keys = useRef({ w: false, a: false, s: false, d: false, space: false, crouch: false });
   const velocity = useRef(new THREE.Vector3());
@@ -86,6 +90,7 @@ const Player = ({
 
   // Handle Pointer Lock events to ensure cursor is ALWAYS visible when unlocked (ESC)
   useEffect(() => {
+    if (isMobile) return;
     const controls = controlsRef.current;
     if (!controls) return;
 
@@ -105,10 +110,11 @@ const Player = ({
       controls.removeEventListener('unlock', onUnlock);
       document.body.style.cursor = 'default';
     };
-  }, []);
+  }, [isMobile]);
 
-  // 🚀 Automatically re-engage Pointer Lock when Modal closes so user seamlessly returns to game!
+  // 🚀 Automatically re-engage Pointer Lock on desktop when Modal closes!
   useEffect(() => {
+    if (isMobile) return;
     if (enabled && controlsRef.current && !controlsRef.current.isLocked) {
       const timer = setTimeout(() => {
         if (controlsRef.current && !controlsRef.current.isLocked) {
@@ -123,16 +129,16 @@ const Player = ({
     }
   }, [enabled]);
 
+  const triggerInteraction = () => {
+    if (isLookingAtNPCRef.current && onInteractE) {
+      onInteractE();
+    } else if (lookingAtArtRef.current && onSelectArt) {
+      onSelectArt(lookingAtArtRef.current);
+    }
+  };
+
   // Listen for both KeyE press and mouse click to interact with AI Assistant OR inspect Artworks!
   useEffect(() => {
-    const triggerInteraction = () => {
-      if (isLookingAtNPCRef.current && onInteractE) {
-        onInteractE();
-      } else if (lookingAtArtRef.current && onSelectArt) {
-        onSelectArt(lookingAtArtRef.current);
-      }
-    };
-
     const onKeyDown = (e) => {
       switch (e.code) {
         case 'KeyW': case 'ArrowUp': keys.current.w = true; break;
@@ -159,7 +165,9 @@ const Player = ({
     };
 
     const onMouseDown = () => {
-      triggerInteraction();
+      if (!isMobile) {
+        triggerInteraction();
+      }
     };
     
     document.addEventListener('keydown', onKeyDown);
@@ -173,6 +181,25 @@ const Player = ({
     };
   }, [onInteractE, onSelectArt]);
 
+  // Handle mobile jump trigger
+  useEffect(() => {
+    if (mobileJumpTrigger > 0) {
+      const isLevel2 = camera.position.y >= 10;
+      const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
+      const canJump = camera.position.y <= baseFloorY + 0.1;
+      if (canJump) {
+        velocity.current.y = JUMP_FORCE;
+      }
+    }
+  }, [mobileJumpTrigger]);
+
+  // Handle mobile interact trigger
+  useEffect(() => {
+    if (mobileInteractTrigger > 0) {
+      triggerInteraction();
+    }
+  }, [mobileInteractTrigger]);
+
   // Teleport effect with multi-level Y support
   useEffect(() => {
     if (teleportTarget) {
@@ -185,19 +212,22 @@ const Player = ({
     camera.getWorldDirection(_viewDir);
 
     // 1. Raycast Target Check for AI Assistant & Overhead Speech Bubble
-    // Checks aiming at both bot body [3, 2.2, 6] AND overhead speech bubble [3, 3.6, 6] so looking up NEVER hides bubble!
+    // Hysteresis calculation (enter at 0.83, exit at 0.74) eliminates boundary glitching/flickering!
     const distToNpc = camera.position.distanceTo(_npcBodyPos);
     let isLookingAtNpc = false;
 
-    if (distToNpc <= 7.0) {
+    if (distToNpc <= 8.5) {
       _toNpcBody.copy(_npcBodyPos).sub(camera.position).normalize();
       _toNpcBubble.copy(_npcBubblePos).sub(camera.position).normalize();
 
       const dotBody = _viewDir.dot(_toNpcBody);
       const dotBubble = _viewDir.dot(_toNpcBubble);
+      const maxDot = Math.max(dotBody, dotBubble);
 
-      isLookingAtNpc = (dotBody > 0.88 || dotBubble > 0.88);
+      const threshold = prevLookingAtNpc.current ? 0.74 : 0.83;
+      isLookingAtNpc = maxDot > threshold;
     }
+    prevLookingAtNpc.current = isLookingAtNpc;
     isLookingAtNPCRef.current = isLookingAtNpc;
 
     // 2. Zero-Allocation Raycast Check for Artworks (Distance <= 8.5m, Dot > 0.94)
@@ -220,34 +250,57 @@ const Player = ({
     }
     lookingAtArtRef.current = bestArt;
 
-    // Highlight crosshair blue if looking at either AI Assistant OR Artwork!
+    // Highlight crosshair and determine type of interactive target
     const isInteractive = isLookingAtNpc || Boolean(bestArt);
     if (onLookingAtNPC) {
       onLookingAtNPC(isInteractive);
+    }
+
+    if (onInteractTypeChange) {
+      const type = isLookingAtNpc ? 'bot' : (bestArt ? 'art' : null);
+      onInteractTypeChange(type);
     }
 
     // Determine level floor base (Level 1 base = 3.8m, Level 2 Penthouse base = 15.8m)
     const isLevel2 = camera.position.y >= 10;
     const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
 
-    const targetHeight = keys.current.crouch ? baseFloorY - 1.8 : baseFloorY;
-    const currentSpeed = keys.current.crouch ? SPEED * 0.5 : SPEED;
+    const isCrouching = keys.current.crouch || mobileCrouched;
+    const targetHeight = isCrouching ? baseFloorY - 1.8 : baseFloorY;
+    const currentSpeed = isCrouching ? SPEED * 0.5 : SPEED;
 
-    // ── Touch Controls Movement & Camera Look Handler (Mobile) ──
-    const hasMobileInput = (mobileMoveVector && (mobileMoveVector.x !== 0 || mobileMoveVector.y !== 0)) ||
-                           (mobileLookDelta && (mobileLookDelta.x !== 0 || mobileLookDelta.y !== 0));
+    // ── Apply Gravity & Vertical Movement (Shared for Mobile & Desktop!) ──
+    velocity.current.y -= GRAVITY * delta;
+    camera.position.y += velocity.current.y * delta;
 
-    if (hasMobileInput || isTouchDevice.current) {
-      if (mobileLookDelta && (mobileLookDelta.x !== 0 || mobileLookDelta.y !== 0)) {
-        const sensitivity = 0.0035;
-        yaw.current -= mobileLookDelta.x * sensitivity;
-        pitch.current -= mobileLookDelta.y * sensitivity;
-        pitch.current = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, pitch.current));
+    // Snap to floor boundary (Shared for Mobile & Desktop!)
+    if (camera.position.y <= targetHeight) {
+      camera.position.y = targetHeight;
+      if (velocity.current.y < 0) {
+        velocity.current.y = 0;
       }
+    }
+
+    // ── Zero-Allocation Touch Controls Handler ──
+    if (isMobile) {
+      const moveVec = mobileMoveVectorRef?.current;
+      const lookDelta = mobileLookDeltaRef?.current;
+
+      if (lookDelta && (lookDelta.x !== 0 || lookDelta.y !== 0)) {
+        const sensitivity = 0.0058;
+        yaw.current -= lookDelta.x * sensitivity;
+        pitch.current -= lookDelta.y * sensitivity;
+        pitch.current = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, pitch.current));
+
+        // Consume look delta immediately
+        lookDelta.x = 0;
+        lookDelta.y = 0;
+      }
+
       camera.rotation.set(pitch.current, yaw.current, 0, 'YXZ');
 
-      if (enabled && mobileMoveVector && (mobileMoveVector.x !== 0 || mobileMoveVector.y !== 0)) {
-        const touchSpeed = 12 * delta; // Walk speed multiplier for touch
+      if (enabled && moveVec && (moveVec.x !== 0 || moveVec.y !== 0)) {
+        const touchSpeed = 12 * delta;
         const sin = Math.sin(yaw.current);
         const cos = Math.cos(yaw.current);
 
@@ -256,8 +309,8 @@ const Player = ({
         const rightX = cos;
         const rightZ = -sin;
 
-        const moveX = (rightX * mobileMoveVector.x - forwardX * mobileMoveVector.y) * touchSpeed;
-        const moveZ = (rightZ * mobileMoveVector.x - forwardZ * mobileMoveVector.y) * touchSpeed;
+        const moveX = (rightX * moveVec.x - forwardX * moveVec.y) * touchSpeed;
+        const moveZ = (rightZ * moveVec.x - forwardZ * moveVec.y) * touchSpeed;
 
         // Move X & check validity
         camera.position.x += moveX;
@@ -271,6 +324,9 @@ const Player = ({
           camera.position.z -= moveZ;
         }
       }
+
+      // Exit early on touch devices so desktop WASD PointerLock controls don't run
+      return;
     }
 
     if (!controlsRef.current || !controlsRef.current.isLocked || !enabled) return;
@@ -282,9 +338,6 @@ const Player = ({
     // Dampen velocity
     velocity.current.x -= velocity.current.x * 10.0 * delta;
     velocity.current.z -= velocity.current.z * 10.0 * delta;
-    
-    // Apply gravity
-    velocity.current.y -= GRAVITY * delta;
 
     direction.current.z = Number(keys.current.w) - Number(keys.current.s);
     direction.current.x = Number(keys.current.d) - Number(keys.current.a);
@@ -305,23 +358,14 @@ const Player = ({
       controlsRef.current.moveForward(velocity.current.z * delta);
     }
     
-    // Jump mechanics
+    // Desktop Jump Mechanics (Spacebar)
     const canJump = camera.position.y <= targetHeight + 0.1;
     if (canJump && keys.current.space) {
       velocity.current.y = JUMP_FORCE;
     }
-    
-    camera.position.y += velocity.current.y * delta;
-    
-    // Floor boundary per level
-    if (camera.position.y <= targetHeight) {
-      camera.position.y = targetHeight;
-      if (velocity.current.y < 0) {
-        velocity.current.y = 0;
-      }
-    }
   });
 
+  if (isMobile) return null;
   return <PointerLockControls ref={controlsRef} />;
 };
 

@@ -5,7 +5,10 @@ const MobileTouchControls = ({
   onLook,
   onInteract,
   onJump,
+  onCrouchToggle,
+  isCrouched = false,
   isInteractive = false,
+  interactType = null,
 }) => {
   const joystickBaseRef = useRef(null);
   const [joystickActive, setJoystickActive] = useState(false);
@@ -96,6 +99,7 @@ const MobileTouchControls = ({
     for (let i = 0; i < e.changedTouches.length; i++) {
       if (e.changedTouches[i].identifier === lookTouchIdRef.current) {
         lookTouchIdRef.current = null;
+        if (onLook) onLook(0, 0);
         break;
       }
     }
@@ -103,7 +107,7 @@ const MobileTouchControls = ({
 
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20, userSelect: 'none', touchAction: 'none' }}>
-      {/* Touch Look Area (Right 60% of screen) */}
+      {/* Touch Look Area (Right 60% of screen, full height) */}
       <div
         onTouchStart={handleLookStart}
         onTouchMove={handleLookMove}
@@ -112,15 +116,15 @@ const MobileTouchControls = ({
         style={{
           position: 'absolute',
           top: 0,
+          bottom: 0,
           right: 0,
           width: '60%',
-          height: '100%',
           pointerEvents: 'auto',
           touchAction: 'none',
         }}
       />
 
-      {/* Analog Joystick Container (Bottom-Left) */}
+      {/* Sleek Minimal Analog Joystick Container (Bottom-Left - No Arrows, No Blue Glow) */}
       <div
         ref={joystickBaseRef}
         onTouchStart={handleJoystickStart}
@@ -131,37 +135,30 @@ const MobileTouchControls = ({
           position: 'absolute',
           bottom: '24px',
           left: '24px',
-          width: '120px',
-          height: '120px',
+          width: '116px',
+          height: '116px',
           borderRadius: '50%',
-          background: 'rgba(255, 255, 255, 0.12)',
-          border: '2px solid rgba(255, 255, 255, 0.3)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          border: '1.5px solid rgba(255, 255, 255, 0.25)',
           backdropFilter: 'blur(10px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           pointerEvents: 'auto',
           touchAction: 'none',
-          boxShadow: joystickActive ? '0 0 20px rgba(59, 130, 246, 0.5)' : '0 4px 12px rgba(0,0,0,0.3)',
-          transition: 'box-shadow 0.2s ease',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.35)',
         }}
       >
-        {/* Direction guide arrows */}
-        <div style={{ position: 'absolute', top: '6px', fontSize: '9px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }}>▲</div>
-        <div style={{ position: 'absolute', bottom: '6px', fontSize: '9px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }}>▼</div>
-        <div style={{ position: 'absolute', left: '6px', fontSize: '9px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }}>◀</div>
-        <div style={{ position: 'absolute', right: '6px', fontSize: '9px', color: 'rgba(255,255,255,0.4)', pointerEvents: 'none' }}>▶</div>
-
-        {/* Joystick Knob */}
+        {/* Joystick Knob (Clean Neutral White/Grey) */}
         <div
           style={{
-            width: '50px',
-            height: '50px',
+            width: '48px',
+            height: '48px',
             borderRadius: '50%',
             background: joystickActive
-              ? 'radial-gradient(circle, #60a5fa 0%, #2563eb 100%)'
-              : 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(200,200,200,0.75) 100%)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+              ? 'radial-gradient(circle, #ffffff 0%, #e2e8f0 100%)'
+              : 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(200,200,200,0.7) 100%)',
+            boxShadow: '0 3px 10px rgba(0,0,0,0.4)',
             transform: `translate(${knobPos.x}px, ${knobPos.y}px)`,
             transition: joystickActive ? 'none' : 'transform 0.15s ease-out',
             pointerEvents: 'none',
@@ -169,15 +166,52 @@ const MobileTouchControls = ({
         />
       </div>
 
-      {/* Action Buttons (Bottom-Right) */}
-      <div style={{ position: 'absolute', bottom: '24px', right: '24px', display: 'flex', gap: '12px', alignItems: 'center', pointerEvents: 'auto' }}>
-        {/* Jump Button */}
+      {/* Control Buttons Container (Bottom-Right - zIndex: 30) */}
+      <div style={{
+        position: 'absolute',
+        bottom: '40px',
+        right: '24px',
+        width: '200px',
+        height: '170px',
+        pointerEvents: 'auto',
+        zIndex: 30,
+      }}>
+        {/* Crouch Button (Bottom-Left) */}
         <button
-          onClick={onJump}
-          onTouchStart={(e) => { e.stopPropagation(); onJump(); }}
+          onClick={(e) => { e.stopPropagation(); if (onCrouchToggle) onCrouchToggle(); }}
           style={{
-            width: '52px',
-            height: '52px',
+            position: 'absolute',
+            bottom: '10px',
+            right: '122px',
+            width: '58px',
+            height: '58px',
+            borderRadius: '50%',
+            background: isCrouched ? 'rgba(59, 130, 246, 0.85)' : 'rgba(15, 15, 20, 0.85)',
+            border: isCrouched ? '1.5px solid #60a5fa' : '1.5px solid rgba(255, 255, 255, 0.25)',
+            color: '#ffffff',
+            fontSize: '0.72rem',
+            fontWeight: 800,
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            touchAction: 'manipulation',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          }}
+        >
+          CROUCH
+        </button>
+
+        {/* Jump Button (Bottom-Right) */}
+        <button
+          onClick={(e) => { e.stopPropagation(); if (onJump) onJump(); }}
+          style={{
+            position: 'absolute',
+            bottom: '10px',
+            right: '10px',
+            width: '58px',
+            height: '58px',
             borderRadius: '50%',
             background: 'rgba(15, 15, 20, 0.85)',
             border: '1.5px solid rgba(255, 255, 255, 0.25)',
@@ -196,34 +230,35 @@ const MobileTouchControls = ({
           JUMP
         </button>
 
-        {/* Action / Interact Button */}
+        {/* Action Button (Centered above Crouch and Jump) */}
         <button
-          onClick={onInteract}
-          onTouchStart={(e) => { e.stopPropagation(); onInteract(); }}
+          onClick={(e) => { e.stopPropagation(); if (isInteractive && onInteract) onInteract(); }}
           style={{
-            width: '64px',
-            height: '64px',
+            position: 'absolute',
+            bottom: '84px',
+            right: '61px',
+            width: '68px',
+            height: '68px',
             borderRadius: '50%',
-            background: isInteractive
-              ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
-              : 'rgba(15, 15, 20, 0.85)',
-            border: isInteractive
-              ? '2px solid #60a5fa'
-              : '1.5px solid rgba(255, 255, 255, 0.25)',
+            background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+            border: '2px solid #60a5fa',
             color: '#ffffff',
-            fontSize: '0.8rem',
+            fontSize: '0.85rem',
             fontWeight: 800,
             backdropFilter: 'blur(8px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: isInteractive ? '0 0 18px rgba(59, 130, 246, 0.7)' : '0 4px 12px rgba(0,0,0,0.3)',
-            transition: 'all 0.2s ease',
+            boxShadow: '0 0 20px rgba(59, 130, 246, 0.75)',
             touchAction: 'manipulation',
+            opacity: isInteractive ? 1 : 0,
+            pointerEvents: isInteractive ? 'auto' : 'none',
+            transform: isInteractive ? 'scale(1)' : 'scale(0.8)',
+            transition: 'opacity 0.2s ease, transform 0.2s ease',
           }}
         >
-          {isInteractive ? 'ACTION' : 'E'}
+          {interactType === 'bot' ? 'INTERACT' : 'VIEW'}
         </button>
       </div>
     </div>

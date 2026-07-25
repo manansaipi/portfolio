@@ -20,6 +20,15 @@ export const playAIAudioAndStreamText = (text, audioResult, onProgress, onEnd) =
 
     let animFrameId = null;
     const alignment = audioResult.alignment;
+    let hasEnded = false;
+
+    const triggerEnd = () => {
+      if (hasEnded) return;
+      hasEnded = true;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      if (onProgress) onProgress(text.length);
+      if (onEnd) onEnd();
+    };
 
     const updateTextProgress = () => {
       if (!currentAudio || currentAudio !== audio) return;
@@ -58,8 +67,7 @@ export const playAIAudioAndStreamText = (text, audioResult, onProgress, onEnd) =
       if (onProgress) onProgress(Math.min(text.length, spokenCount));
 
       if (audio.ended || (duration > 0 && currentTime >= duration - 0.05)) {
-        if (onProgress) onProgress(text.length);
-        if (onEnd) onEnd();
+        triggerEnd();
       } else {
         animFrameId = requestAnimationFrame(updateTextProgress);
       }
@@ -73,9 +81,7 @@ export const playAIAudioAndStreamText = (text, audioResult, onProgress, onEnd) =
     });
 
     audio.onended = () => {
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      if (onProgress) onProgress(text.length);
-      if (onEnd) onEnd();
+      triggerEnd();
     };
 
     return;

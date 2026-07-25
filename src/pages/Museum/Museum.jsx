@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Preload } from '@react-three/drei';
 import { Helmet } from 'react-helmet-async';
@@ -40,13 +40,14 @@ const Museum = () => {
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [speechText, setSpeechText] = useState(DEFAULT_WELCOME_SPEECH);
 
-  // Mobile Analog Touch State
-  const [mobileMoveVector, setMobileMoveVector] = useState({ x: 0, y: 0 });
-  const [mobileLookDelta, setMobileLookDelta] = useState({ x: 0, y: 0 });
+  // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
+  const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
+  const mobileLookDeltaRef = useRef({ x: 0, y: 0 });
   const [mobileJumpTrigger, setMobileJumpTrigger] = useState(0);
+  const [mobileCrouched, setMobileCrouched] = useState(false);
+  const [interactType, setInteractType] = useState(null);
+  const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
@@ -209,8 +210,6 @@ const Museum = () => {
               {/* 🤖 Taller Lobby AI Bot Assistant NPC */}
               <BotAssistantNPC
                 onOpenChat={() => setIsAiChatOpen(true)}
-                isSpeaking={isSpeaking}
-                speechText={speechText}
                 isLookingAtNPC={isLookingAtNPC}
               />
 
@@ -247,9 +246,13 @@ const Museum = () => {
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
               onSelectArt={(media) => setSelectedMedia(media)}
-              mobileMoveVector={mobileMoveVector}
-              mobileLookDelta={mobileLookDelta}
+              mobileMoveVectorRef={mobileMoveVectorRef}
+              mobileLookDeltaRef={mobileLookDeltaRef}
               mobileJumpTrigger={mobileJumpTrigger}
+              mobileInteractTrigger={mobileInteractTrigger}
+              mobileCrouched={mobileCrouched}
+              onInteractTypeChange={setInteractType}
+              isMobile={isMobile}
             />
             <Preload all />
           </Suspense>
@@ -268,8 +271,12 @@ const Museum = () => {
       <BotAssistantModal
         isOpen={isAiChatOpen}
         onClose={() => setIsAiChatOpen(false)}
-        onSpeakingChange={setIsSpeaking}
-        onSpeechTextChange={setSpeechText}
+        onSpeakingChange={(speaking) => {
+          window.dispatchEvent(new CustomEvent('ai-speaking', { detail: speaking }));
+        }}
+        onSpeechTextChange={(text) => {
+          window.dispatchEvent(new CustomEvent('ai-speech-text', { detail: text }));
+        }}
       />
 
       {/* Interactive HTML5 Drawing & Text Studio Modal */}
@@ -301,11 +308,17 @@ const Museum = () => {
       {/* Touch D-Pad / Analog Joystick & Touch Look Controls for Mobile */}
       {isMobile && (
         <MobileTouchControls
-          onMove={setMobileMoveVector}
-          onLook={(dx, dy) => setMobileLookDelta({ x: dx, y: dy })}
-          onInteract={() => setIsAiChatOpen(true)}
+          onMove={(v) => { mobileMoveVectorRef.current = v; }}
+          onLook={(dx, dy) => {
+            mobileLookDeltaRef.current.x += dx;
+            mobileLookDeltaRef.current.y += dy;
+          }}
+          onInteract={() => setMobileInteractTrigger(Date.now())}
           onJump={() => setMobileJumpTrigger(Date.now())}
-          isInteractive={isLookingAtNPC}
+          onCrouchToggle={() => setMobileCrouched(prev => !prev)}
+          isCrouched={mobileCrouched}
+          isInteractive={Boolean(interactType)}
+          interactType={interactType}
         />
       )}
     </div>
