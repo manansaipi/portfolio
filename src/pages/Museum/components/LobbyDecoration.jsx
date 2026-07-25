@@ -14,6 +14,134 @@ const LobbyDecoration = ({ onTeleportToLevel2, categories = [] }) => {
   return (
     <group>
       {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 🏛️ 0. GRAND MARBLE COLUMNS at Archway Corners                   */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {[
+        [-13.2, -13.2], [-13.2, 13.2], [13.2, -13.2], [13.2, 13.2]
+      ].map(([cx, cz]) => (
+        <group key={`col-${cx}-${cz}`} position={[cx, 0, cz]}>
+          {/* Base plinth */}
+          <mesh position={[0, 0.2, 0]}>
+            <boxGeometry args={[0.9, 0.4, 0.9]} />
+            <meshLambertMaterial color="#d4cfc6" />
+          </mesh>
+          {/* Shaft */}
+          <mesh position={[0, 3.8, 0]}>
+            <cylinderGeometry args={[0.32, 0.36, 7.2, 18]} />
+            <meshLambertMaterial color="#ede9e1" />
+          </mesh>
+          {/* Capital */}
+          <mesh position={[0, 7.6, 0]}>
+            <boxGeometry args={[0.85, 0.5, 0.85]} />
+            <meshLambertMaterial color="#d4af37" />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 🕯️ 0b. CHANDELIER under skylight                               */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <group position={[0, 8.4, 0]}>
+        {/* Central brass ring */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[1.8, 0.07, 10, 36]} />
+          <meshLambertMaterial color="#b8962e" />
+        </mesh>
+        {/* 8 pendant bulbs around the ring */}
+        {Array.from({ length: 8 }).map((_, i) => {
+          const angle = (i / 8) * Math.PI * 2;
+          return (
+            <group key={i} position={[Math.cos(angle) * 1.8, 0, Math.sin(angle) * 1.8]}>
+              <mesh position={[0, -0.18, 0]}>
+                <cylinderGeometry args={[0.03, 0.03, 0.35, 6]} />
+                <meshLambertMaterial color="#b8962e" />
+              </mesh>
+              <mesh position={[0, -0.48, 0]}>
+                <sphereGeometry args={[0.14, 10, 10]} />
+                <meshBasicMaterial color="#fff7d6" />
+              </mesh>
+            </group>
+          );
+        })}
+        {/* Center drop sphere */}
+        <mesh position={[0, -0.35, 0]}>
+          <sphereGeometry args={[0.28, 14, 14]} />
+          <meshBasicMaterial color="#fff9e0" />
+        </mesh>
+        {/* Hanging rod from ceiling */}
+        <mesh position={[0, 0.75, 0]}>
+          <cylinderGeometry args={[0.025, 0.025, 1.5, 6]} />
+          <meshLambertMaterial color="#b8962e" />
+        </mesh>
+      </group>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 🟤 0c. DECORATIVE RUG under skylight                           */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[6.5, 48]} />
+        <meshLambertMaterial color="#3b1a0a" />
+      </mesh>
+      <mesh position={[0, 0.006, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[5.8, 6.4, 48]} />
+        <meshBasicMaterial color="#b8962e" />
+      </mesh>
+      <mesh position={[0, 0.007, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[4.2, 5.0, 48]} />
+        <meshBasicMaterial color="#7c2d12" />
+      </mesh>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 🪙 0d. ROPE STANCHIONS around kiosk                            */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {[
+        [3.8, 5.5], [3.8, 10.5], [-3.8, 5.5], [-3.8, 10.5]
+      ].map(([sx, sz]) => (
+        <group key={`st-${sx}-${sz}`} position={[sx, 0, sz]}>
+          <mesh position={[0, 0.55, 0]}>
+            <cylinderGeometry args={[0.05, 0.07, 1.1, 8]} />
+            <meshLambertMaterial color="#b8962e" />
+          </mesh>
+          <mesh position={[0, 1.08, 0]}>
+            <sphereGeometry args={[0.1, 8, 8]} />
+            <meshLambertMaterial color="#d4af37" />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 💡 0e. WALL SCONCES (N/S/E/W sides)                            */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {[
+        { pos: [-6, 5.2, -14.2], rot: [0, 0, 0] },
+        { pos: [6, 5.2, -14.2], rot: [0, 0, 0] },
+        { pos: [-6, 5.2, 14.2], rot: [0, Math.PI, 0] },
+        { pos: [6, 5.2, 14.2], rot: [0, Math.PI, 0] },
+        { pos: [-14.2, 5.2, -6], rot: [0, Math.PI / 2, 0] },
+        { pos: [-14.2, 5.2, 6], rot: [0, Math.PI / 2, 0] },
+        { pos: [14.2, 5.2, -6], rot: [0, -Math.PI / 2, 0] },
+        { pos: [14.2, 5.2, 6], rot: [0, -Math.PI / 2, 0] },
+      ].map(({ pos, rot }, i) => (
+        <group key={`sconce-${i}`} position={pos} rotation={rot}>
+          {/* Arm bracket */}
+          <mesh position={[0, 0, 0.22]}>
+            <boxGeometry args={[0.08, 0.08, 0.45]} />
+            <meshLambertMaterial color="#8b7355" />
+          </mesh>
+          {/* Bulb shade */}
+          <mesh position={[0, 0.18, 0.4]}>
+            <coneGeometry args={[0.18, 0.28, 10, 1, true]} />
+            <meshLambertMaterial color="#c9a84c" />
+          </mesh>
+          {/* Glow point */}
+          <mesh position={[0, 0.1, 0.4]}>
+            <sphereGeometry args={[0.09, 8, 8]} />
+            <meshBasicMaterial color="#fff5c0" />
+          </mesh>
+        </group>
+      ))}
+
+      {/* ════════════════════════════════════════════════════════════════ */}
       {/* 🧭 1. CENTRAL INFORMATION KIOSK ("THE GALLERY")                  */}
       {/* ════════════════════════════════════════════════════════════════ */}
       <group position={[0, 0, 8]} rotation={[0, Math.PI, 0]}>

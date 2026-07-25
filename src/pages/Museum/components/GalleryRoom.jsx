@@ -5,8 +5,8 @@ import * as THREE from 'three';
 // Default icons & fallback names per slug
 const SLUG_META = {
   nature:   { icon: '🌿', color: '#4ade80', bannerColor: '#4ade80' },
-  street:   { icon: '💼', color: '#facc15', bannerColor: '#facc15' },
-  travel:   { icon: '🧗', color: '#fb923c', bannerColor: '#fb923c' },
+  street:   { icon: '🏙️', color: '#facc15', bannerColor: '#facc15' },
+  travel:   { icon: '🌍', color: '#fb923c', bannerColor: '#fb923c' },
   portrait: { icon: '👨\u200d👩\u200d👧', color: '#60a5fa', bannerColor: '#60a5fa' },
 };
 

@@ -14,6 +14,10 @@ import BotAssistantModal from './components/BotAssistantModal';
 import DrawingStudioModal from './components/DrawingStudioModal';
 import Player from './components/Player';
 import MuseumMapHUD from './components/MuseumMapHUD';
+import NatureHallDecoration from './components/NatureHallDecoration';
+import ProfessionalHallDecoration from './components/ProfessionalHallDecoration';
+import AdventureHallDecoration from './components/AdventureHallDecoration';
+import FamilyHallDecoration from './components/FamilyHallDecoration';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
@@ -220,6 +224,10 @@ const Museum = () => {
             <group onClick={() => setSelectedMedia(null)}>
               <GalleryRoom categories={categories} />
               <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
+              <NatureHallDecoration />
+              <ProfessionalHallDecoration />
+              <AdventureHallDecoration />
+              <FamilyHallDecoration />
 
               {/* 🤖 Taller Lobby AI Bot Assistant NPC */}
               <BotAssistantNPC
