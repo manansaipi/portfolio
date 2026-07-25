@@ -175,7 +175,7 @@ const MobileTouchControls = ({
         right: '24px',
         width: '200px',
         height: '170px',
-        pointerEvents: 'auto',
+        pointerEvents: 'none',
         zIndex: 30,
       }}>
         {/* Crouch Button (Bottom-Left) */}
@@ -208,6 +208,7 @@ const MobileTouchControls = ({
             justifyContent: 'center',
             cursor: 'pointer',
             touchAction: 'manipulation',
+            pointerEvents: 'auto',
             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
           }}
         >
@@ -244,6 +245,7 @@ const MobileTouchControls = ({
             justifyContent: 'center',
             cursor: 'pointer',
             touchAction: 'manipulation',
+            pointerEvents: 'auto',
             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
           }}
         >
