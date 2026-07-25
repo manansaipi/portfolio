@@ -19,7 +19,6 @@ import ProfessionalHallDecoration from './components/ProfessionalHallDecoration'
 import AdventureHallDecoration from './components/AdventureHallDecoration';
 import FamilyHallDecoration from './components/FamilyHallDecoration';
 import MobileTouchControls from './components/MobileTouchControls';
-import LandscapePrompt from './components/LandscapePrompt';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
@@ -302,8 +301,6 @@ const Museum = () => {
           />
         )}
       </div>
-      {/* Landscape Orientation Lock / Rotation Prompt Overlay for Mobile */}
-      <LandscapePrompt />
 
       {/* Touch D-Pad / Analog Joystick & Touch Look Controls for Mobile */}
       {isMobile && (
