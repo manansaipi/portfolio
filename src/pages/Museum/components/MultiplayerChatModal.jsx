@@ -16,8 +16,25 @@ const MultiplayerChatModal = ({
   editChat,
   updateProfile,
   isAdmin,
-  NEON_COLORS = []
+  NEON_COLORS = [],
+  isMobile: isMobileProp
 }) => {
+  const [isMobileDevice, setIsMobileDevice] = useState(() => 
+    isMobileProp !== undefined ? isMobileProp : (typeof window !== 'undefined' && (window.innerWidth <= 768 || 'ontouchstart' in window))
+  );
+
+  useEffect(() => {
+    if (isMobileProp !== undefined) {
+      setIsMobileDevice(isMobileProp);
+      return;
+    }
+    const handleResize = () => setIsMobileDevice(window.innerWidth <= 768 || 'ontouchstart' in window);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobileProp]);
+
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileDevice;
+
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'profile'
   const [inputMsg, setInputMsg] = useState('');
   const [editName, setEditName] = useState(visitorName || '');
@@ -168,9 +185,13 @@ const MultiplayerChatModal = ({
           height: 0;
         }
       `}</style>
-      {/* ── Compact Live HUD Badge (Bottom-Right corner above mobile controls) ── */}
+      {/* ── Compact Live HUD Badge ── */}
       <div style={{
-        position: 'fixed', bottom: '24px', right: '24px', zIndex: 100,
+        position: 'fixed',
+        bottom: isMobile ? 'auto' : '24px',
+        top: isMobile ? '16px' : 'auto',
+        right: isMobile ? '14px' : '24px',
+        zIndex: 100,
         display: 'flex', alignItems: 'center', gap: '8px'
       }}>
         <button
@@ -202,8 +223,15 @@ const MultiplayerChatModal = ({
              onClick={(e) => e.stopPropagation()}
              onKeyDown={(e) => e.stopPropagation()}
              style={{
-          position: 'fixed', bottom: '80px', right: '24px', width: '360px', maxWidth: '90vw',
-          height: '440px', maxHeight: '75vh', background: 'rgba(9, 9, 11, 0.95)',
+          position: 'fixed',
+          bottom: isMobile ? 'auto' : '80px',
+          top: isMobile ? '64px' : 'auto',
+          right: isMobile ? '14px' : '24px',
+          width: '360px',
+          maxWidth: isMobile ? 'calc(100vw - 28px)' : '90vw',
+          height: '440px',
+          maxHeight: isMobile ? 'calc(100vh - 80px)' : '75vh',
+          background: 'rgba(9, 9, 11, 0.95)',
           backdropFilter: 'blur(16px)', border: '1px solid #27272a', borderRadius: '16px',
           zIndex: 101, display: 'flex', flexDirection: 'column', overflow: 'hidden',
           boxShadow: '0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.2)',
@@ -561,9 +589,19 @@ const MultiplayerChatModal = ({
       {/* ── Floating Temporary HUD Chat Toasts ── */}
       {toasts.length > 0 && (
         <div style={{
-          position: 'fixed', left: '24px', bottom: '210px', zIndex: 100,
-          pointerEvents: 'none', display: 'flex', flexDirection: 'column', gap: '8px',
-          maxWidth: '380px', fontFamily: 'Inter, system-ui, sans-serif'
+          position: 'fixed',
+          left: isMobile ? 'auto' : '24px',
+          right: isMobile ? '14px' : 'auto',
+          bottom: isMobile ? 'auto' : '210px',
+          top: isMobile ? '64px' : 'auto',
+          zIndex: 100,
+          pointerEvents: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: isMobile ? 'flex-end' : 'flex-start',
+          gap: '8px',
+          maxWidth: isMobile ? 'calc(100vw - 28px)' : '380px',
+          fontFamily: 'Inter, system-ui, sans-serif'
         }}>
           {toasts.map((msg) => (
             <div key={msg.toastId} style={{

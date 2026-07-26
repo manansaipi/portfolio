@@ -137,9 +137,9 @@ const AdminGallery = () => {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-5">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
                 <h2 className="text-2xl font-bold">Scrapbook Gallery</h2>
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-3 w-full sm:w-auto">
                     <PrimaryButton label="Manage Categories" handleOnClick={startEditingCategories} />
                     <PrimaryButton label="Upload Media" handleOnClick={() => setIsFormOpen(true)} />
                 </div>

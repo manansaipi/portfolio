@@ -67,20 +67,22 @@ const AdminPhotos = () => {
     return (
         <div>
             <h2 className="text-2xl font-bold mb-4">Manage Photos</h2>
-            <div className="flex gap-4 mb-6 border-b border-light-dark pb-2">
-                <button 
-                    className={`px-4 py-2 cursor-none shrink-0 ${subTab === 'local' ? 'font-bold border-b-2 border-primary text-primary' : 'opacity-50'}`} 
-                    onClick={() => setSubTab('local')}
-                >
-                    Local Storage
-                </button>
-                <button 
-                    className={`px-4 py-2 cursor-none shrink-0 ${subTab === 'cloudinary' ? 'font-bold border-b-2 border-primary text-primary' : 'opacity-50'}`} 
-                    onClick={() => setSubTab('cloudinary')}
-                >
-                    Cloudinary
-                </button>
-                <button onClick={fetchPhotos} className="ml-auto px-4 py-2 text-sm border border-light-dark rounded hover:bg-light-dark transition-colors cursor-none">
+            <div className="flex flex-wrap justify-between items-center gap-3 mb-6 border-b border-light-dark pb-2">
+                <div className="flex gap-2 sm:gap-4 overflow-x-auto">
+                    <button 
+                        className={`px-3 sm:px-4 py-2 cursor-none shrink-0 text-sm sm:text-base ${subTab === 'local' ? 'font-bold border-b-2 border-primary text-primary' : 'opacity-50'}`} 
+                        onClick={() => setSubTab('local')}
+                    >
+                        Local Storage
+                    </button>
+                    <button 
+                        className={`px-3 sm:px-4 py-2 cursor-none shrink-0 text-sm sm:text-base ${subTab === 'cloudinary' ? 'font-bold border-b-2 border-primary text-primary' : 'opacity-50'}`} 
+                        onClick={() => setSubTab('cloudinary')}
+                    >
+                        Cloudinary
+                    </button>
+                </div>
+                <button onClick={fetchPhotos} className="px-4 py-2 text-sm border border-light-dark rounded hover:bg-light-dark transition-colors cursor-none shrink-0">
                     Refresh
                 </button>
             </div>
@@ -90,7 +92,7 @@ const AdminPhotos = () => {
             {loading ? (
                 <div className="text-center py-10 opacity-70 animate-pulse">Loading photos...</div>
             ) : subTab === "local" ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {localPhotos.length === 0 && <p className="col-span-full opacity-70">No local photos found.</p>}
                     {localPhotos.map((photo) => (
                         <div key={photo.filename} className="border border-light-dark rounded overflow-hidden flex flex-col bg-background/50 transition-transform hover:scale-105">
@@ -113,7 +115,7 @@ const AdminPhotos = () => {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {cloudinaryPhotos.length === 0 && <p className="col-span-full opacity-70">No Cloudinary photos found.</p>}
                     {cloudinaryPhotos.map((photo) => (
                         <div key={photo.public_id} className="border border-light-dark rounded overflow-hidden flex flex-col bg-background/50 transition-transform hover:scale-105">

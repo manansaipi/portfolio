@@ -76,3 +76,20 @@ export const deleteUser = async (id) => {
     const res = await api.delete(`/api/users/${id}`);
     return res.data;
 };
+
+// --- MUSEUM CHAT ---
+export const getAdminChatMessages = async (skip = 0, limit = 100) => (await api.get(`/api/multiplayer/chat/admin/all?skip=${skip}&limit=${limit}`)).data;
+export const deleteAdminChatMessage = async (id) => {
+    const res = await api.delete(`/api/multiplayer/chat/messages/${id}`);
+    return res.data;
+};
+export const updateAdminChatMessage = async (id, text) => {
+    const res = await api.put(`/api/multiplayer/chat/messages/${id}`, { text });
+    return res.data;
+};
+export const deleteAdminChatMessagesBulk = async (ids) => {
+    const res = await api.delete(`/api/multiplayer/chat/messages`, {
+        data: { message_ids: ids }
+    });
+    return res.data;
+};

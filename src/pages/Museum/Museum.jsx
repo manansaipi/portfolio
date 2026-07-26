@@ -323,6 +323,7 @@ const Museum = () => {
         editChat={editChat}
         updateProfile={updateProfile}
         NEON_COLORS={NEON_COLORS}
+        isMobile={isMobile}
       />
 
       {/* Interactive HTML5 Drawing & Text Studio Modal */}
