@@ -47,7 +47,23 @@ PENDING 🕧
 
 Skills: .NET Framework · Java · React.js · Statistical Process Control (SPC) · SQL · Spring Boot
 
+Here are 5 exciting, high-impact ideas we can build next to take your 3D Museum and portfolio experience to the next level:
 
+1. 🎭 Multiplayer Emotes & Expressions ([1], [2], [3], [4] keys)
+What it is: Give players quick keyboard shortcuts or an Emote Wheel to make their avatar Wave 👋, Dance 💃, Nod/Cheer 🎉, or Sit/Rest 🧘.
+Why it's cool: When triggered, it broadcasts an emote event so everyone in the room sees your character perform a smooth 3D animation (like raising and waving their right arm in the air or doing a 360 spin!).
+2. 🗺️ Sleek Mini-Map / Visitor Radar HUD
+What it is: A modern, glassmorphic mini-map or compass bar in the corner of the screen showing the floor plan and real-time dots for where other connected visitors, Maya (Tour Guide), and the AI Assistant are located.
+Why it's cool: Helps visitors easily locate and socialize with each other in large galleries without ever getting lost.
+3. ❤️ Live Artwork & Exhibit Reactions (Floating Hearts / Particles)
+What it is: When standing near a project or painting, let visitors press [F] or click a reaction button (Heart, Fire, Mind Blown) to "like" an exhibit.
+Why it's cool: Floating 3D emoji particles or glowing hearts rise up from the artwork in real time for all connected players to see!
+4. 🔊 Spatial Audio Footsteps & Museum Ambience
+What it is: Add realistic, soft footsteps as avatars walk across the floor, complete with 3D spatial audio (so you can hear if someone is walking up behind you or to your left/right!).
+Why it's cool: Elevates the sensory immersion from a visual demo to a tangible, atmospheric world.
+5. 🔦 Laser Pointer / Look-Ray for Guided Tours
+What it is: Let players (or just Admins) hold [R] to project a glowing laser beam from their avatar's hand onto walls and artwork.
+Why it's cool: Perfect for pointing out specific architectural details or portfolio features when showing friends or clients around the museum.
 
 
 

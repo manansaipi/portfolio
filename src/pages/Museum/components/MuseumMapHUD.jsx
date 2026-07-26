@@ -1,8 +1,47 @@
 import React, { useState, useEffect } from 'react';
 
-const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0 }) => {
+const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {} }) => {
   const [fps, setFps] = useState(60);
   const [showControls, setShowControls] = useState(true);
+  const [activeEmote, setActiveEmote] = useState(null);
+
+  const triggerEmote = (emoteId) => {
+    if (activeEmote === emoteId) {
+      setActiveEmote(null);
+      onEmote(null);
+      return;
+    }
+    setActiveEmote(emoteId);
+    onEmote(emoteId);
+    const duration = emoteId === 'dance' ? 10000 : 3500;
+    setTimeout(() => {
+      setActiveEmote((prev) => {
+        if (prev === emoteId) {
+          onEmote(null);
+          return null;
+        }
+        return prev;
+      });
+    }, duration);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable) {
+        return;
+      }
+      if (e.key === '1') triggerEmote('wave');
+      if (e.key === '2') triggerEmote('dance');
+      if (e.key === '3') triggerEmote('cheer');
+      if (e.key === '4') triggerEmote('clap');
+      if (e.key === 'Escape' && activeEmote) {
+        setActiveEmote(null);
+        onEmote(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onEmote, activeEmote]);
 
   // FPS Counter tick
   useEffect(() => {
@@ -105,30 +144,40 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0 }) => {
           </div>
         )}
 
-        {/* First 10-Seconds Controls Guide (Desktop Only!) */}
-        {typeof window !== 'undefined' && !('ontouchstart' in window) && window.innerWidth > 768 && (
+        {/* First 10-Seconds Controls Guide & Emotes (Simple text with no color and styling) */}
+        {showControls && (
           <div style={{
             background: 'rgba(10, 10, 12, 0.85)', border: '1px solid rgba(255,255,255,0.15)',
             padding: '12px 16px', borderRadius: '8px', color: '#ffffff',
-            backdropFilter: 'blur(8px)', width: '210px',
-            opacity: showControls ? 1 : 0,
-            pointerEvents: showControls ? 'auto' : 'none',
-            transform: showControls ? 'translateY(0)' : 'translateY(10px)',
-            transition: 'opacity 0.8s ease, transform 0.8s ease'
+            backdropFilter: 'blur(8px)', width: '220px',
+            pointerEvents: 'none',
+            animation: 'fadeIn 0.5s ease'
           }}>
             <div style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '6px', opacity: 0.9 }}>
               CONTROLS
             </div>
             <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
-              <div>WASD - Walk</div>
-              <div>Mouse - Look Around</div>
-              <div>[E] - Interact</div>
-              <div>[/] - Room Chat</div>
-              <div>ESC - Release Pointer</div>
+              {typeof window !== 'undefined' && !('ontouchstart' in window) && window.innerWidth > 768 ? (
+                <>
+                  <div>WASD - Walk</div>
+                  <div>Mouse - Look Around</div>
+                  <div>[1-4] - Emotes (Wave, Dance, Cheer, Clap)</div>
+                  <div>[E] - Interact</div>
+                  <div>[/] - Room Chat</div>
+                  <div>ESC - Release Pointer</div>
+                </>
+              ) : (
+                <>
+                  <div>Joystick - Walk</div>
+                  <div>Drag - Look Around</div>
+                  <div>Tap Buttons - Jump & Interact</div>
+                </>
+              )}
             </div>
           </div>
         )}
       </div>
+
     </div>
   );
 };

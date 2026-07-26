@@ -42,6 +42,7 @@ const Player = ({
   position = [0, 3.8, 0],
   teleportTarget,
   enabled = true,
+  disableMovement = false,
   onInteractE,
   onLookingAtNPC,
   placedArtworks = [],
@@ -222,6 +223,10 @@ const Player = ({
   }, [teleportTarget, camera]);
 
   useFrame((state, delta) => {
+    if (disableMovement) {
+      velocity.current.set(0, 0, 0);
+      return;
+    }
     camera.getWorldDirection(_viewDir);
 
     // 1. Raycast Target Check for AI Assistant & Overhead Speech Bubble
@@ -312,7 +317,7 @@ const Player = ({
 
       camera.rotation.set(pitch.current, yaw.current, 0, 'YXZ');
 
-      if (enabled && moveVec && (moveVec.x !== 0 || moveVec.y !== 0)) {
+      if (enabled && !disableMovement && moveVec && (moveVec.x !== 0 || moveVec.y !== 0)) {
         const touchSpeed = 12 * delta;
         const sin = Math.sin(yaw.current);
         const cos = Math.cos(yaw.current);
@@ -394,7 +399,7 @@ const Player = ({
   });
 
   if (isMobile) return null;
-  return <PointerLockControls ref={controlsRef} enabled={enabled} />;
+  return <PointerLockControls ref={controlsRef} enabled={enabled && !disableMovement} />;
 };
 
 export default Player;

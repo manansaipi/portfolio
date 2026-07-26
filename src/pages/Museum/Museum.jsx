@@ -26,6 +26,7 @@ import { getGalleryMedia, getGalleryCategories } from '@services/gallery';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
 import { useMultiplayer } from './hooks/useMultiplayer';
 import OtherPlayersList from './components/OtherPlayersList';
+import LocalPlayerEmoteAvatar from './components/LocalPlayerEmoteAvatar';
 import MultiplayerChatModal from './components/MultiplayerChatModal';
 
 const Museum = () => {
@@ -49,6 +50,7 @@ const Museum = () => {
   const [mobileCrouched, setMobileCrouched] = useState(false);
   const [interactType, setInteractType] = useState(null);
   const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
+  const [activeEmote, setActiveEmote] = useState(null);
 
   // 🌐 Real-Time Multiplayer State & Coordinate Syncing Hook
   const {
@@ -61,6 +63,7 @@ const Museum = () => {
     chatMessages,
     sendMovement,
     sendChat,
+    sendEmote,
     deleteChat,
     editChat,
     updateProfile,
@@ -264,6 +267,7 @@ const Museum = () => {
             <Player
               teleportTarget={teleportTarget}
               enabled={!selectedStudioSlot && !isAiChatOpen && !isMultiplayerChatOpen}
+              disableMovement={Boolean(activeEmote)}
               onInteractE={() => setIsAiChatOpen(true)}
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
@@ -279,6 +283,14 @@ const Museum = () => {
             />
             {/* 🧑‍🤝‍🧑 Real-Time 3D Avatars of Other Museum Explorers */}
             <OtherPlayersList activePlayersList={activePlayersList} playersRef={playersRef} />
+            {activeEmote && (
+              <LocalPlayerEmoteAvatar
+                activeEmote={activeEmote}
+                visitorName={visitorName}
+                visitorColor={visitorColor}
+                isAdmin={isAdmin}
+              />
+            )}
             <Preload all />
           </Suspense>
         </Canvas>
@@ -291,6 +303,10 @@ const Museum = () => {
         isLookingAtNPC={isLookingAtNPC}
         onOpenAIChat={() => setIsAiChatOpen(true)}
         ping={ping}
+        onEmote={(emoteId) => {
+          setActiveEmote(emoteId);
+          sendEmote(emoteId, emoteId === 'dance' ? 10 : 3.5);
+        }}
       />
 
       {/* 🤖 Interactive AI Bot Assistant Chat Modal */}

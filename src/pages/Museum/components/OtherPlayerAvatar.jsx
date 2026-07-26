@@ -20,6 +20,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
   const smoothSpeedRef = useRef(0);
   const limbPhaseRef = useRef(0);
   const [activeSpeech, setActiveSpeech] = useState('');
+  const [activeEmote, setActiveEmote] = useState(null);
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
@@ -35,8 +36,16 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
       // Smoothly lerp position towards target at 12x delta speed (~60/120 FPS butter-smooth motion)
       groupRef.current.position.lerp(targetVec, Math.min(delta * 12, 1));
 
+      // Check active emote state
+      const currentEmote = (playerData.currentEmote && (playerData.emoteEndTime === 0 || Date.now() < playerData.emoteEndTime))
+        ? playerData.currentEmote
+        : null;
+      if (activeEmote !== currentEmote) {
+        setActiveEmote(currentEmote);
+      }
+
       // Use Quaternions for robust shortest-path rotation interpolation without drift
-      if (bodyGroupRef.current) {
+      if (bodyGroupRef.current && currentEmote !== 'dance') {
         // cleanYaw is computed relative to +Z axis, matching our mesh front face directly
         const cleanYaw = (playerData.targetRotation && playerData.targetRotation[1]) || 0;
         
@@ -93,20 +102,76 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
 
     if (speed > 0.15) {
       // Walking / running limb swing animation!
-      // Accumulate phase smoothly using delta time! Never multiply absolute time by variable speed!
-      const swingFreq = Math.min(Math.max(speed * 2.2, 4.0), 10.0); // clamp swing frequency between 4 and 10 rad/s
+      const swingFreq = Math.min(Math.max(speed * 2.2, 4.0), 10.0);
       limbPhaseRef.current += delta * swingFreq;
       const limbAngle = Math.sin(limbPhaseRef.current) * 0.6;
       if (leftLegRef.current) leftLegRef.current.rotation.x = limbAngle;
       if (rightLegRef.current) rightLegRef.current.rotation.x = -limbAngle;
-      if (leftArmRef.current) leftArmRef.current.rotation.x = -limbAngle * 0.7;
-      if (rightArmRef.current) rightArmRef.current.rotation.x = limbAngle * 0.7;
+      if (leftArmRef.current) { leftArmRef.current.rotation.x = -limbAngle * 0.7; leftArmRef.current.rotation.z = 0; }
+      if (rightArmRef.current) { rightArmRef.current.rotation.x = limbAngle * 0.7; rightArmRef.current.rotation.z = 0; }
+      if (bodyGroupRef.current) bodyGroupRef.current.position.y = THREE.MathUtils.lerp(bodyGroupRef.current.position.y, 0, Math.min(delta * 12, 1));
+    } else if (activeEmote) {
+      const time = state.clock.elapsedTime;
+      if (activeEmote === 'wave') {
+        if (rightArmRef.current) {
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -Math.PI / 1.1, Math.min(delta * 12, 1));
+          rightArmRef.current.rotation.z = Math.sin(time * 10) * 0.45;
+        }
+        if (leftArmRef.current) { leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0, Math.min(delta * 12, 1)); leftArmRef.current.rotation.z = 0; }
+        if (leftLegRef.current) leftLegRef.current.rotation.x = THREE.MathUtils.lerp(leftLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+        if (rightLegRef.current) rightLegRef.current.rotation.x = THREE.MathUtils.lerp(rightLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+        if (bodyGroupRef.current) bodyGroupRef.current.position.y = THREE.MathUtils.lerp(bodyGroupRef.current.position.y, 0, Math.min(delta * 12, 1));
+      } else if (activeEmote === 'dance') {
+        if (leftArmRef.current) {
+          leftArmRef.current.rotation.x = -Math.PI / 1.2 + Math.sin(time * 8) * 0.4;
+          leftArmRef.current.rotation.z = -0.2;
+        }
+        if (rightArmRef.current) {
+          rightArmRef.current.rotation.x = -Math.PI / 1.2 - Math.sin(time * 8) * 0.4;
+          rightArmRef.current.rotation.z = 0.2;
+        }
+        if (leftLegRef.current) leftLegRef.current.rotation.x = Math.sin(time * 8) * 0.2;
+        if (rightLegRef.current) rightLegRef.current.rotation.x = -Math.sin(time * 8) * 0.2;
+        if (bodyGroupRef.current) {
+          bodyGroupRef.current.position.y = Math.abs(Math.sin(time * 8)) * 0.15;
+          bodyGroupRef.current.rotation.y += delta * 6.0;
+        }
+      } else if (activeEmote === 'cheer') {
+        if (leftArmRef.current) {
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -Math.PI / 1.1, Math.min(delta * 12, 1));
+          leftArmRef.current.rotation.z = -0.3 + Math.sin(time * 12) * 0.1;
+        }
+        if (rightArmRef.current) {
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -Math.PI / 1.1, Math.min(delta * 12, 1));
+          rightArmRef.current.rotation.z = 0.3 - Math.sin(time * 12) * 0.1;
+        }
+        if (headRef.current) headRef.current.rotation.x = Math.sin(time * 12) * 0.35;
+        if (bodyGroupRef.current) bodyGroupRef.current.position.y = Math.abs(Math.sin(time * 10)) * 0.1;
+      } else if (activeEmote === 'clap') {
+        if (leftArmRef.current) {
+          leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, -Math.PI / 2.1, Math.min(delta * 12, 1));
+          leftArmRef.current.rotation.z = -0.15 + Math.sin(time * 16) * 0.15;
+        }
+        if (rightArmRef.current) {
+          rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, -Math.PI / 2.1, Math.min(delta * 12, 1));
+          rightArmRef.current.rotation.z = 0.15 - Math.sin(time * 16) * 0.15;
+        }
+        if (headRef.current) headRef.current.rotation.x = Math.sin(time * 8) * 0.15;
+        if (bodyGroupRef.current) bodyGroupRef.current.position.y = Math.abs(Math.sin(time * 16)) * 0.08;
+      }
     } else {
       // Smoothly lerp limbs back to neutral standing position when idle!
       if (leftLegRef.current) leftLegRef.current.rotation.x = THREE.MathUtils.lerp(leftLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
       if (rightLegRef.current) rightLegRef.current.rotation.x = THREE.MathUtils.lerp(rightLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
-      if (leftArmRef.current) leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
-      if (rightArmRef.current) rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+      if (leftArmRef.current) {
+        leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+        leftArmRef.current.rotation.z = THREE.MathUtils.lerp(leftArmRef.current.rotation.z, 0, Math.min(delta * 12, 1));
+      }
+      if (rightArmRef.current) {
+        rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+        rightArmRef.current.rotation.z = THREE.MathUtils.lerp(rightArmRef.current.rotation.z, 0, Math.min(delta * 12, 1));
+      }
+      if (bodyGroupRef.current) bodyGroupRef.current.position.y = THREE.MathUtils.lerp(bodyGroupRef.current.position.y, 0, Math.min(delta * 12, 1));
       limbPhaseRef.current = 0; // Reset phase for next step
     }
   });
@@ -170,9 +235,31 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
           {player.name}
         </Text>
 
-        {/* 3D Speech Bubble (Appears above crown when Admin talks in chat!) */}
+        {/* 3D Emote Emoji Badge Above Name Tag */}
+        {activeEmote && (
+          <group position={[0, isAdmin ? 0.62 : 0.32, 0]}>
+            <mesh position={[0, 0, -0.01]}>
+              <circleGeometry args={[0.2, 16]} />
+              <meshBasicMaterial color="#0f172a" transparent opacity={0.88} />
+            </mesh>
+            <mesh position={[0, 0, -0.012]}>
+              <circleGeometry args={[0.23, 16]} />
+              <meshBasicMaterial color={avatarColor} transparent opacity={0.8} />
+            </mesh>
+            <Text
+              position={[0, 0, 0]}
+              fontSize={0.24}
+              anchorX="center"
+              anchorY="middle"
+            >
+              {activeEmote === 'wave' ? '👋' : activeEmote === 'dance' ? '💃' : activeEmote === 'cheer' ? '🎉' : '👏'}
+            </Text>
+          </group>
+        )}
+
+        {/* 3D Speech Bubble (Appears above crown/emote when talking in chat!) */}
         {activeSpeech && (
-          <group position={[0, (isAdmin ? 0.42 : 0.25) + (bubbleHeight / 2), 0]}>
+          <group position={[0, (isAdmin ? (activeEmote ? 0.88 : 0.42) : (activeEmote ? 0.58 : 0.25)) + (bubbleHeight / 2), 0]}>
             <mesh position={[0, 0, -0.01]}>
               <planeGeometry args={[bubbleWidth, bubbleHeight]} />
               <meshBasicMaterial color={isAdmin ? "#2d1b00" : "#18181b"} transparent opacity={0.94} />

@@ -78,6 +78,8 @@ export const useMultiplayer = (roomId = "default") => {
   const playersRef = useRef({});
   const wsRef = useRef(null);
   const lastMoveSendTimeRef = useRef(0);
+  const lastSentPosRef = useRef([0, 0, 0]);
+  const lastSentRotRef = useRef([0, 0, 0]);
   const reconnectTimeoutRef = useRef(null);
   const pingStartRef = useRef(null);
 
@@ -132,6 +134,8 @@ export const useMultiplayer = (roomId = "default") => {
               targetPosition: p.position || [0, EYE_HEIGHT, 0],
               rotation: p.rotation || [0, 0, 0],
               targetRotation: p.rotation || [0, 0, 0],
+              currentEmote: p.current_emote || null,
+              emoteEndTime: p.emote_end_time ? p.emote_end_time * 1000 : 0,
               speechText: "",
               speechEndTime: 0
             };
@@ -150,6 +154,8 @@ export const useMultiplayer = (roomId = "default") => {
               targetPosition: p.position || [0, EYE_HEIGHT, 0],
               rotation: p.rotation || [0, 0, 0],
               targetRotation: p.rotation || [0, 0, 0],
+              currentEmote: p.current_emote || null,
+              emoteEndTime: p.emote_end_time ? p.emote_end_time * 1000 : 0,
               speechText: "",
               speechEndTime: 0
             };
@@ -180,6 +186,16 @@ export const useMultiplayer = (roomId = "default") => {
           if (p) {
             if (data.position) p.targetPosition = data.position;
             if (data.rotation) p.targetRotation = data.rotation;
+            if (p.currentEmote) {
+              p.currentEmote = null;
+              p.emoteEndTime = 0;
+            }
+          }
+        } else if (type === "player_emoted") {
+          const { id: senderId, emote, duration } = data;
+          if (playersRef.current[senderId]) {
+            playersRef.current[senderId].currentEmote = emote || null;
+            playersRef.current[senderId].emoteEndTime = emote ? Date.now() + (duration * 1000) : 0;
           }
         } else if (type === "player_updated") {
           const updatedId = data.id;
@@ -314,18 +330,31 @@ export const useMultiplayer = (roomId = "default") => {
     return () => clearInterval(interval);
   }, [isConnected]);
 
-  // Throttled movement sender called from 3D Player.jsx useFrame
   const sendMovement = useCallback((position, rotation) => {
     if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
     
     const now = Date.now();
     if (now - lastMoveSendTimeRef.current < 60) return; // Throttled to ~16 FPS
+
+    const px = position.x, py = position.y, pz = position.z;
+    const rx = rotation.x, ry = rotation.y, rz = rotation.z;
+    const [lpx, lpy, lpz] = lastSentPosRef.current;
+    const [lrx, lry, lrz] = lastSentRotRef.current;
+
+    // Do not send if position and rotation haven't changed at all!
+    if (Math.abs(px - lpx) < 0.001 && Math.abs(py - lpy) < 0.001 && Math.abs(pz - lpz) < 0.001 &&
+        Math.abs(rx - lrx) < 0.001 && Math.abs(ry - lry) < 0.001 && Math.abs(rz - lrz) < 0.001) {
+      return;
+    }
+
     lastMoveSendTimeRef.current = now;
+    lastSentPosRef.current = [px, py, pz];
+    lastSentRotRef.current = [rx, ry, rz];
 
     wsRef.current.send(JSON.stringify({
       type: "move",
-      position: [position.x, position.y, position.z],
-      rotation: [rotation.x, rotation.y, rotation.z]
+      position: [px, py, pz],
+      rotation: [rx, ry, rz]
     }));
   }, []);
 
@@ -378,6 +407,15 @@ export const useMultiplayer = (roomId = "default") => {
     }
   }, [visitorName, visitorColor, isAdmin]);
 
+  const sendEmote = useCallback((emote, duration = 3.0) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+    wsRef.current.send(JSON.stringify({
+      type: "emote",
+      emote,
+      duration
+    }));
+  }, []);
+
   return {
     visitorId,
     visitorName,
@@ -389,6 +427,7 @@ export const useMultiplayer = (roomId = "default") => {
     chatMessages,
     sendMovement,
     sendChat,
+    sendEmote,
     deleteChat,
     editChat,
     updateProfile,
