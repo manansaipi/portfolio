@@ -10,23 +10,74 @@ const MultiplayerChatModal = ({
   chatMessages = [],
   loadMoreMessages,
   hasMoreMessages,
+  isLoadingOlder,
   sendChat,
+  deleteChat,
+  editChat,
   updateProfile,
+  isAdmin,
   NEON_COLORS = []
 }) => {
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'profile'
   const [inputMsg, setInputMsg] = useState('');
   const [editName, setEditName] = useState(visitorName || '');
   const [editColor, setEditColor] = useState(visitorColor || '#38bdf8');
+  const [toasts, setToasts] = useState([]);
+  const [editingMsgId, setEditingMsgId] = useState(null);
+  const [editText, setEditText] = useState('');
+  const [showWelcome, setShowWelcome] = useState(false);
   const chatBottomRef = useRef(null);
   const chatInputRef = useRef(null);
   const modalRef = useRef(null);
+  const oldScrollHeightRef = useRef(null);
+  const lastMsgIdRef = useRef(null);
+  const lastToastedMsgIdRef = useRef(null);
+
+  const startEditing = (msg) => {
+    setEditingMsgId(msg.id);
+    setEditText(msg.text);
+  };
+
+  const saveEditing = (msgId) => {
+    if (editText.trim() && editChat) {
+      editChat(msgId, editText.trim());
+    }
+    setEditingMsgId(null);
+  };
+
+  // Show incoming live messages as toasts regardless of whether modal is open or closed
+  useEffect(() => {
+    if (chatMessages.length === 0) return;
+    const latestMsg = chatMessages[chatMessages.length - 1];
+    // Check if message is a fresh live arrival (within last 2000ms) and hasn't been toasted yet
+    if (
+      latestMsg &&
+      latestMsg.id !== lastToastedMsgIdRef.current &&
+      latestMsg.receivedAt &&
+      (Date.now() - latestMsg.receivedAt) < 2000
+    ) {
+      lastToastedMsgIdRef.current = latestMsg.id;
+      const toastId = Math.random();
+      const newToast = { ...latestMsg, toastId, expiresAt: Date.now() + 5000 };
+      setToasts((prev) => [...prev.slice(-4), newToast]);
+    }
+  }, [chatMessages]);
+
+  // Clean up expired toasts reliably every 500ms without timer cancellation conflicts
+  useEffect(() => {
+    if (toasts.length === 0) return;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setToasts((prev) => prev.filter((t) => t.expiresAt > now));
+    }, 500);
+    return () => clearInterval(interval);
+  }, [toasts.length]);
 
   // Close modal when clicking outside
   useEffect(() => {
     if (!isOpen) return;
+    lastMsgIdRef.current = null; // Reset scroll tracker when opening modal
     const handleClickOutside = (e) => {
-      // Don't close if they clicked inside the modal or on the toggle button
       if (modalRef.current && !modalRef.current.contains(e.target) && !e.target.closest('button')) {
         setIsOpen(false);
       }
@@ -54,11 +105,43 @@ const MultiplayerChatModal = ({
     setEditColor(visitorColor || '#38bdf8');
   }, [visitorName, visitorColor]);
 
+  // Welcome banner visible for 10 seconds when chat opens
+  useEffect(() => {
+    if (isOpen && activeTab === 'chat') {
+      setShowWelcome(true);
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+      }, 10000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowWelcome(false);
+    }
+  }, [isOpen, activeTab]);
+
   useEffect(() => {
     if (chatBottomRef.current && isOpen && activeTab === 'chat') {
-      chatBottomRef.current.scrollIntoView({ behavior: 'smooth' });
+      const currentLastMsg = chatMessages[chatMessages.length - 1];
+      const currentLastId = currentLastMsg ? currentLastMsg.id : null;
+      if (currentLastId !== lastMsgIdRef.current) {
+        lastMsgIdRef.current = currentLastId;
+        chatBottomRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, [chatMessages, isOpen, activeTab]);
+
+  // Preserve scroll position when older messages are prepended to top
+  useEffect(() => {
+    if (oldScrollHeightRef.current && activeTab === 'chat') {
+      const container = document.getElementById('museum-chat-container');
+      if (container) {
+        const diff = container.scrollHeight - oldScrollHeightRef.current;
+        if (diff > 0) {
+          container.scrollTop = diff;
+        }
+      }
+      oldScrollHeightRef.current = null;
+    }
+  }, [chatMessages, activeTab]);
 
   const handleSendChat = (e) => {
     e.preventDefault();
@@ -70,7 +153,7 @@ const MultiplayerChatModal = ({
   const handleSaveProfile = (e) => {
     e.preventDefault();
     if (!editName.trim()) return;
-    updateProfile(editName.trim(), editColor);
+    updateProfile(editName.trim(), isAdmin ? undefined : editColor);
     setActiveTab('chat');
   };
 
@@ -78,6 +161,13 @@ const MultiplayerChatModal = ({
 
   return (
     <>
+      <style>{`
+        #museum-chat-container::-webkit-scrollbar {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+      `}</style>
       {/* ── Compact Live HUD Badge (Bottom-Right corner above mobile controls) ── */}
       <div style={{
         position: 'fixed', bottom: '24px', right: '24px', zIndex: 100,
@@ -102,7 +192,7 @@ const MultiplayerChatModal = ({
           }} />
           <span>{totalOnline} {totalOnline === 1 ? 'Explorer' : 'Explorers'} Online</span>
           <span style={{ opacity: 0.6 }}>•</span>
-          <span style={{ color: '#38bdf8' }}>💬 Chat</span>
+          <span style={{ color: '#38bdf8' }}>Chat</span>
         </button>
       </div>
 
@@ -154,7 +244,7 @@ const MultiplayerChatModal = ({
                 fontWeight: 600, cursor: 'pointer'
               }}
             >
-              💬 Room Chat
+              Room Chat
             </button>
             <button
               onClick={() => setActiveTab('profile')}
@@ -165,64 +255,149 @@ const MultiplayerChatModal = ({
                 fontWeight: 600, cursor: 'pointer'
               }}
             >
-              ⚙️ My Avatar Profile
+              My Avatar Profile
             </button>
           </div>
 
           {/* Body */}
+          {activeTab === 'chat' ? (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               {/* Messages List */}
               <div 
                 id="museum-chat-container"
                 style={{
-                  flex: 1, padding: '12px 14px', overflowY: 'auto', display: 'flex',
-                  flexDirection: 'column', gap: '10px'
+                  flex: 1, padding: '12px 14px', overflowY: 'auto', overflowX: 'hidden', display: 'flex',
+                  flexDirection: 'column', gap: '10px', scrollbarWidth: 'none', msOverflowStyle: 'none'
                 }}
                 onScroll={(e) => {
                   const target = e.target;
-                  if (target.scrollTop === 0 && hasMoreMessages) {
-                    const oldScrollHeight = target.scrollHeight;
-                    loadMoreMessages().then(() => {
-                      // After React renders new messages prepended at top,
-                      // the scrollHeight will increase. We need to maintain the visual scroll position
-                      // by setting scrollTop to the difference in scrollHeight!
-                      setTimeout(() => {
-                        target.scrollTop = target.scrollHeight - oldScrollHeight;
-                      }, 10);
-                    });
+                  if (target.scrollTop <= 10 && hasMoreMessages && !isLoadingOlder && loadMoreMessages) {
+                    oldScrollHeightRef.current = target.scrollHeight;
+                    loadMoreMessages();
                   }
                 }}
               >
                 {hasMoreMessages && (
-                  <div style={{ textAlign: 'center', padding: '10px', color: '#38bdf8', fontSize: '0.8rem' }}>
-                    Scrolling up to load older messages...
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isLoadingOlder && loadMoreMessages) {
+                        const container = document.getElementById('museum-chat-container');
+                        if (container) oldScrollHeightRef.current = container.scrollHeight;
+                        loadMoreMessages();
+                      }
+                    }}
+                    disabled={isLoadingOlder}
+                    style={{
+                      background: 'rgba(56, 189, 248, 0.1)',
+                      border: '1px dashed rgba(56, 189, 248, 0.4)',
+                      color: '#38bdf8',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      cursor: isLoadingOlder ? 'wait' : 'pointer',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      textAlign: 'center',
+                      width: '100%',
+                      transition: 'all 0.2s',
+                      opacity: isLoadingOlder ? 0.6 : 1
+                    }}
+                  >
+                    {isLoadingOlder ? '⏳ Loading older messages from database...' : '⬆️ Scroll up or Click here to load older messages...'}
+                  </button>
+                )}
+                {showWelcome && (
+                  <div style={{
+                    padding: '8px 12px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.1)',
+                    border: '1px solid rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '0.78rem',
+                    textAlign: 'center', transition: 'opacity 0.5s ease-out', animation: 'fadeIn 0.3s ease-out'
+                  }}>
+                    Welcome to the Live Museum! Say hello to nearby explorers. Your chat messages also appear as 3D speech bubbles above your avatar!
                   </div>
                 )}
-                <div style={{
-                  padding: '8px 12px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.1)',
-                  border: '1px solid rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '0.78rem',
-                  textAlign: 'center'
-                }}>
-                  Welcome to the Live Museum! Say hello to nearby explorers. Your chat messages also appear as 3D speech bubbles above your avatar!
-                </div>
 
                 {chatMessages.map((msg) => (
                   <div key={msg.id} style={{
-                    fontSize: '0.84rem', lineHeight: 1.4
+                    fontSize: '0.84rem', lineHeight: 1.4,
+                    wordBreak: 'break-word', overflowWrap: 'anywhere'
                   }}>
                     {msg.system ? (
                       <div style={{ color: '#64748b', fontStyle: 'italic', fontSize: '0.78rem', textAlign: 'center', margin: '4px 0' }}>
                         {msg.text}
                       </div>
+                    ) : editingMsgId === msg.id ? (
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', padding: '4px 0' }}>
+                        <input
+                          type="text"
+                          value={editText}
+                          maxLength={200}
+                          onChange={(e) => setEditText(e.target.value)}
+                          style={{
+                            flex: 1, padding: '4px 8px', borderRadius: '6px', background: '#09090b',
+                            border: '1px solid #38bdf8', color: '#fff', fontSize: '0.82rem', outline: 'none'
+                          }}
+                          autoFocus
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') saveEditing(msg.id);
+                            if (e.key === 'Escape') setEditingMsgId(null);
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => saveEditing(msg.id)}
+                          style={{
+                            padding: '4px 8px', borderRadius: '6px', background: '#22c55e', border: 'none',
+                            color: '#000', fontWeight: 'bold', fontSize: '0.75rem', cursor: 'pointer'
+                          }}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingMsgId(null)}
+                          style={{
+                            padding: '4px 8px', borderRadius: '6px', background: '#71717a', border: 'none',
+                            color: '#fff', fontSize: '0.75rem', cursor: 'pointer'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     ) : msg.senderIsAdmin ? (
-                      <div style={{ background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, transparent 100%)', padding: '6px 10px', borderRadius: '6px', borderLeft: '3px solid #f59e0b' }}>
-                        <span style={{ color: '#f59e0b', fontWeight: 800, marginRight: '6px', textShadow: '0 0 10px rgba(245, 158, 11, 0.6)' }}>
+                      <div style={{ background: 'rgba(245, 158, 11, 0.08)', padding: '6px 10px', borderRadius: '6px', borderLeft: '3px solid #f59e0b' }}>
+                        <span style={{ color: '#f59e0b', fontWeight: 800, marginRight: '6px' }}>
                           {msg.senderName || 'Admin'}:
                         </span>
                         <span style={{ color: '#fef3c7', fontWeight: 500 }}>{msg.text}</span>
                         {msg.timestamp && (
                           <span style={{ color: '#d97706', fontSize: '0.7rem', marginLeft: '6px' }}>
                             {msg.timestamp}
+                          </span>
+                        )}
+                        {isAdmin && (
+                          <span style={{ marginLeft: '8px', display: 'inline-flex', gap: '4px', verticalAlign: 'middle' }}>
+                            <button
+                              type="button"
+                              onClick={() => startEditing(msg)}
+                              title="Edit message"
+                              style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                padding: '0 2px', fontSize: '0.75rem', opacity: 0.7, color: '#93c5fd'
+                              }}
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => deleteChat && deleteChat(msg.id)}
+                              title="Delete message"
+                              style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                padding: '0 2px', fontSize: '0.75rem', opacity: 0.7, color: '#fca5a5'
+                              }}
+                            >
+                              🗑️
+                            </button>
                           </span>
                         )}
                       </div>
@@ -237,6 +412,32 @@ const MultiplayerChatModal = ({
                             {msg.timestamp}
                           </span>
                         )}
+                        {isAdmin && (
+                          <span style={{ marginLeft: '8px', display: 'inline-flex', gap: '4px', verticalAlign: 'middle' }}>
+                            <button
+                              type="button"
+                              onClick={() => startEditing(msg)}
+                              title="Edit message"
+                              style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                padding: '0 2px', fontSize: '0.75rem', opacity: 0.7, color: '#93c5fd'
+                              }}
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => deleteChat && deleteChat(msg.id)}
+                              title="Delete message"
+                              style={{
+                                background: 'transparent', border: 'none', cursor: 'pointer',
+                                padding: '0 2px', fontSize: '0.75rem', opacity: 0.7, color: '#fca5a5'
+                              }}
+                            >
+                              🗑️
+                            </button>
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -249,18 +450,28 @@ const MultiplayerChatModal = ({
                 padding: '12px', borderTop: '1px solid #27272a', display: 'flex', gap: '8px',
                 background: '#18181b'
               }}>
-                <input
-                  ref={chatInputRef}
-                  type="text"
-                  placeholder="Type to chat..."
-                  value={inputMsg}
-                  onChange={(e) => setInputMsg(e.target.value)}
-                  style={{
-                    flex: 1, padding: '8px 12px', borderRadius: '20px', background: '#09090b',
-                    border: '1px solid #27272a', color: '#ffffff', fontSize: '0.85rem',
-                    outline: 'none'
-                  }}
-                />
+                <div style={{ position: 'relative', flex: 1, display: 'flex' }}>
+                  <input
+                    ref={chatInputRef}
+                    type="text"
+                    maxLength={200}
+                    placeholder="Type to chat (max 200 chars)..."
+                    value={inputMsg}
+                    onChange={(e) => setInputMsg(e.target.value)}
+                    style={{
+                      flex: 1, padding: '8px 50px 8px 12px', borderRadius: '20px', background: '#09090b',
+                      border: '1px solid #27272a', color: '#ffffff', fontSize: '0.85rem',
+                      outline: 'none'
+                    }}
+                  />
+                  <span style={{
+                    position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                    fontSize: '0.68rem', color: inputMsg.length >= 180 ? '#ef4444' : '#64748b',
+                    pointerEvents: 'none', fontWeight: 600
+                  }}>
+                    {inputMsg.length}/200
+                  </span>
+                </div>
                 <button
                   type="submit"
                   style={{
@@ -301,23 +512,33 @@ const MultiplayerChatModal = ({
                 <label style={{ display: 'block', color: '#9ca3af', fontSize: '0.8rem', marginBottom: '8px', fontWeight: 600 }}>
                   CHOOSE YOUR AVATAR NEON COLOR
                 </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-                  {NEON_COLORS.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => setEditColor(color)}
-                      style={{
-                        height: '42px', borderRadius: '8px', background: color,
-                        border: editColor === color ? '3px solid #ffffff' : '1px solid transparent',
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        boxShadow: editColor === color ? `0 0 12px ${color}` : 'none'
-                      }}
-                    >
-                      {editColor === color && <span style={{ color: '#000', fontWeight: 'bold' }}>✓</span>}
-                    </button>
-                  ))}
-                </div>
+                {isAdmin ? (
+                  <div style={{
+                    padding: '12px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)', color: '#f59e0b', fontSize: '0.82rem',
+                    textAlign: 'center', fontWeight: 600
+                  }}>
+                    👑 Avatar Color selection is disabled in Admin mode (VIP Gold is permanently active).
+                  </div>
+                ) : (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+                    {NEON_COLORS.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => setEditColor(color)}
+                        style={{
+                          height: '42px', borderRadius: '8px', background: color,
+                          border: editColor === color ? '3px solid #ffffff' : '1px solid transparent',
+                          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          boxShadow: editColor === color ? `0 0 12px ${color}` : 'none'
+                        }}
+                      >
+                        {editColor === color && <span style={{ color: '#000', fontWeight: 'bold' }}>✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
@@ -334,6 +555,50 @@ const MultiplayerChatModal = ({
               </div>
             </form>
           )}
+        </div>
+      )}
+
+      {/* ── Floating Temporary HUD Chat Toasts ── */}
+      {toasts.length > 0 && (
+        <div style={{
+          position: 'fixed', left: '24px', bottom: '210px', zIndex: 100,
+          pointerEvents: 'none', display: 'flex', flexDirection: 'column', gap: '8px',
+          maxWidth: '380px', fontFamily: 'Inter, system-ui, sans-serif'
+        }}>
+          {toasts.map((msg) => (
+            <div key={msg.toastId} style={{
+              background: 'rgba(9, 9, 11, 0.88)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid #27272a',
+              borderLeft: msg.senderIsAdmin ? '3px solid #f59e0b' : '1px solid #27272a',
+              borderRadius: '12px', padding: '10px 14px',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.6)',
+              animation: 'fadeIn 0.3s ease-out',
+              fontSize: '0.85rem', lineHeight: 1.4,
+              wordBreak: 'break-word', overflowWrap: 'anywhere',
+              overflow: 'hidden'
+            }}>
+              {msg.system ? (
+                <div style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.8rem' }}>
+                  {msg.text}
+                </div>
+              ) : msg.senderIsAdmin ? (
+                <div>
+                  <span style={{ color: '#f59e0b', fontWeight: 800, marginRight: '6px' }}>
+                    {msg.senderName || 'Admin'}:
+                  </span>
+                  <span style={{ color: '#fef3c7', fontWeight: 500 }}>{msg.text}</span>
+                </div>
+              ) : (
+                <div>
+                  <span style={{ color: msg.senderColor || '#38bdf8', fontWeight: 700, marginRight: '6px' }}>
+                    {msg.senderName || 'Visitor'}:
+                  </span>
+                  <span style={{ color: '#e2e8f0' }}>{msg.text}</span>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
@@ -58,11 +58,28 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
   const isAdmin = player.isAdmin || false;
   const adminGoldAccent = "#f59e0b";
 
+  const { bubbleWidth, bubbleHeight } = useMemo(() => {
+    if (!activeSpeech) return { bubbleWidth: 0, bubbleHeight: 0 };
+    const lines = activeSpeech.split('\n');
+    let totalLines = 0;
+    let maxLineLen = 0;
+    const maxCharsPerLine = 38; // ~2.4 units / 0.063
+    lines.forEach(line => {
+      const len = line.length;
+      maxLineLen = Math.max(maxLineLen, Math.min(maxCharsPerLine, len));
+      const lineWraps = Math.ceil(len / maxCharsPerLine) || 1;
+      totalLines += lineWraps;
+    });
+    const w = Math.min(2.75, Math.max(0.4, maxLineLen * 0.063 + 0.3));
+    const h = Math.max(0.32, totalLines * 0.16 + 0.18);
+    return { bubbleWidth: w, bubbleHeight: h };
+  }, [activeSpeech]);
+
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       {/* ── Floating Name Tag & Speech Bubble Billboard Group (above scaled head) ── */}
       <group ref={nameTagGroupRef} position={[0, 2.9, 0]}>
-        {/* Admin Crown / Badge */}
+        {/* Admin Crown / Badge (positioned below the speech bubble!) */}
         {isAdmin && (
           <Text
             position={[0, 0.28, 0]}
@@ -96,22 +113,24 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
           {player.name}
         </Text>
 
-        {/* 3D Speech Bubble (Appears when player talks in chat!) */}
+        {/* 3D Speech Bubble (Appears above crown when Admin talks in chat!) */}
         {activeSpeech && (
-          <group position={[0, 0.55, 0]}>
+          <group position={[0, (isAdmin ? 0.42 : 0.25) + (bubbleHeight / 2), 0]}>
             <mesh position={[0, 0, -0.01]}>
-              <planeGeometry args={[2.8, 0.65]} />
-              <meshBasicMaterial color="#18181b" transparent opacity={0.92} />
+              <planeGeometry args={[bubbleWidth, bubbleHeight]} />
+              <meshBasicMaterial color={isAdmin ? "#2d1b00" : "#18181b"} transparent opacity={0.94} />
             </mesh>
             <mesh position={[0, 0, -0.012]}>
-              <planeGeometry args={[2.84, 0.69]} />
-              <meshBasicMaterial color={avatarColor} transparent opacity={0.8} />
+              <planeGeometry args={[bubbleWidth + 0.04, bubbleHeight + 0.04]} />
+              <meshBasicMaterial color={isAdmin ? "#f59e0b" : avatarColor} transparent opacity={0.85} />
             </mesh>
             <Text
               position={[0, 0, 0]}
               fontSize={0.12}
-              color="#ffffff"
-              maxWidth={2.6}
+              color={isAdmin ? "#fef3c7" : "#ffffff"}
+              maxWidth={2.4}
+              overflowWrap="break-word"
+              whiteSpace="normal"
               textAlign="center"
               anchorX="center"
               anchorY="middle"

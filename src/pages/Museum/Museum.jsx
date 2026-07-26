@@ -54,15 +54,19 @@ const Museum = () => {
   const {
     visitorName,
     visitorColor,
+    isAdmin,
     isConnected,
     activePlayersList,
     playersRef,
     chatMessages,
     sendMovement,
     sendChat,
+    deleteChat,
+    editChat,
     updateProfile,
     loadMoreMessages,
     hasMoreMessages,
+    isLoadingOlder,
     ping,
     NEON_COLORS,
   } = useMultiplayer("default");
@@ -307,12 +311,16 @@ const Museum = () => {
         setIsOpen={setIsMultiplayerChatOpen}
         visitorName={visitorName}
         visitorColor={visitorColor}
+        isAdmin={isAdmin}
         isConnected={isConnected}
         activePlayersList={activePlayersList}
         chatMessages={chatMessages}
         loadMoreMessages={loadMoreMessages}
         hasMoreMessages={hasMoreMessages}
+        isLoadingOlder={isLoadingOlder}
         sendChat={sendChat}
+        deleteChat={deleteChat}
+        editChat={editChat}
         updateProfile={updateProfile}
         NEON_COLORS={NEON_COLORS}
       />

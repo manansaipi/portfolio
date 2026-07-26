@@ -16,3 +16,13 @@ export const getRoomVisitorCount = async (roomId = "default") => {
     return { room_id: roomId, count: 0 };
   }
 };
+
+export const getChatHistory = async (roomId = "default", skip = 0, limit = 50) => {
+  try {
+    const response = await api.get(`/api/multiplayer/chat/${roomId}?skip=${skip}&limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chat history:", error);
+    return { messages: [], hasMore: false, total: 0 };
+  }
+};

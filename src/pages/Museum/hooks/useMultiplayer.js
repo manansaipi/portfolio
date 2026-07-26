@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { getWsUrl } from '@services/multiplayer';
+import { getWsUrl, getChatHistory } from '@services/multiplayer';
 
 const NEON_COLORS = [
   "#38bdf8", // Sky Blue
@@ -14,6 +14,18 @@ const NEON_COLORS = [
 
 // Must match NORMAL_HEIGHT in Player.jsx
 const EYE_HEIGHT = 3.8;
+
+const formatLocalTime = (tsFloatOrDate) => {
+  let dateObj;
+  if (typeof tsFloatOrDate === 'number') {
+    dateObj = new Date(tsFloatOrDate * 1000);
+  } else if (tsFloatOrDate instanceof Date) {
+    dateObj = tsFloatOrDate;
+  } else {
+    dateObj = new Date();
+  }
+  return dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 
 export const useMultiplayer = (roomId = "default") => {
   // Detect admin status from existing auth system
@@ -55,6 +67,7 @@ export const useMultiplayer = (roomId = "default") => {
   const [chatMessages, setChatMessages] = useState([]);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [chatSkip, setChatSkip] = useState(0);
+  const [isLoadingOlder, setIsLoadingOlder] = useState(false);
   const [ping, setPing] = useState(0);
   
   // React state for adding/removing player components in DOM when someone joins/leaves
@@ -144,19 +157,21 @@ export const useMultiplayer = (roomId = "default") => {
             setChatMessages((prev) => [...prev, {
               id: Date.now() + "-" + p.id,
               system: true,
-              text: `${p.name} joined the museum.`
+              text: `${p.name} joined the museum.`,
+              receivedAt: Date.now()
             }]);
           }
         } else if (type === "player_left") {
           const leftId = data.id;
           if (leftId && playersRef.current[leftId]) {
-            const leftName = playersRef.current[leftId].name;
+            const leftName = playersRef.current[leftId].name || data.name || "An explorer";
             delete playersRef.current[leftId];
             syncPlayersState();
             setChatMessages((prev) => [...prev, {
               id: Date.now() + "-" + leftId,
               system: true,
-              text: `${leftName} left the museum.`
+              text: `${leftName} left the museum.`,
+              receivedAt: Date.now()
             }]);
           }
         } else if (type === "player_moved") {
@@ -174,8 +189,17 @@ export const useMultiplayer = (roomId = "default") => {
             if (data.color) p.color = data.color;
             syncPlayersState();
           }
+          if (data.activity && Array.isArray(data.activity)) {
+            const newLogs = data.activity.map((txt, idx) => ({
+              id: Date.now() + "-act-" + idx,
+              system: true,
+              text: txt,
+              receivedAt: Date.now()
+            }));
+            setChatMessages((prev) => [...prev, ...newLogs]);
+          }
         } else if (type === "player_chat") {
-          const { id: senderId, name: senderName, color: senderColor, isAdmin: senderIsAdmin, message, db_id } = data;
+          const { id: senderId, name: senderName, color: senderColor, isAdmin: senderIsAdmin, message, db_id, timestamp: tsFloat } = data;
           
           // Add to global chat messages
           setChatMessages((prev) => [...prev, {
@@ -185,7 +209,8 @@ export const useMultiplayer = (roomId = "default") => {
             senderColor,
             senderIsAdmin,
             text: message,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            timestamp: formatLocalTime(tsFloat || new Date()),
+            receivedAt: Date.now()
           }]);
 
           // If from another player, set their floating 3D speech bubble for 6 seconds!
@@ -193,6 +218,12 @@ export const useMultiplayer = (roomId = "default") => {
             playersRef.current[senderId].speechText = message;
             playersRef.current[senderId].speechEndTime = Date.now() + 6000;
           }
+        } else if (type === "chat_deleted") {
+          const { msg_id } = data;
+          setChatMessages((prev) => prev.filter(m => m.id !== msg_id && m.id !== String(msg_id)));
+        } else if (type === "chat_edited") {
+          const { msg_id, new_text } = data;
+          setChatMessages((prev) => prev.map(m => (m.id === msg_id || m.id === String(msg_id)) ? { ...m, text: new_text } : m));
         } else if (type === "pong") {
           if (pingStartRef.current) {
             setPing(Date.now() - pingStartRef.current);
@@ -219,32 +250,41 @@ export const useMultiplayer = (roomId = "default") => {
 
   // Fetch initial chat history
   useEffect(() => {
-    fetch(`/api/multiplayer/chat/${roomId}?skip=0&limit=50`)
-      .then(res => res.json())
+    getChatHistory(roomId, 0, 10)
       .then(data => {
-        setChatMessages(data.messages || []);
+        const formatted = (data.messages || []).map(msg => ({
+          ...msg,
+          timestamp: msg.timestamp_float ? formatLocalTime(msg.timestamp_float) : msg.timestamp
+        }));
+        setChatMessages(formatted);
         setHasMoreMessages(data.hasMore || false);
-        setChatSkip(50);
+        setChatSkip(10);
       })
       .catch(err => console.error("Failed to fetch chat history", err));
   }, [roomId]);
 
   const loadMoreMessages = useCallback(async () => {
-    if (!hasMoreMessages) return;
+    if (!hasMoreMessages || isLoadingOlder) return;
+    setIsLoadingOlder(true);
     try {
-      const res = await fetch(`/api/multiplayer/chat/${roomId}?skip=${chatSkip}&limit=50`);
-      const data = await res.json();
+      const data = await getChatHistory(roomId, chatSkip, 20);
       if (data.messages && data.messages.length > 0) {
-        setChatMessages(prev => [...data.messages, ...prev]);
-        setChatSkip(prev => prev + 50);
+        const formatted = data.messages.map(msg => ({
+          ...msg,
+          timestamp: msg.timestamp_float ? formatLocalTime(msg.timestamp_float) : msg.timestamp
+        }));
+        setChatMessages(prev => [...formatted, ...prev]);
+        setChatSkip(prev => prev + 20);
         setHasMoreMessages(data.hasMore);
       } else {
         setHasMoreMessages(false);
       }
     } catch (err) {
       console.error("Failed to load older messages", err);
+    } finally {
+      setIsLoadingOlder(false);
     }
-  }, [roomId, chatSkip, hasMoreMessages]);
+  }, [roomId, chatSkip, hasMoreMessages, isLoadingOlder]);
 
   useEffect(() => {
     connect();
@@ -295,8 +335,27 @@ export const useMultiplayer = (roomId = "default") => {
     
     wsRef.current.send(JSON.stringify({
       type: "chat",
-      message: messageText.trim()
+      message: messageText.trim().slice(0, 200)
     }));
+  }, []);
+
+  const deleteChat = useCallback((msgId) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({
+        type: "delete_chat",
+        msg_id: msgId
+      }));
+    }
+  }, []);
+
+  const editChat = useCallback((msgId, newText) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && newText.trim()) {
+      wsRef.current.send(JSON.stringify({
+        type: "edit_chat",
+        msg_id: msgId,
+        new_text: newText.trim().slice(0, 200)
+      }));
+    }
   }, []);
 
   // Update profile name or color
@@ -305,7 +364,8 @@ export const useMultiplayer = (roomId = "default") => {
       setVisitorName(newName);
       localStorage.setItem('museum_visitor_name', newName);
     }
-    if (newColor) {
+    const effectiveColor = isAdmin ? "#f59e0b" : (newColor || visitorColor);
+    if (!isAdmin && newColor) {
       setVisitorColor(newColor);
       localStorage.setItem('museum_visitor_color', newColor);
     }
@@ -313,24 +373,28 @@ export const useMultiplayer = (roomId = "default") => {
       wsRef.current.send(JSON.stringify({
         type: "update_profile",
         name: newName || visitorName,
-        color: newColor || visitorColor
+        color: effectiveColor
       }));
     }
-  }, [visitorName, visitorColor]);
+  }, [visitorName, visitorColor, isAdmin]);
 
   return {
     visitorId,
     visitorName,
     visitorColor,
+    isAdmin,
     isConnected,
     activePlayersList,
     playersRef,
     chatMessages,
     sendMovement,
     sendChat,
+    deleteChat,
+    editChat,
     updateProfile,
     loadMoreMessages,
     hasMoreMessages,
+    isLoadingOlder,
     ping,
     NEON_COLORS
   };
