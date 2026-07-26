@@ -9,9 +9,14 @@ export const askAI = async (question) => {
     }
 
     try {
-        const response = await api.post(`/api/ai/ask`, {
-            question: question
-        });
+        const payload = {
+            question: question,
+            screen_width: typeof window !== 'undefined' ? window.innerWidth : null,
+            screen_height: typeof window !== 'undefined' ? window.innerHeight : null,
+            language: typeof navigator !== 'undefined' ? navigator.language : null,
+            referrer: typeof document !== 'undefined' ? document.referrer : null
+        };
+        const response = await api.post(`/api/ai/ask`, payload);
         
         let audioResult = null;
         if (response.data.audioResult && response.data.audioResult.audio_base64) {

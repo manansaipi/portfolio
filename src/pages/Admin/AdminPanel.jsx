@@ -13,6 +13,7 @@ import AdminMuseumChat from "./components/AdminMuseumChat";
 const AdminPanel = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("writings");
+    const [visitedTabs, setVisitedTabs] = useState({ writings: true });
 
     useEffect(() => {
         // Enable admin mode for the rest of the site (for inline edits/deletes)
@@ -22,6 +23,11 @@ const AdminPanel = () => {
     const exitAdmin = () => {
         localStorage.removeItem("admin_token");
         navigate("/");
+    };
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        setVisitedTabs((prev) => ({ ...prev, [tab]: true }));
     };
 
     return (
@@ -35,25 +41,25 @@ const AdminPanel = () => {
             </div>
             
             <div className="flex gap-4 mb-5 border-b border-light-dark pb-2 overflow-x-auto">
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'writings' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('writings')}>Writings</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'experiences' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('experiences')}>Experiences</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'certificates' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('certificates')}>Certificates</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'terminal' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('terminal')}>Terminal Logs</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'users' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('users')}>Users</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'photos' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('photos')}>Photos</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'gallery' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('gallery')}>Scrapbook Gallery</button>
-                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'chat' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => setActiveTab('chat')}>Museum Chat</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'writings' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('writings')}>Writings</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'experiences' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('experiences')}>Experiences</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'certificates' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('certificates')}>Certificates</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'terminal' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('terminal')}>Terminal Logs</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'users' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('users')}>Users</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'photos' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('photos')}>Photos</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'gallery' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('gallery')}>Scrapbook Gallery</button>
+                <button className={`px-4 py-2 cursor-none shrink-0 ${activeTab === 'chat' ? 'font-bold border-b-2 border-primary' : 'opacity-50'}`} onClick={() => handleTabChange('chat')}>Museum Chat</button>
             </div>
 
             <div className="p-4 sm:p-6 md:p-10 border border-light-dark rounded-md">
-                <div style={{ display: activeTab === "writings" ? "block" : "none" }}><AdminWritings /></div>
-                <div style={{ display: activeTab === "experiences" ? "block" : "none" }}><AdminExperiences /></div>
-                <div style={{ display: activeTab === "certificates" ? "block" : "none" }}><AdminCertificates /></div>
-                <div style={{ display: activeTab === "terminal" ? "block" : "none" }}><AdminTerminalLogs /></div>
-                <div style={{ display: activeTab === "users" ? "block" : "none" }}><AdminUsers /></div>
-                <div style={{ display: activeTab === "photos" ? "block" : "none" }}><AdminPhotos /></div>
-                <div style={{ display: activeTab === "gallery" ? "block" : "none" }}><AdminGallery /></div>
-                <div style={{ display: activeTab === "chat" ? "block" : "none" }}><AdminMuseumChat /></div>
+                {visitedTabs.writings && <div style={{ display: activeTab === "writings" ? "block" : "none" }}><AdminWritings /></div>}
+                {visitedTabs.experiences && <div style={{ display: activeTab === "experiences" ? "block" : "none" }}><AdminExperiences /></div>}
+                {visitedTabs.certificates && <div style={{ display: activeTab === "certificates" ? "block" : "none" }}><AdminCertificates /></div>}
+                {visitedTabs.terminal && <div style={{ display: activeTab === "terminal" ? "block" : "none" }}><AdminTerminalLogs /></div>}
+                {visitedTabs.users && <div style={{ display: activeTab === "users" ? "block" : "none" }}><AdminUsers /></div>}
+                {visitedTabs.photos && <div style={{ display: activeTab === "photos" ? "block" : "none" }}><AdminPhotos /></div>}
+                {visitedTabs.gallery && <div style={{ display: activeTab === "gallery" ? "block" : "none" }}><AdminGallery /></div>}
+                {visitedTabs.chat && <div style={{ display: activeTab === "chat" ? "block" : "none" }}><AdminMuseumChat /></div>}
             </div>
         </div>
     );

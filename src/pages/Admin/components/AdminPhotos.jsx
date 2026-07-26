@@ -9,8 +9,10 @@ const AdminPhotos = () => {
     const [cloudinaryPhotos, setCloudinaryPhotos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [loadedSubTabs, setLoadedSubTabs] = useState({});
 
-    const fetchPhotos = async () => {
+    const fetchPhotos = async (force = false) => {
+        if (!force && loadedSubTabs[subTab]) return;
         setLoading(true);
         setError(null);
         try {
@@ -21,6 +23,7 @@ const AdminPhotos = () => {
                 const data = await getCloudinaryPhotos();
                 setCloudinaryPhotos(data);
             }
+            setLoadedSubTabs(prev => ({ ...prev, [subTab]: true }));
         } catch (err) {
             console.error("Error fetching photos", err);
             setError("Failed to fetch photos.");
@@ -82,7 +85,7 @@ const AdminPhotos = () => {
                         Cloudinary
                     </button>
                 </div>
-                <button onClick={fetchPhotos} className="px-4 py-2 text-sm border border-light-dark rounded hover:bg-light-dark transition-colors cursor-none shrink-0">
+                <button onClick={() => fetchPhotos(true)} className="px-4 py-2 text-sm border border-light-dark rounded hover:bg-light-dark transition-colors cursor-none shrink-0">
                     Refresh
                 </button>
             </div>
