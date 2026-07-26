@@ -84,7 +84,10 @@ const Player = ({
 
   // Initial Spawn: Orient camera level at eye height facing directly towards the Portrait Hall (+Z)!
   useEffect(() => {
-    camera.position.set(position[0], position[1] || NORMAL_HEIGHT, position[2]);
+    const isSpawnLobby = position[0] === 0 && position[2] === 0;
+    const offsetX = isSpawnLobby ? (Math.random() - 0.5) * 3.5 : 0;
+    const offsetZ = isSpawnLobby ? (Math.random() - 0.5) * 3.5 : 0;
+    camera.position.set(position[0] + offsetX, position[1] || NORMAL_HEIGHT, position[2] + offsetZ);
     camera.rotation.set(0, Math.PI, 0); // Face South (Portrait Hall) level at eye height!
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camera]);
@@ -207,10 +210,13 @@ const Player = ({
     }
   }, [mobileInteractTrigger]);
 
-  // Teleport effect with multi-level Y support
+  // Teleport effect with multi-level Y support & spawn jitter
   useEffect(() => {
     if (teleportTarget) {
-      camera.position.set(teleportTarget[0], teleportTarget[1] || NORMAL_HEIGHT, teleportTarget[2]);
+      const isLobbyOrCenter = teleportTarget[0] === 0 || Math.abs(teleportTarget[0]) === 52 || Math.abs(teleportTarget[2]) === 52;
+      const offsetX = isLobbyOrCenter ? (Math.random() - 0.5) * 3.5 : 0;
+      const offsetZ = isLobbyOrCenter ? (Math.random() - 0.5) * 3.5 : 0;
+      camera.position.set(teleportTarget[0] + offsetX, teleportTarget[1] || NORMAL_HEIGHT, teleportTarget[2] + offsetZ);
       velocity.current.set(0, 0, 0);
     }
   }, [teleportTarget, camera]);

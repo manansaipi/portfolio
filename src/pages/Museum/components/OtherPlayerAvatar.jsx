@@ -52,6 +52,13 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
     if (nameTagGroupRef.current) {
       nameTagGroupRef.current.lookAt(camera.position);
     }
+
+    // 3. Proximity clipping prevention: hide avatar if camera is too close (distance < 1.4m)
+    const dx = camera.position.x - groupRef.current.position.x;
+    const dz = camera.position.z - groupRef.current.position.z;
+    const dy = camera.position.y - (groupRef.current.position.y + EYE_HEIGHT);
+    const distSq = dx * dx + dy * dy + dz * dz;
+    groupRef.current.visible = distSq > 1.96; // 1.4m squared
   });
 
   const avatarColor = player.color || "#38bdf8";
@@ -78,7 +85,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       {/* ── Floating Name Tag & Speech Bubble Billboard Group (above scaled head) ── */}
-      <group ref={nameTagGroupRef} position={[0, 2.9, 0]}>
+      <group ref={nameTagGroupRef} position={[0, 4.45, 0]}>
         {/* Admin Crown / Badge (positioned below the speech bubble!) */}
         {isAdmin && (
           <Text
@@ -143,7 +150,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
       </group>
 
       {/* ── Human-Proportioned 3D Character Body (rotates with camera yaw, scaled to match bot NPC) ── */}
-      <group ref={bodyGroupRef} scale={[1.3, 1.3, 1.3]}>
+      <group ref={bodyGroupRef} scale={[2.15, 2.15, 2.15]}>
         {isAdmin ? (
           /* ══════ ADMIN: Premium Gold & Black Character ══════ */
           <group>
