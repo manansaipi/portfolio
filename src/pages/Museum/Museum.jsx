@@ -28,6 +28,7 @@ import { useMultiplayer } from './hooks/useMultiplayer';
 import OtherPlayersList from './components/OtherPlayersList';
 import LocalPlayerEmoteAvatar from './components/LocalPlayerEmoteAvatar';
 import MultiplayerChatModal from './components/MultiplayerChatModal';
+import MuseumMiniMap from './components/MuseumMiniMap';
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -52,6 +53,7 @@ const Museum = () => {
   const [interactType, setInteractType] = useState(null);
   const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
   const [activeEmote, setActiveEmote] = useState(null);
+  const playerPosRef = useRef({ x: 0, z: 0, yaw: 0 });
 
   // 🌐 Real-Time Multiplayer State & Coordinate Syncing Hook
   const {
@@ -286,7 +288,12 @@ const Museum = () => {
               mobileCrouched={mobileCrouched}
               onInteractTypeChange={setInteractType}
               isMobile={isMobile}
-              onMove={sendMovement}
+              onMove={(pos, euler) => {
+                playerPosRef.current.x = pos.x;
+                playerPosRef.current.z = pos.z;
+                playerPosRef.current.yaw = euler.y;
+                sendMovement(pos, euler);
+              }}
             />
             {/* 🧑‍🤝‍🧑 Real-Time 3D Avatars of Other Museum Explorers */}
             <OtherPlayersList activePlayersList={activePlayersList} playersRef={playersRef} />
@@ -302,6 +309,13 @@ const Museum = () => {
           </Suspense>
         </Canvas>
       </ErrorBoundary3D>
+
+      {/* 🗺️ Sleek Mini-Map / Visitor Radar HUD */}
+      <MuseumMiniMap
+        playersRef={playersRef}
+        playerPosRef={playerPosRef}
+        isMobile={isMobile}
+      />
 
       {/* HUD Navigation Overlay */}
       <MuseumMapHUD

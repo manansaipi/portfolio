@@ -207,8 +207,9 @@ const MultiplayerChatModal = ({
       <div style={{
         position: 'fixed',
         bottom: isMobile ? 'auto' : '24px',
-        top: isMobile ? '16px' : 'auto',
-        right: isMobile ? '14px' : '24px',
+        top: isMobile ? '60px' : 'auto',
+        left: isMobile ? '16px' : 'auto',
+        right: isMobile ? 'auto' : '24px',
         zIndex: 100,
         display: 'flex', alignItems: 'center', gap: '8px'
       }}>
