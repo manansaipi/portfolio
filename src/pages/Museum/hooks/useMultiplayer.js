@@ -30,22 +30,18 @@ export const useMultiplayer = (roomId = "default") => {
   });
 
   const [visitorName, setVisitorName] = useState(() => {
-    // Admin gets a fixed default name
-    if (isAdmin) return "Abdul Mannan Saipi";
     let savedName = localStorage.getItem('museum_visitor_name');
     if (!savedName) {
-      savedName = "Visitor #" + visitorId.substring(2, 6).toUpperCase();
+      savedName = isAdmin ? "Abdul Mannan Saipi" : "Visitor #" + visitorId.substring(2, 6).toUpperCase();
       localStorage.setItem('museum_visitor_name', savedName);
     }
     return savedName;
   });
 
   const [visitorColor, setVisitorColor] = useState(() => {
-    // Admin gets a royal purple color instead of gold
-    if (isAdmin) return "#8b5cf6";
     let savedColor = localStorage.getItem('museum_visitor_color');
     if (!savedColor) {
-      savedColor = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+      savedColor = isAdmin ? "#a855f7" : NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
       localStorage.setItem('museum_visitor_color', savedColor);
     }
     return savedColor;
@@ -181,7 +177,6 @@ export const useMultiplayer = (roomId = "default") => {
             senderId,
             senderName,
             senderColor,
-            isAdmin: senderId === visitorId ? isAdmin : (playersRef.current[senderId]?.isAdmin || false),
             text: message,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }]);
