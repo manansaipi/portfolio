@@ -146,6 +146,17 @@ const MultiplayerChatModal = ({
     }
   }, [chatMessages, isOpen, activeTab]);
 
+  // Ensure we always scroll to the bottom when the modal first opens
+  useEffect(() => {
+    if (isOpen && activeTab === 'chat') {
+      setTimeout(() => {
+        if (chatBottomRef.current) {
+          chatBottomRef.current.scrollIntoView({ behavior: 'auto' });
+        }
+      }, 100);
+    }
+  }, [isOpen, activeTab]);
+
   // Preserve scroll position when older messages are prepended to top
   useEffect(() => {
     if (oldScrollHeightRef.current && activeTab === 'chat') {
