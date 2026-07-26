@@ -211,7 +211,7 @@ const MultiplayerChatModal = ({
             boxShadow: isConnected ? '0 0 8px #10b981' : 'none',
             display: 'inline-block'
           }} />
-          <span>{totalOnline} {totalOnline === 1 ? 'Explorer' : 'Explorers'} Online</span>
+          <span>{totalOnline} Online</span>
           <span style={{ opacity: 0.6 }}>•</span>
           <span style={{ color: '#38bdf8' }}>Chat</span>
         </button>

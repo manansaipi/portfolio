@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Preload } from '@react-three/drei';
+import { Preload, PerformanceMonitor } from '@react-three/drei';
 import { Helmet } from 'react-helmet-async';
 import { Image as AntdImage } from 'antd';
 import ErrorBoundary3D from './components/ErrorBoundary3D';
@@ -42,6 +42,7 @@ const Museum = () => {
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
+  const [dpr, setDpr] = useState(1.5); // Performance Monitor DPR scaler
 
   // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
   const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
@@ -221,7 +222,13 @@ const Museum = () => {
       <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
 
       <ErrorBoundary3D>
-        <Canvas dpr={[1, 2]} camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }} gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
+        <Canvas
+          dpr={dpr}
+          frameloop={(isAiChatOpen || selectedStudioSlot || isMultiplayerChatOpen) ? "demand" : "always"}
+          camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }}
+          gl={{ antialias: dpr <= 1, alpha: false, powerPreference: "high-performance" }}
+        >
+          <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)} />
           <Suspense fallback={null}>
             <MuseumLighting />
             <group onClick={() => setSelectedMedia(null)}>

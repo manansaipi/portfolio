@@ -52,14 +52,14 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
   return (
     <group position={position} rotation={rotation}>
       {/* Spotlight Focused on Art Piece */}
-      <spotLight
+      {/* <spotLight
         position={[0, frameH / 2 + 0.8, 1.6]}
         target-position={[0, 0, 0]}
         angle={Math.PI / 4}
         penumbra={0.3}
         intensity={2.2}
         color="#fffcf5"
-      />
+      /> */}
 
       {/* Dynamic Picture Frame Group */}
       <group

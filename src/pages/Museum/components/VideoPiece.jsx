@@ -41,14 +41,14 @@ const VideoPiece = ({ media, position, rotation, onClick }) => {
   return (
     <group position={position} rotation={rotation}>
       {/* Spotlight */}
-      <spotLight
+      {/* <spotLight
         position={[0, height / 2 + 1.0, 1.5]}
         target-position={[0, 0, 0]}
         angle={Math.PI / 4}
         penumbra={0.3}
         intensity={2.0}
         color="#e6f0ff"
-      />
+      /> */}
 
       <group
         onClick={(e) => {

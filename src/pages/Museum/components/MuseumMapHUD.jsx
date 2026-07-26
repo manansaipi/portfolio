@@ -152,28 +152,20 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {} }) 
             backdropFilter: 'blur(8px)', width: '220px',
             pointerEvents: 'none',
             animation: 'fadeIn 0.5s ease'
-          }}>
+          }}
+            className='hidden lg:block'
+          >
             <div style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '6px', opacity: 0.9 }}>
               CONTROLS
             </div>
             <div style={{ fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.8 }}>
-              {typeof window !== 'undefined' && !('ontouchstart' in window) && window.innerWidth > 768 ? (
-                <>
-                  <div>WASD - Walk</div>
-                  <div>Mouse - Look Around</div>
-                  <div>[1-4] - Emotes (Wave, Dance, Cheer, Clap)</div>
-                  <div>[E] - Interact</div>
-                  <div>[/] - Room Chat</div>
-                  <div>ESC - Release Pointer</div>
-                </>
-              ) : (
-                <>
-                  <div>Joystick - Walk</div>
-                  <div>Drag - Look Around</div>
-                  <div>Tap Buttons - Jump & Interact</div>
-                </>
-              )}
-            </div>
+              <div>WASD - Walk</div>
+              <div>Mouse - Look Around</div>
+              <div>[1-4] - Emotes (Wave, Dance, Cheer, Clap)</div>
+              <div>[E] - Interact</div>
+              <div>[/] - Room Chat</div>
+              <div>ESC - Release Pointer</div>
+          </div>
           </div>
         )}
       </div>
