@@ -119,8 +119,8 @@ const MuseumMiniMap = ({ playersRef, playerPosRef, isMobile = false }) => {
       // yaw 0 = facing +Z (down on map). Canvas: down = PI/2. So canvasAngle = yaw + PI/2
       // But we need to negate because canvas Y is flipped from world sense.
       // After testing: rotation = yaw (yaw=0 faces +Z = down on minimap)
-      ctx.rotate(yaw);
-
+      ctx.rotate(-yaw + Math.PI);
+      
       // Bright cone of vision
       ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
       ctx.beginPath();

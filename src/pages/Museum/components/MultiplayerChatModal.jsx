@@ -42,7 +42,6 @@ const MultiplayerChatModal = ({
   const [toasts, setToasts] = useState([]);
   const [editingMsgId, setEditingMsgId] = useState(null);
   const [editText, setEditText] = useState('');
-  const [showWelcome, setShowWelcome] = useState(false);
   const chatBottomRef = useRef(null);
   const chatInputRef = useRef(null);
   const modalRef = useRef(null);
@@ -122,19 +121,6 @@ const MultiplayerChatModal = ({
     setEditColor(visitorColor || '#38bdf8');
   }, [visitorName, visitorColor]);
 
-  // Welcome banner visible for 10 seconds when chat opens
-  useEffect(() => {
-    if (isOpen && activeTab === 'chat') {
-      setShowWelcome(true);
-      const timer = setTimeout(() => {
-        setShowWelcome(false);
-      }, 10000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowWelcome(false);
-    }
-  }, [isOpen, activeTab]);
-
   useEffect(() => {
     if (chatBottomRef.current && isOpen && activeTab === 'chat') {
       const currentLastMsg = chatMessages[chatMessages.length - 1];
@@ -211,11 +197,13 @@ const MultiplayerChatModal = ({
         left: isMobile ? '16px' : 'auto',
         right: isMobile ? 'auto' : '24px',
         zIndex: 100,
+        pointerEvents: 'none',
         display: 'flex', alignItems: 'center', gap: '8px'
       }}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           style={{
+            pointerEvents: 'auto',
             background: 'rgba(15, 23, 42, 0.88)', backdropFilter: 'blur(10px)',
             border: '1px solid #38bdf8', borderRadius: '30px', padding: '8px 16px',
             color: '#ffffff', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
@@ -352,15 +340,6 @@ const MultiplayerChatModal = ({
                   >
                     {isLoadingOlder ? '⏳ Loading older messages from database...' : '⬆️ Scroll up or Click here to load older messages...'}
                   </button>
-                )}
-                {showWelcome && (
-                  <div style={{
-                    padding: '8px 12px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.1)',
-                    border: '1px solid rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '0.78rem',
-                    textAlign: 'center', transition: 'opacity 0.5s ease-out', animation: 'fadeIn 0.3s ease-out'
-                  }}>
-                    Welcome to the Live Museum! Say hello to nearby explorers. Your chat messages also appear as 3D speech bubbles above your avatar!
-                  </div>
                 )}
 
                 {chatMessages.map((msg) => (
@@ -614,13 +593,14 @@ const MultiplayerChatModal = ({
           bottom: isMobile ? 'auto' : '210px',
           top: isMobile ? '110px' : 'auto',
           transform: 'none',
-          zIndex: 100,
+          zIndex: 50,
           pointerEvents: 'none',
+          touchAction: 'none',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
           gap: '8px',
-          maxWidth: isMobile ? 'calc(100vw - 28px)' : '380px',
+          maxWidth: isMobile ? '200px' : '380px',
           fontFamily: 'Inter, system-ui, sans-serif'
         }}>
           {toasts.map((msg) => (

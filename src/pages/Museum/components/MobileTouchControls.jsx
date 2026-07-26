@@ -109,7 +109,7 @@ const MobileTouchControls = ({
 
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20, userSelect: 'none', touchAction: 'none' }}>
-      {/* Touch Look Area (Right 60% of screen, full height) */}
+      {/* Touch Look Area (Full screen - joystick & buttons sit on top) */}
       <div
         onTouchStart={handleLookStart}
         onTouchMove={handleLookMove}
@@ -117,10 +117,7 @@ const MobileTouchControls = ({
         onTouchCancel={handleLookEnd}
         style={{
           position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 0,
-          width: '60%',
+          inset: 0,
           pointerEvents: 'auto',
           touchAction: 'none',
         }}
