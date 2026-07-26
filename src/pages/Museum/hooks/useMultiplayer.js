@@ -53,6 +53,7 @@ export const useMultiplayer = (roomId = "default") => {
 
   const [isConnected, setIsConnected] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
+  const [ping, setPing] = useState(0);
   
   // React state for adding/removing player components in DOM when someone joins/leaves
   const [activePlayersList, setActivePlayersList] = useState([]);
@@ -63,6 +64,7 @@ export const useMultiplayer = (roomId = "default") => {
   const wsRef = useRef(null);
   const lastMoveSendTimeRef = useRef(0);
   const reconnectTimeoutRef = useRef(null);
+  const pingStartRef = useRef(null);
 
   // Helper to sync activePlayersList state with playersRef keys
   const syncPlayersState = useCallback(() => {
@@ -188,6 +190,11 @@ export const useMultiplayer = (roomId = "default") => {
             playersRef.current[senderId].speechText = message;
             playersRef.current[senderId].speechEndTime = Date.now() + 6000;
           }
+        } else if (type === "pong") {
+          if (pingStartRef.current) {
+            setPing(Date.now() - pingStartRef.current);
+            pingStartRef.current = null;
+          }
         }
       } catch (err) {
         console.error("Multiplayer JSON parse error:", err);
@@ -217,6 +224,23 @@ export const useMultiplayer = (roomId = "default") => {
       }
     };
   }, [connect]);
+
+  // Ping interval heartbeat when connected
+  useEffect(() => {
+    if (!isConnected) {
+      setPing(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        pingStartRef.current = Date.now();
+        wsRef.current.send(JSON.stringify({ type: "ping" }));
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isConnected]);
 
   // Throttled movement sender called from 3D Player.jsx useFrame
   const sendMovement = useCallback((position, rotation) => {
@@ -273,6 +297,7 @@ export const useMultiplayer = (roomId = "default") => {
     sendMovement,
     sendChat,
     updateProfile,
+    ping,
     NEON_COLORS
   };
 };

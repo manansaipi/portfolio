@@ -40,6 +40,7 @@ const Museum = () => {
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
+  const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
 
   // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
   const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
@@ -60,6 +61,7 @@ const Museum = () => {
     sendMovement,
     sendChat,
     updateProfile,
+    ping,
     NEON_COLORS,
   } = useMultiplayer("default");
 
@@ -255,7 +257,7 @@ const Museum = () => {
 
             <Player
               teleportTarget={teleportTarget}
-              enabled={!selectedStudioSlot && !isAiChatOpen}
+              enabled={!selectedStudioSlot && !isAiChatOpen && !isMultiplayerChatOpen}
               onInteractE={() => setIsAiChatOpen(true)}
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
@@ -282,6 +284,7 @@ const Museum = () => {
         onNavigate={navigateTo}
         isLookingAtNPC={isLookingAtNPC}
         onOpenAIChat={() => setIsAiChatOpen(true)}
+        ping={ping}
       />
 
       {/* 🤖 Interactive AI Bot Assistant Chat Modal */}
@@ -298,6 +301,8 @@ const Museum = () => {
 
       {/* 🌐 Real-Time Multiplayer Chat & Profile HUD */}
       <MultiplayerChatModal
+        isOpen={isMultiplayerChatOpen}
+        setIsOpen={setIsMultiplayerChatOpen}
         visitorName={visitorName}
         visitorColor={visitorColor}
         isConnected={isConnected}

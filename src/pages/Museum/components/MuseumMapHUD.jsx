@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const MuseumMapHUD = ({ isLookingAtNPC = false }) => {
+const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0 }) => {
   const [fps, setFps] = useState(60);
   const [showControls, setShowControls] = useState(true);
 
@@ -35,20 +35,37 @@ const MuseumMapHUD = ({ isLookingAtNPC = false }) => {
 
   return (
     <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, zIndex: 10, fontFamily: 'Inter, system-ui, sans-serif' }}>
-      {/* ── Top-Left FPS Counter Display ── */}
+      {/* ── Top-Left FPS & Ping Counter Display ── */}
       <div style={{
         position: 'absolute', top: '16px', left: '16px',
         background: 'rgba(10, 10, 12, 0.85)', border: '1px solid rgba(255,255,255,0.15)',
         padding: '6px 12px', borderRadius: '6px', color: '#ffffff',
-        backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: '8px'
+        backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: '12px'
       }}>
-        <div style={{
-          width: '8px', height: '8px', borderRadius: '50%',
-          background: fps >= 50 ? '#22c55e' : fps >= 30 ? '#eab308' : '#ef4444'
-        }} />
-        <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em' }}>
-          {fps} FPS
-        </span>
+        {/* FPS Section */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{
+            width: '8px', height: '8px', borderRadius: '50%',
+            background: fps >= 50 ? '#22c55e' : fps >= 30 ? '#eab308' : '#ef4444'
+          }} />
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+            {fps} FPS
+          </span>
+        </div>
+        
+        {/* Divider */}
+        <div style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.2)' }} />
+
+        {/* Ping Section */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{
+            width: '8px', height: '8px', borderRadius: '50%',
+            background: ping === 0 ? '#64748b' : ping <= 90 ? '#22c55e' : ping <= 200 ? '#eab308' : '#ef4444'
+          }} />
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+            {ping === 0 ? '--' : `${ping} ms`}
+          </span>
+        </div>
       </div>
 
       {/* ── Center Crosshair Dot (Clean White Always) ── */}

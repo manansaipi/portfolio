@@ -386,7 +386,7 @@ const Player = ({
   });
 
   if (isMobile) return null;
-  return <PointerLockControls ref={controlsRef} />;
+  return <PointerLockControls ref={controlsRef} enabled={enabled} />;
 };
 
 export default Player;

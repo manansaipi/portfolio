@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const MultiplayerChatModal = ({
+  isOpen,
+  setIsOpen,
   visitorName,
   visitorColor,
   isConnected,
@@ -10,13 +12,26 @@ const MultiplayerChatModal = ({
   updateProfile,
   NEON_COLORS = []
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'profile'
   const [inputMsg, setInputMsg] = useState('');
   const [editName, setEditName] = useState(visitorName || '');
   const [editColor, setEditColor] = useState(visitorColor || '#38bdf8');
   const chatBottomRef = useRef(null);
   const chatInputRef = useRef(null);
+  const modalRef = useRef(null);
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e) => {
+      // Don't close if they clicked inside the modal or on the toggle button
+      if (modalRef.current && !modalRef.current.contains(e.target) && !e.target.closest('button')) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, setIsOpen]);
 
   // Listen for '/' keyboard shortcut event dispatched from Player.jsx
   useEffect(() => {
@@ -30,7 +45,7 @@ const MultiplayerChatModal = ({
     };
     window.addEventListener('open-multiplayer-chat', handleOpenChat);
     return () => window.removeEventListener('open-multiplayer-chat', handleOpenChat);
-  }, []);
+  }, [setIsOpen]);
 
   useEffect(() => {
     setEditName(visitorName || '');
@@ -91,7 +106,10 @@ const MultiplayerChatModal = ({
 
       {/* ── Glassmorphic Multiplayer Chat & Profile Modal Box ── */}
       {isOpen && (
-        <div style={{
+        <div ref={modalRef} 
+             onClick={(e) => e.stopPropagation()}
+             onKeyDown={(e) => e.stopPropagation()}
+             style={{
           position: 'fixed', bottom: '80px', right: '24px', width: '360px', maxWidth: '90vw',
           height: '440px', maxHeight: '75vh', background: 'rgba(9, 9, 11, 0.95)',
           backdropFilter: 'blur(16px)', border: '1px solid #27272a', borderRadius: '16px',
