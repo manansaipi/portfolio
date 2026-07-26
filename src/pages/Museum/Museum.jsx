@@ -211,7 +211,7 @@ const Museum = () => {
             borderRadius: '3px', transition: 'width 0.3s ease',
           }} />
         </div>
-        <p style={{ marginTop: '0.85rem', fontSize: '0.85rem', opacity: 0.6 }}>{progress}% assets downloaded</p>
+        <p style={{ marginTop: '0.85rem', fontSize: '0.85rem', opacity: 0.6 }}>assets loading {progress}% </p>
       </div>
     );
   }

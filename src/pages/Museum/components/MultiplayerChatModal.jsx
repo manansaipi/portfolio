@@ -149,11 +149,18 @@ const MultiplayerChatModal = ({
   // Ensure we always scroll to the bottom when the modal first opens
   useEffect(() => {
     if (isOpen && activeTab === 'chat') {
-      setTimeout(() => {
-        if (chatBottomRef.current) {
+      const scrollToBottom = () => {
+        const container = document.getElementById('museum-chat-container');
+        if (container) {
+          container.scrollTop = container.scrollHeight;
+        } else if (chatBottomRef.current) {
           chatBottomRef.current.scrollIntoView({ behavior: 'auto' });
         }
-      }, 100);
+      };
+      // Try multiple times to catch different phases of modal animation
+      setTimeout(scrollToBottom, 50);
+      setTimeout(scrollToBottom, 200);
+      setTimeout(scrollToBottom, 400);
     }
   }, [isOpen, activeTab]);
 
