@@ -127,8 +127,8 @@ const MuseumMiniMap = ({ playersRef, playerPosRef, isMobile = false }) => {
       ctx.moveTo(0, 0);
       const coneLen = isMobile ? 14 : 18;
       const coneAngle = Math.PI / 5;
-      ctx.lineTo(Math.sin(coneAngle) * coneLen, Math.cos(coneAngle) * coneLen);
-      ctx.lineTo(-Math.sin(coneAngle) * coneLen, Math.cos(coneAngle) * coneLen);
+      ctx.lineTo(Math.sin(coneAngle) * coneLen, -Math.cos(coneAngle) * coneLen);
+      ctx.lineTo(-Math.sin(coneAngle) * coneLen, -Math.cos(coneAngle) * coneLen);
       ctx.closePath();
       ctx.fill();
 

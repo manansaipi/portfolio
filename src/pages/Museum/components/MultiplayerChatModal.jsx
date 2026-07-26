@@ -609,15 +609,16 @@ const MultiplayerChatModal = ({
       {toasts.length > 0 && (
         <div style={{
           position: 'fixed',
-          left: isMobile ? 'auto' : '24px',
-          right: isMobile ? '14px' : 'auto',
+          left: isMobile ? '16px' : '24px',
+          right: 'auto',
           bottom: isMobile ? 'auto' : '210px',
-          top: isMobile ? '64px' : 'auto',
+          top: isMobile ? '110px' : 'auto',
+          transform: 'none',
           zIndex: 100,
           pointerEvents: 'none',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: isMobile ? 'flex-end' : 'flex-start',
+          alignItems: 'flex-start',
           gap: '8px',
           maxWidth: isMobile ? 'calc(100vw - 28px)' : '380px',
           fontFamily: 'Inter, system-ui, sans-serif'
