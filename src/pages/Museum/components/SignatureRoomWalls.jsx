@@ -32,10 +32,9 @@ const SignatureTile = ({ wall, col, row, savedEntry, onOpenStudio }) => {
     <group
       onClick={(e) => {
         e.stopPropagation();
-        if (document.pointerLockElement) {
-          document.exitPointerLock();
-          onOpenStudio({ wall, col, row, savedEntry });
-        }
+        if (typeof document !== 'undefined' && !document.pointerLockElement && !('ontouchstart' in window) && window.innerWidth > 768) return;
+        if (document.pointerLockElement) document.exitPointerLock();
+        onOpenStudio({ wall, col, row, savedEntry });
       }}
       onPointerOver={(e) => {
         e.stopPropagation();

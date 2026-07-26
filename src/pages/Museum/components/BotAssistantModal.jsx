@@ -3,12 +3,37 @@ import { askAI } from '@services/ai';
 import { playAIAudioAndStreamText, stopAIAudio } from '../utils/useAIAudioStream';
 import { renderFormattedText } from '@components/ui/Terminal/utils/terminalFormatters';
 import { THINKING_MESSAGES, THINKING_MESSAGE_MEDIUM, THINKING_MESSAGE_LONGER } from '@components/ui/Terminal/hooks/consts';
+import { DEFAULT_WELCOME_SPEECH } from '../utils/aiConstants';
+
+const AIAssistantAvatar = () => (
+  <svg viewBox="0 0 100 100" width="100%" height="100%" style={{ overflow: 'visible' }}>
+    <defs>
+      <clipPath id="ai-head-clip">
+        <circle cx="50" cy="50" r="36" />
+      </clipPath>
+    </defs>
+    {/* Earpiece on right side */}
+    <rect x="80" y="40" width="12" height="22" rx="3" fill="#38bdf8" />
+    
+    {/* Head & Hair (Moved hair way back/up so it's a neat top cap) */}
+    <g clipPath="url(#ai-head-clip)">
+      <circle cx="50" cy="50" r="36" fill="#f5d0a9" />
+      <circle cx="50" cy="6" r="22" fill="#18181b" />
+    </g>
+    
+    {/* Glowing Blue Eyes */}
+    <circle cx="37" cy="53" r="5" fill="#0284c7" />
+    <circle cx="37" cy="53" r="2.5" fill="#38bdf8" />
+    <circle cx="63" cy="53" r="5" fill="#0284c7" />
+    <circle cx="63" cy="53" r="2.5" fill="#38bdf8" />
+  </svg>
+);
 
 const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChange }) => {
   const [messages, setMessages] = useState([
     {
       sender: 'assistant',
-      text: "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.",
+      text: DEFAULT_WELCOME_SPEECH,
     },
   ]);
   const [input, setInput] = useState('');
@@ -199,14 +224,15 @@ const BotAssistantModal = ({ isOpen, onClose, onSpeakingChange, onSpeechTextChan
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
-              width: '38px', height: '38px', borderRadius: '50%', background: 'linear-gradient(135deg, #0284c7, #38bdf8)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px'
+              width: '42px', height: '42px', borderRadius: '50%', background: '#0f172a', border: '1.5px solid #38bdf8',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '2px',
+              boxShadow: '0 0 10px rgba(56, 189, 248, 0.3)'
             }}>
-              🤖
+              <AIAssistantAvatar />
             </div>
             <div>
               <h3 style={{ margin: 0, color: '#ffffff', fontSize: '1.05rem', fontWeight: 700 }}>AI Assistant</h3>
-              <p style={{ margin: 0, color: '#38bdf8', fontSize: '0.75rem', fontWeight: 600 }}>Online • Portfolio Q&A Engine</p>
+              <p style={{ margin: 0, color: '#38bdf8', fontSize: '0.75rem', fontWeight: 600 }}>Online</p>
             </div>
           </div>
           <button

@@ -53,6 +53,7 @@ const Player = ({
   mobileCrouched = false,
   onInteractTypeChange,
   isMobile = false,
+  onMove,
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
@@ -150,6 +151,11 @@ const Player = ({
         case 'KeyE':
           triggerInteraction();
           break;
+        case 'Slash':
+          e.preventDefault();
+          if (document.pointerLockElement) document.exitPointerLock();
+          window.dispatchEvent(new CustomEvent('open-multiplayer-chat'));
+          break;
       }
     };
 
@@ -166,6 +172,7 @@ const Player = ({
 
     const onMouseDown = () => {
       if (!isMobile) {
+        if (typeof document !== 'undefined' && !document.pointerLockElement) return;
         triggerInteraction();
       }
     };
@@ -325,6 +332,12 @@ const Player = ({
         }
       }
 
+      if (onMove && enabled) {
+        // Compute clean horizontal yaw from 3D forward vector to prevent Euler gimbal lock / ambiguity
+        const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+        const cleanYaw = Math.atan2(forward.x, forward.z);
+        onMove(camera.position, new THREE.Euler(0, cleanYaw, 0));
+      }
       // Exit early on touch devices so desktop WASD PointerLock controls don't run
       return;
     }
@@ -362,6 +375,13 @@ const Player = ({
     const canJump = camera.position.y <= targetHeight + 0.1;
     if (canJump && keys.current.space) {
       velocity.current.y = JUMP_FORCE;
+    }
+
+    if (onMove && enabled) {
+      // Compute clean horizontal yaw from 3D forward vector to prevent Euler gimbal lock / ambiguity
+      const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+      const cleanYaw = Math.atan2(forward.x, forward.z);
+      onMove(camera.position, new THREE.Euler(0, cleanYaw, 0));
     }
   });
 

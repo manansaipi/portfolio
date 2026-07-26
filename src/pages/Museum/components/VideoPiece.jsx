@@ -53,6 +53,7 @@ const VideoPiece = ({ media, position, rotation, onClick }) => {
       <group
         onClick={(e) => {
           e.stopPropagation();
+          if (typeof document !== 'undefined' && !document.pointerLockElement && !('ontouchstart' in window) && window.innerWidth > 768) return;
           // Proximity Enforcement: Only allow inspecting video if player is close (distance <= 8.5m)!
           if (e.distance && e.distance > 8.5) return;
           if (onClick) onClick(media);

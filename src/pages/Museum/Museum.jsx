@@ -24,8 +24,9 @@ import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
 import { getGalleryMedia, getGalleryCategories } from '@services/gallery';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
-
-const DEFAULT_WELCOME_SPEECH = "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.";
+import { useMultiplayer } from './hooks/useMultiplayer';
+import OtherPlayersList from './components/OtherPlayersList';
+import MultiplayerChatModal from './components/MultiplayerChatModal';
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -47,6 +48,20 @@ const Museum = () => {
   const [mobileCrouched, setMobileCrouched] = useState(false);
   const [interactType, setInteractType] = useState(null);
   const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
+
+  // 🌐 Real-Time Multiplayer State & Coordinate Syncing Hook
+  const {
+    visitorName,
+    visitorColor,
+    isConnected,
+    activePlayersList,
+    playersRef,
+    chatMessages,
+    sendMovement,
+    sendChat,
+    updateProfile,
+    NEON_COLORS,
+  } = useMultiplayer("default");
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
@@ -252,7 +267,10 @@ const Museum = () => {
               mobileCrouched={mobileCrouched}
               onInteractTypeChange={setInteractType}
               isMobile={isMobile}
+              onMove={sendMovement}
             />
+            {/* 🧑‍🤝‍🧑 Real-Time 3D Avatars of Other Museum Explorers */}
+            <OtherPlayersList activePlayersList={activePlayersList} playersRef={playersRef} />
             <Preload all />
           </Suspense>
         </Canvas>
@@ -276,6 +294,18 @@ const Museum = () => {
         onSpeechTextChange={(text) => {
           window.dispatchEvent(new CustomEvent('ai-speech-text', { detail: text }));
         }}
+      />
+
+      {/* 🌐 Real-Time Multiplayer Chat & Profile HUD */}
+      <MultiplayerChatModal
+        visitorName={visitorName}
+        visitorColor={visitorColor}
+        isConnected={isConnected}
+        activePlayersList={activePlayersList}
+        chatMessages={chatMessages}
+        sendChat={sendChat}
+        updateProfile={updateProfile}
+        NEON_COLORS={NEON_COLORS}
       />
 
       {/* Interactive HTML5 Drawing & Text Studio Modal */}

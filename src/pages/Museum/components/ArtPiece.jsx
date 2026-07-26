@@ -65,6 +65,7 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
       <group
         onClick={(e) => {
           e.stopPropagation();
+          if (typeof document !== 'undefined' && !document.pointerLockElement && !('ontouchstart' in window) && window.innerWidth > 768) return;
           // Proximity Enforcement: Only allow inspecting artwork if player is close (distance <= 8.5m)!
           if (e.distance && e.distance > 8.5) return;
           if (onClick) onClick(media);

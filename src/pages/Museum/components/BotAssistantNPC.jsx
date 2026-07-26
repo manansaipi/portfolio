@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
+import { DEFAULT_WELCOME_SPEECH } from '../utils/aiConstants';
 
 // Helper function to clean markdown syntax for crisp, beautifully formatted 3D speech text
 const cleanMarkdownFor3D = (rawText) => {
@@ -13,8 +14,6 @@ const cleanMarkdownFor3D = (rawText) => {
     .replace(/`([^`]+)`/g, '$1')             // Replace `code` with "code"
     .replace(/^[*-\s]+/gm, '• ');            // Clean bullet points
 };
-
-const DEFAULT_WELCOME_SPEECH = "Hello! I'm Abdul Mannan's AI Assistant. I'm here to help you learn more about Abdul's projects, technical expertise, professional experience, achievements, and creative work. Feel free to ask me anything, and I'll be happy to assist you.";
 
 const _npcPos = new THREE.Vector3(3, 2.0, 6);
 const _lookDir = new THREE.Vector3();
@@ -151,6 +150,7 @@ const BotAssistantNPC = ({ onOpenChat, isLookingAtNPC = false }) => {
       <group
         onClick={(e) => {
           e.stopPropagation();
+          if (typeof document !== 'undefined' && !document.pointerLockElement && !('ontouchstart' in window) && window.innerWidth > 768) return;
           if (e.distance && e.distance > 6.0) return;
           if (onOpenChat) onOpenChat();
         }}

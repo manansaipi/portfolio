@@ -106,6 +106,7 @@ const MuseumMapHUD = ({ isLookingAtNPC = false }) => {
               <div>WASD - Walk</div>
               <div>Mouse - Look Around</div>
               <div>[E] - Interact</div>
+              <div>[/] - Room Chat</div>
               <div>ESC - Release Pointer</div>
             </div>
           </div>

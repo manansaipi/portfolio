@@ -10,6 +10,7 @@ const GuestbookBoard = ({ entries = [], position = [0, 0, -4], rotation = [0, 0,
       <group
         onClick={(e) => {
           e.stopPropagation();
+          if (typeof document !== 'undefined' && !document.pointerLockElement && !('ontouchstart' in window) && window.innerWidth > 768) return;
           if (document.pointerLockElement) document.exitPointerLock();
           if (onOpenSignModal) onOpenSignModal();
         }}
