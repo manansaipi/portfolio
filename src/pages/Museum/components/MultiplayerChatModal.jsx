@@ -194,7 +194,7 @@ const MultiplayerChatModal = ({
                     ) : msg.senderIsAdmin ? (
                       <div style={{ background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, transparent 100%)', padding: '6px 10px', borderRadius: '6px', borderLeft: '3px solid #f59e0b' }}>
                         <span style={{ color: '#f59e0b', fontWeight: 800, marginRight: '6px', textShadow: '0 0 10px rgba(245, 158, 11, 0.6)' }}>
-                          👑 {msg.senderName || 'Admin'}:
+                          {msg.senderName || 'Admin'}:
                         </span>
                         <span style={{ color: '#fef3c7', fontWeight: 500 }}>{msg.text}</span>
                         {msg.timestamp && (
