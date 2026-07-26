@@ -41,8 +41,8 @@ export const useMultiplayer = (roomId = "default") => {
   });
 
   const [visitorColor, setVisitorColor] = useState(() => {
-    // Admin gets a gold color
-    if (isAdmin) return "#f59e0b";
+    // Admin gets a royal purple color instead of gold
+    if (isAdmin) return "#8b5cf6";
     let savedColor = localStorage.getItem('museum_visitor_color');
     if (!savedColor) {
       savedColor = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
@@ -181,6 +181,7 @@ export const useMultiplayer = (roomId = "default") => {
             senderId,
             senderName,
             senderColor,
+            isAdmin: senderId === visitorId ? isAdmin : (playersRef.current[senderId]?.isAdmin || false),
             text: message,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }]);

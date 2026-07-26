@@ -194,6 +194,7 @@ const MultiplayerChatModal = ({
                     ) : (
                       <div>
                         <span style={{ color: msg.senderColor || '#38bdf8', fontWeight: 700, marginRight: '6px' }}>
+                          {msg.isAdmin && <span style={{ marginRight: '4px' }}>👑</span>}
                           {msg.senderName || 'Visitor'}:
                         </span>
                         <span style={{ color: '#e2e8f0' }}>{msg.text}</span>
