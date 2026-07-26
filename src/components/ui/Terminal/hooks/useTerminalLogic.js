@@ -4,7 +4,6 @@ import { getAllWorks } from '@services/work';
 import { getAllWritings } from '@services/post';
 import { getCertificates } from '@services/admin';
 import { askAI } from '@services/ai';
-import { logTerminalCommand as apiLogTerminalCommand } from '@services/terminal';
 import { AVAILABLE_COMMANDS, THINKING_MESSAGES, THINKING_MESSAGE_MEDIUM, THINKING_MESSAGE_LONGER } from './consts';
 
 const startThinkingAnimation = (setHistory) => {
@@ -53,7 +52,6 @@ export const useTerminalLogic = (isEmbed = false) => {
     ]);
     
     const audioRef = useRef(null);
-    const lastLogTimeRef = useRef(0);
     
     useEffect(() => {
         if (!audioRef.current) {
@@ -89,14 +87,6 @@ export const useTerminalLogic = (isEmbed = false) => {
         }
     };
 
-    const logCommand = (originalInput, aiMode, responseText, timeMs, audioBase64 = null) => {
-        const now = Date.now();
-        if (now - lastLogTimeRef.current > 1500) {
-            apiLogTerminalCommand(originalInput, aiMode, responseText, timeMs, audioBase64);
-            lastLogTimeRef.current = now;
-        }
-    };
-    
     const processAiQuery = async (query, originalInput, startTime, isEnteringMode) => {
         if (isEnteringMode) {
             setIsAiMode(true);
@@ -105,7 +95,6 @@ export const useTerminalLogic = (isEmbed = false) => {
                 { type: 'system', content: 'Entered AI mode. You can now chat freely! Type /exit or press Ctrl+C to leave.' }
             ]);
             if (!query) {
-                logCommand(originalInput, false, 'Entered AI mode.', Math.round(performance.now() - startTime));
                 setIsProcessing(false);
                 return;
             }
@@ -113,7 +102,6 @@ export const useTerminalLogic = (isEmbed = false) => {
 
         const intervalId = startThinkingAnimation(setHistory);
         let responseTextToLog = ' ';
-        let audioBase64Data = null;
 
         try {
             const responseObj = await askAI(query);
@@ -123,7 +111,6 @@ export const useTerminalLogic = (isEmbed = false) => {
             let syncData = null;
             
             if (!isEmbed && typeof responseObj !== 'string' && responseObj?.audioResult) {
-                audioBase64Data = responseObj.audioResult.audioBase64;
                 syncData = await playAudio(responseObj.audioResult);
             }
             
@@ -143,8 +130,6 @@ export const useTerminalLogic = (isEmbed = false) => {
             });
         }
         
-        const isAiLogMode = true;
-        logCommand(originalInput, isAiLogMode, responseTextToLog, Math.round(performance.now() - startTime), audioBase64Data);
         setIsProcessing(false);
     };
 
@@ -326,7 +311,6 @@ export const useTerminalLogic = (isEmbed = false) => {
                 systemResponseText = `Command not found: ${command}`;
         }
 
-        logCommand(originalInput, false, systemResponseText, Math.round(performance.now() - startTime));
         setIsProcessing(false);
     };
 
@@ -427,7 +411,6 @@ export const useTerminalLogic = (isEmbed = false) => {
                 stopSpeech();
                 setIsAiMode(false);
                 setHistory(prev => [...prev, { type: 'system', content: 'Exited AI mode.' }]);
-                logCommand(originalInput, true, 'Exited AI mode.', Math.round(performance.now() - startTime));
                 setIsProcessing(false);
                 return;
             }
