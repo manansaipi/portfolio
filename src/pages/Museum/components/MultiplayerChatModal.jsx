@@ -191,8 +191,20 @@ const MultiplayerChatModal = ({
                       <div style={{ color: '#64748b', fontStyle: 'italic', fontSize: '0.78rem', textAlign: 'center', margin: '4px 0' }}>
                         {msg.text}
                       </div>
+                    ) : msg.senderIsAdmin ? (
+                      <div style={{ background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, transparent 100%)', padding: '6px 10px', borderRadius: '6px', borderLeft: '3px solid #f59e0b' }}>
+                        <span style={{ color: '#f59e0b', fontWeight: 800, marginRight: '6px', textShadow: '0 0 10px rgba(245, 158, 11, 0.6)' }}>
+                          👑 {msg.senderName || 'Admin'}:
+                        </span>
+                        <span style={{ color: '#fef3c7', fontWeight: 500 }}>{msg.text}</span>
+                        {msg.timestamp && (
+                          <span style={{ color: '#d97706', fontSize: '0.7rem', marginLeft: '6px' }}>
+                            {msg.timestamp}
+                          </span>
+                        )}
+                      </div>
                     ) : (
-                      <div>
+                      <div style={{ padding: '2px 0' }}>
                         <span style={{ color: msg.senderColor || '#38bdf8', fontWeight: 700, marginRight: '6px' }}>
                           {msg.senderName || 'Visitor'}:
                         </span>

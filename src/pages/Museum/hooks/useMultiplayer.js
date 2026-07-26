@@ -3,13 +3,13 @@ import { getWsUrl } from '@services/multiplayer';
 
 const NEON_COLORS = [
   "#38bdf8", // Sky Blue
-  "#f43f5e", // Rose Red
-  "#10b981", // Emerald Green
-  "#a855f7", // Purple
-  "#f59e0b", // Amber
-  "#6366f1", // Indigo
+  "#ef4444", // Red
+  "#22c55e", // Green
+  "#8b5cf6", // Violet
+  "#f97316", // Orange
+  "#84cc16", // Lime
+  "#06b6d4", // Cyan
   "#ec4899", // Pink
-  "#14b8a6", // Teal
 ];
 
 // Must match NORMAL_HEIGHT in Player.jsx
@@ -30,18 +30,22 @@ export const useMultiplayer = (roomId = "default") => {
   });
 
   const [visitorName, setVisitorName] = useState(() => {
+    // Admin gets a fixed default name
+    if (isAdmin) return "Abdul Mannan Saipi";
     let savedName = localStorage.getItem('museum_visitor_name');
     if (!savedName) {
-      savedName = isAdmin ? "Abdul Mannan Saipi" : "Visitor #" + visitorId.substring(2, 6).toUpperCase();
+      savedName = "Visitor #" + visitorId.substring(2, 6).toUpperCase();
       localStorage.setItem('museum_visitor_name', savedName);
     }
     return savedName;
   });
 
   const [visitorColor, setVisitorColor] = useState(() => {
+    // Admin gets a gold color
+    if (isAdmin) return "#f59e0b";
     let savedColor = localStorage.getItem('museum_visitor_color');
     if (!savedColor) {
-      savedColor = isAdmin ? "#a855f7" : NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
+      savedColor = NEON_COLORS[Math.floor(Math.random() * NEON_COLORS.length)];
       localStorage.setItem('museum_visitor_color', savedColor);
     }
     return savedColor;
@@ -169,7 +173,7 @@ export const useMultiplayer = (roomId = "default") => {
             syncPlayersState();
           }
         } else if (type === "player_chat") {
-          const { id: senderId, name: senderName, color: senderColor, message } = data;
+          const { id: senderId, name: senderName, color: senderColor, isAdmin: senderIsAdmin, message } = data;
           
           // Add to global chat messages
           setChatMessages((prev) => [...prev.slice(-49), {
@@ -177,6 +181,7 @@ export const useMultiplayer = (roomId = "default") => {
             senderId,
             senderName,
             senderColor,
+            senderIsAdmin,
             text: message,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }]);

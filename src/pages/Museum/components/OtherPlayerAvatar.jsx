@@ -56,6 +56,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
 
   const avatarColor = player.color || "#38bdf8";
   const isAdmin = player.isAdmin || false;
+  const adminGoldAccent = "#f59e0b";
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
@@ -80,7 +81,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
         </mesh>
         <mesh position={[0, 0, -0.012]}>
           <planeGeometry args={[1.84, 0.38]} />
-          <meshBasicMaterial color={avatarColor} transparent opacity={0.6} />
+          <meshBasicMaterial color={isAdmin ? adminGoldAccent : avatarColor} transparent opacity={0.6} />
         </mesh>
         <Text
           position={[0, 0, 0]}
@@ -142,10 +143,10 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
               <boxGeometry args={[0.22, 0.07, 0.08]} />
               <meshBasicMaterial color="#0f0f0f" />
             </mesh>
-            {/* Accent Earring */}
+            {/* Gold Earring */}
             <mesh position={[0.19, 1.70, 0]}>
               <sphereGeometry args={[0.025, 8, 8]} />
-              <meshBasicMaterial color={avatarColor} />
+              <meshBasicMaterial color={adminGoldAccent} />
             </mesh>
 
             {/* Neck */}
@@ -154,20 +155,20 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
               <meshLambertMaterial color="#f5d0a9" />
             </mesh>
 
-            {/* Torso — Premium Blazer */}
+            {/* Torso — Premium Blazer (Black with Gold trim) */}
             <mesh position={[0, 1.22, 0]}>
               <boxGeometry args={[0.52, 0.55, 0.28]} />
               <meshLambertMaterial color="#111111" />
             </mesh>
-            {/* Blazer Lapel / Accent Trim */}
+            {/* Blazer Lapel / Gold Trim */}
             <mesh position={[0, 1.38, 0.14]}>
               <boxGeometry args={[0.15, 0.12, 0.02]} />
-              <meshBasicMaterial color={avatarColor} />
+              <meshBasicMaterial color={adminGoldAccent} />
             </mesh>
-            {/* Accent Pocket Square */}
+            {/* Gold Pocket Square */}
             <mesh position={[-0.15, 1.35, 0.15]}>
               <boxGeometry args={[0.06, 0.06, 0.01]} />
-              <meshBasicMaterial color={avatarColor} />
+              <meshBasicMaterial color={adminGoldAccent} />
             </mesh>
 
             {/* Belt */}
@@ -178,7 +179,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
             {/* Belt Buckle */}
             <mesh position={[0, 0.93, 0.14]}>
               <boxGeometry args={[0.08, 0.06, 0.02]} />
-              <meshBasicMaterial color={avatarColor} />
+              <meshBasicMaterial color={adminGoldAccent} />
             </mesh>
 
             {/* Left Arm Upper */}
