@@ -11,6 +11,7 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
   const groupRef = useRef();
   const nameTagGroupRef = useRef();
   const bodyGroupRef = useRef();
+  const headRef = useRef();
   const leftArmRef = useRef();
   const rightArmRef = useRef();
   const leftLegRef = useRef();
@@ -43,6 +44,14 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
         const targetQuaternion = new THREE.Quaternion().setFromEuler(targetEuler);
         
         bodyGroupRef.current.quaternion.slerp(targetQuaternion, Math.min(delta * 12, 1));
+      }
+
+      // Animate head pitch (looking up / down) smoothly
+      if (headRef.current) {
+        // Negate targetPitch because for a +Z facing mesh, positive X rotation tilts down and negative X rotation tilts up
+        const targetPitch = -(playerData.targetRotation && playerData.targetRotation[0]) || 0;
+        const clampedPitch = THREE.MathUtils.clamp(targetPitch, -1.05, 1.05); // Limit to ~60 deg tilt
+        headRef.current.rotation.x = THREE.MathUtils.lerp(headRef.current.rotation.x, clampedPitch, Math.min(delta * 12, 1));
       }
 
       // Check active speech text
@@ -195,26 +204,29 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
         {isAdmin ? (
           /* ══════ ADMIN: Premium Gold & Black Character ══════ */
           <group>
-            {/* Head */}
-            <mesh position={[0, 1.72, 0]}>
-              <sphereGeometry args={[0.18, 16, 16]} />
-              <meshLambertMaterial color="#f5d0a9" />
-            </mesh>
-            {/* Hair */}
-            <mesh position={[0, 1.88, -0.04]}>
-              <sphereGeometry args={[0.16, 12, 12]} />
-              <meshLambertMaterial color="#1a1a2e" />
-            </mesh>
-            {/* Sunglasses Visor */}
-            <mesh position={[0, 1.74, 0.14]}>
-              <boxGeometry args={[0.22, 0.07, 0.08]} />
-              <meshBasicMaterial color="#0f0f0f" />
-            </mesh>
-            {/* Gold Earring */}
-            <mesh position={[0.19, 1.70, 0]}>
-              <sphereGeometry args={[0.025, 8, 8]} />
-              <meshBasicMaterial color={adminGoldAccent} />
-            </mesh>
+            {/* Head Group (pivoting at neck Y=1.58) */}
+            <group ref={headRef} position={[0, 1.58, 0]}>
+              {/* Head */}
+              <mesh position={[0, 0.14, 0]}>
+                <sphereGeometry args={[0.18, 16, 16]} />
+                <meshLambertMaterial color="#f5d0a9" />
+              </mesh>
+              {/* Hair */}
+              <mesh position={[0, 0.30, -0.04]}>
+                <sphereGeometry args={[0.16, 12, 12]} />
+                <meshLambertMaterial color="#1a1a2e" />
+              </mesh>
+              {/* Sunglasses Visor */}
+              <mesh position={[0, 0.16, 0.14]}>
+                <boxGeometry args={[0.22, 0.07, 0.08]} />
+                <meshBasicMaterial color="#0f0f0f" />
+              </mesh>
+              {/* Gold Earring */}
+              <mesh position={[0.19, 0.12, 0]}>
+                <sphereGeometry args={[0.025, 8, 8]} />
+                <meshBasicMaterial color={adminGoldAccent} />
+              </mesh>
+            </group>
 
             {/* Neck */}
             <mesh position={[0, 1.52, 0]}>
@@ -298,16 +310,19 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
         ) : (
           /* ══════ REGULAR VISITOR: Cyber-Neon Character ══════ */
           <group>
-            {/* Head */}
-            <mesh position={[0, 1.72, 0]}>
-              <sphereGeometry args={[0.18, 16, 16]} />
-              <meshLambertMaterial color="#f8fafc" />
-            </mesh>
-            {/* Neon Visor Eyes (makes rotation visible — positioned on the FRONT face) */}
-            <mesh position={[0, 1.74, 0.14]}>
-              <boxGeometry args={[0.22, 0.07, 0.08]} />
-              <meshBasicMaterial color={avatarColor} />
-            </mesh>
+            {/* Head Group (pivoting at neck Y=1.58) */}
+            <group ref={headRef} position={[0, 1.58, 0]}>
+              {/* Head */}
+              <mesh position={[0, 0.14, 0]}>
+                <sphereGeometry args={[0.18, 16, 16]} />
+                <meshLambertMaterial color="#f8fafc" />
+              </mesh>
+              {/* Neon Visor Eyes (makes rotation visible — positioned on the FRONT face) */}
+              <mesh position={[0, 0.16, 0.14]}>
+                <boxGeometry args={[0.22, 0.07, 0.08]} />
+                <meshBasicMaterial color={avatarColor} />
+              </mesh>
+            </group>
 
             {/* Neck */}
             <mesh position={[0, 1.52, 0]}>

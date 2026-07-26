@@ -339,10 +339,11 @@ const Player = ({
       }
 
       if (onMove && enabled) {
-        // Compute clean horizontal yaw from 3D forward vector to prevent Euler gimbal lock / ambiguity
+        // Compute clean horizontal yaw and vertical pitch from 3D forward vector to prevent Euler gimbal lock / ambiguity
         const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
         const cleanYaw = Math.atan2(forward.x, forward.z);
-        onMove(camera.position, new THREE.Euler(0, cleanYaw, 0));
+        const cleanPitch = Math.asin(THREE.MathUtils.clamp(forward.y, -1, 1));
+        onMove(camera.position, new THREE.Euler(cleanPitch, cleanYaw, 0));
       }
       // Exit early on touch devices so desktop WASD PointerLock controls don't run
       return;
@@ -384,10 +385,11 @@ const Player = ({
     }
 
     if (onMove && enabled) {
-      // Compute clean horizontal yaw from 3D forward vector to prevent Euler gimbal lock / ambiguity
+      // Compute clean horizontal yaw and vertical pitch from 3D forward vector to prevent Euler gimbal lock / ambiguity
       const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
       const cleanYaw = Math.atan2(forward.x, forward.z);
-      onMove(camera.position, new THREE.Euler(0, cleanYaw, 0));
+      const cleanPitch = Math.asin(THREE.MathUtils.clamp(forward.y, -1, 1));
+      onMove(camera.position, new THREE.Euler(cleanPitch, cleanYaw, 0));
     }
   });
 
