@@ -11,6 +11,13 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
   const groupRef = useRef();
   const nameTagGroupRef = useRef();
   const bodyGroupRef = useRef();
+  const leftArmRef = useRef();
+  const rightArmRef = useRef();
+  const leftLegRef = useRef();
+  const rightLegRef = useRef();
+  const prevPosRef = useRef(new THREE.Vector3());
+  const smoothSpeedRef = useRef(0);
+  const limbPhaseRef = useRef(0);
   const [activeSpeech, setActiveSpeech] = useState('');
 
   useFrame((state, delta) => {
@@ -59,6 +66,40 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
     const dy = camera.position.y - (groupRef.current.position.y + EYE_HEIGHT);
     const distSq = dx * dx + dy * dy + dz * dz;
     groupRef.current.visible = distSq > 1.96; // 1.4m squared
+
+    // 4. Calculate walking speed and animate limb swing!
+    const moveDist = groupRef.current.position.distanceTo(prevPosRef.current);
+    const instantSpeed = delta > 0 ? moveDist / delta : 0;
+    prevPosRef.current.copy(groupRef.current.position);
+
+    if (moveDist > 5.0) {
+      // Teleported or just spawned! Do not swing limbs.
+      smoothSpeedRef.current = 0;
+      return;
+    }
+
+    // Smooth speed over ~10 frames to eliminate network lerp spikes when tapping keys
+    smoothSpeedRef.current = THREE.MathUtils.lerp(smoothSpeedRef.current, instantSpeed, Math.min(delta * 12, 1));
+    const speed = smoothSpeedRef.current;
+
+    if (speed > 0.15) {
+      // Walking / running limb swing animation!
+      // Accumulate phase smoothly using delta time! Never multiply absolute time by variable speed!
+      const swingFreq = Math.min(Math.max(speed * 2.2, 4.0), 10.0); // clamp swing frequency between 4 and 10 rad/s
+      limbPhaseRef.current += delta * swingFreq;
+      const limbAngle = Math.sin(limbPhaseRef.current) * 0.6;
+      if (leftLegRef.current) leftLegRef.current.rotation.x = limbAngle;
+      if (rightLegRef.current) rightLegRef.current.rotation.x = -limbAngle;
+      if (leftArmRef.current) leftArmRef.current.rotation.x = -limbAngle * 0.7;
+      if (rightArmRef.current) rightArmRef.current.rotation.x = limbAngle * 0.7;
+    } else {
+      // Smoothly lerp limbs back to neutral standing position when idle!
+      if (leftLegRef.current) leftLegRef.current.rotation.x = THREE.MathUtils.lerp(leftLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+      if (rightLegRef.current) rightLegRef.current.rotation.x = THREE.MathUtils.lerp(rightLegRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+      if (leftArmRef.current) leftArmRef.current.rotation.x = THREE.MathUtils.lerp(leftArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+      if (rightArmRef.current) rightArmRef.current.rotation.x = THREE.MathUtils.lerp(rightArmRef.current.rotation.x, 0, Math.min(delta * 12, 1));
+      limbPhaseRef.current = 0; // Reset phase for next step
+    }
   });
 
   const avatarColor = player.color || "#38bdf8";
@@ -208,48 +249,51 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
               <meshBasicMaterial color={adminGoldAccent} />
             </mesh>
 
-            {/* Left Arm Upper */}
-            <mesh position={[-0.35, 1.30, 0]}>
-              <boxGeometry args={[0.14, 0.35, 0.16]} />
-              <meshLambertMaterial color="#111111" />
-            </mesh>
-            {/* Left Hand */}
-            <mesh position={[-0.35, 1.08, 0]}>
-              <boxGeometry args={[0.12, 0.14, 0.14]} />
-              <meshLambertMaterial color="#f5d0a9" />
-            </mesh>
-            {/* Right Arm Upper */}
-            <mesh position={[0.35, 1.30, 0]}>
-              <boxGeometry args={[0.14, 0.35, 0.16]} />
-              <meshLambertMaterial color="#111111" />
-            </mesh>
-            {/* Right Hand */}
-            <mesh position={[0.35, 1.08, 0]}>
-              <boxGeometry args={[0.12, 0.14, 0.14]} />
-              <meshLambertMaterial color="#f5d0a9" />
-            </mesh>
+            {/* Left Arm Group (pivoting at shoulder Y=1.45) */}
+            <group ref={leftArmRef} position={[-0.35, 1.45, 0]}>
+              <mesh position={[0, -0.15, 0]}>
+                <boxGeometry args={[0.14, 0.35, 0.16]} />
+                <meshLambertMaterial color="#111111" />
+              </mesh>
+              <mesh position={[0, -0.37, 0]}>
+                <boxGeometry args={[0.12, 0.14, 0.14]} />
+                <meshLambertMaterial color="#f5d0a9" />
+              </mesh>
+            </group>
+            {/* Right Arm Group (pivoting at shoulder Y=1.45) */}
+            <group ref={rightArmRef} position={[0.35, 1.45, 0]}>
+              <mesh position={[0, -0.15, 0]}>
+                <boxGeometry args={[0.14, 0.35, 0.16]} />
+                <meshLambertMaterial color="#111111" />
+              </mesh>
+              <mesh position={[0, -0.37, 0]}>
+                <boxGeometry args={[0.12, 0.14, 0.14]} />
+                <meshLambertMaterial color="#f5d0a9" />
+              </mesh>
+            </group>
 
-            {/* Left Leg */}
-            <mesh position={[-0.12, 0.52, 0]}>
-              <boxGeometry args={[0.18, 0.75, 0.2]} />
-              <meshLambertMaterial color="#1a1a2e" />
-            </mesh>
-            {/* Right Leg */}
-            <mesh position={[0.12, 0.52, 0]}>
-              <boxGeometry args={[0.18, 0.75, 0.2]} />
-              <meshLambertMaterial color="#1a1a2e" />
-            </mesh>
-
-            {/* Left Shoe */}
-            <mesh position={[-0.12, 0.08, 0.04]}>
-              <boxGeometry args={[0.18, 0.16, 0.28]} />
-              <meshLambertMaterial color="#0a0a0a" />
-            </mesh>
-            {/* Right Shoe */}
-            <mesh position={[0.12, 0.08, 0.04]}>
-              <boxGeometry args={[0.18, 0.16, 0.28]} />
-              <meshLambertMaterial color="#0a0a0a" />
-            </mesh>
+            {/* Left Leg Group (pivoting at hip Y=0.90) */}
+            <group ref={leftLegRef} position={[-0.12, 0.90, 0]}>
+              <mesh position={[0, -0.38, 0]}>
+                <boxGeometry args={[0.18, 0.75, 0.2]} />
+                <meshLambertMaterial color="#1a1a2e" />
+              </mesh>
+              <mesh position={[0, -0.82, 0.04]}>
+                <boxGeometry args={[0.18, 0.16, 0.28]} />
+                <meshLambertMaterial color="#0a0a0a" />
+              </mesh>
+            </group>
+            {/* Right Leg Group (pivoting at hip Y=0.90) */}
+            <group ref={rightLegRef} position={[0.12, 0.90, 0]}>
+              <mesh position={[0, -0.38, 0]}>
+                <boxGeometry args={[0.18, 0.75, 0.2]} />
+                <meshLambertMaterial color="#1a1a2e" />
+              </mesh>
+              <mesh position={[0, -0.82, 0.04]}>
+                <boxGeometry args={[0.18, 0.16, 0.28]} />
+                <meshLambertMaterial color="#0a0a0a" />
+              </mesh>
+            </group>
           </group>
         ) : (
           /* ══════ REGULAR VISITOR: Cyber-Neon Character ══════ */
@@ -288,48 +332,51 @@ const OtherPlayerAvatar = ({ player, playersRef }) => {
               <meshLambertMaterial color="#1e293b" />
             </mesh>
 
-            {/* Left Arm Upper */}
-            <mesh position={[-0.33, 1.30, 0]}>
-              <boxGeometry args={[0.14, 0.35, 0.15]} />
-              <meshLambertMaterial color={avatarColor} />
-            </mesh>
-            {/* Left Hand */}
-            <mesh position={[-0.33, 1.08, 0]}>
-              <boxGeometry args={[0.12, 0.14, 0.13]} />
-              <meshLambertMaterial color="#f8fafc" />
-            </mesh>
-            {/* Right Arm Upper */}
-            <mesh position={[0.33, 1.30, 0]}>
-              <boxGeometry args={[0.14, 0.35, 0.15]} />
-              <meshLambertMaterial color={avatarColor} />
-            </mesh>
-            {/* Right Hand */}
-            <mesh position={[0.33, 1.08, 0]}>
-              <boxGeometry args={[0.12, 0.14, 0.13]} />
-              <meshLambertMaterial color="#f8fafc" />
-            </mesh>
+            {/* Left Arm Group (pivoting at shoulder Y=1.45) */}
+            <group ref={leftArmRef} position={[-0.33, 1.45, 0]}>
+              <mesh position={[0, -0.15, 0]}>
+                <boxGeometry args={[0.14, 0.35, 0.15]} />
+                <meshLambertMaterial color={avatarColor} />
+              </mesh>
+              <mesh position={[0, -0.37, 0]}>
+                <boxGeometry args={[0.12, 0.14, 0.13]} />
+                <meshLambertMaterial color="#f8fafc" />
+              </mesh>
+            </group>
+            {/* Right Arm Group (pivoting at shoulder Y=1.45) */}
+            <group ref={rightArmRef} position={[0.33, 1.45, 0]}>
+              <mesh position={[0, -0.15, 0]}>
+                <boxGeometry args={[0.14, 0.35, 0.15]} />
+                <meshLambertMaterial color={avatarColor} />
+              </mesh>
+              <mesh position={[0, -0.37, 0]}>
+                <boxGeometry args={[0.12, 0.14, 0.13]} />
+                <meshLambertMaterial color="#f8fafc" />
+              </mesh>
+            </group>
 
-            {/* Left Leg */}
-            <mesh position={[-0.12, 0.52, 0]}>
-              <boxGeometry args={[0.17, 0.75, 0.19]} />
-              <meshLambertMaterial color="#334155" />
-            </mesh>
-            {/* Right Leg */}
-            <mesh position={[0.12, 0.52, 0]}>
-              <boxGeometry args={[0.17, 0.75, 0.19]} />
-              <meshLambertMaterial color="#334155" />
-            </mesh>
-
-            {/* Left Shoe */}
-            <mesh position={[-0.12, 0.08, 0.04]}>
-              <boxGeometry args={[0.17, 0.16, 0.26]} />
-              <meshLambertMaterial color="#1e293b" />
-            </mesh>
-            {/* Right Shoe */}
-            <mesh position={[0.12, 0.08, 0.04]}>
-              <boxGeometry args={[0.17, 0.16, 0.26]} />
-              <meshLambertMaterial color="#1e293b" />
-            </mesh>
+            {/* Left Leg Group (pivoting at hip Y=0.90) */}
+            <group ref={leftLegRef} position={[-0.12, 0.90, 0]}>
+              <mesh position={[0, -0.38, 0]}>
+                <boxGeometry args={[0.17, 0.75, 0.19]} />
+                <meshLambertMaterial color="#334155" />
+              </mesh>
+              <mesh position={[0, -0.82, 0.04]}>
+                <boxGeometry args={[0.17, 0.16, 0.26]} />
+                <meshLambertMaterial color="#1e293b" />
+              </mesh>
+            </group>
+            {/* Right Leg Group (pivoting at hip Y=0.90) */}
+            <group ref={rightLegRef} position={[0.12, 0.90, 0]}>
+              <mesh position={[0, -0.38, 0]}>
+                <boxGeometry args={[0.17, 0.75, 0.19]} />
+                <meshLambertMaterial color="#334155" />
+              </mesh>
+              <mesh position={[0, -0.82, 0.04]}>
+                <boxGeometry args={[0.17, 0.16, 0.26]} />
+                <meshLambertMaterial color="#1e293b" />
+              </mesh>
+            </group>
           </group>
         )}
       </group>
