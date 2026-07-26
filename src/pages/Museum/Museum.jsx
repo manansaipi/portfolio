@@ -61,6 +61,8 @@ const Museum = () => {
     sendMovement,
     sendChat,
     updateProfile,
+    loadMoreMessages,
+    hasMoreMessages,
     ping,
     NEON_COLORS,
   } = useMultiplayer("default");
@@ -308,6 +310,8 @@ const Museum = () => {
         isConnected={isConnected}
         activePlayersList={activePlayersList}
         chatMessages={chatMessages}
+        loadMoreMessages={loadMoreMessages}
+        hasMoreMessages={hasMoreMessages}
         sendChat={sendChat}
         updateProfile={updateProfile}
         NEON_COLORS={NEON_COLORS}

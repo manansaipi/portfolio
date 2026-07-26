@@ -53,6 +53,8 @@ export const useMultiplayer = (roomId = "default") => {
 
   const [isConnected, setIsConnected] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
+  const [chatSkip, setChatSkip] = useState(0);
   const [ping, setPing] = useState(0);
   
   // React state for adding/removing player components in DOM when someone joins/leaves
@@ -173,11 +175,11 @@ export const useMultiplayer = (roomId = "default") => {
             syncPlayersState();
           }
         } else if (type === "player_chat") {
-          const { id: senderId, name: senderName, color: senderColor, isAdmin: senderIsAdmin, message } = data;
+          const { id: senderId, name: senderName, color: senderColor, isAdmin: senderIsAdmin, message, db_id } = data;
           
           // Add to global chat messages
-          setChatMessages((prev) => [...prev.slice(-49), {
-            id: Date.now() + "-" + Math.random(),
+          setChatMessages((prev) => [...prev, {
+            id: db_id || (Date.now() + "-" + Math.random()),
             senderId,
             senderName,
             senderColor,
@@ -214,6 +216,35 @@ export const useMultiplayer = (roomId = "default") => {
       ws.close();
     };
   }, [roomId, visitorId, visitorName, visitorColor, syncPlayersState]);
+
+  // Fetch initial chat history
+  useEffect(() => {
+    fetch(`/api/multiplayer/chat/${roomId}?skip=0&limit=50`)
+      .then(res => res.json())
+      .then(data => {
+        setChatMessages(data.messages || []);
+        setHasMoreMessages(data.hasMore || false);
+        setChatSkip(50);
+      })
+      .catch(err => console.error("Failed to fetch chat history", err));
+  }, [roomId]);
+
+  const loadMoreMessages = useCallback(async () => {
+    if (!hasMoreMessages) return;
+    try {
+      const res = await fetch(`/api/multiplayer/chat/${roomId}?skip=${chatSkip}&limit=50`);
+      const data = await res.json();
+      if (data.messages && data.messages.length > 0) {
+        setChatMessages(prev => [...data.messages, ...prev]);
+        setChatSkip(prev => prev + 50);
+        setHasMoreMessages(data.hasMore);
+      } else {
+        setHasMoreMessages(false);
+      }
+    } catch (err) {
+      console.error("Failed to load older messages", err);
+    }
+  }, [roomId, chatSkip, hasMoreMessages]);
 
   useEffect(() => {
     connect();
@@ -298,6 +329,8 @@ export const useMultiplayer = (roomId = "default") => {
     sendMovement,
     sendChat,
     updateProfile,
+    loadMoreMessages,
+    hasMoreMessages,
     ping,
     NEON_COLORS
   };

@@ -8,6 +8,8 @@ const MultiplayerChatModal = ({
   isConnected,
   activePlayersList = [],
   chatMessages = [],
+  loadMoreMessages,
+  hasMoreMessages,
   sendChat,
   updateProfile,
   NEON_COLORS = []
@@ -168,13 +170,34 @@ const MultiplayerChatModal = ({
           </div>
 
           {/* Body */}
-          {activeTab === 'chat' ? (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               {/* Messages List */}
-              <div style={{
-                flex: 1, padding: '12px 14px', overflowY: 'auto', display: 'flex',
-                flexDirection: 'column', gap: '10px'
-              }}>
+              <div 
+                id="museum-chat-container"
+                style={{
+                  flex: 1, padding: '12px 14px', overflowY: 'auto', display: 'flex',
+                  flexDirection: 'column', gap: '10px'
+                }}
+                onScroll={(e) => {
+                  const target = e.target;
+                  if (target.scrollTop === 0 && hasMoreMessages) {
+                    const oldScrollHeight = target.scrollHeight;
+                    loadMoreMessages().then(() => {
+                      // After React renders new messages prepended at top,
+                      // the scrollHeight will increase. We need to maintain the visual scroll position
+                      // by setting scrollTop to the difference in scrollHeight!
+                      setTimeout(() => {
+                        target.scrollTop = target.scrollHeight - oldScrollHeight;
+                      }, 10);
+                    });
+                  }
+                }}
+              >
+                {hasMoreMessages && (
+                  <div style={{ textAlign: 'center', padding: '10px', color: '#38bdf8', fontSize: '0.8rem' }}>
+                    Scrolling up to load older messages...
+                  </div>
+                )}
                 <div style={{
                   padding: '8px 12px', borderRadius: '8px', background: 'rgba(56, 189, 248, 0.1)',
                   border: '1px solid rgba(56, 189, 248, 0.2)', color: '#38bdf8', fontSize: '0.78rem',
