@@ -22,7 +22,7 @@ const App = () => {
     const isEmbed = new URLSearchParams(window.location.search).get('embed') === 'true';
     const [entranceAnimationDone, setEntranceAnimationDone] = useState(isEmbed);
     const [theme, setTheme] = useState("dark");
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(() => !!localStorage.getItem("admin_token"));
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     const location = useLocation();
