@@ -34,13 +34,13 @@ const HomeMuseumPortal = () => {
                         <div className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-widest text-white mb-4">
                             3D MUSEUM
                         </div>
-                        <div className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg">
-                            Step into a fully interactive multiplayer gallery experience.
+                        <div className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg text-center">
+                            Gallery of my photos, memories, and things I've captured.
                         </div>
                         
                         <div>
                             <PrimaryButton 
-                                label="ENTER PORTAL" 
+                                label="ENTER MUSEUM" 
                                 handleOnClick={handleEnterMuseum}
                             />
                         </div>
