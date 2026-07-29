@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { useAdminAuth } from "./hooks/useAdminAuth";
@@ -13,6 +13,7 @@ import Navbar from "@components/layout/Navbar/Navbar";
 import FloatingAdminButton from "@components/ui/FloatingAdminButton/FloatingAdminButton";
 import TerminalFloating from "@components/ui/Terminal/TerminalFloating";
 import { Helmet } from 'react-helmet-async';
+import { trackPageVisit } from "@services/analytics";
 const Home = React.lazy(() => import("@pages/Home/Home"));
 
 export const AppContext = React.createContext({});
@@ -37,6 +38,13 @@ const App = () => {
     useAutoScroll(isEmbed);
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
+
+    // Track page visits for non-admin users
+    useEffect(() => {
+        if (!isAdmin && !isEmbed) {
+            trackPageVisit(location.pathname, navigator.userAgent);
+        }
+    }, [location.pathname, isAdmin, isEmbed]);
 
     function handleButtonNavigation(href) {
         if (location.pathname != href) {
