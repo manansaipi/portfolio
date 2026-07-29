@@ -151,7 +151,7 @@ const Player = ({
         case 'KeyS': case 'ArrowDown': keys.current.s = true; break;
         case 'KeyD': case 'ArrowRight': keys.current.d = true; break;
         case 'Space': keys.current.space = true; break;
-        case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = true; break;
+        // case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = true; break;
         case 'KeyE':
           triggerInteraction();
           break;
