@@ -1,39 +1,29 @@
-import React, { useRef, useContext } from "react";
+import React from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
-import { AppContext } from "@/App";
-import { useNavigate } from "react-router";
-import { useLenis } from "lenis/react";
-import { handleImageNavigation } from "@utils/navigationImageAnimation";
+import { useHomeMuseumPortal } from "./useHomeMuseumPortal";
 
 import museumPc from "@/assets/img/museum/SS_MUSEUM_PC.png";
 import museumMobile from "@/assets/img/museum/SS_MUSEUM_MOBILE.png";
 
 const HomeMuseumPortal = () => {
-    const { navbarRef, preloaderRef } = useContext(AppContext);
-    const lenis = useLenis();
-    const navigate = useNavigate();
-    const imageRef = useRef(null);
-
-    const handleEnterMuseum = () => {
-        if (!imageRef.current) return;
-        handleImageNavigation("/museum", imageRef.current, navbarRef, preloaderRef, lenis, navigate);
-    };
+    const { imageRef, handleEnterMuseum } = useHomeMuseumPortal();
 
     return (
-        <div className="bg-light-dark text-primary py-10 md:py-20 px-5 md:px-10 lg:px-25 xl:px-30 transition-all">
+        <div data-name="view" className="bg-light-dark text-primary pt-10 md:pt-20 px-5 md:px-10 lg:px-25 xl:px-30 transition-all">
             <div 
-                className="relative w-full h-[50vh] md:h-[70vh] rounded-3xl overflow-hidden cursor-pointer group shadow-2xl"
+                className="relative w-full h-[80vh] md:h-[70vh] rounded-3xl overflow-hidden group shadow-2xl"
                 onClick={handleEnterMuseum}
             >
                 {/* The background image that expands */}
-                <img 
-                    ref={imageRef}
-                    src={museumPc}
-                    srcSet={`${museumMobile} 768w, ${museumPc} 1200w`}
-                    sizes="(max-width: 768px) 100vw, 100vw"
-                    alt="3D Virtual Museum"
-                    className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+                <picture>
+                    <source media="(max-width: 768px)" srcSet={museumMobile} />
+                    <img 
+                        ref={imageRef}
+                        src={museumPc}
+                        alt="3D Virtual Museum"
+                        className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                </picture>
 
                 {/* Dark overlay for text readability */}
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500"></div>
@@ -48,7 +38,7 @@ const HomeMuseumPortal = () => {
                             Step into a fully interactive multiplayer gallery experience.
                         </div>
                         
-                        <div className="pointer-events-auto">
+                        <div>
                             <PrimaryButton 
                                 label="ENTER PORTAL" 
                                 handleOnClick={handleEnterMuseum}

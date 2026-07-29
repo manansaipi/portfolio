@@ -38,7 +38,7 @@ const Museum = () => {
   const [guestbookEntries, setGuestbookEntries] = useState([]);
   const [selectedStudioSlot, setSelectedStudioSlot] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && (window.innerWidth <= 768 || 'ontouchstart' in window));
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window));
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
@@ -78,7 +78,7 @@ const Museum = () => {
   } = useMultiplayer("default");
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024 || 'ontouchstart' in window);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
