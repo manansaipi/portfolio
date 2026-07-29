@@ -3,6 +3,9 @@ import gsap from "gsap";
 import { AppContext } from "@/App";
 import { useNavigate } from "react-router";
 import { useLenis } from "lenis/react";
+import { textureCache } from "@pages/Museum/utils/TextureCache";
+import { getGalleryMedia } from "@services/gallery";
+import { resolveImg } from "@utils/imageUtils";
 
 export const useHomeMuseumPortal = () => {
     const { navbarRef, preloaderRef } = useContext(AppContext);
@@ -10,12 +13,41 @@ export const useHomeMuseumPortal = () => {
     const navigate = useNavigate();
     const imageRef = useRef(null);
 
+    const triggerHeavyPreload = async () => {
+        try {
+            // 1. Preload JS bundle
+            import("@pages/Museum/Museum.jsx").catch(() => {});
+            
+            // 2. Fetch the museum data
+            const data = await getGalleryMedia();
+            
+            // 3. Preload all textures into the browser cache
+            const urls = data
+                .filter(item => item.media_type === 'image')
+                .map(item => resolveImg(item.url))
+                .filter(Boolean);
+
+            if (urls.length > 0) {
+                textureCache.preloadAll(urls, () => {});
+            }
+        } catch (error) {
+            console.error("Background preloading failed", error);
+        }
+    };
+
     const handleEnterMuseum = () => {
         if (!imageRef.current) return;
         
-        const imageElement = imageRef.current;
+        // Start downloading models, textures, and API data instantly in the background!
+        triggerHeavyPreload();
+
+        if (lenis) {
+            lenis.stop();
+        }
         document.body.style.overflow = "hidden";
         document.body.setAttribute("data-lenis-prevent", "true");
+        
+        const imageElement = imageRef.current;
 
         const rect = imageElement.getBoundingClientRect();
 
@@ -90,8 +122,14 @@ export const useHomeMuseumPortal = () => {
         });
     };
 
+    const preloadMuseum = () => {
+        // Preload the heavy 3D Javascript bundle in the background
+        import("@pages/Museum/Museum.jsx").catch(() => {});
+    };
+
     return {
         imageRef,
-        handleEnterMuseum
+        handleEnterMuseum,
+        preloadMuseum
     };
 };

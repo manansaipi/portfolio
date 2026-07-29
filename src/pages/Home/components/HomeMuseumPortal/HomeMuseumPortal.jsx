@@ -6,13 +6,14 @@ import museumPc from "@/assets/img/museum/SS_MUSEUM_PC.png";
 import museumMobile from "@/assets/img/museum/SS_MUSEUM_MOBILE.png";
 
 const HomeMuseumPortal = () => {
-    const { imageRef, handleEnterMuseum } = useHomeMuseumPortal();
+    const { imageRef, handleEnterMuseum, preloadMuseum } = useHomeMuseumPortal();
 
     return (
         <div data-name="view" className="bg-light-dark text-primary pt-10 md:pt-20 px-5 md:px-10 lg:px-25 xl:px-30 transition-all">
             <div 
                 className="relative w-full h-[80vh] md:h-[70vh] rounded-3xl overflow-hidden group shadow-2xl"
                 onClick={handleEnterMuseum}
+                onMouseEnter={preloadMuseum}
             >
                 {/* The background image that expands */}
                 <picture>
