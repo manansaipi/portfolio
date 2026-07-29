@@ -39,9 +39,10 @@ const App = () => {
 
     const isHome = location.pathname === "/" || location.pathname === "/home";
 
-    // Track page visits for non-admin users
+    // Track page visits for non-admin users (ignore localhost/embed)
     useEffect(() => {
-        if (!isAdmin && !isEmbed) {
+        const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        if (!isAdmin && !isEmbed && !isLocalhost) {
             trackPageVisit(location.pathname, navigator.userAgent);
         }
     }, [location.pathname, isAdmin, isEmbed]);
