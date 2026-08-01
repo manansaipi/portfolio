@@ -25,11 +25,33 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     const lookEast = dirX > 0.25;
     const lookWest = dirX < -0.25;
 
-    // A hall is visible if you are inside it OR if you are looking in its direction
-    if (northRef.current) northRef.current.visible = inNorth || lookNorth;
-    if (southRef.current) southRef.current.visible = inSouth || lookSouth;
-    if (eastRef.current) eastRef.current.visible = inEast || lookEast;
-    if (westRef.current) westRef.current.visible = inWest || lookWest;
+    // Portal Culling Logic: If you are inside a hall, you can't see the adjacent halls through the walls!
+    if (inLobby) {
+      if (northRef.current) northRef.current.visible = lookNorth;
+      if (southRef.current) southRef.current.visible = lookSouth;
+      if (eastRef.current) eastRef.current.visible = lookEast;
+      if (westRef.current) westRef.current.visible = lookWest;
+    } else if (inNorth) {
+      if (northRef.current) northRef.current.visible = true;
+      if (southRef.current) southRef.current.visible = lookSouth; // Only visible if looking back at the lobby
+      if (eastRef.current) eastRef.current.visible = false;       // Blocked by corridor wall
+      if (westRef.current) westRef.current.visible = false;       // Blocked by corridor wall
+    } else if (inSouth) {
+      if (northRef.current) northRef.current.visible = lookNorth;
+      if (southRef.current) southRef.current.visible = true;
+      if (eastRef.current) eastRef.current.visible = false;
+      if (westRef.current) westRef.current.visible = false;
+    } else if (inEast) {
+      if (northRef.current) northRef.current.visible = false;
+      if (southRef.current) southRef.current.visible = false;
+      if (eastRef.current) eastRef.current.visible = true;
+      if (westRef.current) westRef.current.visible = lookWest;
+    } else if (inWest) {
+      if (northRef.current) northRef.current.visible = false;
+      if (southRef.current) southRef.current.visible = false;
+      if (eastRef.current) eastRef.current.visible = lookEast;
+      if (westRef.current) westRef.current.visible = true;
+    }
     
     if (lobbyRef.current) {
       lobbyRef.current.visible = true;
