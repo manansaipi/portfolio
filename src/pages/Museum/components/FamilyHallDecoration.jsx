@@ -50,7 +50,7 @@ const FamilyHallDecoration = () => (
       {/* Screen Display Glass */}
       <mesh position={[0, 1.15, 0.08]} rotation={[-0.45, 0, 0]}>
         <planeGeometry args={[0.62, 0.42]} />
-        <meshBasicMaterial color="#38bdf8" />
+        <meshBasicMaterial color="#bfdbfe" side={THREE.DoubleSide} />
       </mesh>
     </group>
 
