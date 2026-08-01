@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {} }) => {
+const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, heldMedia = null }) => {
   const [fps, setFps] = useState(60);
   const [showControls, setShowControls] = useState(true);
   const [activeEmote, setActiveEmote] = useState(null);
@@ -170,6 +170,31 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {} }) 
         )}
       </div>
 
+      {/* ── Held Media Thumbnail (Minecraft-style Grab) ── */}
+      {heldMedia && (
+        <div style={{
+          position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'
+        }}>
+          <div style={{
+            background: 'rgba(10, 10, 12, 0.9)', border: '2px solid #3b82f6',
+            padding: '8px', borderRadius: '8px',
+            boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)'
+          }}>
+            <img 
+              src={heldMedia.url} 
+              alt="Held Artwork" 
+              style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} 
+            />
+          </div>
+          <div style={{
+            background: 'rgba(10, 10, 12, 0.85)', padding: '4px 10px',
+            borderRadius: '4px', color: '#fff', fontSize: '0.75rem', fontWeight: 600
+          }}>
+            Holding: {heldMedia.title || "Artwork"} [F to Place]
+          </div>
+        </div>
+      )}
     </div>
   );
 };

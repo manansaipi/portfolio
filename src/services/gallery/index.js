@@ -1,7 +1,7 @@
 import api from "../api";
 
-export const getGalleryMedia = async () => {
-    const res = await api.get("/api/gallery/");
+export const getGalleryMedia = async (includeHidden = false) => {
+    const res = await api.get(`/api/gallery/?include_hidden=${includeHidden}`);
     return res.data;
 };
 

@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Preload, PerformanceMonitor } from '@react-three/drei';
 import { Helmet } from 'react-helmet-async';
-import { Image as AntdImage } from 'antd';
+import { Image as AntdImage, message } from 'antd';
 import ErrorBoundary3D from './components/ErrorBoundary3D';
 import GalleryRoom from './components/GalleryRoom';
 import LobbyDecoration from './components/LobbyDecoration';
 import MuseumLighting from './components/MuseumLighting';
 import ArtPiece from './components/ArtPiece';
+import EmptyWallSlot from './components/EmptyWallSlot';
 import VideoPiece from './components/VideoPiece';
 import BotAssistantNPC from './components/BotAssistantNPC';
 import BotAssistantModal from './components/BotAssistantModal';
@@ -23,7 +24,7 @@ import MobileTouchControls from './components/MobileTouchControls';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
-import { getGalleryMedia, getGalleryCategories } from '@services/gallery';
+import { getGalleryMedia, getGalleryCategories, updateGalleryMedia } from '@services/gallery';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
 import { useMultiplayer } from './hooks/useMultiplayer';
 import OtherPlayersList from './components/OtherPlayersList';
@@ -39,6 +40,8 @@ const Museum = () => {
   const [guestbookEntries, setGuestbookEntries] = useState([]);
   const [selectedStudioSlot, setSelectedStudioSlot] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const [heldMedia, setHeldMedia] = useState(null); // The media currently being "carried" by the admin
+
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window));
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
@@ -55,6 +58,9 @@ const Museum = () => {
   const [mobileCrouched, setMobileCrouched] = useState(false);
   const [interactType, setInteractType] = useState(null);
   const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
+  
+  // Track hovered empty slot or art piece for admin placement
+  const [hoveredPlacementTarget, setHoveredPlacementTarget] = useState(null);
   const [activeEmote, setActiveEmote] = useState(null);
   const playerPosRef = useRef({ x: 0, z: 0, yaw: 0 });
 
@@ -136,7 +142,18 @@ const Museum = () => {
       isMounted = false;
       textureCache.dispose();
     };
-  }, [isMobile]);
+  }, [isMobile]); // Initial load
+
+  // Refetch to include hidden items if user is an admin
+  useEffect(() => {
+    let isMounted = true;
+    if (isAdmin && loadingState === 'ready') {
+      getGalleryMedia(true).then(data => {
+        if (isMounted) setMediaItems(data);
+      }).catch(err => console.error('Failed to refetch hidden items:', err));
+    }
+    return () => { isMounted = false; };
+  }, [isAdmin, loadingState]);
 
   // Handle Escape key & cursor visibility during image/AI focus
   useEffect(() => {
@@ -147,41 +164,137 @@ const Museum = () => {
       document.body.style.cursor = 'default';
     }
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = async (e) => {
+      // Check if user is typing in an input field (like chat)
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName) || document.activeElement?.isContentEditable) {
+        return;
+      }
+      
+      if ((e.key === 'q' || e.key === 'Q') && isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia) {
+        setSelectedMedia(hoveredMedia || selectedMedia);
+        setIsEditingMedia(true);
+      }
+      if (e.code === 'KeyF' && isAdmin) {
+        // Minecraft placement logic
+        if (heldMedia) {
+          // PLACE or SWAP
+          if (hoveredPlacementTarget) {
+
+            const { media: targetMedia, isEmptySlot, slotIndex, category } = hoveredPlacementTarget;
+            
+            // Optimistically update frontend
+            let updatedItems = [...mediaItems];
+            let heldItemIndex = updatedItems.findIndex(m => m.id === heldMedia.id);
+            
+            const hideLoading = message.loading("Saving placement...", 0);
+            
+            try {
+              if (isEmptySlot) {
+                  // Moving to an empty slot
+                  updatedItems[heldItemIndex] = { ...heldMedia, category, order: slotIndex };
+                  await updateGalleryMedia(heldMedia.id, { category, order: slotIndex });
+              } else if (targetMedia && targetMedia.id !== heldMedia.id) {
+                  // SWAP with another artwork
+                  let targetItemIndex = updatedItems.findIndex(m => m.id === targetMedia.id);
+                  
+                  const heldOrder = heldMedia.slotIndex !== undefined ? heldMedia.slotIndex : heldItemIndex;
+                  const heldCat = heldMedia.category || 'nature-hall';
+                  
+                  const targetOrder = targetMedia.slotIndex !== undefined ? targetMedia.slotIndex : targetItemIndex;
+                  const targetCat = targetMedia.category || 'nature-hall';
+                  
+                  // Swap their values
+                  updatedItems[heldItemIndex] = { ...heldMedia, category: targetCat, order: targetOrder };
+                  updatedItems[targetItemIndex] = { ...targetMedia, category: heldCat, order: heldOrder };
+                  
+                  // Call reorder API
+                  await updateGalleryMedia(heldMedia.id, { category: targetCat, order: targetOrder });
+                  await updateGalleryMedia(targetMedia.id, { category: heldCat, order: heldOrder });
+              }
+              
+              setMediaItems(updatedItems);
+              setHeldMedia(null);
+              message.success("Artwork placed!");
+            } catch (err) {
+              console.error(err);
+              message.error("Failed to save placement.");
+            } finally {
+              hideLoading();
+            }
+          }
+        } else {
+          // GRAB
+          if (hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot && hoveredPlacementTarget.media) {
+
+            setHeldMedia(hoveredPlacementTarget.media);
+            message.info("Artwork grabbed! Press F on a wall to place.");
+          }
+        }
+      }
+      
       if (e.key === 'Escape') {
         if (selectedMedia) setSelectedMedia(null);
         if (selectedStudioSlot) setSelectedStudioSlot(null);
         if (isAiChatOpen) setIsAiChatOpen(false);
       }
-      if ((e.key === 'q' || e.key === 'Q') && isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia) {
-        setSelectedMedia(hoveredMedia || selectedMedia);
-        setIsEditingMedia(true);
-      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedMedia, hoveredMedia, selectedStudioSlot, isAiChatOpen, isAdmin, isEditingMedia]);
+  }, [selectedMedia, hoveredMedia, selectedStudioSlot, isAiChatOpen, isAdmin, isEditingMedia, heldMedia, hoveredPlacementTarget]);
 
   // Map uploaded artworks to wall slots in the 4 exhibition halls
-  const placedArtworks = useMemo(() => {
+  const { placedArtworks, emptySlots } = useMemo(() => {
     const placed = [];
-    const usedCounts = {};
-    Object.keys(HALL_CONFIG).forEach(k => { usedCounts[k] = 0; });
-
+    const slots = [];
+    
+    const categorizedMedia = {};
+    Object.keys(HALL_CONFIG).forEach(k => { categorizedMedia[k] = []; });
+    
     mediaItems.forEach((media) => {
-      const category = media.category?.toLowerCase() || 'nature';
-      const config = HALL_CONFIG[category] || HALL_CONFIG.nature;
-      const catKey = config.slug;
+      const category = media.category?.toLowerCase() || 'nature-hall';
+      const catKey = HALL_CONFIG[category] ? category : 'nature-hall';
+      categorizedMedia[catKey].push(media);
+    });
 
-      if (config.walls && usedCounts[catKey] < config.walls.length) {
-        const wall = config.walls[usedCounts[catKey]];
-        placed.push({ ...media, pos: wall.position, rot: wall.rotation });
-        usedCounts[catKey]++;
+    Object.keys(HALL_CONFIG).forEach(catKey => {
+      const config = HALL_CONFIG[catKey];
+      if (!config.walls) return;
+      
+      const wallsLength = config.walls.length;
+      const occupiedIndices = new Set();
+      
+      // First pass: Place items with valid order
+      categorizedMedia[catKey].forEach(media => {
+        const order = media.order;
+        if (order !== undefined && order !== null && order >= 0 && order < wallsLength && !occupiedIndices.has(order)) {
+          occupiedIndices.add(order);
+          placed.push({ ...media, pos: config.walls[order].position, rot: config.walls[order].rotation, slotIndex: order, category: catKey });
+        }
+      });
+      
+      // Second pass: Place remaining items in first available empty slots
+      const unplaced = categorizedMedia[catKey].filter(media => {
+        const order = media.order;
+        return !(order !== undefined && order !== null && order >= 0 && order < wallsLength && occupiedIndices.has(order) && placed.find(p => p.id === media.id && p.slotIndex === order));
+      });
+      
+      let unplacedIdx = 0;
+      for (let i = 0; i < wallsLength; i++) {
+        if (!occupiedIndices.has(i)) {
+          if (unplacedIdx < unplaced.length) {
+            const media = unplaced[unplacedIdx];
+            placed.push({ ...media, pos: config.walls[i].position, rot: config.walls[i].rotation, slotIndex: i, category: catKey });
+            occupiedIndices.add(i);
+            unplacedIdx++;
+          } else if (isAdmin) {
+            slots.push({ category: catKey, slotIndex: i, pos: config.walls[i].position, rot: config.walls[i].rotation });
+          }
+        }
       }
     });
 
-    return placed;
-  }, [mediaItems]);
+    return { placedArtworks: placed, emptySlots: slots };
+  }, [mediaItems, isAdmin]);
 
   const navigateTo = (slug) => {
     if (slug === 'signature') {
@@ -274,6 +387,8 @@ const Museum = () => {
                     onClick={(m) => {
                       setSelectedMedia(m);
                     }}
+                    onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })}
+                    onUnhover={() => setHoveredPlacementTarget(null)}
                   />
                 ) : (
                   <ArtPiece
@@ -284,8 +399,14 @@ const Museum = () => {
                     onClick={(m) => {
                       setSelectedMedia(m);
                     }}
-                    onHover={(m) => setHoveredMedia(m)}
-                    onUnhover={() => setHoveredMedia(null)}
+                    onHover={(m) => {
+                      setHoveredMedia(m);
+                      setHoveredPlacementTarget({ media: m, isEmptySlot: false });
+                    }}
+                    onUnhover={() => {
+                      setHoveredMedia(null);
+                      setHoveredPlacementTarget(null);
+                    }}
                   />
                 )
               ))}
@@ -323,6 +444,17 @@ const Museum = () => {
                 isAdmin={isAdmin}
               />
             )}
+            {emptySlots.map((slot, index) => (
+              <EmptyWallSlot
+                key={`empty-${slot.category}-${index}`}
+                position={slot.pos}
+                rotation={slot.rot}
+                slotIndex={slot.slotIndex}
+                category={slot.category}
+                onHover={setHoveredPlacementTarget}
+                onUnhover={() => setHoveredPlacementTarget(null)}
+              />
+            ))}
             <Preload all />
           </Suspense>
         </Canvas>
@@ -342,6 +474,7 @@ const Museum = () => {
         isLookingAtNPC={isLookingAtNPC}
         onOpenAIChat={() => setIsAiChatOpen(true)}
         ping={ping}
+        heldMedia={heldMedia}
         onEmote={(emoteId) => {
           setActiveEmote(emoteId);
           sendEmote(emoteId, emoteId === 'dance' ? 10 : 3.5);

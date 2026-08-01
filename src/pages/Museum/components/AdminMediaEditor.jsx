@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Select, Button, message, Popconfirm, ConfigProvider, theme } from 'antd';
+import { Modal, Form, Input, Select, Button, message, Popconfirm, ConfigProvider, theme, Switch } from 'antd';
 import { updateGalleryMedia, deleteGalleryMedia } from '@services/gallery';
 
 const { TextArea } = Input;
@@ -15,7 +15,8 @@ const AdminMediaEditor = ({ isOpen, onClose, media, categories, onMediaUpdated, 
       form.setFieldsValue({
         title: media.title || '',
         caption: media.caption || '',
-        category: media.category || 'nature',
+        category: media.category || 'nature-hall',
+        is_visible: media.is_visible !== false, // default true
       });
     }
   }, [media, isOpen, form]);
@@ -28,6 +29,7 @@ const AdminMediaEditor = ({ isOpen, onClose, media, categories, onMediaUpdated, 
         title: values.title,
         caption: values.caption,
         category: values.category,
+        is_visible: values.is_visible,
       });
       message.success('Artwork updated successfully!');
       if (onMediaUpdated) onMediaUpdated(updatedMedia);
@@ -63,7 +65,7 @@ const AdminMediaEditor = ({ isOpen, onClose, media, categories, onMediaUpdated, 
         open={isOpen}
         onCancel={onClose}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         style={{ top: 20 }}
       >
         <Form
@@ -94,10 +96,18 @@ const AdminMediaEditor = ({ isOpen, onClose, media, categories, onMediaUpdated, 
           <Select style={{ width: '100%' }}>
             {categories.map((cat) => (
               <Option key={cat.slug} value={cat.slug}>
-                {cat.name}
+                {cat.label || cat.name}
               </Option>
             ))}
           </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="is_visible"
+          label="Visibility"
+          valuePropName="checked"
+        >
+          <Switch checkedChildren="Visible" unCheckedChildren="Hidden (Soft Delete)" />
         </Form.Item>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #27272a' }}>

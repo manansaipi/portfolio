@@ -49,6 +49,8 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
     }
   }
 
+  const isHidden = media.is_visible === false;
+
   return (
     <group position={position} rotation={rotation}>
       {/* Spotlight Focused on Art Piece */}
@@ -153,6 +155,19 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
               </Text>
             )}
           </group>
+        )}
+
+        {/* Hidden Badge for Admins */}
+        {isHidden && (
+          <Text
+            position={[0, frameH / 2 + 0.5, 0.05]}
+            fontSize={0.25}
+            color="#ef4444"
+            anchorX="center"
+            anchorY="middle"
+          >
+            [ HIDDEN ]
+          </Text>
         )}
       </group>
     </group>

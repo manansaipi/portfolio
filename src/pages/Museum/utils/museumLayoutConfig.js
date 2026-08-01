@@ -18,9 +18,9 @@ export const WALKABLE_ZONES = [
 ];
 
 export const HALL_CONFIG = {
-  nature: {
+  'nature-hall': {
     title: 'Nature Hall',
-    slug: 'nature',
+    slug: 'nature-hall',
     center: [0, 3.8, -77],
     floorColor: '#252e25',
     wallColor: '#2d3b2d',
@@ -49,9 +49,9 @@ export const HALL_CONFIG = {
     ]
   },
 
-  street: {
+  'professional-hall': {
     title: 'Street Hall',
-    slug: 'street',
+    slug: 'professional-hall',
     center: [-77, 3.8, 0],
     floorColor: '#1c1c1e',
     wallColor: '#2b2b2e',
@@ -80,9 +80,9 @@ export const HALL_CONFIG = {
     ]
   },
 
-  travel: {
+  'adventure-hall': {
     title: 'Travel Hall',
-    slug: 'travel',
+    slug: 'adventure-hall',
     center: [77, 3.8, 0],
     floorColor: '#2b231d',
     wallColor: '#3d3229',
@@ -111,9 +111,9 @@ export const HALL_CONFIG = {
     ]
   },
 
-  portrait: {
+  'family-hall': {
     title: 'Portrait Hall',
-    slug: 'portrait',
+    slug: 'family-hall',
     center: [0, 3.8, 77],
     floorColor: '#1d222b',
     wallColor: '#232b38',
