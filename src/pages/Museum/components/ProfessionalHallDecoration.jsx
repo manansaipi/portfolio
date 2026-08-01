@@ -1,4 +1,5 @@
 import React from 'react';
+import * as THREE from 'three';
 
 // 💼 Professional Hall Decorations — West Wing (X: -30 to -125, Hall center: [-77, 0, 0])
 
@@ -60,7 +61,7 @@ const ProfessionalHallDecoration = () => (
       {/* Floor Inlay Medallion */}
       <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.5, 3.2, 32]} />
-        <meshBasicMaterial color="#fde047" opacity={0.35} transparent />
+        <meshBasicMaterial color="#fde047" side={THREE.DoubleSide} />
       </mesh>
 
       {/* Tall slim pedestal */}

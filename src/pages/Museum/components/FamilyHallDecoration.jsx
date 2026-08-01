@@ -1,4 +1,5 @@
 import React from 'react';
+import * as THREE from 'three';
 
 // 👨‍👩‍👧 Family Hall Decorations — South Wing (Hall center: [0, 0, 77])
 
@@ -60,7 +61,7 @@ const FamilyHallDecoration = () => (
       {/* Floor Inlay Medallion */}
       <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.5, 3.2, 32]} />
-        <meshBasicMaterial color="#bfdbfe" opacity={0.4} transparent />
+        <meshBasicMaterial color="#bfdbfe" side={THREE.DoubleSide} />
       </mesh>
 
       {/* Sleek Minimalist Gallery Bench */}

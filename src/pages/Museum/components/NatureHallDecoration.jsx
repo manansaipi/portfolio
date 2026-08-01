@@ -1,4 +1,5 @@
 import React from 'react';
+import * as THREE from 'three';
 
 // 🌿 Nature Hall Decorations — North Wing (Z: -30 to -125, Hall center: [0, 0, -77])
 
@@ -60,7 +61,7 @@ const NatureHallDecoration = () => (
       {/* Floor Inlay Medallion */}
       <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[2.5, 3.2, 32]} />
-        <meshBasicMaterial color="#86efac" opacity={0.35} transparent />
+        <meshBasicMaterial color="#86efac" side={THREE.DoubleSide} />
       </mesh>
 
       {/* Root base mound */}
@@ -254,7 +255,7 @@ const NatureHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🕯️ 4. CEILING PENDANT SPOTLIGHTS                                 */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    {[-50, -70, -90, -110].map((pz) => (
+    {[-42, -66, -90, -110].map((pz) => (
       <group key={`pendant-light-${pz}`} position={[0, 8.8, pz]}>
         <mesh position={[0, 0.6, 0]}>
           <cylinderGeometry args={[0.012, 0.012, 1.2, 8]} />
@@ -266,7 +267,7 @@ const NatureHallDecoration = () => (
         </mesh>
         <mesh position={[0, -0.18, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <ringGeometry args={[0.02, 0.2, 16]} />
-          <meshBasicMaterial color="#86efac" />
+          <meshBasicMaterial color="#86efac" side={THREE.DoubleSide} />
         </mesh>
       </group>
     ))}
