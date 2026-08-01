@@ -292,31 +292,31 @@ const GalleryRoom = ({ categories = [] }) => {
         {/* Outer Side Walls */}
         <mesh position={[-15, 5, -77]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[100, 10, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
         <mesh position={[15, 5, -77]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[100, 10, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
 
         {/* Back Wall */}
         <mesh position={[0, 5, -127]}>
           <boxGeometry args={[30, 10, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
 
         {/* 🧱 Front Entrance Walls of Nature Hall at Z = -27 (Encloses left & right when looking back!) */}
         <mesh position={[-9.5, 5, -27]}>
           <boxGeometry args={[11, 10, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
         <mesh position={[9.5, 5, -27]}>
           <boxGeometry args={[11, 10, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
         <mesh position={[0, 8.5, -27]}>
           <boxGeometry args={[8, 3, 0.8]} />
-          <meshLambertMaterial color="#e8f5e9" />
+          <meshLambertMaterial color="#4a604a" />
         </mesh>
 
         <Text position={[0, 8.2, -27.2]} fontSize={0.65} color={getMeta('nature').bannerColor} anchorX="center">
@@ -487,31 +487,31 @@ const GalleryRoom = ({ categories = [] }) => {
         {/* Outer Side Walls */}
         <mesh position={[-15, 5, 77]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[100, 10, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
         <mesh position={[15, 5, 77]} rotation={[0, -Math.PI / 2, 0]}>
           <boxGeometry args={[100, 10, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
 
         {/* Back Wall */}
         <mesh position={[0, 5, 127]}>
           <boxGeometry args={[30, 10, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
 
         {/* 🧱 Front Entrance Walls of Portrait Hall at Z = 27 (Encloses left & right when looking back!) */}
         <mesh position={[-9.5, 5, 27]}>
           <boxGeometry args={[11, 10, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
         <mesh position={[9.5, 5, 27]}>
           <boxGeometry args={[11, 10, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
         <mesh position={[0, 8.5, 27]}>
           <boxGeometry args={[8, 3, 0.8]} />
-          <meshLambertMaterial color="#e3f2fd" />
+          <meshLambertMaterial color="#4b5e78" />
         </mesh>
 
         <Text position={[0, 8.2, 27.2]} rotation={[0, Math.PI, 0]} fontSize={0.65} color={getMeta('portrait').bannerColor} anchorX="center">

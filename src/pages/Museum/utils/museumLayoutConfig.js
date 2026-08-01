@@ -23,7 +23,7 @@ export const HALL_CONFIG = {
     slug: 'nature-hall',
     center: [0, 3.8, -77],
     floorColor: '#252e25',
-    wallColor: '#e8f5e9',
+    wallColor: '#4a604a',
     walls: [
       { position: [-14.55, 4.2, -35], rotation: [0, Math.PI / 2, 0] },
       { position: [-14.55, 4.2, -45], rotation: [0, Math.PI / 2, 0] },
@@ -116,7 +116,7 @@ export const HALL_CONFIG = {
     slug: 'family-hall',
     center: [0, 3.8, 77],
     floorColor: '#1d222b',
-    wallColor: '#e3f2fd',
+    wallColor: '#4b5e78',
     walls: [
       { position: [-14.55, 4.2, 35], rotation: [0, Math.PI / 2, 0] },
       { position: [-14.55, 4.2, 45], rotation: [0, Math.PI / 2, 0] },
