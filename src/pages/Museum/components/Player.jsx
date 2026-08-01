@@ -234,18 +234,7 @@ const Player = ({
     }
   }, [teleportTarget, camera]);
 
-  const frameCount = useRef(0);
-
   useFrame((state, delta) => {
-    // 🚀 Pre-compile Hack: Spin the camera 360 degrees rapidly during the first 60 frames (1 second)
-    // while the loading screen is up! This forces ALL halls to enter the view frustum,
-    // which guarantees that Three.js uploads their geometries and textures to the GPU VRAM.
-    // This perfectly eliminates the stutter when the user turns around later!
-    if (frameCount.current < 60) {
-      camera.rotation.y += (Math.PI * 2) / 60; // 360 degrees over 60 frames
-      frameCount.current++;
-    }
-
     if (disableMovement) {
       velocity.current.set(0, 0, 0);
       return;

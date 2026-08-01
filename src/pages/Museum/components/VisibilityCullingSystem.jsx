@@ -1,22 +1,37 @@
 import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 
+const WARMUP_FRAMES = 90; // ~1.5 seconds at 60fps — enough for GPU to compile all shaders & upload textures
+
 const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef }) => {
   const { gl } = useThree();
   const lastLogRef = useRef(0);
-  const frameCount = useRef(0);
+  const frameCountRef = useRef(0);
+  const warmupDoneRef = useRef(false);
 
   useFrame(() => {
-    // 🚀 Wait 60 frames (~1 second) before starting occlusion culling.
-    // This forces ALL halls to be visible during the loading screen, 
-    // ensuring Three.js Preload compiles shaders and uploads VRAM for everything!
-    // This completely eliminates the stutter when turning the camera for the first time.
-    if (frameCount.current < 60) {
-      frameCount.current++;
+    if (!playerPosRef.current) return;
+
+    // ── GPU WARM-UP PHASE ──
+    // Keep ALL halls visible for the first ~1.5 seconds so the GPU compiles
+    // every shader and uploads every texture. After warm-up, culling kicks in
+    // and toggling visibility is instant with zero frame drops.
+    if (!warmupDoneRef.current) {
+      frameCountRef.current++;
+      if (northRef.current) northRef.current.visible = true;
+      if (southRef.current) southRef.current.visible = true;
+      if (eastRef.current) eastRef.current.visible = true;
+      if (westRef.current) westRef.current.visible = true;
+      if (lobbyRef.current) lobbyRef.current.visible = true;
+
+      if (frameCountRef.current >= WARMUP_FRAMES) {
+        warmupDoneRef.current = true;
+        console.log('%c🔥 GPU Warm-up Complete! All shaders compiled. Portal Culling now active.', 'color: #facc15; font-weight: bold; font-size: 14px;');
+      }
       return;
     }
 
-    if (!playerPosRef.current) return;
+    // ── PORTAL CULLING (post warm-up) ──
     const { x, z, yaw } = playerPosRef.current;
 
     // Define Hall Boundaries
@@ -24,7 +39,6 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     const inSouth = z > 15;
     const inEast = x > 15;
     const inWest = x < -15;
-    const inLobby = !inNorth && !inSouth && !inEast && !inWest;
 
     const dirX = Math.sin(yaw);
     const dirZ = Math.cos(yaw);
@@ -36,16 +50,11 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     const lookWest = dirX < -0.25;
 
     // Portal Culling Logic: If you are inside a hall, you can't see the adjacent halls through the walls!
-    if (inLobby) {
-      if (northRef.current) northRef.current.visible = lookNorth;
-      if (southRef.current) southRef.current.visible = lookSouth;
-      if (eastRef.current) eastRef.current.visible = lookEast;
-      if (westRef.current) westRef.current.visible = lookWest;
-    } else if (inNorth) {
+    if (inNorth) {
       if (northRef.current) northRef.current.visible = true;
-      if (southRef.current) southRef.current.visible = lookSouth; // Only visible if looking back at the lobby
-      if (eastRef.current) eastRef.current.visible = false;       // Blocked by corridor wall
-      if (westRef.current) westRef.current.visible = false;       // Blocked by corridor wall
+      if (southRef.current) southRef.current.visible = lookSouth;
+      if (eastRef.current) eastRef.current.visible = false;
+      if (westRef.current) westRef.current.visible = false;
     } else if (inSouth) {
       if (northRef.current) northRef.current.visible = lookNorth;
       if (southRef.current) southRef.current.visible = true;
@@ -61,6 +70,12 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
       if (southRef.current) southRef.current.visible = false;
       if (eastRef.current) eastRef.current.visible = lookEast;
       if (westRef.current) westRef.current.visible = true;
+    } else {
+      // Lobby — only show halls you're looking at
+      if (northRef.current) northRef.current.visible = lookNorth;
+      if (southRef.current) southRef.current.visible = lookSouth;
+      if (eastRef.current) eastRef.current.visible = lookEast;
+      if (westRef.current) westRef.current.visible = lookWest;
     }
     
     if (lobbyRef.current) {
