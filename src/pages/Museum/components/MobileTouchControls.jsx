@@ -5,10 +5,17 @@ const MobileTouchControls = ({
   onLook,
   onInteract,
   onJump,
-  onCrouchToggle,
-  isCrouched = false,
   isInteractive = false,
   interactType = null,
+  isAdmin = false,
+  hoveredPlacementTarget = null,
+  heldMedia = null,
+  isEditingMedia = false,
+  hoveredMedia = null,
+  selectedMedia = null,
+  onAdminEdit,
+  onAdminGrabPlace,
+  onAdminUpload,
 }) => {
   const joystickBaseRef = useRef(null);
   const [joystickActive, setJoystickActive] = useState(false);
@@ -175,43 +182,6 @@ const MobileTouchControls = ({
         pointerEvents: 'none',
         zIndex: 30,
       }}>
-        {/* Crouch Button (Bottom-Left) */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (Date.now() - lastButtonTouchTimeRef.current < 500) return;
-            if (onCrouchToggle) onCrouchToggle();
-          }}
-          onTouchStart={(e) => {
-            e.stopPropagation();
-            lastButtonTouchTimeRef.current = Date.now();
-            if (onCrouchToggle) onCrouchToggle();
-          }}
-          style={{
-            position: 'absolute',
-            bottom: '10px',
-            right: '122px',
-            width: '58px',
-            height: '58px',
-            borderRadius: '50%',
-            background: isCrouched ? 'rgba(59, 130, 246, 0.85)' : 'rgba(15, 15, 20, 0.85)',
-            border: isCrouched ? '1.5px solid #60a5fa' : '1.5px solid rgba(255, 255, 255, 0.25)',
-            color: '#ffffff',
-            fontSize: '0.72rem',
-            fontWeight: 800,
-            backdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            touchAction: 'manipulation',
-            pointerEvents: 'auto',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-          }}
-        >
-          CROUCH
-        </button>
-
         {/* Jump Button (Bottom-Right) */}
         <button
           onClick={(e) => {
@@ -249,7 +219,64 @@ const MobileTouchControls = ({
           JUMP
         </button>
 
-        {/* Action Button (Centered above Crouch and Jump) */}
+        {/* --- ADMIN MOBILE BUTTONS --- */}
+        {isAdmin && hoveredPlacementTarget?.isEmptySlot && !heldMedia && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdminUpload && onAdminUpload(); }}
+            onTouchStart={(e) => { e.stopPropagation(); onAdminUpload && onAdminUpload(); }}
+            style={{
+              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              background: 'rgba(59, 130, 246, 0.85)', border: '1.5px solid #60a5fa', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
+            }}
+          >
+            UPLOAD
+          </button>
+        )}
+
+        {isAdmin && heldMedia && hoveredPlacementTarget && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            style={{
+              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              background: 'rgba(34, 197, 94, 0.85)', border: '1.5px solid #4ade80', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
+            }}
+          >
+            PLACE
+          </button>
+        )}
+
+        {isAdmin && !heldMedia && hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            style={{
+              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              background: 'rgba(249, 115, 22, 0.85)', border: '1.5px solid #fb923c', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
+            }}
+          >
+            GRAB
+          </button>
+        )}
+
+        {isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdminEdit && onAdminEdit(); }}
+            onTouchStart={(e) => { e.stopPropagation(); onAdminEdit && onAdminEdit(); }}
+            style={{
+              position: 'absolute', bottom: '80px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              background: 'rgba(168, 85, 247, 0.85)', border: '1.5px solid #c084fc', color: '#fff', fontSize: '0.72rem', fontWeight: 800,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
+            }}
+          >
+            EDIT
+          </button>
+        )}
+
+        {/* Action Button (Centered above Jump) */}
         <button
           onClick={(e) => {
             e.stopPropagation();

@@ -24,7 +24,8 @@ import MobileTouchControls from './components/MobileTouchControls';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
 import { resolveImg } from '@utils/imageUtils';
-import { getGalleryMedia, getGalleryCategories, updateGalleryMedia } from '@services/gallery';
+import { getGalleryMedia, getGalleryCategories, updateGalleryMedia, createGalleryMedia } from '@services/gallery';
+import { uploadFile } from '@services/admin';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
 import { useMultiplayer } from './hooks/useMultiplayer';
 import OtherPlayersList from './components/OtherPlayersList';
@@ -155,6 +156,69 @@ const Museum = () => {
     return () => { isMounted = false; };
   }, [isAdmin, loadingState]);
 
+  // ── Admin Actions ──
+  const handleAdminEdit = () => {
+    if (isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia) {
+      setSelectedMedia(hoveredMedia || selectedMedia);
+      setIsEditingMedia(true);
+    }
+  };
+
+  const handleAdminGrabPlace = async () => {
+    if (!isAdmin) return;
+    if (heldMedia) {
+      if (hoveredPlacementTarget) {
+        const { media: targetMedia, isEmptySlot, slotIndex, category } = hoveredPlacementTarget;
+        
+        // Optimistically update frontend
+        let updatedItems = [...mediaItems];
+        let heldItemIndex = updatedItems.findIndex(m => m.id === heldMedia.id);
+        
+        const hideLoading = message.loading("Saving placement...", 0);
+        
+        try {
+          if (isEmptySlot) {
+              // Moving to an empty slot
+              updatedItems[heldItemIndex] = { ...heldMedia, category, order: slotIndex };
+              await updateGalleryMedia(heldMedia.id, { category, order: slotIndex });
+          } else if (targetMedia && targetMedia.id !== heldMedia.id) {
+              // SWAP with another artwork
+              let targetItemIndex = updatedItems.findIndex(m => m.id === targetMedia.id);
+              
+              const heldOrder = heldMedia.slotIndex !== undefined ? heldMedia.slotIndex : heldItemIndex;
+              const heldCat = heldMedia.category || 'nature-hall';
+              
+              const targetOrder = targetMedia.slotIndex !== undefined ? targetMedia.slotIndex : targetItemIndex;
+              const targetCat = targetMedia.category || 'nature-hall';
+              
+              // Swap their values
+              updatedItems[heldItemIndex] = { ...heldMedia, category: targetCat, order: targetOrder };
+              updatedItems[targetItemIndex] = { ...targetMedia, category: heldCat, order: heldOrder };
+              
+              // Call reorder API
+              await updateGalleryMedia(heldMedia.id, { category: targetCat, order: targetOrder });
+              await updateGalleryMedia(targetMedia.id, { category: heldCat, order: heldOrder });
+          }
+          
+          setMediaItems(updatedItems);
+          setHeldMedia(null);
+          message.success("Artwork placed!");
+        } catch (err) {
+          console.error(err);
+          message.error("Failed to save placement.");
+        } finally {
+          hideLoading();
+        }
+      }
+    } else {
+      // GRAB
+      if (hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot && hoveredPlacementTarget.media) {
+        setHeldMedia(hoveredPlacementTarget.media);
+        message.info("Artwork grabbed! Press F on a wall to place.");
+      }
+    }
+  };
+
   // Handle Escape key & cursor visibility during image/AI focus
   useEffect(() => {
     if (selectedMedia || isAiChatOpen) {
@@ -170,74 +234,21 @@ const Museum = () => {
         return;
       }
       
-      if ((e.key === 'q' || e.key === 'Q') && isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia) {
-        setSelectedMedia(hoveredMedia || selectedMedia);
-        setIsEditingMedia(true);
+      if (e.key === 'q' || e.key === 'Q') {
+        handleAdminEdit();
       }
-      if (e.code === 'KeyF' && isAdmin) {
-        // Minecraft placement logic
-        if (heldMedia) {
-          // PLACE or SWAP
-          if (hoveredPlacementTarget) {
-
-            const { media: targetMedia, isEmptySlot, slotIndex, category } = hoveredPlacementTarget;
-            
-            // Optimistically update frontend
-            let updatedItems = [...mediaItems];
-            let heldItemIndex = updatedItems.findIndex(m => m.id === heldMedia.id);
-            
-            const hideLoading = message.loading("Saving placement...", 0);
-            
-            try {
-              if (isEmptySlot) {
-                  // Moving to an empty slot
-                  updatedItems[heldItemIndex] = { ...heldMedia, category, order: slotIndex };
-                  await updateGalleryMedia(heldMedia.id, { category, order: slotIndex });
-              } else if (targetMedia && targetMedia.id !== heldMedia.id) {
-                  // SWAP with another artwork
-                  let targetItemIndex = updatedItems.findIndex(m => m.id === targetMedia.id);
-                  
-                  const heldOrder = heldMedia.slotIndex !== undefined ? heldMedia.slotIndex : heldItemIndex;
-                  const heldCat = heldMedia.category || 'nature-hall';
-                  
-                  const targetOrder = targetMedia.slotIndex !== undefined ? targetMedia.slotIndex : targetItemIndex;
-                  const targetCat = targetMedia.category || 'nature-hall';
-                  
-                  // Swap their values
-                  updatedItems[heldItemIndex] = { ...heldMedia, category: targetCat, order: targetOrder };
-                  updatedItems[targetItemIndex] = { ...targetMedia, category: heldCat, order: heldOrder };
-                  
-                  // Call reorder API
-                  await updateGalleryMedia(heldMedia.id, { category: targetCat, order: targetOrder });
-                  await updateGalleryMedia(targetMedia.id, { category: heldCat, order: heldOrder });
-              }
-              
-              setMediaItems(updatedItems);
-              setHeldMedia(null);
-              message.success("Artwork placed!");
-            } catch (err) {
-              console.error(err);
-              message.error("Failed to save placement.");
-            } finally {
-              hideLoading();
-            }
-          }
-        } else {
-          // GRAB
-          if (hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot && hoveredPlacementTarget.media) {
-
-            setHeldMedia(hoveredPlacementTarget.media);
-            message.info("Artwork grabbed! Press F on a wall to place.");
-          }
-        }
+      if (e.code === 'KeyF') {
+        await handleAdminGrabPlace();
       }
       
+      // Close artwork view on Escape
       if (e.key === 'Escape') {
         if (selectedMedia) setSelectedMedia(null);
         if (selectedStudioSlot) setSelectedStudioSlot(null);
         if (isAiChatOpen) setIsAiChatOpen(false);
       }
     };
+    
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedMedia, hoveredMedia, selectedStudioSlot, isAiChatOpen, isAdmin, isEditingMedia, heldMedia, hoveredPlacementTarget]);
@@ -322,6 +333,47 @@ const Museum = () => {
   const handleMediaDeleted = (mediaId) => {
     setMediaItems((prev) => prev.filter(m => m.id !== mediaId));
     setSelectedMedia(null);
+  };
+
+  // ── Upload Photo to Empty Slot ──
+  const handleSlotUpload = async (file, targetSlot) => {
+    if (!isAdmin || !targetSlot) return;
+
+    const hideLoading = message.loading("Uploading artwork to gallery...", 0);
+    try {
+      // 1. Upload to Cloudinary
+      const uploadResult = await uploadFile(file);
+      if (!uploadResult || !uploadResult.url) {
+        throw new Error("Upload failed");
+      }
+
+      // 2. Create the Database Record
+      const newMedia = await createGalleryMedia({
+        url: uploadResult.url,
+        category: targetSlot.category,
+        order: targetSlot.slotIndex,
+        is_visible: true,
+        title: file.name.replace(/\.[^/.]+$/, ""), // default title from filename
+      });
+
+      // 3. Instantly show it on the wall
+      setMediaItems(prev => {
+        const updated = [...prev];
+        // Ensure array is large enough
+        while (updated.length <= targetSlot.slotIndex) {
+          updated.push(null);
+        }
+        updated[targetSlot.slotIndex] = newMedia;
+        return updated;
+      });
+
+      message.success("Artwork uploaded and placed successfully!");
+    } catch (error) {
+      console.error("Slot upload error:", error);
+      message.error("Failed to upload artwork.");
+    } finally {
+      hideLoading();
+    }
   };
 
   // ── 1. Loading Screen ──
@@ -475,6 +527,9 @@ const Museum = () => {
         onOpenAIChat={() => setIsAiChatOpen(true)}
         ping={ping}
         heldMedia={heldMedia}
+        hoveredPlacementTarget={hoveredPlacementTarget}
+        isAdmin={isAdmin}
+        onUpload={handleSlotUpload}
         onEmote={(emoteId) => {
           setActiveEmote(emoteId);
           sendEmote(emoteId, emoteId === 'dance' ? 10 : 3.5);
@@ -561,10 +616,20 @@ const Museum = () => {
           }}
           onInteract={() => setMobileInteractTrigger(Date.now())}
           onJump={() => setMobileJumpTrigger(Date.now())}
-          onCrouchToggle={() => setMobileCrouched(prev => !prev)}
-          isCrouched={mobileCrouched}
           isInteractive={Boolean(interactType)}
           interactType={interactType}
+          isAdmin={isAdmin}
+          hoveredPlacementTarget={hoveredPlacementTarget}
+          heldMedia={heldMedia}
+          isEditingMedia={isEditingMedia}
+          hoveredMedia={hoveredMedia}
+          selectedMedia={selectedMedia}
+          onAdminEdit={handleAdminEdit}
+          onAdminGrabPlace={handleAdminGrabPlace}
+          onAdminUpload={() => {
+            const fileInput = document.getElementById('hidden-upload-input');
+            if (fileInput) fileInput.click();
+          }}
         />
       )}
     </div>

@@ -51,7 +51,6 @@ const Player = ({
   mobileLookDeltaRef,
   mobileJumpTrigger = 0,
   mobileInteractTrigger = 0,
-  mobileCrouched = false,
   onInteractTypeChange,
   isMobile = false,
   onMove,
@@ -63,7 +62,7 @@ const Player = ({
   const pitch = useRef(0);
   const prevLookingAtNpc = useRef(false);
 
-  const keys = useRef({ w: false, a: false, s: false, d: false, space: false, crouch: false });
+  const keys = useRef({ w: false, a: false, s: false, d: false, space: false });
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
   const isLookingAtNPCRef = useRef(false);
@@ -151,7 +150,6 @@ const Player = ({
         case 'KeyS': case 'ArrowDown': keys.current.s = true; break;
         case 'KeyD': case 'ArrowRight': keys.current.d = true; break;
         case 'Space': keys.current.space = true; break;
-        // case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = true; break;
         case 'KeyE':
           triggerInteraction();
           break;
@@ -170,7 +168,6 @@ const Player = ({
         case 'KeyS': case 'ArrowDown': keys.current.s = false; break;
         case 'KeyD': case 'ArrowRight': keys.current.d = false; break;
         case 'Space': keys.current.space = false; break;
-        case 'KeyC': case 'ShiftLeft': case 'ShiftRight': keys.current.crouch = false; break;
       }
     };
 
@@ -283,9 +280,8 @@ const Player = ({
     const isLevel2 = camera.position.y >= 10;
     const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
 
-    const isCrouching = keys.current.crouch || mobileCrouched;
-    const targetHeight = isCrouching ? baseFloorY - 1.8 : baseFloorY;
-    const currentSpeed = isCrouching ? SPEED * 0.5 : SPEED;
+    const targetHeight = baseFloorY;
+    const currentSpeed = SPEED;
 
     // ── Apply Gravity & Vertical Movement (Shared for Mobile & Desktop!) ──
     velocity.current.y -= GRAVITY * delta;

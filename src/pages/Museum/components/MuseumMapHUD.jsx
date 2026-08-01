@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, heldMedia = null }) => {
+const MuseumMapHUD = ({ 
+  isLookingAtNPC = false, 
+  ping = 0, 
+  onEmote = () => {}, 
+  heldMedia = null,
+  hoveredPlacementTarget = null,
+  isAdmin = false,
+  onUpload = () => {}
+}) => {
   const [fps, setFps] = useState(60);
   const [showControls, setShowControls] = useState(true);
   const [activeEmote, setActiveEmote] = useState(null);
@@ -38,10 +46,13 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, he
         setActiveEmote(null);
         onEmote(null);
       }
+      if ((e.key === 'u' || e.key === 'U') && isAdmin && hoveredPlacementTarget?.isEmptySlot && !heldMedia) {
+        document.getElementById('hidden-upload-input')?.click();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onEmote, activeEmote]);
+  }, [onEmote, activeEmote, isAdmin, hoveredPlacementTarget, heldMedia]);
 
   // FPS Counter tick
   useEffect(() => {
@@ -125,6 +136,7 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, he
         display: 'flex', flexDirection: 'column', gap: '8px'
       }}>
         {/* Simple Black & White Interactive Prompt (Desktop Only!) */}
+        {/* [E] to Interact Prompt */}
         {typeof window !== 'undefined' && !('ontouchstart' in window) && window.innerWidth > 768 && (
           <div style={{
             background: 'rgba(10, 10, 12, 0.85)',
@@ -138,9 +150,28 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, he
             opacity: isLookingAtNPC ? 0.95 : 0,
             pointerEvents: 'none',
             transform: isLookingAtNPC ? 'translateY(0)' : 'translateY(6px)',
-            transition: 'opacity 0.25s ease, transform 0.25s ease'
+            transition: 'opacity 0.25s ease, transform 0.25s ease',
+            marginBottom: isAdmin && hoveredPlacementTarget?.isEmptySlot && !heldMedia ? '4px' : '0'
           }}>
             [E] to Interact
+          </div>
+        )}
+
+        {/* [U] to Upload Prompt */}
+        {typeof window !== 'undefined' && !('ontouchstart' in window) && window.innerWidth > 768 && isAdmin && hoveredPlacementTarget?.isEmptySlot && !heldMedia && (
+          <div style={{
+            background: 'rgba(10, 10, 12, 0.85)',
+            color: '#ffffff',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '8px 14px',
+            borderRadius: '6px',
+            fontSize: '0.78rem',
+            fontWeight: 600,
+            backdropFilter: 'blur(8px)',
+            pointerEvents: 'none',
+            animation: 'fadeIn 0.25s ease'
+          }}>
+            [U] to Upload Photo
           </div>
         )}
 
@@ -195,6 +226,20 @@ const MuseumMapHUD = ({ isLookingAtNPC = false, ping = 0, onEmote = () => {}, he
           </div>
         </div>
       )}
+
+      {/* Hidden File Input for Uploading */}
+      <input 
+        type="file" 
+        id="hidden-upload-input" 
+        accept="image/*" 
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            onUpload(e.target.files[0], hoveredPlacementTarget);
+            e.target.value = null; // reset
+          }
+        }}
+      />
     </div>
   );
 };
