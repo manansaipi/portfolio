@@ -13,8 +13,8 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     const inWest = x < -15;
     const inLobby = !inNorth && !inSouth && !inEast && !inWest;
 
-    const dirX = -Math.sin(yaw);
-    const dirZ = -Math.cos(yaw);
+    const dirX = Math.sin(yaw);
+    const dirZ = Math.cos(yaw);
 
     // If dir is beyond threshold, it means camera is pointing towards that hall.
     const lookNorth = dirZ < -0.25;
