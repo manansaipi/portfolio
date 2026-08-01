@@ -7,7 +7,7 @@ const FamilyHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🪑 1. ARMCHAIR PAIR + COFFEE TABLE — center of hall             */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[0, 0, 52]}>
+    <group position={[0, 0, 77]}>
       {/* Left armchair */}
       <group position={[-1.4, 0, 0]}>
         {/* Seat cushion */}
@@ -89,7 +89,7 @@ const FamilyHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🔥 2. FIREPLACE MANTLE — back wall warm glow                    */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[0, 0, 73]}>
+    <group position={[0, 0, 123]}>
       {/* Mantle surround — outer */}
       <mesh position={[0, 1.8, 0]}>
         <boxGeometry args={[3.8, 3.6, 0.55]} />

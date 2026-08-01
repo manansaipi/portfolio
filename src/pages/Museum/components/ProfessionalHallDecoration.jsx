@@ -7,7 +7,7 @@ const ProfessionalHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🖤 1. MINIMALIST DISPLAY PEDESTAL CLUSTER — center of hall      */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[-52, 0, 0]}>
+    <group position={[-77, 0, 0]}>
       {/* Tall slim pedestal */}
       <mesh position={[0, 0.75, 0]}>
         <boxGeometry args={[0.35, 1.5, 0.35]} />
@@ -47,7 +47,7 @@ const ProfessionalHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* ✨ 2. FLOOR ACCENT LIGHT STRIP — running along the center aisle  */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    {[-40, -48, -56, -64].map((bx) => (
+    {[-40, -48, -56, -64, -72, -80, -88, -96, -104, -112, -120].map((bx) => (
       <group key={bx}>
         {/* Left floor strip */}
         <mesh position={[bx, 0.008, -3]} rotation={[-Math.PI / 2, 0, 0]}>

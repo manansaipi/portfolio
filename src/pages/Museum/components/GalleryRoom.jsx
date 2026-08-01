@@ -264,19 +264,19 @@ const GalleryRoom = ({ categories = [] }) => {
       {/* ════════════════════════════════════════════════════════════════ */}
       <group>
         {/* Floor */}
-        <mesh position={[0, -0.01, -52]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[30, 50]} />
+        <mesh position={[0, -0.01, -77]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[30, 100]} />
           <meshLambertMaterial color="#252e25" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Ceiling */}
-        <mesh position={[0, 10, -52]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[30, 50]} />
+        <mesh position={[0, 10, -77]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[30, 100]} />
           <meshLambertMaterial color="#2d3b2d" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Beams */}
-        {[-70, -60, -50, -40, -30].map((bz) => (
+        {[-120, -110, -100, -90, -80, -70, -60, -50, -40, -30].map((bz) => (
           <group key={bz}>
             <mesh position={[0, 9.75, bz]}>
               <boxGeometry args={[29.2, 0.35, 0.6]} />
@@ -290,17 +290,17 @@ const GalleryRoom = ({ categories = [] }) => {
         ))}
 
         {/* Outer Side Walls */}
-        <mesh position={[-15, 5, -52]} rotation={[0, Math.PI / 2, 0]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[-15, 5, -77]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#2d3b2d" />
         </mesh>
-        <mesh position={[15, 5, -52]} rotation={[0, Math.PI / 2, 0]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[15, 5, -77]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#2d3b2d" />
         </mesh>
 
         {/* Back Wall */}
-        <mesh position={[0, 5, -77]}>
+        <mesh position={[0, 5, -127]}>
           <boxGeometry args={[30, 10, 0.8]} />
           <meshLambertMaterial color="#2d3b2d" />
         </mesh>
@@ -329,19 +329,19 @@ const GalleryRoom = ({ categories = [] }) => {
       {/* ════════════════════════════════════════════════════════════════ */}
       <group>
         {/* Floor */}
-        <mesh position={[-52, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[50, 30]} />
+        <mesh position={[-77, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[100, 30]} />
           <meshLambertMaterial color="#1c1c1e" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Ceiling */}
-        <mesh position={[-52, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[50, 30]} />
+        <mesh position={[-77, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[100, 30]} />
           <meshLambertMaterial color="#2b2b2e" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Beams */}
-        {[-70, -60, -50, -40, -30].map((bx) => (
+        {[-120, -110, -100, -90, -80, -70, -60, -50, -40, -30].map((bx) => (
           <group key={bx}>
             <mesh position={[bx, 9.75, 0]}>
               <boxGeometry args={[0.6, 0.35, 29.2]} />
@@ -355,17 +355,17 @@ const GalleryRoom = ({ categories = [] }) => {
         ))}
 
         {/* Outer Side Walls */}
-        <mesh position={[-52, 5, -15]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[-77, 5, -15]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#2b2b2e" />
         </mesh>
-        <mesh position={[-52, 5, 15]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[-77, 5, 15]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#2b2b2e" />
         </mesh>
 
         {/* Back Wall */}
-        <mesh position={[-77, 5, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <mesh position={[-127, 5, 0]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[30, 10, 0.8]} />
           <meshLambertMaterial color="#2b2b2e" />
         </mesh>
@@ -394,19 +394,19 @@ const GalleryRoom = ({ categories = [] }) => {
       {/* ════════════════════════════════════════════════════════════════ */}
       <group>
         {/* Floor */}
-        <mesh position={[52, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[50, 30]} />
+        <mesh position={[77, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[100, 30]} />
           <meshLambertMaterial color="#2b231d" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Ceiling */}
-        <mesh position={[52, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[50, 30]} />
+        <mesh position={[77, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[100, 30]} />
           <meshLambertMaterial color="#3d3229" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Beams */}
-        {[30, 40, 50, 60, 70].map((bx) => (
+        {[30, 40, 50, 60, 70, 80, 90, 100, 110, 120].map((bx) => (
           <group key={bx}>
             <mesh position={[bx, 9.75, 0]}>
               <boxGeometry args={[0.6, 0.35, 29.2]} />
@@ -420,17 +420,17 @@ const GalleryRoom = ({ categories = [] }) => {
         ))}
 
         {/* Outer Side Walls */}
-        <mesh position={[52, 5, -15]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[77, 5, -15]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#3d3229" />
         </mesh>
-        <mesh position={[52, 5, 15]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[77, 5, 15]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#3d3229" />
         </mesh>
 
         {/* Back Wall */}
-        <mesh position={[77, 5, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <mesh position={[127, 5, 0]} rotation={[0, Math.PI / 2, 0]}>
           <boxGeometry args={[30, 10, 0.8]} />
           <meshLambertMaterial color="#3d3229" />
         </mesh>
@@ -459,19 +459,19 @@ const GalleryRoom = ({ categories = [] }) => {
       {/* ════════════════════════════════════════════════════════════════ */}
       <group>
         {/* Floor */}
-        <mesh position={[0, -0.01, 52]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[30, 50]} />
+        <mesh position={[0, -0.01, 77]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[30, 100]} />
           <meshLambertMaterial color="#1d222b" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Ceiling */}
-        <mesh position={[0, 10, 52]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[30, 50]} />
+        <mesh position={[0, 10, 77]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[30, 100]} />
           <meshLambertMaterial color="#232b38" side={THREE.DoubleSide} />
         </mesh>
 
         {/* Beams */}
-        {[30, 40, 50, 60, 70].map((bz) => (
+        {[30, 40, 50, 60, 70, 80, 90, 100, 110, 120].map((bz) => (
           <group key={bz}>
             <mesh position={[0, 9.75, bz]}>
               <boxGeometry args={[29.2, 0.35, 0.6]} />
@@ -485,17 +485,17 @@ const GalleryRoom = ({ categories = [] }) => {
         ))}
 
         {/* Outer Side Walls */}
-        <mesh position={[-15, 5, 52]} rotation={[0, Math.PI / 2, 0]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[-15, 5, 77]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#232b38" />
         </mesh>
-        <mesh position={[15, 5, 52]} rotation={[0, -Math.PI / 2, 0]}>
-          <boxGeometry args={[50, 10, 0.8]} />
+        <mesh position={[15, 5, 77]} rotation={[0, -Math.PI / 2, 0]}>
+          <boxGeometry args={[100, 10, 0.8]} />
           <meshLambertMaterial color="#232b38" />
         </mesh>
 
         {/* Back Wall */}
-        <mesh position={[0, 5, 77]}>
+        <mesh position={[0, 5, 127]}>
           <boxGeometry args={[30, 10, 0.8]} />
           <meshLambertMaterial color="#232b38" />
         </mesh>

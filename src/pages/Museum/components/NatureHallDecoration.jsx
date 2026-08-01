@@ -51,7 +51,7 @@ const NatureHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🪨 2. ROCK CLUSTER — back wall accent                           */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[8, 0, -70]}>
+    <group position={[8, 0, -120]}>
       <mesh position={[0, 0.5, 0]} rotation={[0.2, 0.4, 0.1]}>
         <dodecahedronGeometry args={[0.9, 0]} />
         <meshLambertMaterial color="#6b6b6b" />
@@ -69,7 +69,7 @@ const NatureHallDecoration = () => (
         <meshLambertMaterial color="#888" />
       </mesh>
     </group>
-    <group position={[-8, 0, -70]}>
+    <group position={[-8, 0, -120]}>
       <mesh position={[0, 0.4, 0]} rotation={[-0.1, 0.6, 0.15]}>
         <dodecahedronGeometry args={[0.7, 0]} />
         <meshLambertMaterial color="#6b6b6b" />

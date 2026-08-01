@@ -39,7 +39,7 @@ const AdventureHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 🌍 2. GLOBE ON PEDESTAL — back-wall accent                      */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[65, 0, 6]}>
+    <group position={[115, 0, 6]}>
       {/* Pedestal */}
       <mesh position={[0, 0.6, 0]}>
         <cylinderGeometry args={[0.2, 0.28, 1.2, 14]} />
