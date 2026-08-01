@@ -48,9 +48,9 @@ const AdventureHallDecoration = () => (
         <meshLambertMaterial color="#2b1a0e" />
       </mesh>
       {/* Screen Glass */}
-      <mesh position={[0, 1.15, 0.08]} rotation={[-0.45, 0, 0]}>
+      <mesh position={[0, 1.15, 0.09]} rotation={[0, 0, -0.35]}>
         <planeGeometry args={[0.62, 0.42]} />
-        <meshBasicMaterial color="#fed7aa" side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#fb923c" side={THREE.DoubleSide} />
       </mesh>
     </group>
 

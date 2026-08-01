@@ -48,9 +48,9 @@ const ProfessionalHallDecoration = () => (
         <meshLambertMaterial color="#0f0f0f" />
       </mesh>
       {/* Screen Glass */}
-      <mesh position={[0, 1.15, 0.08]} rotation={[-0.45, 0, 0]}>
+      <mesh position={[0, 1.15, 0.09]} rotation={[0, 0, 0.35]}>
         <planeGeometry args={[0.62, 0.42]} />
-        <meshBasicMaterial color="#fde047" side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#facc15" side={THREE.DoubleSide} />
       </mesh>
     </group>
 
