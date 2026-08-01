@@ -4,8 +4,18 @@ import { useFrame, useThree } from '@react-three/fiber';
 const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef }) => {
   const { gl } = useThree();
   const lastLogRef = useRef(0);
+  const frameCount = useRef(0);
 
   useFrame(() => {
+    // 🚀 Wait 60 frames (~1 second) before starting occlusion culling.
+    // This forces ALL halls to be visible during the loading screen, 
+    // ensuring Three.js Preload compiles shaders and uploads VRAM for everything!
+    // This completely eliminates the stutter when turning the camera for the first time.
+    if (frameCount.current < 60) {
+      frameCount.current++;
+      return;
+    }
+
     if (!playerPosRef.current) return;
     const { x, z, yaw } = playerPosRef.current;
 
