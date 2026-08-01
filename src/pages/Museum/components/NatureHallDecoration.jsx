@@ -43,14 +43,14 @@ const NatureHallDecoration = () => (
         <meshLambertMaterial color="#2d3b2d" />
       </mesh>
       {/* Screen Frame */}
-      <mesh position={[0, 1.15, 0.05]} rotation={[-0.45, 0, 0]}>
+      <mesh position={[0, 1.15, 0.05]} rotation={[0.45, 0, 0]}>
         <boxGeometry args={[0.7, 0.5, 0.06]} />
         <meshLambertMaterial color="#1c261d" />
       </mesh>
-      {/* Screen Glass */}
-      <mesh position={[0, 1.15, 0.09]} rotation={[-0.45, 0, 0]}>
+      {/* Screen Glass — Bright Glowing Green */}
+      <mesh position={[0, 1.15, 0.09]} rotation={[0.45, 0, 0]}>
         <planeGeometry args={[0.62, 0.42]} />
-        <meshBasicMaterial color="#86efac" side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#4ade80" side={THREE.DoubleSide} />
       </mesh>
     </group>
 
