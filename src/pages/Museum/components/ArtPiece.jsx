@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Instance } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import { textureCache } from '../utils/TextureCache';
 import { resolveImg } from '@utils/imageUtils';
 
@@ -84,13 +84,25 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
           if (onUnhover) onUnhover();
         }}
       >
-        {/* Outer Wooden Picture Frame Bars (Instanced for massive draw call savings!) */}
-        <Instance position={[0, frameH / 2 + 0.1, 0]} scale={[frameW + 0.4, 0.2, 0.15]} color={hovered ? '#452a1a' : '#2a1810'} />
-        <Instance position={[0, -frameH / 2 - 0.1, 0]} scale={[frameW + 0.4, 0.2, 0.15]} color={hovered ? '#452a1a' : '#2a1810'} />
-        <Instance position={[-frameW / 2 - 0.1, 0, 0]} scale={[0.2, frameH, 0.15]} color={hovered ? '#452a1a' : '#2a1810'} />
-        <Instance position={[frameW / 2 + 0.1, 0, 0]} scale={[0.2, frameH, 0.15]} color={hovered ? '#452a1a' : '#2a1810'} />
+        {/* Outer Wooden Picture Frame Bars */}
+        <mesh position={[0, frameH / 2 + 0.1, 0]}>
+          <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
+          <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
+        </mesh>
+        <mesh position={[0, -frameH / 2 - 0.1, 0]}>
+          <boxGeometry args={[frameW + 0.4, 0.2, 0.15]} />
+          <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
+        </mesh>
+        <mesh position={[-frameW / 2 - 0.1, 0, 0]}>
+          <boxGeometry args={[0.2, frameH, 0.15]} />
+          <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
+        </mesh>
+        <mesh position={[frameW / 2 + 0.1, 0, 0]}>
+          <boxGeometry args={[0.2, frameH, 0.15]} />
+          <meshLambertMaterial color={hovered ? '#452a1a' : '#2a1810'} />
+        </mesh>
 
-        {/* 🖼️ Actual Artwork Canvas/Image */}
+        {/* Backboard */}
         <mesh position={[0, 0, -0.02]}>
           <planeGeometry args={[frameW + 0.1, frameH + 0.1]} />
           <meshLambertMaterial color="#111111" />

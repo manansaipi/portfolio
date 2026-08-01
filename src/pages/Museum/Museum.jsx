@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Preload, PerformanceMonitor, Instances } from '@react-three/drei';
+import { Preload, PerformanceMonitor } from '@react-three/drei';
 import { Helmet } from 'react-helmet-async';
 import { Image as AntdImage, message } from 'antd';
 import ErrorBoundary3D from './components/ErrorBoundary3D';
@@ -424,15 +424,10 @@ const Museum = () => {
             <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} />
             <MuseumLighting />
             
-            {/* Global Picture Frame Instancer */}
-            <Instances limit={1000}>
-              <boxGeometry args={[1, 1, 1]} />
-              <meshLambertMaterial color="white" />
-              
-              <group onClick={() => setSelectedMedia(null)}>
-                <GalleryRoom categories={categories} />
+            <group onClick={() => setSelectedMedia(null)}>
+              <GalleryRoom categories={categories} />
 
-                {/* LOBBY ZONE */}
+              {/* LOBBY ZONE */}
               <group ref={lobbyRef}>
                 <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
                 <BotAssistantNPC
@@ -501,8 +496,7 @@ const Museum = () => {
                 ))}
               </group>
 
-              </group>
-            </Instances>
+            </group>
 
             <Player
               teleportTarget={teleportTarget}
