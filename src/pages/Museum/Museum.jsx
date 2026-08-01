@@ -32,6 +32,7 @@ import OtherPlayersList from './components/OtherPlayersList';
 import LocalPlayerEmoteAvatar from './components/LocalPlayerEmoteAvatar';
 import MultiplayerChatModal from './components/MultiplayerChatModal';
 import MuseumMiniMap from './components/MuseumMiniMap';
+import VisibilityCullingSystem from './components/VisibilityCullingSystem';
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -64,6 +65,13 @@ const Museum = () => {
   const [hoveredPlacementTarget, setHoveredPlacementTarget] = useState(null);
   const [activeEmote, setActiveEmote] = useState(null);
   const playerPosRef = useRef({ x: 0, z: 0, yaw: 0 });
+
+  // Occlusion Culling Refs
+  const northRef = useRef();
+  const southRef = useRef();
+  const eastRef = useRef();
+  const westRef = useRef();
+  const lobbyRef = useRef();
 
   // 🌐 Real-Time Multiplayer State & Coordinate Syncing Hook
   const {
@@ -413,55 +421,81 @@ const Museum = () => {
         >
           <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)} />
           <Suspense fallback={null}>
+            <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} />
             <MuseumLighting />
+            
             <group onClick={() => setSelectedMedia(null)}>
               <GalleryRoom categories={categories} />
-              <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
-              <NatureHallDecoration />
-              <ProfessionalHallDecoration />
-              <AdventureHallDecoration />
-              <FamilyHallDecoration />
 
-              {/* 🤖 Taller Lobby AI Bot Assistant NPC */}
-              <BotAssistantNPC
-                onOpenChat={() => setIsAiChatOpen(true)}
-                isLookingAtNPC={isLookingAtNPC}
-              />
+              {/* LOBBY ZONE */}
+              <group ref={lobbyRef}>
+                <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
+                <BotAssistantNPC
+                  onOpenChat={() => setIsAiChatOpen(true)}
+                  isLookingAtNPC={isLookingAtNPC}
+                />
+              </group>
 
-              {/* Placed Artworks */}
-              {placedArtworks.map((art) => (
-                art.media_type === 'video' ? (
-                  <VideoPiece
-                    key={art.id}
-                    media={art}
-                    position={art.pos}
-                    rotation={art.rot}
-                    onClick={(m) => {
-                      setSelectedMedia(m);
-                    }}
-                    onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })}
-                    onUnhover={() => setHoveredPlacementTarget(null)}
-                  />
-                ) : (
-                  <ArtPiece
-                    key={art.id}
-                    media={art}
-                    position={art.pos}
-                    rotation={art.rot}
-                    onClick={(m) => {
-                      setSelectedMedia(m);
-                    }}
-                    onHover={(m) => {
-                      setHoveredMedia(m);
-                      setHoveredPlacementTarget({ media: m, isEmptySlot: false });
-                    }}
-                    onUnhover={() => {
-                      setHoveredMedia(null);
-                      setHoveredPlacementTarget(null);
-                    }}
-                  />
-                )
-              ))}
+              {/* NORTH ZONE (Nature) */}
+              <group ref={northRef}>
+                <NatureHallDecoration />
+                {placedArtworks.filter(art => art.category === 'nature-hall').map((art) => (
+                  art.media_type === 'video' ? (
+                    <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
+                  ) : (
+                    <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
+                  )
+                ))}
+                {emptySlots.filter(slot => slot.category === 'nature-hall').map((slot, index) => (
+                  <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
+                ))}
+              </group>
+
+              {/* SOUTH ZONE (Family / Portrait) */}
+              <group ref={southRef}>
+                <FamilyHallDecoration />
+                {placedArtworks.filter(art => art.category === 'portrait-hall').map((art) => (
+                  art.media_type === 'video' ? (
+                    <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
+                  ) : (
+                    <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
+                  )
+                ))}
+                {emptySlots.filter(slot => slot.category === 'portrait-hall').map((slot, index) => (
+                  <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
+                ))}
+              </group>
+
+              {/* WEST ZONE (Professional / Street) */}
+              <group ref={westRef}>
+                <ProfessionalHallDecoration />
+                {placedArtworks.filter(art => art.category === 'street-hall').map((art) => (
+                  art.media_type === 'video' ? (
+                    <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
+                  ) : (
+                    <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
+                  )
+                ))}
+                {emptySlots.filter(slot => slot.category === 'street-hall').map((slot, index) => (
+                  <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
+                ))}
+              </group>
+
+              {/* EAST ZONE (Adventure / Travel) */}
+              <group ref={eastRef}>
+                <AdventureHallDecoration />
+                {placedArtworks.filter(art => art.category === 'travel-hall').map((art) => (
+                  art.media_type === 'video' ? (
+                    <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
+                  ) : (
+                    <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
+                  )
+                ))}
+                {emptySlots.filter(slot => slot.category === 'travel-hall').map((slot, index) => (
+                  <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
+                ))}
+              </group>
+
             </group>
 
             <Player
@@ -505,17 +539,7 @@ const Museum = () => {
                 isAdmin={isAdmin}
               />
             )}
-            {emptySlots.map((slot, index) => (
-              <EmptyWallSlot
-                key={`empty-${slot.category}-${index}`}
-                position={slot.pos}
-                rotation={slot.rot}
-                slotIndex={slot.slotIndex}
-                category={slot.category}
-                onHover={setHoveredPlacementTarget}
-                onUnhover={() => setHoveredPlacementTarget(null)}
-              />
-            ))}
+            {/* Empty slots are now mapped inside their respective zone groups above */}
             <Preload all />
           </Suspense>
         </Canvas>
