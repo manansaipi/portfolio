@@ -454,14 +454,14 @@ const Museum = () => {
               {/* SOUTH ZONE (Family / Portrait) */}
               <group ref={southRef}>
                 <FamilyHallDecoration />
-                {placedArtworks.filter(art => art.category === 'portrait-hall').map((art) => (
+                {placedArtworks.filter(art => art.category === 'family-hall').map((art) => (
                   art.media_type === 'video' ? (
                     <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
                   ) : (
                     <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
                   )
                 ))}
-                {emptySlots.filter(slot => slot.category === 'portrait-hall').map((slot, index) => (
+                {emptySlots.filter(slot => slot.category === 'family-hall').map((slot, index) => (
                   <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
                 ))}
               </group>
@@ -469,14 +469,14 @@ const Museum = () => {
               {/* WEST ZONE (Professional / Street) */}
               <group ref={westRef}>
                 <ProfessionalHallDecoration />
-                {placedArtworks.filter(art => art.category === 'street-hall').map((art) => (
+                {placedArtworks.filter(art => art.category === 'professional-hall').map((art) => (
                   art.media_type === 'video' ? (
                     <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
                   ) : (
                     <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
                   )
                 ))}
-                {emptySlots.filter(slot => slot.category === 'street-hall').map((slot, index) => (
+                {emptySlots.filter(slot => slot.category === 'professional-hall').map((slot, index) => (
                   <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
                 ))}
               </group>
@@ -484,14 +484,14 @@ const Museum = () => {
               {/* EAST ZONE (Adventure / Travel) */}
               <group ref={eastRef}>
                 <AdventureHallDecoration />
-                {placedArtworks.filter(art => art.category === 'travel-hall').map((art) => (
+                {placedArtworks.filter(art => art.category === 'adventure-hall').map((art) => (
                   art.media_type === 'video' ? (
                     <VideoPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => setHoveredPlacementTarget({ media: m, isEmptySlot: false })} onUnhover={() => setHoveredPlacementTarget(null)} />
                   ) : (
                     <ArtPiece key={art.id} media={art} position={art.pos} rotation={art.rot} onClick={setSelectedMedia} onHover={(m) => { setHoveredMedia(m); setHoveredPlacementTarget({ media: m, isEmptySlot: false }); }} onUnhover={() => { setHoveredMedia(null); setHoveredPlacementTarget(null); }} />
                   )
                 ))}
-                {emptySlots.filter(slot => slot.category === 'travel-hall').map((slot, index) => (
+                {emptySlots.filter(slot => slot.category === 'adventure-hall').map((slot, index) => (
                   <EmptyWallSlot key={`empty-${slot.category}-${index}`} position={slot.pos} rotation={slot.rot} slotIndex={slot.slotIndex} category={slot.category} onHover={setHoveredPlacementTarget} onUnhover={() => setHoveredPlacementTarget(null)} />
                 ))}
               </group>
