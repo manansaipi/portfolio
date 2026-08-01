@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Instances, Instance } from '@react-three/drei';
+import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Default icons & fallback names per slug
@@ -91,41 +91,70 @@ const GalleryRoom = ({ categories = [] }) => {
           </group>
         ))}
 
-        <Instances>
+        {/* North Wall Segments */}
+        <mesh position={[-9.5, 5, -15]}>
           <boxGeometry args={[11, 10, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
-          {/* North */}
-          <Instance position={[-9.5, 5, -15]} />
-          <Instance position={[9.5, 5, -15]} />
-          {/* South */}
-          <Instance position={[-9.5, 5, 15]} />
-          <Instance position={[9.5, 5, 15]} />
-          {/* West */}
-          <Instance position={[-15, 5, -9.5]} rotation={[0, Math.PI / 2, 0]} />
-          <Instance position={[-15, 5, 9.5]} rotation={[0, Math.PI / 2, 0]} />
-          {/* East */}
-          <Instance position={[15, 5, -9.5]} rotation={[0, Math.PI / 2, 0]} />
-          <Instance position={[15, 5, 9.5]} rotation={[0, Math.PI / 2, 0]} />
-        </Instances>
-
-        <Instances>
+        </mesh>
+        <mesh position={[9.5, 5, -15]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[0, 8.5, -15]}>
           <boxGeometry args={[8, 3, 0.8]} />
           <meshLambertMaterial color="#e5e2dc" />
-          <Instance position={[0, 8.5, -15]} />
-          <Instance position={[0, 8.5, 15]} />
-          <Instance position={[-15, 8.5, 0]} rotation={[0, Math.PI / 2, 0]} />
-          <Instance position={[15, 8.5, 0]} rotation={[0, Math.PI / 2, 0]} />
-        </Instances>
-
+        </mesh>
         <Text position={[0, 6.2, -14.5]} fontSize={0.55} color={getMeta('nature').color} anchorX="center">
           {getMeta('nature').icon} {getLabel('nature', 'NATURE HALL').toUpperCase()} ➔
         </Text>
+
+        {/* South Wall Segments */}
+        <mesh position={[-9.5, 5, 15]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[9.5, 5, 15]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[0, 8.5, 15]}>
+          <boxGeometry args={[8, 3, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
         <Text position={[0, 6.2, 14.5]} rotation={[0, Math.PI, 0]} fontSize={0.55} color={getMeta('portrait').color} anchorX="center">
           {getMeta('portrait').icon} {getLabel('portrait', 'FAMILY HALL').toUpperCase()} ➔
         </Text>
+
+        {/* West Wall Segments */}
+        <mesh position={[-15, 5, -9.5]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[-15, 5, 9.5]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[-15, 8.5, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[8, 3, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
         <Text position={[-14.5, 6.2, 0]} rotation={[0, Math.PI / 2, 0]} fontSize={0.55} color={getMeta('street').color} anchorX="center">
           {getMeta('street').icon} {getLabel('street', 'PROFESSIONAL HALL').toUpperCase()} ➔
         </Text>
+
+        {/* East Wall Segments */}
+        <mesh position={[15, 5, -9.5]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[15, 5, 9.5]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[11, 10, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
+        <mesh position={[15, 8.5, 0]} rotation={[0, Math.PI / 2, 0]}>
+          <boxGeometry args={[8, 3, 0.8]} />
+          <meshLambertMaterial color="#e5e2dc" />
+        </mesh>
         <Text position={[14.5, 6.2, 0]} rotation={[0, -Math.PI / 2, 0]} fontSize={0.55} color={getMeta('travel').color} anchorX="center">
           {getMeta('travel').icon} {getLabel('travel', 'ADVENTURE HALL').toUpperCase()} ➔
         </Text>
