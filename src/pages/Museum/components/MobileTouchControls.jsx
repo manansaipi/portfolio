@@ -115,7 +115,7 @@ const MobileTouchControls = ({
   };
 
   return (
-    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20, userSelect: 'none', touchAction: 'none' }}>
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20, userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none', touchAction: 'none' }}>
       {/* Touch Look Area (Full screen - joystick & buttons sit on top) */}
       <div
         onTouchStart={handleLookStart}
