@@ -51,7 +51,9 @@ const Museum = () => {
   const [hoveredMedia, setHoveredMedia] = useState(null);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
-  const [dpr, setDpr] = useState(1.5); // Performance Monitor DPR scaler
+  const maxDpr = isMobile ? 1 : 1.5;
+  const minDpr = isMobile ? 0.75 : 1;
+  const [dpr, setDpr] = useState(maxDpr); // Performance Monitor DPR scaler
 
   // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
   const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
@@ -419,7 +421,7 @@ const Museum = () => {
           camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }}
           gl={{ antialias: dpr <= 1, alpha: false, powerPreference: "high-performance" }}
         >
-          <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)} />
+          <PerformanceMonitor onIncline={() => setDpr(maxDpr)} onDecline={() => setDpr(minDpr)} />
           <Suspense fallback={null}>
             <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} />
             <MuseumLighting />
