@@ -234,7 +234,7 @@ const MobileTouchControls = ({
           </button>
         )}
 
-        {isAdmin && heldMedia && hoveredPlacementTarget && (
+        {isAdmin && heldMedia && hoveredPlacementTarget && hoveredPlacementTarget.isEmptySlot && (
           <button
             onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
             onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
@@ -245,6 +245,20 @@ const MobileTouchControls = ({
             }}
           >
             PLACE
+          </button>
+        )}
+
+        {isAdmin && heldMedia && hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
+            style={{
+              position: 'absolute', bottom: '10px', right: '140px', width: '58px', height: '58px', borderRadius: '50%',
+              background: 'rgba(234, 179, 8, 0.85)', border: '1.5px solid #facc15', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
+            }}
+          >
+            SWAP
           </button>
         )}
 

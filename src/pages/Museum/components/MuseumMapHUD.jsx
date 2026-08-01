@@ -222,7 +222,7 @@ const MuseumMapHUD = ({
             background: 'rgba(10, 10, 12, 0.85)', padding: '4px 10px',
             borderRadius: '4px', color: '#fff', fontSize: '0.75rem', fontWeight: 600
           }}>
-            Holding: {heldMedia.title || "Artwork"} [F to Place]
+            Holding: {heldMedia.title || "Artwork"} {hoveredPlacementTarget && !hoveredPlacementTarget.isEmptySlot ? "[F to Swap]" : "[F to Place]"}
           </div>
         </div>
       )}
