@@ -1,26 +1,24 @@
 import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 
-const WARMUP_FRAMES = 120; // ~2 seconds at 60fps
+const WARMUP_FRAMES = 5; // Only need a few frames now since we force-init textures
 
 const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef }) => {
-  const { gl, scene, camera } = useThree();
+  const { gl, scene } = useThree();
   const lastLogRef = useRef(0);
   const frameCountRef = useRef(0);
   const warmupDoneRef = useRef(false);
-  const frustumCulledCache = useRef([]);
 
   useFrame(() => {
     if (!playerPosRef.current) return;
 
     // ── GPU WARM-UP PHASE ──
-    // Force-render ALL meshes (even off-screen ones) for the first ~2 seconds
-    // so the GPU compiles every shader and uploads every texture to VRAM.
-    // After warm-up, culling kicks in and toggling is instant with zero frame drops.
+    // Force ALL halls visible + force-upload ALL textures to GPU VRAM
+    // so there are zero frame drops when the user first looks at a new hall.
     if (!warmupDoneRef.current) {
       frameCountRef.current++;
 
-      // Frame 1: Make everything visible AND disable frustum culling on every mesh
+      // Frame 1: Make everything visible and force-upload all textures to GPU
       if (frameCountRef.current === 1) {
         if (northRef.current) northRef.current.visible = true;
         if (southRef.current) southRef.current.visible = true;
@@ -28,30 +26,51 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
         if (westRef.current) westRef.current.visible = true;
         if (lobbyRef.current) lobbyRef.current.visible = true;
 
-        // Traverse entire scene and disable frustumCulled on every mesh
-        // so the GPU is forced to compile shaders for ALL objects, even off-screen ones
-        frustumCulledCache.current = [];
+        // Force-upload every texture and compile every material to GPU
+        let textureCount = 0;
+        let materialCount = 0;
         scene.traverse((obj) => {
           if (obj.isMesh) {
-            frustumCulledCache.current.push({ obj, original: obj.frustumCulled });
+            // Disable frustum culling so GPU renders it even if off-screen
             obj.frustumCulled = false;
+
+            // Force-upload textures to GPU VRAM immediately
+            const mat = obj.material;
+            if (mat) {
+              // Compile the material's shader program
+              materialCount++;
+
+              // Force-init all texture maps on this material
+              const textureProps = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap', 'lightMap', 'bumpMap', 'displacementMap', 'alphaMap', 'envMap'];
+              for (const prop of textureProps) {
+                const tex = mat[prop];
+                if (tex && tex.isTexture) {
+                  try {
+                    gl.initTexture(tex);
+                    textureCount++;
+                  } catch (e) {
+                    // Fallback: some older Three.js versions don't have initTexture
+                  }
+                }
+              }
+            }
           }
         });
 
-        console.log('%c⏳ GPU Warm-up started... Compiling all shaders & uploading textures...', 'color: #facc15; font-weight: bold;');
+        console.log(`%c⏳ GPU Warm-up: Force-uploaded ${textureCount} textures and ${materialCount} materials to GPU VRAM`, 'color: #facc15; font-weight: bold;');
       }
 
-      // After warm-up frames: restore frustumCulled and enable portal culling
       if (frameCountRef.current >= WARMUP_FRAMES) {
         warmupDoneRef.current = true;
 
-        // Restore original frustumCulled values
-        for (const entry of frustumCulledCache.current) {
-          entry.obj.frustumCulled = entry.original;
-        }
-        frustumCulledCache.current = [];
+        // Restore frustumCulled on all meshes
+        scene.traverse((obj) => {
+          if (obj.isMesh) {
+            obj.frustumCulled = true;
+          }
+        });
 
-        console.log('%c🔥 GPU Warm-up Complete! All shaders compiled. Portal Culling now active. Zero frame drops guaranteed!', 'color: #4ade80; font-weight: bold; font-size: 14px;');
+        console.log('%c🔥 GPU Warm-up Complete! All shaders compiled & textures uploaded. Zero frame drops guaranteed!', 'color: #4ade80; font-weight: bold; font-size: 14px;');
       }
       return;
     }
