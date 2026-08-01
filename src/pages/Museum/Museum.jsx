@@ -23,7 +23,7 @@ import FamilyHallDecoration from './components/FamilyHallDecoration';
 import MobileTouchControls from './components/MobileTouchControls';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
-import { resolveImg } from '@utils/imageUtils';
+import { resolveImg, resolveTextureImg } from '@utils/imageUtils';
 import { getGalleryMedia, getGalleryCategories, updateGalleryMedia, createGalleryMedia } from '@services/gallery';
 import { uploadFile } from '@services/admin';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
@@ -134,7 +134,7 @@ const Museum = () => {
         setLoadingState('preloading');
         const urls = data
           .filter(item => item.media_type === 'image')
-          .map(item => resolveImg(item.url))
+          .map(item => resolveTextureImg(item.url))
           .filter(Boolean);
 
         if (urls.length > 0) {

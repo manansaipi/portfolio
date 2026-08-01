@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text } from '@react-three/drei';
 import { textureCache } from '../utils/TextureCache';
-import { resolveImg } from '@utils/imageUtils';
+import { resolveImg, resolveTextureImg } from '@utils/imageUtils';
 
 const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width = 4.8, height = 3.5, onClick, onHover, onUnhover }) => {
   const [texture, setTexture] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const imgUrl = resolveImg(media.url);
+  const imgUrl = resolveTextureImg(media.url);
 
   useEffect(() => {
     let isMounted = true;
