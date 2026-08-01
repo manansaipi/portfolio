@@ -64,7 +64,7 @@ const Player = ({
   const pitch = useRef(0);
   const prevLookingAtNpc = useRef(false);
 
-  const keys = useRef({ w: false, a: false, s: false, d: false, space: false });
+  const keys = useRef({ w: false, a: false, s: false, d: false, space: false, shift: false });
   const velocity = useRef(new THREE.Vector3());
   const direction = useRef(new THREE.Vector3());
   const isLookingAtNPCRef = useRef(false);
@@ -163,6 +163,7 @@ const Player = ({
         case 'KeyS': case 'ArrowDown': keys.current.s = true; break;
         case 'KeyD': case 'ArrowRight': keys.current.d = true; break;
         case 'Space': keys.current.space = true; break;
+        case 'ShiftLeft': case 'ShiftRight': keys.current.shift = true; break;
         case 'KeyE':
           triggerInteraction();
           break;
@@ -181,6 +182,7 @@ const Player = ({
         case 'KeyS': case 'ArrowDown': keys.current.s = false; break;
         case 'KeyD': case 'ArrowRight': keys.current.d = false; break;
         case 'Space': keys.current.space = false; break;
+        case 'ShiftLeft': case 'ShiftRight': keys.current.shift = false; break;
       }
     };
 
@@ -319,7 +321,7 @@ const Player = ({
     const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
 
     const targetHeight = baseFloorY;
-    const currentSpeed = SPEED;
+    const currentSpeed = keys.current.shift ? SPEED * 1.75 : SPEED;
 
     // ── Apply Gravity & Vertical Movement (Shared for Mobile & Desktop!) ──
     velocity.current.y -= GRAVITY * delta;
