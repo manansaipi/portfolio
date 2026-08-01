@@ -52,6 +52,7 @@ const Museum = () => {
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
   const [dpr, setDpr] = useState(1.5); // Performance Monitor DPR scaler
+  const [gpuReady, setGpuReady] = useState(false); // GPU warm-up complete flag
 
   // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
   const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
@@ -421,7 +422,7 @@ const Museum = () => {
         >
           <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)} />
           <Suspense fallback={null}>
-            <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} />
+            <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} onWarmupComplete={() => setGpuReady(true)} />
             <MuseumLighting />
             
             <group onClick={() => setSelectedMedia(null)}>
@@ -664,6 +665,26 @@ const Museum = () => {
             if (fileInput) fileInput.click();
           }}
         />
+      )}
+
+      {/* GPU Warm-up Loading Overlay */}
+      {!gpuReady && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: '#09090b',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          transition: 'opacity 0.5s ease',
+        }}>
+          <div style={{
+            width: '32px', height: '32px', border: '3px solid #27272a',
+            borderTopColor: '#3b82f6', borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+          }} />
+          <p style={{ marginTop: '1rem', color: '#a1a1aa', fontSize: '0.9rem', letterSpacing: '0.02em' }}>
+            Preparing Exhibition Halls...
+          </p>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
       )}
     </div>
   );

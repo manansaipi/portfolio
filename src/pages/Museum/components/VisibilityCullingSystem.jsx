@@ -3,8 +3,8 @@ import { useFrame, useThree } from '@react-three/fiber';
 
 const WARMUP_FRAMES = 5; // Only need a few frames now since we force-init textures
 
-const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef }) => {
-  const { gl, scene } = useThree();
+const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef, onWarmupComplete }) => {
+  const { gl, scene, camera } = useThree();
   const lastLogRef = useRef(0);
   const frameCountRef = useRef(0);
   const warmupDoneRef = useRef(false);
@@ -20,6 +20,8 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
 
       // Frame 1: Make everything visible and force-upload all textures to GPU
       if (frameCountRef.current === 1) {
+        // Force camera to look straight at the South hall during warm-up (not the floor!)
+        camera.rotation.set(0, Math.PI, 0);
         if (northRef.current) northRef.current.visible = true;
         if (southRef.current) southRef.current.visible = true;
         if (eastRef.current) eastRef.current.visible = true;
@@ -71,6 +73,7 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
         });
 
         console.log('%c🔥 GPU Warm-up Complete! All shaders compiled & textures uploaded. Zero frame drops guaranteed!', 'color: #4ade80; font-weight: bold; font-size: 14px;');
+        if (onWarmupComplete) onWarmupComplete();
       }
       return;
     }
