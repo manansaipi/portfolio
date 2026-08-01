@@ -1,7 +1,10 @@
-import React from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 
 const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef }) => {
+  const { gl } = useThree();
+  const lastLogRef = useRef(0);
+
   useFrame(() => {
     if (!playerPosRef.current) return;
     const { x, z, yaw } = playerPosRef.current;
@@ -30,6 +33,20 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     
     if (lobbyRef.current) {
       lobbyRef.current.visible = true;
+    }
+
+    // ── DEBUG LOGGING (Once per second) to prove Culling ──
+    const now = Date.now();
+    if (now - lastLogRef.current > 1000) {
+      lastLogRef.current = now;
+      console.log(
+        `%c🛡️ Culling Active!%c\n` +
+        `Visible Halls: North[${northRef.current?.visible ? '✅' : '❌'}] South[${southRef.current?.visible ? '✅' : '❌'}] East[${eastRef.current?.visible ? '✅' : '❌'}] West[${westRef.current?.visible ? '✅' : '❌'}]\n` +
+        `WebGL Draw Calls: ${gl.info.render.calls}\n` +
+        `WebGL Triangles: ${gl.info.render.triangles}`,
+        'color: #4ade80; font-weight: bold; font-size: 14px;',
+        'color: inherit;'
+      );
     }
   });
 
