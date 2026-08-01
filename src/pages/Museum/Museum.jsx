@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Preload, PerformanceMonitor } from '@react-three/drei';
+import { Preload, PerformanceMonitor, Instances } from '@react-three/drei';
 import { Helmet } from 'react-helmet-async';
 import { Image as AntdImage, message } from 'antd';
 import ErrorBoundary3D from './components/ErrorBoundary3D';
@@ -23,7 +23,7 @@ import FamilyHallDecoration from './components/FamilyHallDecoration';
 import MobileTouchControls from './components/MobileTouchControls';
 import { textureCache } from './utils/TextureCache';
 import { HALL_CONFIG } from './utils/museumLayoutConfig';
-import { resolveImg, resolveTextureImg } from '@utils/imageUtils';
+import { resolveImg } from '@utils/imageUtils';
 import { getGalleryMedia, getGalleryCategories, updateGalleryMedia, createGalleryMedia } from '@services/gallery';
 import { uploadFile } from '@services/admin';
 import { getGuestbookEntries, createGuestbookEntry } from '@services/guestbook';
@@ -51,12 +51,7 @@ const Museum = () => {
   const [hoveredMedia, setHoveredMedia] = useState(null);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
-  const [dpr, setDpr] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return (window.innerWidth <= 1024 || 'ontouchstart' in window) ? 1 : 1.5;
-    }
-    return 1.5;
-  }); // Dynamic DPR scaler based on device capability
+  const [dpr, setDpr] = useState(1.5); // Performance Monitor DPR scaler
 
   // Mobile Analog Touch State (Use Refs for 120 FPS zero-re-render touch swiping!)
   const mobileMoveVectorRef = useRef({ x: 0, y: 0 });
@@ -134,7 +129,7 @@ const Museum = () => {
         setLoadingState('preloading');
         const urls = data
           .filter(item => item.media_type === 'image')
-          .map(item => resolveTextureImg(item.url))
+          .map(item => resolveImg(item.url))
           .filter(Boolean);
 
         if (urls.length > 0) {
@@ -424,18 +419,20 @@ const Museum = () => {
           camera={{ fov: 60, near: 0.01, far: 250, position: [0, 3.8, 0] }}
           gl={{ antialias: dpr <= 1, alpha: false, powerPreference: "high-performance" }}
         >
-          <PerformanceMonitor 
-            onIncline={() => setDpr(isMobile ? 1 : 1.5)} 
-            onDecline={() => setDpr(isMobile ? 0.8 : 1)} 
-          />
+          <PerformanceMonitor onIncline={() => setDpr(1.5)} onDecline={() => setDpr(1)} />
           <Suspense fallback={null}>
             <VisibilityCullingSystem playerPosRef={playerPosRef} northRef={northRef} southRef={southRef} eastRef={eastRef} westRef={westRef} lobbyRef={lobbyRef} />
             <MuseumLighting />
             
-            <group onClick={() => setSelectedMedia(null)}>
-              <GalleryRoom categories={categories} />
+            {/* Global Picture Frame Instancer */}
+            <Instances limit={1000}>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshLambertMaterial color="white" />
+              
+              <group onClick={() => setSelectedMedia(null)}>
+                <GalleryRoom categories={categories} />
 
-              {/* LOBBY ZONE */}
+                {/* LOBBY ZONE */}
               <group ref={lobbyRef}>
                 <LobbyDecoration categories={categories} onTeleportToLevel2={() => navigateTo('signature')} />
                 <BotAssistantNPC
@@ -504,7 +501,8 @@ const Museum = () => {
                 ))}
               </group>
 
-            </group>
+              </group>
+            </Instances>
 
             <Player
               teleportTarget={teleportTarget}

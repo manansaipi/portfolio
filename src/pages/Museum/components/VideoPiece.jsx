@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Text } from '@react-three/drei';
+import { Text, Instance } from '@react-three/drei';
 import * as THREE from 'three';
 import { resolveImg } from '@utils/imageUtils';
 
@@ -69,10 +69,7 @@ const VideoPiece = ({ media, position, rotation, onClick }) => {
         }}
       >
         {/* Sleek Dark Frame */}
-        <mesh position={[0, 0, -0.01]}>
-          <boxGeometry args={[width + 0.2, height + 0.2, 0.1]} />
-          <meshLambertMaterial color={hovered ? '#1e293b' : '#0f172a'} />
-        </mesh>
+        <Instance position={[0, 0, -0.01]} scale={[width + 0.2, height + 0.2, 0.1]} color={hovered ? '#1e293b' : '#0f172a'} />
 
         {/* Video Canvas */}
         <mesh position={[0, 0, 0.05]}>
