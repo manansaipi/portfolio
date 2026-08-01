@@ -31,24 +31,24 @@ const NatureHallDecoration = () => (
     {/* ════════════════════════════════════════════════════════════════ */}
     {/* 📱 0b. INTERACTIVE DIGITAL INFO KIOSK (At Z = -42)                */}
     {/* ════════════════════════════════════════════════════════════════ */}
-    <group position={[-2.8, 0, -42]} rotation={[0, -Math.PI / 6, 0]}>
+    <group position={[-2.8, 0, -42]} rotation={[0, Math.PI, 0]}>
       {/* Base */}
       <mesh position={[0, 0.05, 0]}>
         <boxGeometry args={[0.6, 0.1, 0.5]} />
         <meshLambertMaterial color="#1c261d" />
       </mesh>
       {/* Stand */}
-      <mesh position={[0, 0.55, 0]} rotation={[0.15, 0, 0]}>
+      <mesh position={[0, 0.55, 0]} rotation={[-0.15, 0, 0]}>
         <boxGeometry args={[0.15, 1.0, 0.12]} />
         <meshLambertMaterial color="#2d3b2d" />
       </mesh>
       {/* Screen Frame */}
-      <mesh position={[0, 1.15, 0.05]} rotation={[0.45, 0, 0]}>
+      <mesh position={[0, 1.15, 0.05]} rotation={[-0.45, 0, 0]}>
         <boxGeometry args={[0.7, 0.5, 0.06]} />
         <meshLambertMaterial color="#1c261d" />
       </mesh>
-      {/* Screen Glass — Bright Glowing Green */}
-      <mesh position={[0, 1.15, 0.09]} rotation={[0.45, 0, 0]}>
+      {/* Screen Glass — Bright Glowing Green facing Player */}
+      <mesh position={[0, 1.15, 0.09]} rotation={[-0.45, 0, 0]}>
         <planeGeometry args={[0.62, 0.42]} />
         <meshBasicMaterial color="#4ade80" side={THREE.DoubleSide} />
       </mesh>
