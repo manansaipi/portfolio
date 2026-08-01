@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 // Museum world bounds for coordinate → minimap pixel mapping
-const WORLD_MIN = -80;
-const WORLD_MAX = 80;
-const WORLD_RANGE = WORLD_MAX - WORLD_MIN; // 160 units total
+const WORLD_MIN = -130;
+const WORLD_MAX = 130;
+const WORLD_RANGE = WORLD_MAX - WORLD_MIN; // 260 units total
 
 // NPC locations (AI Bot is at [3, 2.2, 6])
 const NPC_POS = { x: 3, z: 6 };
@@ -12,7 +12,7 @@ const MuseumMiniMap = ({ playersRef, playerPosRef, isMobile = false }) => {
   const canvasRef = useRef(null);
   const animFrameRef = useRef(null);
 
-  const MAP_SIZE = isMobile ? 120 : 160;
+  const MAP_SIZE = isMobile ? 120 : 180;
   const PADDING = 8;
 
   // Convert world XZ → canvas pixel
@@ -49,19 +49,19 @@ const MuseumMiniMap = ({ playersRef, playerPosRef, isMobile = false }) => {
 
     // North corridor + hall (Nature) — negative Z
     drawRoom(-4, -28, 4, -15);
-    drawRoom(-15, -77, 15, -28);
+    drawRoom(-15, -126, 15, -28);
 
     // South corridor + hall (Portrait) — positive Z
     drawRoom(-4, 15, 4, 28);
-    drawRoom(-15, 28, 15, 77);
+    drawRoom(-15, 28, 15, 126);
 
     // West corridor + hall (Street) — negative X
     drawRoom(-28, -4, -15, 4);
-    drawRoom(-77, -15, -28, 15);
+    drawRoom(-126, -15, -28, 15);
 
     // East corridor + hall (Travel) — positive X
     drawRoom(15, -4, 28, 4);
-    drawRoom(28, -15, 77, 15);
+    drawRoom(28, -15, 126, 15);
 
     // ── Draw room labels ──
     ctx.fillStyle = 'rgba(255, 255, 255, 0.30)';
@@ -96,8 +96,9 @@ const MuseumMiniMap = ({ playersRef, playerPosRef, isMobile = false }) => {
       const players = playersRef.current;
       const entries = players instanceof Map ? [...players.entries()] : Object.entries(players);
       for (const [, p] of entries) {
-        if (!p || !p.position || p.position.length < 3) continue;
-        const [px, py] = worldToMap(p.position[0], p.position[2]);
+        const pos = p.targetPosition || p.position;
+        if (!pos || pos.length < 3) continue;
+        const [px, py] = worldToMap(pos[0], pos[2]);
         ctx.fillStyle = p.color || '#38bdf8';
         ctx.beginPath();
         ctx.arc(px, py, 2.5, 0, Math.PI * 2);
