@@ -471,6 +471,8 @@ const Museum = () => {
               onInteractE={() => setIsAiChatOpen(true)}
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
+              emptySlots={emptySlots}
+              onHoverTarget={setHoveredPlacementTarget}
               onSelectArt={(media) => setSelectedMedia(media)}
               mobileMoveVectorRef={mobileMoveVectorRef}
               mobileLookDeltaRef={mobileLookDeltaRef}

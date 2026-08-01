@@ -54,6 +54,8 @@ const Player = ({
   onInteractTypeChange,
   isMobile = false,
   onMove,
+  emptySlots = [],
+  onHoverTarget,
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
@@ -81,6 +83,17 @@ const Player = ({
       vec: art.pos ? new THREE.Vector3(...art.pos) : null
     })).filter(item => item.vec !== null);
   }, [placedArtworks]);
+
+  const parsedEmptySlots = useRef([]);
+  useEffect(() => {
+    parsedEmptySlots.current = emptySlots.map(slot => ({
+      slot,
+      vec: slot.pos ? new THREE.Vector3(...slot.pos) : null
+    })).filter(item => item.vec !== null);
+  }, [emptySlots]);
+
+  // Track the last emitted hover target on mobile to avoid state spam
+  const lastHoverTargetRef = useRef(null);
 
   // Initial Spawn: Orient camera level at eye height facing directly towards the Portrait Hall (+Z)!
   useEffect(() => {
@@ -245,8 +258,8 @@ const Player = ({
     prevLookingAtNpc.current = isLookingAtNpc;
     isLookingAtNPCRef.current = isLookingAtNpc;
 
-    // 2. Zero-Allocation Raycast Check for Artworks (Distance <= 8.5m, Dot > 0.94)
-    let bestArt = null;
+    // 2. Zero-Allocation Raycast Check for Artworks & Empty Slots (Distance <= 8.5m, Dot > 0.94)
+    let bestTarget = null;
     let bestDot = 0.94;
 
     const list = parsedArtworks.current;
@@ -259,21 +272,46 @@ const Player = ({
         const dotArt = _viewDir.dot(_toArt);
         if (dotArt > bestDot) {
           bestDot = dotArt;
-          bestArt = item.art;
+          bestTarget = { media: item.art, isEmptySlot: false };
         }
       }
     }
-    lookingAtArtRef.current = bestArt;
+
+    const slotList = parsedEmptySlots.current;
+    for (let i = 0; i < slotList.length; i++) {
+      const item = slotList[i];
+      const distToSlot = camera.position.distanceTo(item.vec);
+
+      if (distToSlot <= 8.5) {
+        _toArt.copy(item.vec).sub(camera.position).normalize();
+        const dotSlot = _viewDir.dot(_toArt);
+        if (dotSlot > bestDot) {
+          bestDot = dotSlot;
+          bestTarget = { ...item.slot, isEmptySlot: true };
+        }
+      }
+    }
+
+    lookingAtArtRef.current = bestTarget && !bestTarget.isEmptySlot ? bestTarget.media : null;
 
     // Highlight crosshair and determine type of interactive target
-    const isInteractive = isLookingAtNpc || Boolean(bestArt);
+    const isInteractive = isLookingAtNpc || Boolean(bestTarget);
     if (onLookingAtNPC) {
       onLookingAtNPC(isInteractive);
     }
 
     if (onInteractTypeChange) {
-      const type = isLookingAtNpc ? 'bot' : (bestArt ? 'art' : null);
+      const type = isLookingAtNpc ? 'bot' : (bestTarget ? (bestTarget.isEmptySlot ? 'slot' : 'art') : null);
       onInteractTypeChange(type);
+    }
+
+    // Only update hovered placement target on mobile (desktop uses onPointerOver for precise picking)
+    if (isMobile && onHoverTarget) {
+      const currentId = bestTarget ? (bestTarget.isEmptySlot ? `slot-${bestTarget.category}-${bestTarget.slotIndex}` : `art-${bestTarget.media.id}`) : null;
+      if (lastHoverTargetRef.current !== currentId) {
+        lastHoverTargetRef.current = currentId;
+        onHoverTarget(bestTarget);
+      }
     }
 
     // Determine level floor base (Level 1 base = 3.8m, Level 2 Penthouse base = 15.8m)
