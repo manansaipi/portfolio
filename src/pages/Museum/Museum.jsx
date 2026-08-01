@@ -384,15 +384,20 @@ const Museum = () => {
     }
   };
 
-  // ── 1. Loading Screen ──
-  if (loadingState !== 'ready') {
-    return (
+  // ── 1. Loading Screen & Full 3D Virtual Museum Engine ──
+  return (
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0, touchAction: 'none', overscrollBehavior: 'none' }}>
+      <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
+
+      {/* Loading Overlay (Stays on top while Canvas precompiles in the background) */}
       <div style={{
-        position: 'fixed', inset: 0, background: '#09090b',
+        position: 'absolute', inset: 0, background: '#09090b',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         color: '#ffffff', fontFamily: 'Inter, system-ui, sans-serif', zIndex: 100,
+        opacity: loadingState !== 'ready' ? 1 : 0,
+        pointerEvents: loadingState !== 'ready' ? 'all' : 'none',
+        transition: 'opacity 0.8s ease-out'
       }}>
-        <Helmet><title>Loading 3D Museum...</title></Helmet>
         <h2 style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '1.5rem', opacity: 0.9 }}>
           {loadingState === 'fetching' ? 'Fetching Exhibition Media...' : 'Initializing 3D Museum Environment'}
         </h2>
@@ -404,13 +409,6 @@ const Museum = () => {
         </div>
         <p style={{ marginTop: '0.85rem', fontSize: '0.85rem', opacity: 0.6 }}>assets loading {progress}% </p>
       </div>
-    );
-  }
-
-  // ── 2. Full 3D Virtual Museum Engine (Mobile & Desktop Enabled!) ──
-  return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0, touchAction: 'none', overscrollBehavior: 'none' }}>
-      <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
 
       <ErrorBoundary3D>
         <Canvas
