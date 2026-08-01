@@ -12,6 +12,7 @@ import VideoPiece from './components/VideoPiece';
 import BotAssistantNPC from './components/BotAssistantNPC';
 import BotAssistantModal from './components/BotAssistantModal';
 import DrawingStudioModal from './components/DrawingStudioModal';
+import AdminMediaEditor from './components/AdminMediaEditor';
 import Player from './components/Player';
 import MuseumMapHUD from './components/MuseumMapHUD';
 import NatureHallDecoration from './components/NatureHallDecoration';
@@ -41,6 +42,8 @@ const Museum = () => {
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window));
   const [teleportTarget, setTeleportTarget] = useState(null);
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+  const [isEditingMedia, setIsEditingMedia] = useState(false);
+  const [hoveredMedia, setHoveredMedia] = useState(null);
   const [isLookingAtNPC, setIsLookingAtNPC] = useState(false);
   const [isMultiplayerChatOpen, setIsMultiplayerChatOpen] = useState(false);
   const [dpr, setDpr] = useState(1.5); // Performance Monitor DPR scaler
@@ -150,10 +153,14 @@ const Museum = () => {
         if (selectedStudioSlot) setSelectedStudioSlot(null);
         if (isAiChatOpen) setIsAiChatOpen(false);
       }
+      if ((e.key === 'q' || e.key === 'Q') && isAdmin && (hoveredMedia || selectedMedia) && !isEditingMedia) {
+        setSelectedMedia(hoveredMedia || selectedMedia);
+        setIsEditingMedia(true);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedMedia, selectedStudioSlot, isAiChatOpen]);
+  }, [selectedMedia, hoveredMedia, selectedStudioSlot, isAiChatOpen, isAdmin, isEditingMedia]);
 
   // Map uploaded artworks to wall slots in the 4 exhibition halls
   const placedArtworks = useMemo(() => {
@@ -193,6 +200,15 @@ const Museum = () => {
   const handlePostDrawing = async (entryData) => {
     await createGuestbookEntry(entryData);
     await fetchGuestbook();
+  };
+
+  const handleMediaUpdated = (updatedMedia) => {
+    setMediaItems((prev) => prev.map(m => m.id === updatedMedia.id ? updatedMedia : m));
+  };
+
+  const handleMediaDeleted = (mediaId) => {
+    setMediaItems((prev) => prev.filter(m => m.id !== mediaId));
+    setSelectedMedia(null);
   };
 
   // ── 1. Loading Screen ──
@@ -268,6 +284,8 @@ const Museum = () => {
                     onClick={(m) => {
                       setSelectedMedia(m);
                     }}
+                    onHover={(m) => setHoveredMedia(m)}
+                    onUnhover={() => setHoveredMedia(null)}
                   />
                 )
               ))}
@@ -371,16 +389,29 @@ const Museum = () => {
         onSubmit={handlePostDrawing}
       />
 
+      {/* Admin Editor Modal */}
+      <AdminMediaEditor
+        isOpen={isEditingMedia}
+        onClose={() => {
+          setIsEditingMedia(false);
+          setSelectedMedia(null);
+        }}
+        media={selectedMedia}
+        categories={categories}
+        onMediaUpdated={handleMediaUpdated}
+        onMediaDeleted={handleMediaDeleted}
+      />
+
       {/* Antd Image Fullscreen Lightbox Inspection */}
       <div style={{ display: 'none' }}>
         {selectedMedia && (
           <AntdImage
             src={resolveImg(selectedMedia.url)}
             preview={{
-              open: true,
+              open: !isEditingMedia,
               src: resolveImg(selectedMedia.url),
               onOpenChange: (open) => {
-                if (!open) setSelectedMedia(null);
+                if (!open && !isEditingMedia) setSelectedMedia(null);
               },
             }}
           />

@@ -3,7 +3,7 @@ import { Text } from '@react-three/drei';
 import { textureCache } from '../utils/TextureCache';
 import { resolveImg } from '@utils/imageUtils';
 
-const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width = 4.8, height = 3.5, onClick }) => {
+const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width = 4.8, height = 3.5, onClick, onHover, onUnhover }) => {
   const [texture, setTexture] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -74,10 +74,12 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
           e.stopPropagation();
           if (e.distance && e.distance <= 8.5) {
             setHovered(true);
+            if (onHover) onHover(media);
           }
         }}
         onPointerOut={() => {
           setHovered(false);
+          if (onUnhover) onUnhover();
         }}
       >
         {/* Outer Wooden Picture Frame Bars */}
