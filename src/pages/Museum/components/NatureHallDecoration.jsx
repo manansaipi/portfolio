@@ -79,6 +79,24 @@ const NatureHallDecoration = () => (
         <meshLambertMaterial color="#757575" />
       </mesh>
     </group>
+
+    {/* ════════════════════════════════════════════════════════════════ */}
+    {/* ✨ 3. FLOOR ACCENT LIGHT STRIP — running along the center aisle  */}
+    {/* ════════════════════════════════════════════════════════════════ */}
+    {[-40, -48, -56, -64, -72, -80, -88, -96, -104, -112, -120].map((bz) => (
+      <group key={bz}>
+        {/* Left floor strip */}
+        <mesh position={[-3, 0.008, bz]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[6, 0.12]} />
+          <meshBasicMaterial color="#86efac" />
+        </mesh>
+        {/* Right floor strip */}
+        <mesh position={[3, 0.008, bz]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[6, 0.12]} />
+          <meshBasicMaterial color="#86efac" />
+        </mesh>
+      </group>
+    ))}
   </group>
 );
 

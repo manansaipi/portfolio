@@ -75,6 +75,24 @@ const AdventureHallDecoration = () => (
         <meshLambertMaterial color="#2d6e2d" />
       </mesh>
     </group>
+
+    {/* ════════════════════════════════════════════════════════════════ */}
+    {/* ✨ 3. FLOOR ACCENT LIGHT STRIP — running along the center aisle  */}
+    {/* ════════════════════════════════════════════════════════════════ */}
+    {[40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120].map((bx) => (
+      <group key={bx}>
+        {/* Left floor strip */}
+        <mesh position={[bx, 0.008, -3]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.12, 6]} />
+          <meshBasicMaterial color="#fed7aa" />
+        </mesh>
+        {/* Right floor strip */}
+        <mesh position={[bx, 0.008, 3]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.12, 6]} />
+          <meshBasicMaterial color="#fed7aa" />
+        </mesh>
+      </group>
+    ))}
   </group>
 );
 
