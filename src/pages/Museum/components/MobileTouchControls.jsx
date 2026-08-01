@@ -225,7 +225,7 @@ const MobileTouchControls = ({
             onClick={(e) => { e.stopPropagation(); onAdminUpload && onAdminUpload(); }}
             onTouchStart={(e) => { e.stopPropagation(); onAdminUpload && onAdminUpload(); }}
             style={{
-              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              position: 'absolute', bottom: '10px', right: '140px', width: '58px', height: '58px', borderRadius: '50%',
               background: 'rgba(59, 130, 246, 0.85)', border: '1.5px solid #60a5fa', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
               display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
             }}
@@ -239,7 +239,7 @@ const MobileTouchControls = ({
             onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
             onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
             style={{
-              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              position: 'absolute', bottom: '10px', right: '140px', width: '58px', height: '58px', borderRadius: '50%',
               background: 'rgba(34, 197, 94, 0.85)', border: '1.5px solid #4ade80', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
               display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
             }}
@@ -253,7 +253,7 @@ const MobileTouchControls = ({
             onClick={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
             onTouchStart={(e) => { e.stopPropagation(); onAdminGrabPlace && onAdminGrabPlace(); }}
             style={{
-              position: 'absolute', bottom: '10px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              position: 'absolute', bottom: '10px', right: '140px', width: '58px', height: '58px', borderRadius: '50%',
               background: 'rgba(249, 115, 22, 0.85)', border: '1.5px solid #fb923c', color: '#fff', fontSize: '0.65rem', fontWeight: 800,
               display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
             }}
@@ -267,7 +267,7 @@ const MobileTouchControls = ({
             onClick={(e) => { e.stopPropagation(); onAdminEdit && onAdminEdit(); }}
             onTouchStart={(e) => { e.stopPropagation(); onAdminEdit && onAdminEdit(); }}
             style={{
-              position: 'absolute', bottom: '80px', right: '122px', width: '58px', height: '58px', borderRadius: '50%',
+              position: 'absolute', bottom: '80px', right: '140px', width: '58px', height: '58px', borderRadius: '50%',
               background: 'rgba(168, 85, 247, 0.85)', border: '1.5px solid #c084fc', color: '#fff', fontSize: '0.72rem', fontWeight: 800,
               display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto', backdropFilter: 'blur(8px)'
             }}
