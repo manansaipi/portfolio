@@ -472,7 +472,14 @@ const Museum = () => {
               onLookingAtNPC={setIsLookingAtNPC}
               placedArtworks={placedArtworks}
               emptySlots={emptySlots}
-              onHoverTarget={setHoveredPlacementTarget}
+              onHoverTarget={(target) => {
+                setHoveredPlacementTarget(target);
+                if (target && !target.isEmptySlot) {
+                  setHoveredMedia(target.media);
+                } else {
+                  setHoveredMedia(null);
+                }
+              }}
               onSelectArt={(media) => setSelectedMedia(media)}
               mobileMoveVectorRef={mobileMoveVectorRef}
               mobileLookDeltaRef={mobileLookDeltaRef}

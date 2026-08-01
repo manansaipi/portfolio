@@ -307,9 +307,9 @@ const MobileTouchControls = ({
             cursor: 'pointer',
             boxShadow: '0 0 20px rgba(59, 130, 246, 0.75)',
             touchAction: 'manipulation',
-            opacity: isInteractive ? 1 : 0,
-            pointerEvents: isInteractive ? 'auto' : 'none',
-            transform: isInteractive ? 'scale(1)' : 'scale(0.8)',
+            opacity: isInteractive && interactType !== 'slot' ? 1 : 0,
+            pointerEvents: isInteractive && interactType !== 'slot' ? 'auto' : 'none',
+            transform: isInteractive && interactType !== 'slot' ? 'scale(1)' : 'scale(0.8)',
             transition: 'opacity 0.2s ease, transform 0.2s ease',
           }}
         >
