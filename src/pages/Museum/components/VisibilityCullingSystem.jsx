@@ -13,10 +13,20 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
     const inWest = x < -15;
     const inLobby = !inNorth && !inSouth && !inEast && !inWest;
 
-    if (northRef.current) northRef.current.visible = inNorth || inLobby;
-    if (southRef.current) southRef.current.visible = inSouth || inLobby;
-    if (eastRef.current) eastRef.current.visible = inEast || inLobby;
-    if (westRef.current) westRef.current.visible = inWest || inLobby;
+    const dirX = -Math.sin(yaw);
+    const dirZ = -Math.cos(yaw);
+
+    // If dir is beyond threshold, it means camera is pointing towards that hall.
+    const lookNorth = dirZ < -0.25;
+    const lookSouth = dirZ > 0.25;
+    const lookEast = dirX > 0.25;
+    const lookWest = dirX < -0.25;
+
+    // A hall is visible if you are inside it OR if you are looking in its direction
+    if (northRef.current) northRef.current.visible = inNorth || lookNorth;
+    if (southRef.current) southRef.current.visible = inSouth || lookSouth;
+    if (eastRef.current) eastRef.current.visible = inEast || lookEast;
+    if (westRef.current) westRef.current.visible = inWest || lookWest;
     
     if (lobbyRef.current) {
       lobbyRef.current.visible = true;
