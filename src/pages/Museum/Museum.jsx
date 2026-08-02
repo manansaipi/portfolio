@@ -33,6 +33,7 @@ import LocalPlayerEmoteAvatar from './components/LocalPlayerEmoteAvatar';
 import MultiplayerChatModal from './components/MultiplayerChatModal';
 import MuseumMiniMap from './components/MuseumMiniMap';
 import VisibilityCullingSystem from './components/VisibilityCullingSystem';
+import StareTooltip from './components/StareTooltip';
 
 const Museum = () => {
   const [loadingState, setLoadingState] = useState('fetching');
@@ -62,10 +63,33 @@ const Museum = () => {
   const [interactType, setInteractType] = useState(null);
   const [mobileInteractTrigger, setMobileInteractTrigger] = useState(0);
   
-  // Track hovered empty slot or art piece for admin placement
   const [hoveredPlacementTarget, setHoveredPlacementTarget] = useState(null);
   const [activeEmote, setActiveEmote] = useState(null);
   const playerPosRef = useRef({ x: 0, z: 0, yaw: 0 });
+
+  // Gaze & Audio State
+  const [staredMedia, setStaredMedia] = useState(null);
+  const ambientAudioRef = useRef(null);
+
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (!ambientAudioRef.current) {
+        ambientAudioRef.current = new Audio('/audio/ambient.mp3');
+        ambientAudioRef.current.loop = true;
+        ambientAudioRef.current.volume = 0.05; // Very subtle background noise
+        ambientAudioRef.current.play().catch(() => console.log('Ambient audio missing or blocked'));
+      }
+    };
+    window.addEventListener('click', handleFirstInteraction, { once: true });
+    window.addEventListener('touchstart', handleFirstInteraction, { once: true });
+    return () => {
+      if (ambientAudioRef.current) {
+        ambientAudioRef.current.pause();
+      }
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
 
   // Occlusion Culling Refs
   const northRef = useRef();
@@ -515,6 +539,8 @@ const Museum = () => {
                   setHoveredMedia(null);
                 }
               }}
+              onStareStart={(media) => setStaredMedia(media)}
+              onStareEnd={() => setStaredMedia(null)}
               onSelectArt={(media) => setSelectedMedia(media)}
               mobileMoveVectorRef={mobileMoveVectorRef}
               mobileLookDeltaRef={mobileLookDeltaRef}
@@ -552,6 +578,9 @@ const Museum = () => {
         playerPosRef={playerPosRef}
         isMobile={isMobile}
       />
+
+      {/* View-Based 2D Tooltip */}
+      <StareTooltip staredMedia={staredMedia} />
 
       {/* HUD Navigation Overlay */}
       <MuseumMapHUD

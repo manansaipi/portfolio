@@ -56,6 +56,8 @@ const Player = ({
   onMove,
   emptySlots = [],
   onHoverTarget,
+  onStareStart,
+  onStareEnd,
 }) => {
   const { camera } = useThree();
   const controlsRef = useRef();
@@ -69,6 +71,24 @@ const Player = ({
   const direction = useRef(new THREE.Vector3());
   const isLookingAtNPCRef = useRef(false);
   const lookingAtArtRef = useRef(null);
+
+  // Stare Timer & Footsteps
+  const hoverTimerRef = useRef(0);
+  const lastHoveredArtIdRef = useRef(null);
+  const audioFootsteps = useRef(null);
+
+  useEffect(() => {
+    // Initialize Footsteps Audio
+    audioFootsteps.current = new Audio('/audio/footsteps.mp3');
+    audioFootsteps.current.loop = true;
+    audioFootsteps.current.volume = 0.15; // Keep it subtle
+    return () => {
+      if (audioFootsteps.current) {
+        audioFootsteps.current.pause();
+        audioFootsteps.current = null;
+      }
+    };
+  }, []);
   
   const SPEED = 180;
   const NORMAL_HEIGHT = 3.8;
@@ -316,6 +336,23 @@ const Player = ({
       }
     }
 
+    // ── Gaze Timer Logic for Tooltips (2.0s stare) ──
+    const art = bestTarget && !bestTarget.isEmptySlot ? bestTarget.media : null;
+    const artId = art ? art.id : null;
+
+    if (artId !== lastHoveredArtIdRef.current) {
+      // Looked away or looked at something new
+      lastHoveredArtIdRef.current = artId;
+      hoverTimerRef.current = 0;
+      if (onStareEnd) onStareEnd();
+    } else if (artId) {
+      // Staring at the same artwork
+      hoverTimerRef.current += delta;
+      if (hoverTimerRef.current > 2.0 && (hoverTimerRef.current - delta) <= 2.0) {
+        if (onStareStart) onStareStart(art);
+      }
+    }
+
     // Determine level floor base (Level 1 base = 3.8m, Level 2 Penthouse base = 15.8m)
     const isLevel2 = camera.position.y >= 10;
     const baseFloorY = isLevel2 ? 15.8 : NORMAL_HEIGHT;
@@ -328,8 +365,10 @@ const Player = ({
     camera.position.y += velocity.current.y * delta;
 
     // Snap to floor boundary (Shared for Mobile & Desktop!)
+    let isGrounded = false;
     if (camera.position.y <= targetHeight) {
       camera.position.y = targetHeight;
+      isGrounded = true;
       if (velocity.current.y < 0) {
         velocity.current.y = 0;
       }
@@ -431,6 +470,23 @@ const Player = ({
       const cleanYaw = Math.atan2(forward.x, forward.z);
       const cleanPitch = Math.asin(THREE.MathUtils.clamp(forward.y, -1, 1));
       onMove(camera.position, new THREE.Euler(cleanPitch, cleanYaw, 0));
+    }
+
+    // ── Footsteps Audio Logic ──
+    if (audioFootsteps.current) {
+      // If moving horizontally and on the ground
+      const isMoving = velocity.current.x * velocity.current.x + velocity.current.z * velocity.current.z > 0.1;
+      if (isMoving && isGrounded && enabled && !disableMovement) {
+        // Adjust playback speed based on running
+        audioFootsteps.current.playbackRate = keys.current.shift ? 1.5 : 1.0;
+        if (audioFootsteps.current.paused) {
+          audioFootsteps.current.play().catch(() => {}); // Catch autoplay rejection
+        }
+      } else {
+        if (!audioFootsteps.current.paused) {
+          audioFootsteps.current.pause();
+        }
+      }
     }
   });
 
