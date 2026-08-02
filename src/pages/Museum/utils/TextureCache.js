@@ -38,7 +38,8 @@ class TextureCache {
           texture.colorSpace = THREE.SRGBColorSpace;
           texture.minFilter = THREE.LinearMipmapLinearFilter;
           texture.magFilter = THREE.LinearFilter;
-          texture.anisotropy = 4;
+          const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window);
+          texture.anisotropy = isMobile ? 1 : 4; // Anisotropy 4 crashes iOS Safari on large textures
           texture.generateMipmaps = true;
           texture.needsUpdate = true;
           this.cache.set(url, texture);
