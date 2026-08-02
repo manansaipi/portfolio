@@ -40,7 +40,7 @@ class TextureCache {
           texture.magFilter = THREE.LinearFilter;
           const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window);
           texture.anisotropy = isMobile ? 1 : 4; // Anisotropy 4 crashes iOS Safari on large textures
-          texture.generateMipmaps = true;
+          texture.generateMipmaps = !isMobile; // Saves 33% VRAM on mobile devices
           texture.needsUpdate = true;
           this.cache.set(url, texture);
           resolve(texture);

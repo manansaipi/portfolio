@@ -35,7 +35,7 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
         
         scene.traverse((obj) => {
           if (obj.isMesh) {
-            // Disable frustum culling so GPU renders it even if off-screen (Desktop only)
+            // Disable frustum culling so GPU renders it even if off-screen (Desktop only)  
             if (!isMobile) {
                 obj.frustumCulled = false;
             }
@@ -43,7 +43,7 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
             // Force-upload textures to GPU VRAM immediately
             const mat = obj.material;
             if (mat) {
-              // Compile the material's shader program
+              // Compile the material's shader programw
               materialCount++;
 
               if (!isMobile) {
