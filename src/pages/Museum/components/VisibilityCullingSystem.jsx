@@ -5,7 +5,6 @@ const WARMUP_FRAMES = 5; // Only need a few frames now since we force-init textu
 
 const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, westRef, lobbyRef, onWarmupComplete }) => {
   const { gl, scene, camera } = useThree();
-  const lastLogRef = useRef(0);
   const frameCountRef = useRef(0);
   const warmupDoneRef = useRef(false);
 
@@ -28,13 +27,18 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
         if (westRef.current) westRef.current.visible = true;
         if (lobbyRef.current) lobbyRef.current.visible = true;
 
-        // Force-upload every texture and compile every material to GPU
+        // Force-upload textures to GPU VRAM immediately (Desktop only, mobile will crash from VRAM spike)
+        const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window);
+        
         let textureCount = 0;
         let materialCount = 0;
+        
         scene.traverse((obj) => {
           if (obj.isMesh) {
-            // Disable frustum culling so GPU renders it even if off-screen
-            obj.frustumCulled = false;
+            // Disable frustum culling so GPU renders it even if off-screen (Desktop only)
+            if (!isMobile) {
+                obj.frustumCulled = false;
+            }
 
             // Force-upload textures to GPU VRAM immediately
             const mat = obj.material;
@@ -42,16 +46,18 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
               // Compile the material's shader program
               materialCount++;
 
-              // Force-init all texture maps on this material
-              const textureProps = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap', 'lightMap', 'bumpMap', 'displacementMap', 'alphaMap', 'envMap'];
-              for (const prop of textureProps) {
-                const tex = mat[prop];
-                if (tex && tex.isTexture) {
-                  try {
-                    gl.initTexture(tex);
-                    textureCount++;
-                  } catch (e) {
-                    // Fallback: some older Three.js versions don't have initTexture
+              if (!isMobile) {
+                // Force-init all texture maps on this material
+                const textureProps = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap', 'lightMap', 'bumpMap', 'displacementMap', 'alphaMap', 'envMap'];
+                for (const prop of textureProps) {
+                  const tex = mat[prop];
+                  if (tex && tex.isTexture) {
+                    try {
+                      gl.initTexture(tex);
+                      textureCount++;
+                    } catch (e) {
+                      // Fallback
+                    }
                   }
                 }
               }
@@ -76,69 +82,6 @@ const VisibilityCullingSystem = ({ playerPosRef, northRef, southRef, eastRef, we
         if (onWarmupComplete) onWarmupComplete();
       }
       return;
-    }
-
-    // ── PORTAL CULLING (post warm-up) ──
-    const { x, z, yaw } = playerPosRef.current;
-
-    const inNorth = z < -15;
-    const inSouth = z > 15;
-    const inEast = x > 15;
-    const inWest = x < -15;
-
-    const dirX = Math.sin(yaw);
-    const dirZ = Math.cos(yaw);
-
-    const lookNorth = dirZ < -0.25;
-    const lookSouth = dirZ > 0.25;
-    const lookEast = dirX > 0.25;
-    const lookWest = dirX < -0.25;
-
-    // Portal Culling Logic: If you are inside a hall, you can't see the adjacent halls through the walls!
-    if (inNorth) {
-      if (northRef.current) northRef.current.visible = true;
-      if (southRef.current) southRef.current.visible = lookSouth;
-      if (eastRef.current) eastRef.current.visible = false;
-      if (westRef.current) westRef.current.visible = false;
-    } else if (inSouth) {
-      if (northRef.current) northRef.current.visible = lookNorth;
-      if (southRef.current) southRef.current.visible = true;
-      if (eastRef.current) eastRef.current.visible = false;
-      if (westRef.current) westRef.current.visible = false;
-    } else if (inEast) {
-      if (northRef.current) northRef.current.visible = false;
-      if (southRef.current) southRef.current.visible = false;
-      if (eastRef.current) eastRef.current.visible = true;
-      if (westRef.current) westRef.current.visible = lookWest;
-    } else if (inWest) {
-      if (northRef.current) northRef.current.visible = false;
-      if (southRef.current) southRef.current.visible = false;
-      if (eastRef.current) eastRef.current.visible = lookEast;
-      if (westRef.current) westRef.current.visible = true;
-    } else {
-      // Lobby
-      if (northRef.current) northRef.current.visible = lookNorth;
-      if (southRef.current) southRef.current.visible = lookSouth;
-      if (eastRef.current) eastRef.current.visible = lookEast;
-      if (westRef.current) westRef.current.visible = lookWest;
-    }
-    
-    if (lobbyRef.current) {
-      lobbyRef.current.visible = true;
-    }
-
-    // ── DEBUG LOGGING (Once per second) ──
-    const now = Date.now();
-    if (now - lastLogRef.current > 1000) {
-      lastLogRef.current = now;
-      console.log(
-        `%c🛡️ Culling Active!%c\n` +
-        `Visible Halls: North[${northRef.current?.visible ? '✅' : '❌'}] South[${southRef.current?.visible ? '✅' : '❌'}] East[${eastRef.current?.visible ? '✅' : '❌'}] West[${westRef.current?.visible ? '✅' : '❌'}]\n` +
-        `WebGL Draw Calls: ${gl.info.render.calls}\n` +
-        `WebGL Triangles: ${gl.info.render.triangles}`,
-        'color: #4ade80; font-weight: bold; font-size: 14px;',
-        'color: inherit;'
-      );
     }
   });
 
