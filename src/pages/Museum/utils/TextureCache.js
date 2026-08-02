@@ -54,6 +54,14 @@ class TextureCache {
     });
   }
 
+  unload(url) {
+    if (this.cache.has(url)) {
+      const texture = this.cache.get(url);
+      if (texture && texture.dispose) texture.dispose();
+      this.cache.delete(url);
+    }
+  }
+
   dispose() {
     this.cache.forEach((texture) => {
       if (texture && texture.dispose) texture.dispose();

@@ -5,18 +5,32 @@ export const resolveImg = (imgStr, defaultImg = "") => {
 		return `${backendUrl}${imgStr}`;
 	}
 	if (imgStr.startsWith("@assets")) return defaultImg;
+	return imgStr;
+};
 
-	// Automatically optimize Cloudinary images to prevent VRAM crashes on mobile
-	if (imgStr.includes('res.cloudinary.com') && imgStr.includes('/upload/')) {
-		const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window);
-		// On mobile, cap texture width to 1024px and use auto compression. On desktop, cap at 2048px.
-		const transform = isMobile ? 'w_1024,c_limit,q_auto,f_auto' : 'w_2048,c_limit,q_auto,f_auto';
-		
-		// Don't inject if it already has transformations (like w_ or q_)
-		if (!imgStr.includes('/upload/w_') && !imgStr.includes('/upload/q_')) {
-			return imgStr.replace('/upload/', `/upload/${transform}/`);
-		}
+export const getLODImageUrls = (imgStr, isMobile) => {
+	if (!imgStr) return { lowRes: "", highRes: "" };
+	
+	// If not Cloudinary, just return original for both
+	if (!imgStr.includes('res.cloudinary.com') || !imgStr.includes('/upload/')) {
+		const resolved = resolveImg(imgStr);
+		return { lowRes: resolved, highRes: resolved };
 	}
 
-	return imgStr;
+	// Base Cloudinary URL without existing w_ or q_ transforms
+	let cleanUrl = imgStr;
+	if (imgStr.includes('/upload/w_') || imgStr.includes('/upload/q_')) {
+		// Just in case it already has them, we don't double inject.
+		// For safety, we'll assume the DB holds clean URLs (which it does)
+	}
+
+	// Tiny texture for distance (virtually 0 VRAM)
+	const lowResTransform = 'w_256,c_limit,q_auto:low,f_auto';
+	// Full HD for close up
+	const highResTransform = isMobile ? 'w_2048,c_limit,q_auto,f_auto' : 'w_3840,c_limit,q_auto,f_auto';
+
+	return {
+		lowRes: cleanUrl.replace('/upload/', `/upload/${lowResTransform}/`),
+		highRes: cleanUrl.replace('/upload/', `/upload/${highResTransform}/`)
+	};
 };

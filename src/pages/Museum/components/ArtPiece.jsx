@@ -1,26 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import { textureCache } from '../utils/TextureCache';
-import { resolveImg } from '@utils/imageUtils';
+import { getLODImageUrls } from '@utils/imageUtils';
 
 const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width = 4.8, height = 3.5, onClick, onHover, onUnhover }) => {
   const [texture, setTexture] = useState(null);
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [lodLevel, setLodLevel] = useState('low'); // 'low' or 'high'
+  const { camera } = useThree();
 
-  const imgUrl = resolveImg(media.url);
+  const isHidden = media.is_visible === false;
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 1024 || 'ontouchstart' in window);
+  const urls = useMemo(() => getLODImageUrls(media.url, isMobile), [media.url, isMobile]);
+
+  useFrame(() => {
+    if (isHidden) return;
+    
+    // Calculate distance squared (faster than Math.sqrt) from camera to artwork's world position
+    const dx = camera.position.x - position[0];
+    const dz = camera.position.z - position[2];
+    const distSq = dx * dx + dz * dz;
+    
+    if (distSq < 100) { // < 10 meters: Upgrade to HD
+      if (lodLevel !== 'high') setLodLevel('high');
+    } else if (distSq > 225) { // > 15 meters: Downgrade to Low-Res to save VRAM
+      if (lodLevel !== 'low') setLodLevel('low');
+    }
+  });
 
   useEffect(() => {
     let isMounted = true;
+    
+    const targetUrl = lodLevel === 'high' ? urls.highRes : urls.lowRes;
 
-    const cached = textureCache.get(imgUrl);
+    // If downgrading, nuke the HD texture from GPU memory!
+    if (lodLevel === 'low' && urls.highRes) {
+      textureCache.unload(urls.highRes);
+    }
+
+    const cached = textureCache.get(targetUrl);
     if (cached) {
       setTexture(cached);
       setLoading(false);
       return;
     }
 
-    textureCache.load(imgUrl).then((tex) => {
+    // Only show loading spinner if it's the high-res loading, keep low-res visible while loading HD
+    if (!texture) setLoading(true);
+
+    textureCache.load(targetUrl).then((tex) => {
       if (isMounted) {
         setTexture(tex);
         setLoading(false);
@@ -30,7 +60,7 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
     return () => {
       isMounted = false;
     };
-  }, [imgUrl]);
+  }, [lodLevel, urls]);
 
   // Compute dynamic frame width and height based on the loaded image's actual aspect ratio!
   let frameW = width;
@@ -48,8 +78,6 @@ const ArtPiece = ({ media, position = [0, 4.5, 0], rotation = [0, 0, 0], width =
       frameH = Math.max(2.4, Math.min(4.8 / aspect, 4.2));
     }
   }
-
-  const isHidden = media.is_visible === false;
 
   return (
     <group position={position} rotation={rotation}>
