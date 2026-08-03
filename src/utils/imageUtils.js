@@ -27,7 +27,7 @@ export const getLODImageUrls = (imgStr, isMobile) => {
 	// Tiny texture for distance (virtually 0 VRAM)
 	const lowResTransform = 'w_256,c_limit,q_auto:low,f_auto';
 	// Full HD for close up
-	const highResTransform = isMobile ? 'w_2048,c_limit,q_auto,f_auto' : 'w_3840,c_limit,q_auto,f_auto';
+	const highResTransform = 'w_3840,c_limit,q_auto,f_auto';
 
 	return {
 		lowRes: cleanUrl.replace('/upload/', `/upload/${lowResTransform}/`),

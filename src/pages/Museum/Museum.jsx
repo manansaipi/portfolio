@@ -410,7 +410,7 @@ const Museum = () => {
 
   // ── 2. Full 3D Virtual Museum Engine (Mobile & Desktop Enabled!) ──
   return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0, touchAction: 'none', overscrollBehavior: 'none' }}>
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#000000', zIndex: 0, touchAction: 'none', overscrollBehavior: 'none', userSelect: 'none', WebkitUserSelect: 'none' }}>
       <Helmet><title>3D Virtual Museum | Portfolio</title></Helmet>
 
       <ErrorBoundary3D>
