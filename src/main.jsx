@@ -4,6 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import { Analytics } from "@vercel/analytics/react";
 
 import "@/index.css";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 import App from "@/App.jsx";
 import { ToastProvider } from "@components/ui/Toast/ToastProvider";
 import ProtectedRoute from "@components/ui/ProtectedRoute/ProtectedRoute";

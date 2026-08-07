@@ -25,6 +25,13 @@ const Home = ({  }) => {
 
 	const [currentGreeting, setCurrentGreeting] = useState(greetings[0]);
 
+	const [viewportHeight, setViewportHeight] = useState(0);
+
+	useLayoutEffect(() => {
+		// Capture innerHeight strictly ONCE on mount to prevent mobile browser resize jumps
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	useLayoutEffect(() => {
 		const cleanup = EntranceAnimation({
 			refs: {
@@ -58,8 +65,8 @@ const Home = ({  }) => {
 	return (
 		// ->60/80vh
 		<div>
-			<div ref={homeContainerRef} className="min-h-svh overflow-hidden">
-				<section className="min-h-svh bg-light-dark flex flex-col justify-center items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl pt-32 pb-20">
+			<div ref={homeContainerRef} className="overflow-hidden" style={{ minHeight: viewportHeight ? `${viewportHeight}px` : "100svh" }}>
+				<section className="bg-light-dark flex flex-col justify-center items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl pt-32 pb-20" style={{ minHeight: viewportHeight ? `${viewportHeight}px` : "100svh" }}>
 					<div className="overflow-hidden w-full">
 						<div
 							ref={headerContainerRef}
