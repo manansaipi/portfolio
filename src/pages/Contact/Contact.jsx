@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useLayoutEffect } from "react";
+import React, { useRef, useState, useEffect, useLayoutEffect } from "react";
 import ContactForm from "@pages/Contact/components/ContactForm/ContactForm";
 import Magnet from "@components/ui/Magnet/Magnet";
 import { LuGithub } from "react-icons/lu";
@@ -9,6 +9,11 @@ import FooterSocials from "@components/layout/Footer/FooterSocials";
 import { IoCopyOutline } from "react-icons/io5";
 
 const Contact = () => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
     const headerContainerRef = useRef();
     const [copied, setCopied] = useState(false);
 
@@ -26,7 +31,12 @@ const Contact = () => {
     }, []);
 
     return (
-        <div className="pt-[20vh] bg-light-dark text-primary overflow-x-hidden">
+        <div 
+            className="bg-light-dark text-primary overflow-x-hidden pt-[var(--vh-20)]"
+            style={{
+                "--vh-20": viewportHeight ? `${viewportHeight * 0.20}px` : "20vh"
+            }}
+        >
             <div className=" p-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10">
                 <div className="custom-heading pb-5 overflow-hidden xl:mb-20">
                     <div ref={headerContainerRef} className="relative z-7 ">

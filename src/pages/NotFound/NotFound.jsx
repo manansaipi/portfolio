@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect,  useState,  useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import CustomCursor from "@components/ui/CustomCursor/CustomCursor";
 const NotFound = () => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const containerRef = useRef(null);
 
 	useEffect(() => {
@@ -16,7 +21,10 @@ const NotFound = () => {
 		<>
 			<div
 				ref={containerRef}
-				className="min-h-[80vh] flex flex-col items-center justify-center bg-light-dark  text-primary  "
+				className="min-h-[var(--vh-80)] flex flex-col items-center justify-center bg-light-dark  text-primary  "
+				style={{
+					"--vh-80": viewportHeight ? `${viewportHeight * 0.80}px` : "80vh"
+				}}
 			>
 				<h1 className="text-9xl font-bold mb-4">404</h1>
 				<p className="text-2xl mb-6 text-center">

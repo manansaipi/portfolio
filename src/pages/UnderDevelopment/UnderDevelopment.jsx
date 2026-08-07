@@ -1,9 +1,14 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useState,  useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaTools } from "react-icons/fa";
 import { AnimateHeader } from "@components/PreLoader/AnimatePageTransition";
 const UnderDevelopment = ({ title = "This page", message }) => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const headerContainerRef = useRef();
 
 	useLayoutEffect(() => {
@@ -11,7 +16,12 @@ const UnderDevelopment = ({ title = "This page", message }) => {
 	}, []);
 
 	return (
-		<section className=" h-[100vh] w-full bg-light-dark text-primary flex flex-col gap-6 items-center justify-center px-6 overflow-hidden">
+		<section 
+			className=" h-[var(--vh-100)] w-full bg-light-dark text-primary flex flex-col gap-6 items-center justify-center px-6 overflow-hidden"
+			style={{
+				"--vh-100": viewportHeight ? `${viewportHeight}px` : "100vh"
+			}}
+		>
 			<FaTools size={60} className="text-accent animate-pulse" />
 			<div
 				ref={headerContainerRef}
