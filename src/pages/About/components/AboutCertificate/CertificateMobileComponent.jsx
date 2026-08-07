@@ -1,8 +1,13 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
 import gsap from "gsap";
 
 const CertificateMobileComponent = ({ certificates }) => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const [visibleCount, setVisibleCount] = useState(2);
 	const cardsContainer = useRef();
 	const prevVisibleCount = useRef(2);
@@ -50,6 +55,10 @@ const CertificateMobileComponent = ({ certificates }) => {
 			<div
 				ref={cardsContainer}
 				className="grid grid-cols-1 md:grid-cols-2 w-full  lg:hidden gap-10 px-5 md:px-10"
+				style={{
+					"--vh-50": viewportHeight ? `${viewportHeight * 0.50}px` : "50vh",
+					"--vh-45": viewportHeight ? `${viewportHeight * 0.45}px` : "45vh"
+				}}
 			>
 				{certificates.slice(0, visibleCount).map((cert, index) => (
 					<a
@@ -59,10 +68,10 @@ const CertificateMobileComponent = ({ certificates }) => {
 						data-name="view"
 						className="flex flex-col  gap-5 text-white h-full cursor-none group"
 					>
-						<div className={`h-[50vh] bg-gray-500 pointer-events-none `}>
+						<div className={`h-[var(--vh-50)] bg-gray-500 pointer-events-none `}>
 							<div className="px-5 w-full h-full flex items-center justify-center">
 								<img
-									className="max-h-[45vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102"
+									className="max-h-[var(--vh-45)] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102"
 									src={cert.img}
 									alt=""
 								/>

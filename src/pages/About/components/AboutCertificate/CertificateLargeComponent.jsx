@@ -10,6 +10,11 @@ const CertificateLargeComponent = ({
 	certDesc,
 	handleHover,	
 }) => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const certDescContainerRef = useRef();
 	const certListRef = useRef();
 
@@ -116,8 +121,8 @@ const CertificateLargeComponent = ({
 	}, [certificates, handleHover]);
 
 	return (
-		<div className="hidden lg:flex lg:flex-row text-primary h-full mx-10 xl:mx-20 2xl:mx-30 ">
-			<div className="w-[50vw] xl:w-[100vh] mt-10 overflow-hidden ">
+		<div className="hidden lg:flex lg:flex-row text-primary h-full mx-10 xl:mx-20 2xl:mx-30 " style={{ "--vh-100": viewportHeight ? `${viewportHeight}px` : "100vh" }}>
+			<div className="w-[50vw] xl:w-[var(--vh-100)] mt-10 overflow-hidden ">
 				<div ref={certDescContainerRef} className=" text-xl xl:text-2xl ">
 					<span ref={certTitle} className="text-primary">
 						Certifications & Achievements:

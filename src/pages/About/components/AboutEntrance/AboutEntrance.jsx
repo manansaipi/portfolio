@@ -7,6 +7,11 @@ import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransitio
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 const AboutEntrance = () => {
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const headerContainerRef = useRef();
 
 	useLayoutEffect(() => {
@@ -14,7 +19,13 @@ const AboutEntrance = () => {
 	}, []);
 
 	return (
-		<div>
+		<div style={{
+			"--vh-60": viewportHeight ? `${viewportHeight * 0.60}px` : "60vh",
+			"--vh-70": viewportHeight ? `${viewportHeight * 0.70}px` : "70vh",
+			"--vh-80": viewportHeight ? `${viewportHeight * 0.80}px` : "80vh",
+			"--vh-85": viewportHeight ? `${viewportHeight * 0.85}px` : "85vh",
+			"--vh-90": viewportHeight ? `${viewportHeight * 0.90}px` : "90vh"
+		}}>
 			<div className="p-5 pt-10 px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 z-10">
 				<div className="custom-heading pb-5 overflow-hidden ">
 					<div ref={headerContainerRef} className="relative z-7 ">
@@ -25,7 +36,7 @@ const AboutEntrance = () => {
 				<div className="border-t-[1px] my-15 text-color-text-hovering"></div>
 
 				<div className="flex flex-col lg:flex-row gap-10 ">
-					<div className="lg:w-[60vh] xl:w-full xl:text-lg 2xl:text-xl">
+					<div className="lg:w-[var(--vh-60)] xl:w-full xl:text-lg 2xl:text-xl">
 						<div className=" leading-relaxed z-10">
 							Hey there! My name is{" "}
 							<span className="font-bold italic">Abdul Mannan Saipi</span>. I
@@ -46,7 +57,7 @@ const AboutEntrance = () => {
 						</div>
 					</div>
 
-					<div className="relative w-full h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden">
+					<div className="relative w-full h-[var(--vh-70)] md:h-[var(--vh-80)] lg:h-[var(--vh-90)] overflow-hidden">
 						<img
 							src={graduate1}
 							className="absolute top-0 left-0 w-full h-full object-cover object-[45%]"
@@ -54,11 +65,11 @@ const AboutEntrance = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex justify-center min-h-[85vh]">
+			<div className="flex justify-center min-h-[var(--vh-85)]">
 				<div className="w-[100vw] my-10 ">
 					<img
 						src={graduate2}
-						className=" max-h-[85vh] w-full rounded-xl object-cover object-center"
+						className=" max-h-[var(--vh-85)] w-full rounded-xl object-cover object-center"
 					/>
 				</div>
 			</div>
