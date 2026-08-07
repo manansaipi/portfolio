@@ -23,6 +23,11 @@ const ExperienceDetail = () => {
 	const location = useLocation();
 	const [currentWork, setCurrentWork] = useState(null);
 
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	const headerContainerRef = useRef();
 	const descRef = useRef();
 	const imageRef = useRef();
@@ -72,6 +77,12 @@ const ExperienceDetail = () => {
 		<div
 			data-name=""
 			className="min-h-screen bg-light-dark text-primary "
+			style={{
+				"--vh-15": viewportHeight ? `${viewportHeight * 0.15}px` : "15vh",
+				"--vh-30": viewportHeight ? `${viewportHeight * 0.30}px` : "30vh",
+				"--vh-70": viewportHeight ? `${viewportHeight * 0.70}px` : "70vh",
+				"--vh-75": viewportHeight ? `${viewportHeight * 0.75}px` : "75vh"
+			}}
 		>
 			<div
 				data-name=""
@@ -85,7 +96,7 @@ const ExperienceDetail = () => {
 					<img
 						ref={imageRef}
 						src={currentWork.img}
-						className="h-[70vh] absolute w-[100vw] object-cover z-7 shadow-lg shadow-black"
+						className="h-[var(--vh-70)] absolute w-[100vw] object-cover z-7 shadow-lg shadow-black"
 						alt={`Image for ${currentWork.company}`}
 						// Fallback for image loading errors
 						onError={(e) => {
@@ -96,7 +107,7 @@ const ExperienceDetail = () => {
 				</div>
 
 				{/* MAIN CONTENT */}
-				<div className="pt-[75vh] flex flex-col gap-5 px-5 md:px-30 lg:px-45 xl:px-70 2xl:px-100 ">
+				<div className="pt-[var(--vh-75)] flex flex-col gap-5 px-5 md:px-30 lg:px-45 xl:px-70 2xl:px-100 ">
 					<div
 						ref={headerContainerRef}
 						className=" w-full relative font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-5 lg:mt-10 mb-2 lg:mb-5 overflow-hidden"
@@ -143,7 +154,7 @@ const ExperienceDetail = () => {
 				</div>
 
 				{/* NEXT WORK */}
-				<div className="flex flex-col items-center  py-[15vh] md:py-[30vh] mx-10 md:mx-30 lg:mx-50 xl:mx-65">
+				<div className="flex flex-col items-center  py-[var(--vh-15)] md:py-[var(--vh-30)] mx-10 md:mx-30 lg:mx-50 xl:mx-65">
 					<div className="text-color-text-hovering text-xs md:text-sm lg:text-md  font-semibold">
 						NEXT WORK
 					</div>
@@ -164,7 +175,7 @@ const ExperienceDetail = () => {
 								)
 							}
 							src={nextWork.img}
-							className="max-h-[70vh]  w-full group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
+							className="max-h-[var(--vh-70)]  w-full group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
 							alt={`Next work for ${nextWork.company}`}
 						/>
 					</div>

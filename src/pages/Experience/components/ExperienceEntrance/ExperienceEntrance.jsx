@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useState } from "react";
 import { AnimateHeader } from "@components/layout/PreLoader/AnimatePageTransition";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton";
 import { AppContext } from "@/App";
@@ -26,12 +26,26 @@ const ExperienceEntrance = () => {
 		AnimateHeader({ headerContainerRef });
 	}, []);
 
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	return (
-		<div className="pt-[20vh] bg-light-dark text-primary px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75">
+		<div 
+			className="bg-light-dark text-primary px-5 md:px-20 lg:px-35 xl:px-50 2xl:px-75 pt-[var(--vh-20)]"
+			style={{
+				"--vh-10": viewportHeight ? `${viewportHeight * 0.10}px` : "10vh",
+				"--vh-15": viewportHeight ? `${viewportHeight * 0.15}px` : "15vh",
+				"--vh-20": viewportHeight ? `${viewportHeight * 0.20}px` : "20vh",
+				"--vh-40": viewportHeight ? `${viewportHeight * 0.40}px` : "40vh",
+				"--vh-70": viewportHeight ? `${viewportHeight * 0.70}px` : "70vh"
+			}}
+		>
 			{!isExperienceDetail && (
 				<div
 					ref={headerContainerRef}
-					className="flex pt-[10vh] items-center pb-[40vh] relative overflow-hidden"
+					className="flex pt-[var(--vh-10)] items-center pb-[var(--vh-40)] relative overflow-hidden"
 				>
 					<p className="custom-heading">
 						I have over 2 years of experience building digital things
@@ -42,7 +56,7 @@ const ExperienceEntrance = () => {
 				{Works.map((work, index) => (
 					<div
 						key={index}
-						className="mb-[15vh] lg:mb-[20vh]  flex flex-col"
+						className="mb-[var(--vh-15)] lg:mb-[var(--vh-20)]  flex flex-col"
 					>
 						<div
 							data-name="view"
@@ -61,7 +75,7 @@ const ExperienceEntrance = () => {
 							<img
 								ref={(el) => (imageRefs.current[index] = el)}
 								src={work.img}
-								className="w-full max-h-[70vh] pointer-events-none group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
+								className="w-full max-h-[var(--vh-70)] pointer-events-none group-hover:scale-105 transition-transform duration-500 ease-in-out object-cover object-center"
 								alt=""
 							/>
 						</div>
