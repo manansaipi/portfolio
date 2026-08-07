@@ -54,7 +54,7 @@ const NavbarLarge = () => {
     return (
         <div>
             <div id="Home" className="bg-light-dark ">
-                <div className=" flex absolute text-color-text-hovering h-32 w-screen items-center px-40 xl:px-60  ">
+                <div className=" flex absolute text-color-text-hovering h-32 w-full items-center px-40 xl:px-60  ">
                     {/* if sm-md screen size, the position is flex */}
                     <div className="w-full hidden  lg:flex flex-col ">
                         <div ref={nameRef} >

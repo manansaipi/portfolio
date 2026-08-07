@@ -58,8 +58,8 @@ const Home = ({  }) => {
 	return (
 		// ->60/80vh
 		<div>
-			<div ref={homeContainerRef} className="min-h-screen overflow-hidden">
-				<section className="min-h-screen bg-light-dark flex flex-col justify-center items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl pt-32 pb-20">
+			<div ref={homeContainerRef} className="min-h-svh overflow-hidden">
+				<section className="min-h-svh bg-light-dark flex flex-col justify-center items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl pt-32 pb-20">
 					<div className="overflow-hidden w-full">
 						<div
 							ref={headerContainerRef}

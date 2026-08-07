@@ -27,7 +27,7 @@ const Museum = lazy(() => import("@pages/Museum/Museum.jsx"));
 import { HelmetProvider } from 'react-helmet-async';
 
 const LoadingFallback = () => (
-    <div className="flex h-screen w-full items-center justify-center bg-background text-primary">
+    <div className="flex h-svh w-full items-center justify-center bg-background text-primary">
         <div className="animate-pulse flex flex-col items-center gap-4">
             <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin"></div>
             <div className="text-sm font-bold tracking-widest uppercase opacity-50">Loading...</div>
