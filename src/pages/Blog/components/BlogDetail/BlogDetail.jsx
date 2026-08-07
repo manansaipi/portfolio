@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useState } from "react";
 import { useBlogDetail } from "./useBlogDetail";
 import CommentSection from "./components/CommentSection";
 import PrimaryButton from "@components/ui/Buttons/PrimaryButton.jsx";
@@ -56,15 +56,26 @@ const BlogDetail = () => {
 	if (currentBlog.image) allImages.push(currentBlog.image);
 	if (parsedImages.length > 0) allImages = [...allImages, ...parsedImages];
 
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	return (
-		<div className="min-h-screen bg-background text-primary pb-50">
+		<div 
+			className="min-h-screen bg-background text-primary pb-50"
+			style={{
+				"--vh-5": viewportHeight ? `${viewportHeight * 0.05}px` : "5vh",
+				"--vh-70": viewportHeight ? `${viewportHeight * 0.70}px` : "70vh"
+			}}
+		>
 			{/* Image Header */}
-			<div className="relative w-full overflow-hidden h-[70vh]">
+			<div className="relative w-full overflow-hidden h-[var(--vh-70)]">
 				{allImages.length > 1 ? (
 					<ImageCarousel
 						ref={imageRef}
 						images={allImages}
-						className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
+						className="h-[var(--vh-70)] w-full object-cover absolute z-7 shadow-lg shadow-black"
 						autoSlideInterval={5000}
 					/>
 				) : (
@@ -72,7 +83,7 @@ const BlogDetail = () => {
 						ref={imageRef}
 						src={currentBlog.image}
 						alt="Blog header"
-						className="h-[70vh] w-full object-cover absolute z-7 shadow-lg shadow-black"
+						className="h-[var(--vh-70)] w-full object-cover absolute z-7 shadow-lg shadow-black"
 						onError={(e) => {
 							e.target.onerror = null;
 							e.target.src = `https://placehold.co/800x450/333333/FFFFFF?text=Image+Not+Found`;
@@ -82,7 +93,7 @@ const BlogDetail = () => {
 			</div>
 
 			{/* Main Content */}
-			<div className="pt-[5vh] px-5 md:px-20 lg:px-40 2xl:px-60 flex flex-col gap-8">
+			<div className="pt-[var(--vh-5)] px-5 md:px-20 lg:px-40 2xl:px-60 flex flex-col gap-8">
 				{/* Title */}
 				<div
 					ref={headerRef}

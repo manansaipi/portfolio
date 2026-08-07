@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useLayoutEffect } from "react";
 import authorImg from "@assets/img/author/no_profile.webp";
 import { resolveImg } from "@utils/imageUtils";
 import dayjs from "dayjs";
@@ -11,9 +11,25 @@ const AllBlog = () => {
 	const { blogs, headerContainerRef, imageRefs, onImageNavigate } = useAllBlog();
 	const { handleButtonNavigation } = useContext(AppContext);
 
+	const [viewportHeight, setViewportHeight] = useState(0);
+	useLayoutEffect(() => {
+		setViewportHeight(window.innerHeight);
+	}, []);
+
 	return (
-		<div className="bg-background min-h-[100vh] text-primary ">
-			<div className="lg:grid lg:grid-cols-2 py-[18vh] md:pt-[20vh] lg:pt-[40vh] w-full px-5 md:px-15 ">
+		<div 
+			className="bg-background min-h-[var(--vh-100)] text-primary "
+			style={{
+				"--vh-18": viewportHeight ? `${viewportHeight * 0.18}px` : "18vh",
+				"--vh-20": viewportHeight ? `${viewportHeight * 0.20}px` : "20vh",
+				"--vh-35": viewportHeight ? `${viewportHeight * 0.35}px` : "35vh",
+				"--vh-40": viewportHeight ? `${viewportHeight * 0.40}px` : "40vh",
+				"--vh-50": viewportHeight ? `${viewportHeight * 0.50}px` : "50vh",
+				"--vh-80": viewportHeight ? `${viewportHeight * 0.80}px` : "80vh",
+				"--vh-100": viewportHeight ? `${viewportHeight}px` : "100vh"
+			}}
+		>
+			<div className="lg:grid lg:grid-cols-2 py-[var(--vh-18)] md:pt-[var(--vh-20)] lg:pt-[var(--vh-40)] w-full px-5 md:px-15 ">
 				{blogs.map((blog, index) => (
 					<div
 						key={index}
@@ -63,9 +79,9 @@ const AllBlog = () => {
 							data-name="view"
 							onClick={() => onImageNavigate(blog, index)}
                             onMouseEnter={() => prefetchComments(blog.id)}
-							className={` group overflow-hidden max-h-[50vh] ${
+							className={` group overflow-hidden max-h-[var(--vh-50)] ${
 								index == 0
-									? "lg:max-h-[80vh]  lg:mx-15 xl:mx-25 2xl:mx-40 "
+									? "lg:max-h-[var(--vh-80)]  lg:mx-15 xl:mx-25 2xl:mx-40 "
 									: ""
 							}`}
 						>
@@ -74,7 +90,7 @@ const AllBlog = () => {
 								src={blog.image}
 								alt="blog_image"
 								className={`-mt-5 w-full ${
-									index == 0 ? "" : "lg:h-[35vh] xl:h-[50vh]"
+									index == 0 ? "" : "lg:h-[var(--vh-35)] xl:h-[var(--vh-50)]"
 								} object-cover pointer-events-none group-hover:scale-105 transition-transform duration-500 ease-in-out`}
 							/>
 						</a>
