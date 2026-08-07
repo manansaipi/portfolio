@@ -58,13 +58,12 @@ const Home = ({  }) => {
 	return (
 		// ->60/80vh
 		<div>
-			<div ref={homeContainerRef} className="h-screen overflow-hidden">
-				<section className="h-screen bg-light-dark flex flex-col  items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl ">
-					<div className="h-[23vh]"></div>
+			<div ref={homeContainerRef} className="min-h-screen overflow-hidden">
+				<section className="min-h-screen bg-light-dark flex flex-col justify-center items-start text-2xl text-primary px-10 md:px-20 md:text-3xl lg:px-56 lg:text-4xl xl:px-96 xl:text-5xl pt-32 pb-20">
 					<div className="overflow-hidden w-full">
 						<div
 							ref={headerContainerRef}
-							className={`flex ${entranceAnimationDone? "relative" : "absolute"} z-7 flex-col w-full mt-[20vh] `}
+							className={`flex ${entranceAnimationDone? "relative" : "absolute"} z-7 flex-col w-full`}
 						>
 							{/* overflow-hidden */}
 							<div className="flex gap-2 lg:gap-3 overflow-hidden ">

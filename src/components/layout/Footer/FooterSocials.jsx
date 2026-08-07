@@ -6,7 +6,7 @@ import Magnet from "@components/ui/Magnet/Magnet";
 
 const FooterSocials = () => {
     return (
-        <div className="flex justify-between items-center h-[10vh]">
+        <div className="flex justify-between items-center h-20">
             <div className="text-sm md:flex md:gap-5 md:text-md lg:text-lg lg:gap-10 ">
                 <div>Made in Jakarta, Indonesia</div>
                 <div>&copy; 2026 Ben</div>

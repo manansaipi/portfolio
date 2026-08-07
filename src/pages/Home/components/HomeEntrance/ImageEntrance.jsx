@@ -5,7 +5,7 @@ const ImageIntro = ({imgContainerRef, imgRef, className}) => {
     return (
         <div
             ref={imgContainerRef}
-            className={`${className} relative -mt-[10vh] bg-black w-full h-[40vw]   max-h-[50vh]  text-white`}
+            className={`${className} relative -mt-20 bg-black w-full h-[40vw]   max-h-[400px]  text-white`}
         >
             <img
                 ref={imgRef}

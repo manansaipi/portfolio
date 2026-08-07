@@ -39,11 +39,11 @@ const ListRecentWorkMobile = ({ works }) => {
 											${index > 2 ? "md:hidden" : ""}
 							gap-5 text-white h-full w-full group`}
 					>
-						<div className={`h-[50vh]  ${work.bgColor} pointer-events-none `}>
+						<div className={`h-[400px]  ${work.bgColor} pointer-events-none `}>
 							<div className="px-5 w-full h-full flex items-center justify-center ">
 								<img
 									ref={(el) => (imageRefs.current[index] = el)}
-									className="h-[40vh] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102 object-cover"
+									className="h-[300px] shadow-lg shadow-black transition-transform duration-500 ease-in-out group-hover:scale-102 object-cover"
 									src={work.img}
 									alt=""
 								/>

@@ -32,7 +32,7 @@ const HomeBlog = () => {
 					{isLoading ? (
 						[1, 2].map((item) => (
 							<div key={item} className="w-full">
-								<div className="my-2 w-full min-h-[30vh] max-h-[50vh] bg-white/5 animate-pulse rounded"></div>
+								<div className="my-2 w-full min-h-[300px] max-h-[400px] bg-white/5 animate-pulse rounded"></div>
 								<div className="h-8 bg-white/5 animate-pulse rounded mt-4 mb-2 w-3/4"></div>
 								<div className="h-4 bg-white/5 animate-pulse rounded w-1/4 mt-2"></div>
 							</div>
@@ -46,10 +46,10 @@ const HomeBlog = () => {
 								data-name="view"
 								className="group w-full cursor-none"
 							>
-								<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[30vh] max-h-[50vh] ">
+								<div className="my-2 pointer-events-none overflow-hidden w-full  min-h-[300px] max-h-[400px] ">
 									<img
 										ref={(el) => (imageRefs.current[index] = el)}
-										className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out w-full max-h-[70vh] "
+										className="object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out w-full max-h-[500px] "
 										src={blog.image}
 										alt="img"
 									/>

@@ -24,8 +24,8 @@ const HomeProject = () => {
 	}, []); // Dependency on windowWidth
 
 	return (
-		<div className="bg-light-dark h-[100vh] w-[300vh] pb-500">
-			<div className="h-[80vh]"></div>
+		<div className="bg-light-dark h-[800px] w-[3000px] pb-500">
+			<div className="h-[600px]"></div>
 			<div ref={containerProject} className="flex flex-row  gap-10">
 				<div className="bg-gray-200  h-[180px] w-[250px] flex  items-center justify-center">
 					<div className="bg-black m-5 h-[150px] w-full"></div>
