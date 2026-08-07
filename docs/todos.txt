@@ -1,16 +1,10 @@
 TODO 🚀 
-- update images of profile and user's commnet and post's images
-
 
 - make resize to get screensize and cursormove function reusable
 - aniamte div item on all page 
 - make hovered images bigger in big screen size (dynamic image size) 
 
-- update home/about/work page to include skills and projects that you'he done
-
-- reply input for user's response
-- make writing like, comment feature
-
+- fix blink black effet on transition on work detail page transition image on mobile. (On Home Page works perfect)
 
 - add tosaster after comment-implement like count add
 
@@ -43,7 +37,10 @@ PENDING 🕧
 - make response section respnsive in larger screen size ✅
 - animate image zoom effect on scroll like in citizen web ✅
 - hover effect animation on scroll in all page, entranceanimateion✅
-
+- update home/about/work page to include skills and projects that you'he done✅
+- reply input for user's response✅
+- make writing like, comment feature✅
+- update images of profile and user's commnet and post's images✅
 
 Skills: .NET Framework · Java · React.js · Statistical Process Control (SPC) · SQL · Spring Boot
 
