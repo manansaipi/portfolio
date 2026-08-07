@@ -114,7 +114,6 @@ const Home = ({  }) => {
 						</div>
 					</div>
 				</section>
-				<ImageIntro imgContainerRef={aboutRef} imgRef={imgRef} className={""} />
 			</div>
 			{/* this div to prevent text content overflow with the content bellow, later will be  */}
 			<ImageIntro

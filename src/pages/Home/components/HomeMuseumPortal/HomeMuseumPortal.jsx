@@ -30,7 +30,7 @@ const HomeMuseumPortal = () => {
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500"></div>
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-10 pointer-events-none">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 pointer-events-none">
                     <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-10 flex flex-col items-center">
                         <div className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-widest text-white mb-4">
                             3D MUSEUM
